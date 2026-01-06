@@ -65,7 +65,7 @@ class AppActionButton extends StatelessWidget {
             // 🔹 Center text
             Center(
               child: Row(
-                mainAxisAlignment: .center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Center(

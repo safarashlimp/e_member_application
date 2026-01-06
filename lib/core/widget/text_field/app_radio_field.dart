@@ -49,7 +49,7 @@ class AppRadioField extends StatelessWidget {
 
           /// 🔹 RADIO BUTTONS
           Row(
-            mainAxisAlignment: .end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               _radio("ഉണ്ട്", "yes"),
               //const SizedBox(width: ),

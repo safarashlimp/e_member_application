@@ -25,8 +25,8 @@ class _LoginViewState extends State<LoginView> {
           child: Padding(
             padding: const EdgeInsets.only(top: 100, left: 30, right: 30),
             child: Column(
-              mainAxisAlignment: .start,
-              crossAxisAlignment: .center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
 
               children: [
                 Image.asset(

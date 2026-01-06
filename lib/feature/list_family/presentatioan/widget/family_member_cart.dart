@@ -211,8 +211,8 @@ class MemberCard extends StatelessWidget {
           const SizedBox(height: 13),
           // Action Buttons
           Row(
-            mainAxisAlignment: .start,
-            mainAxisSize: .min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               OutlinedButton.icon(
                 onPressed: () {
