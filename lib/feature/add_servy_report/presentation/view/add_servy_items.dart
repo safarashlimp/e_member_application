@@ -9,10 +9,16 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_ration_dropdown.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 
-import 'package:e_member_app/dummy_data/rationcard.dart';
+
+import 'package:e_member_app/feature/add_servy_report/data/model/ration_card_model.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/ration_card_repository.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddServyItems extends StatefulWidget {
   const AddServyItems({super.key});
@@ -35,12 +41,7 @@ class _AddServyItemsState extends State<AddServyItems> {
   String widow = 'yes';
 
   int? selectedRationCard;
-  final List<RationCard> dummyRationCards = [
-    RationCard(id: 1, name: "ഉണ്ട് (AAY)"),
-    RationCard(id: 2, name: "പിങ്ക് (PHH)"),
-    RationCard(id: 3, name: "നീല (NPHH)"),
-    RationCard(id: 4, name: "വെള്ള (NPNS)"),
-  ];
+
   Color rationCardBgColor(int id) {
     switch (id) {
       case 1:
@@ -164,23 +165,40 @@ class _AddServyItemsState extends State<AddServyItems> {
                               ),
                             ),
                             SizedBox(width: 20),
-                            Expanded(
-                              child: AppRationDropdown(
-                                label: "റേഷൻ കാർഡ് തരം",
-                                validator:
-                                    Validator.validateSelection<RationCard>,
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.border,
-                                iconColor: AppColor.black,
-                                value: selectedRationCard,
-                                items: dummyRationCards,
-                                //height: 40,
-                                colorBuilder: rationCardBgColor,
-                                onChanged: (v) {
-                                  setState(() => selectedRationCard = v);
-                                },
-                              ),
-                            ),
+                           // inside your _AddServyItemsState build method
+
+Expanded(
+  child: BlocProvider(
+    create: (_) => RationCardBloc(repository: RationCardRepository())
+      ..add(FetchRationCards()),
+    child: BlocBuilder<RationCardBloc, RationCardState>(
+      builder: (context, state) {
+        if (state is RationCardLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is RationCardLoaded) {
+          return AppRationDropdown(
+            label: "റേഷൻ കാർഡ് തരം",
+            validator: Validator.validateSelection<RationCard>,
+            labelColor: AppColor.hintText2,
+            borderColor: AppColor.border,
+            iconColor: AppColor.black,
+            value: selectedRationCard,
+            items: state.rationCards,
+            colorBuilder: rationCardBgColor,
+            onChanged: (v) {
+              setState(() => selectedRationCard = v); // you can later convert this also to bloc
+            },
+          );
+        } else if (state is RationCardError) {
+          return Center(child: Text(state.message));
+        } else {
+          return const SizedBox();
+        }
+      },
+    ),
+  ),
+),
+
                           ],
                         ),
 
