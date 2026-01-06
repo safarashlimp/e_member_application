@@ -40,10 +40,13 @@ dependencies:
   json_annotation: ^4.9.0
   dio: ^5.9.0
   dartz: ^0.10.1
-  flutter_bloc: ^9.0.0
+  flutter_bloc: ^9.1.1
   get_it: ^7.6.0
   flutter_svg: ^2.2.3
   url_launcher: ^6.2.2
+  shared_preferences: ^2.5.4
+  http: ^1.6.0
+  equatable: ^2.0.8
 
 dev_dependencies:
   flutter_test:
