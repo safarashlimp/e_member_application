@@ -1,0 +1,318 @@
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
+import 'package:e_member_app/core/util/validator/validator.dart';
+import 'package:e_member_app/core/widget/button/app_action_button.dart';
+import 'package:e_member_app/core/widget/common/gradient_header.dart';
+import 'package:e_member_app/core/widget/common/servey_section.dart';
+import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
+import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
+import 'package:flutter/material.dart';
+
+class AddItemBasicDetails extends StatefulWidget {
+  const AddItemBasicDetails({super.key});
+
+  @override
+  State<AddItemBasicDetails> createState() => _AddItemBasicDetailsState();
+}
+
+class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
+  String? selectedHouseType;
+  String? selectedLandType;
+  String? selectedLandArea;
+  String? selectedWaterFacility;
+  String? selectedRequiredBenefit;
+  String? selectedElectricityConnection;
+
+  String toilet = 'yes';
+  String electricityConnection = 'yes';
+  String benefitsReceived = "yes";
+  final List<String> dummyHouseTypes = [
+    'പക്കാ വീട്',
+    'സെമി പക്കാ വീട്',
+    'കച്ച വീട്',
+    'വാടക വീട്',
+    'വീട് ഇല്ല',
+  ];
+  final List<String> dummyLandTypes = [
+    'സ്വന്തം ഭൂമി',
+    'ലീസ് ഭൂമി',
+    'പട്ടയ ഭൂമി',
+    'സർക്കാർ ഭൂമി',
+    'ഭൂമി ഇല്ല',
+  ];
+  final List<String> dummyLandArea = [
+    '1 സെന്റ് താഴെ',
+    '1 – 3 സെന്റ്',
+    '3 – 5 സെന്റ്',
+    '5 – 10 സെന്റ്',
+    '10 സെന്റിന് മുകളിൽ',
+  ];
+  final List<String> dummyWaterFacilities = [
+    'കിണർ',
+    'പൈപ്പ് വെള്ളം',
+    'പൊതു ടാപ്പ്',
+    'ബോർവെൽ',
+    'കുടിവെള്ള സൗകര്യം ഇല്ല',
+  ];
+  final List<String> dummyRequiredBenefits = [
+    'വീടിനുള്ള സഹായം',
+    'ഭൂമി ലഭ്യമാക്കൽ',
+    'കുടിവെള്ള സൗകര്യം',
+    'വൈദ്യുതി കണക്ഷൻ',
+    'ശുചിമുറി നിർമാണ സഹായം',
+  ];
+  final List<String> dummyElectricityConnection = [
+    'ഉണ്ട്',
+    'ഇല്ല',
+    'അപേക്ഷ നൽകിയിട്ടുണ്ട്',
+    'താൽക്കാലിക കണക്ഷൻ',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        backgroundColor: AppColor.secondary,
+        body: Column(
+          children: [
+            GradientHeader(backText: 'back'),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(13),
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  SurveySection(
+                    title: 'വീടും അടിസ്ഥാന സൗകരയങ്ങളും',
+                    iconAsset: 'assets/images/house.png',
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AppDropdownField<String>(
+                                label: 'വീടിന്റെ തരം',
+                                selectedValue: selectedHouseType,
+                                borderColor: AppColor.borderColor,
+                                labelColor: AppColor.hintText2,
+                                selectedTextColor: AppColor.primary,
+                                iconColor: AppColor.black,
+                                dropdownBgColor: AppColor.white,
+                                dropdownTextColor: AppColor.hintText,
+                                validator: Validator.validateSelection,
+                                items: const [
+                                  'പക്കാ വീട്',
+                                  'സെമി പക്കാ വീട്',
+                                  'കച്ച വീട്',
+                                  'വാടക വീട്',
+                                  'വീട് ഇല്ല',
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedHouseType = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: AppDropdownField<String>(
+                                label: 'ഭൂമിയുടെ തരം',
+                                selectedValue: selectedLandType,
+                                borderColor: AppColor.borderColor,
+                                labelColor: AppColor.hintText2,
+                                selectedTextColor: AppColor.primary,
+                                iconColor: AppColor.black,
+                                dropdownBgColor: AppColor.white,
+                                dropdownTextColor: AppColor.hintText,
+                                validator: Validator.validateSelection,
+                                items: const [
+                                  'പക്കാ വീട്',
+                                  'സെമി പക്കാ വീട്',
+                                  'കച്ച വീട്',
+                                  'വാടക വീട്',
+                                  'വീട് ഇല്ല',
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedLandType = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 18),
+                        AppDropdownField<String>(
+                          label: 'ഭൂമിയുടെ വിസ്തീർണ്ണം (സെന്റ്)',
+                          selectedValue: selectedLandArea,
+                          borderColor: AppColor.borderColor,
+                          labelColor: AppColor.hintText2,
+                          selectedTextColor: AppColor.primary,
+                          iconColor: AppColor.black,
+                          dropdownBgColor: AppColor.white,
+                          dropdownTextColor: AppColor.hintText,
+                          validator: Validator.validateSelection,
+                          items: const [
+                            'പക്കാ വീട്',
+                            'സെമി പക്കാ വീട്',
+                            'കച്ച വീട്',
+                            'വാടക വീട്',
+                            'വീട് ഇല്ല',
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedLandArea = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 18),
+                        AppRadioField(
+                          label: "ശൗചാലയം",
+                          value: toilet,
+                          onChanged: (v) => setState(() => toilet = v),
+                        ),
+                        SizedBox(height: 18),
+                        AppRadioField(
+                          label: "വൈദ്യുതി കണക്ഷൻ",
+                          value: electricityConnection,
+                          // onChanged: (v) => setState(() =>
+                          // electricityConnection = v),
+                          onChanged: (v) {
+                            setState(() {
+                              electricityConnection = v;
+                              if (v == 'no') {
+                                selectedLandType = null; // reset dropdown
+                              }
+                            });
+                          },
+                        ),
+
+                        if (electricityConnection == 'yes') ...[
+                          const SizedBox(height: 18),
+
+                          AppDropdownField<String>(
+                            label: 'വൈദ്യുതി കണക്ഷൻ തരം',
+                            selectedValue: selectedElectricityConnection,
+                            borderColor: AppColor.borderColor,
+                            labelColor: AppColor.hintText2,
+                            selectedTextColor: AppColor.primary,
+                            iconColor: AppColor.black,
+                            dropdownBgColor: AppColor.white,
+                            dropdownTextColor: AppColor.hintText,
+                            validator: Validator.validateSelection,
+                            items: const [
+                              'പക്കാ വീട്',
+                              'സെമി പക്കാ വീട്',
+                              'കച്ച വീട്',
+                              'വാടക വീട്',
+                              'വീട് ഇല്ല',
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedElectricityConnection = value;
+                              });
+                            },
+                          ),
+                        ],
+                        SizedBox(height: 18),
+                        AppRadioField(
+                          label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
+                          value: benefitsReceived,
+                          // onChanged: (v) => setState(() =>
+                          // electricityConnection = v),
+                          onChanged: (v) {
+                            setState(() {
+                              benefitsReceived = v;
+                              if (v == 'no') {
+                                // benefitsReceived = null;
+                                // selectedLandType = null; // reset dropdown
+                              }
+                            });
+                          },
+                        ),
+
+                        if (benefitsReceived == 'yes') ...[
+                          const SizedBox(height: 18),
+
+                          AppDropdownField<String>(
+                            label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
+                            selectedValue: selectedRequiredBenefit,
+                            borderColor: AppColor.borderColor,
+                            labelColor: AppColor.hintText2,
+                            selectedTextColor: AppColor.primary,
+                            iconColor: AppColor.black,
+                            dropdownBgColor: AppColor.white,
+                            dropdownTextColor: AppColor.hintText,
+                            validator: Validator.validateSelection,
+                            items: const [
+                              'പക്കാ വീട്',
+                              'സെമി പക്കാ വീട്',
+                              'കച്ച വീട്',
+                              'വാടക വീട്',
+                              'വീട് ഇല്ല',
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedRequiredBenefit = value;
+                              });
+                            },
+                          ),
+                        ],
+
+                        const SizedBox(height: 18),
+
+                        AppDropdownField<String>(
+                          label: 'കുടിവെള്ള സൗകര്യം',
+                          selectedValue: selectedWaterFacility,
+                          borderColor: AppColor.borderColor,
+                          labelColor: AppColor.hintText2,
+                          selectedTextColor: AppColor.primary,
+                          iconColor: AppColor.black,
+                          dropdownBgColor: AppColor.white,
+                          dropdownTextColor: AppColor.hintText,
+                          validator: Validator.validateSelection,
+                          items: const [
+                            'പക്കാ വീട്',
+                            'സെമി പക്കാ വീട്',
+                            'കച്ച വീട്',
+                            'വാടക വീട്',
+                            'വീട് ഇല്ല',
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedWaterFacility = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30),
+
+                  AppActionButton(
+                    label: "സമർപ്പിക്കുക",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ListSurveyReport(),
+                        ),
+                      );
+                    },
+                    labelStyle: const TextStyle(
+                      color: AppColor.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    height: 44,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
