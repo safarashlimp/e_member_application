@@ -32,6 +32,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   await prefs.setString('mobile', user.data.first.mobile);  
         
         print("Saved clientid: ${user.data.first.clientid}");
+        print("Saved userid: ${user.data.first.id}");
+        print("Saved username: ${user.data.first.name}"); 
+        print("Saved mobile: ${user.data.first.mobile}");
 
         emit(LoginSuccess(user: user));
       } else {
