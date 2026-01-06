@@ -25,7 +25,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (user.status == "true") {
         // Save Clientid
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('clientid', user.data.first.clientid);
+        // Save fields separately
+  await prefs.setString('clientid', user.data.first.clientid); // Clientid
+  await prefs.setString('userid', user.data.first.id);        // normal id
+  await prefs.setString('username', user.data.first.name);    // name
+  await prefs.setString('mobile', user.data.first.mobile);  
         
         print("Saved clientid: ${user.data.first.clientid}");
 
