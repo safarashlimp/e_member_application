@@ -172,7 +172,7 @@ class MemberCard extends StatelessWidget {
                 height: 12,
                 fit: BoxFit.fill,
                 errorBuilder: (context, error, stackTrace) {
-                  print('Error loading image: $error');
+                  //print('Error loading image: $error');
                   return const Icon(
                     Icons.bar_chart,
                     size: 12,
