@@ -188,6 +188,48 @@ Future<List<MemberDropItem>> getFarmingTypes() async {
     throw Exception("Server error ${response.statusCode}");
   }
 }
+@override
+Future<List<MemberDropItem>> getHealthIssues() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=13",
+    ),
+  );
 
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = MemberDropResponse.fromJson(jsonData);
+
+    if (model.status) {
+      return model.data;
+    } else {
+      throw Exception("API status false");
+    }
+  } else {
+    throw Exception("Server error ${response.statusCode}");
+  }
+}
+
+@override
+Future<List<MemberDropItem>> getHealthInsurance() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=14",
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = MemberDropResponse.fromJson(jsonData);
+
+    if (model.status) {
+      return model.data;
+    } else {
+      throw Exception("API status false");
+    }
+  } else {
+    throw Exception("Server error ${response.statusCode}");
+  }
+}
 
 }

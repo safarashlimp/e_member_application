@@ -14,4 +14,6 @@ abstract class MemberDropRepository {
          Future<List<MemberDropItem>>getJobs();
          Future<List<MemberDropItem>>getEmploymentSupports();
 Future<List<MemberDropItem>>getFarmingTypes();
+Future<List<MemberDropItem>>getHealthIssues();
+Future<List <MemberDropItem>>getHealthInsurance();
 }

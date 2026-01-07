@@ -19,6 +19,9 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/c
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
@@ -79,14 +82,22 @@ String? employmentSupportId;
 String? farmingType;
 String? farmingTypeId;
 
+
+// health issue 
+String? hasHealthIssues;
+String? hasHealthIssuesId;
+// health insurance 
+String? healthInsurance;
+String? healthInsuranceId;
+
+
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
 
   String? selectedBloodGroup;
 
 
-  String? hasHealthIssues;
-  String? healthInsurance;
+
   String? selectedPensionType;
   String? skillsLabel;
 
@@ -852,29 +863,50 @@ BlocBuilder<EducationBloc, EducationState>(
                             ),
                             if (patient == 'yes') ...[
                               const SizedBox(height: 20),
-                              AppDropdownField<String>(
-                                label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
-                                selectedValue: hasHealthIssues,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    hasHealthIssues = value;
-                                  });
-                                },
-                              ),
+                              BlocBuilder<HealthIssueBloc, HealthIssueState>(
+  builder: (context, state) {
+    if (state is HealthIssueLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is HealthIssueLoaded) {
+      return AppDropdownField<String>(
+        label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
+        selectedValue: hasHealthIssues,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            hasHealthIssues = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            hasHealthIssuesId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is HealthIssueError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                               SizedBox(height: 20),
                               AppTextField(
                                 controller: treatmentPlaceLabel,
@@ -935,29 +967,50 @@ BlocBuilder<EducationBloc, EducationState>(
                             ),
                             if (healthInsuranceCard == 'yes') ...[
                               const SizedBox(height: 20),
-                              AppDropdownField<String>(
-                                label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
-                                selectedValue: healthInsurance,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    healthInsurance = value;
-                                  });
-                                },
-                              ),
+                             BlocBuilder<HealthInsuranceBloc, HealthInsuranceState>(
+  builder: (context, state) {
+    if (state is HealthInsuranceLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is HealthInsuranceLoaded) {
+      return AppDropdownField<String>(
+        label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
+        selectedValue: healthInsurance,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            healthInsurance = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            healthInsuranceId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is HealthInsuranceError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             ],
                             const SizedBox(height: 20),
                             AppDropdownField<String>(

@@ -10,6 +10,9 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/c
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
@@ -302,6 +305,16 @@ BlocProvider(
   create: (_) => FarmingTypeBloc(
     MemberDropRepositoryImpl(),
   )..add(FetchFarmingTypes()),
+),
+BlocProvider(
+  create: (_) => HealthIssueBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchHealthIssues()),
+),
+BlocProvider(
+  create: (_) => HealthInsuranceBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchHealthInsurance()),
 ),
 
       ],
