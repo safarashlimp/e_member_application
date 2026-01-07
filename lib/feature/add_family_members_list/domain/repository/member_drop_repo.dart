@@ -8,4 +8,5 @@ abstract class MemberDropRepository {
   Future<List<MemberDropItem>> getRelations(); 
    Future<List<MemberDropItem>> getMaritalStatus();
     Future<List<MemberDropItem>> getCastes();
+      Future<List<MemberDropItem>> getQualifications();
 }

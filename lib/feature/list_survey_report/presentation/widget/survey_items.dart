@@ -1,9 +1,12 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/member_drop_repository_impl.dart';
+
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
@@ -260,6 +263,13 @@ class PropertyCard extends StatelessWidget {
               CasteBloc(MemberDropRepositoryImpl())
                 ..add(FetchCastes()),
         ),
+        BlocProvider(
+  create: (_) => QualificationBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchQualifications()),
+
+)
+
       ],
       child: AddFamilyMembers(),
     ),

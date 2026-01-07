@@ -14,6 +14,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/c
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_state.dart';
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
@@ -48,6 +50,10 @@ String? selectedMaritalStatusId;
 String? selectedCaste;
 String? selectedCasteId;
 
+// qualification
+String? selectedQualification;
+String? selectedQualificationId;
+
 
 
   String selectedGender = 'male';
@@ -55,7 +61,7 @@ String? selectedCasteId;
 
   String? selectedBloodGroup;
   String? selectedEducation;
-  String? selectedQualification;
+
   String? hasHealthIssues;
   String? healthInsurance;
   String? selectedPensionType;
@@ -425,29 +431,50 @@ String? selectedCasteId;
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppDropdownField<String>(
-                              label: 'വിദ്യാഭ്യാസ യോഗ്യത',
-                              selectedValue: selectedQualification,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedQualification = value;
-                                });
-                              },
-                            ),
+                           BlocBuilder<QualificationBloc, QualificationState>(
+  builder: (context, state) {
+    if (state is QualificationLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is QualificationLoaded) {
+      return AppDropdownField<String>(
+        label: 'വിദ്യാഭ്യാസ യോഗ്യത',
+        selectedValue: selectedQualification,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            selectedQualification = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            selectedQualificationId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is QualificationError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             SizedBox(height: 20),
                             AppRadioField(
                               label: " ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ?",
