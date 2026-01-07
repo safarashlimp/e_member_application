@@ -10,6 +10,8 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_status_dart_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
@@ -57,6 +59,9 @@ String? selectedQualificationId;
 // education
 String? selectedEducation;
 String? selectedEducationId;
+// employment status 
+String? employmentStatus;
+String? employmentStatusId;
 
 
 
@@ -71,7 +76,6 @@ String? selectedEducationId;
   String? selectedPensionType;
   String? skillsLabel;
   String? employmentSupportLabel;
-  String? employmentStatus;
   String? jobStatus;
   String? farmingType;
   String? requiredHealthSupports;
@@ -588,29 +592,50 @@ BlocBuilder<EducationBloc, EducationState>(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppDropdownField<String>(
-                              label: 'തൊഴിൽ നില',
-                              selectedValue: employmentStatus,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                "പ്രവാസി",
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  employmentStatus = value;
-                                });
-                              },
-                            ),
+                            BlocBuilder<EmploymentStatusBloc, EmploymentStatusState>(
+  builder: (context, state) {
+    if (state is EmploymentStatusLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is EmploymentStatusLoaded) {
+      return AppDropdownField<String>(
+        label: 'തൊഴിൽ നില',
+        selectedValue: employmentStatus,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            employmentStatus = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            employmentStatusId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is EmploymentStatusError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             SizedBox(height: 20),
                             AppDropdownField<String>(
                               label: 'തൊഴിൽ',
