@@ -10,8 +10,10 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/maritalstatus_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/maritalstatus_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
@@ -42,13 +44,16 @@ String? selectedRelationId;
 //  marital status
 String? selectedMaritalStatus;
 String? selectedMaritalStatusId;
+// caste
+String? selectedCaste;
+String? selectedCasteId;
+
 
 
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
 
   String? selectedBloodGroup;
-  String? selectedCaste;
   String? selectedEducation;
   String? selectedQualification;
   String? hasHealthIssues;
@@ -366,29 +371,50 @@ String? selectedMaritalStatusId;
                               },
                             ),
                             SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'ജാതി',
-                              selectedValue: selectedCaste,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCaste = value;
-                                });
-                              },
-                            ),
+                           BlocBuilder<CasteBloc, CasteState>(
+  builder: (context, state) {
+    if (state is CasteLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is CasteLoaded) {
+      return AppDropdownField<String>(
+        label: 'ജാതി',
+        selectedValue: selectedCaste,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            selectedCaste = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            selectedCasteId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is CasteError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                           ],
                         ),
                       ),

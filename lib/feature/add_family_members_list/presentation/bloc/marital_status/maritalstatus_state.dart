@@ -1,4 +1,5 @@
-import 'package:e_member_app/feature/add_servy_report/data/model/family_dropdown_model.dart';
+import 'package:e_member_app/feature/add_family_members_list/data/model/family_member_model.dart';
+
 
 abstract class MaritalStatusState {}
 
@@ -7,7 +8,7 @@ class MaritalStatusInitial extends MaritalStatusState {}
 class MaritalStatusLoading extends MaritalStatusState {}
 
 class MaritalStatusLoaded extends MaritalStatusState {
-  final List<FamilyDropItem> items;
+  final List<MemberDropItem> items;
   MaritalStatusLoaded(this.items);
 }
 

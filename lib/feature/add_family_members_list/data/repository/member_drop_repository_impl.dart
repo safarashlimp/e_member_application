@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:e_member_app/feature/add_family_members_list/data/model/family_member_model.dart';
-import 'package:e_member_app/feature/add_servy_report/data/model/family_dropdown_model.dart';
+
 
 import 'package:http/http.dart' as http;
 
@@ -31,7 +31,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   }
 // member_drop_repository_impl.dart
 @override
-Future<List<FamilyDropItem>> getMaritalStatus() async {
+Future<List<MemberDropItem>> getMaritalStatus() async {
   final response = await http.get(
     Uri.parse(
       "https://emember.org/API/member_drops.php?clientid=1&posistion=3",
@@ -39,8 +39,25 @@ Future<List<FamilyDropItem>> getMaritalStatus() async {
   );
 
   final jsonData = json.decode(response.body);
-  final model = FamilyDropResponse.fromJson(jsonData);
+  final model = MemberDropResponse.fromJson(jsonData);
   return model.data;
 }
+@override
+Future<List<MemberDropItem>> getCastes() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=5",
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = MemberDropResponse.fromJson(jsonData);
+    return model.data;
+  } else {
+    throw Exception("Failed to load caste list");
+  }
+}
+
 
 }
