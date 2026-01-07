@@ -1,7 +1,13 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
+import 'package:e_member_app/feature/add_family_members_list/data/repository/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/maritalstatus_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PropertyCard extends StatelessWidget {
   final String houseNumber;
@@ -231,14 +237,30 @@ class PropertyCard extends StatelessWidget {
                 height: 24,
                 child: Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddFamilyMembers(),
-                        ),
-                      );
-                    },
+                   onPressed: () {
+  Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              RelationDropBloc(MemberDropRepositoryImpl())
+                ..add(FetchRelations()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              MaritalStatusBloc(MemberDropRepositoryImpl())
+                ..add(FetchMaritalStatus()),
+        ),
+      ],
+      child: AddFamilyMembers(),
+    ),
+  ),
+);
+
+},
+
                     icon: const Icon(
                       Icons.add,
                       size: 12,
