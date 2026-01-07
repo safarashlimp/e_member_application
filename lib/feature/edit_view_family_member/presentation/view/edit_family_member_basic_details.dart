@@ -25,11 +25,28 @@ class _EditFamilyMemberBasicDetailsState
   final TextEditingController mobileNumber = TextEditingController();
 
   final TextEditingController whatsupNumber = TextEditingController();
+  String? selectedBloodGroup;
   String? selectedReletion;
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
   String? selectedMaritalStatus;
   String? selectedCaste;
+    @override
+void initState() {
+  super.initState();
+
+  mobileNumber.addListener(() {
+    // copy text only if whatsapp field is empty OR same
+    if (whatsupNumber.text != mobileNumber.text) {
+      whatsupNumber.text = mobileNumber.text;
+
+      // keep cursor at end
+      whatsupNumber.selection = TextSelection.fromPosition(
+        TextPosition(offset: whatsupNumber.text.length),
+      );
+    }
+  });
+}
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,6 +112,30 @@ class _EditFamilyMemberBasicDetailsState
                           ],
                         ),
                         const SizedBox(height: 20),
+                          AppDropdownField<String>(
+                          label: 'രക്തഗ്രൂപ്പ്',
+                          selectedValue: selectedBloodGroup,
+                          borderColor: AppColor.borderColor,
+                          labelColor: AppColor.hintText2,
+                          selectedTextColor: AppColor.primary,
+                          iconColor: AppColor.black,
+                          dropdownBgColor: AppColor.white,
+                          dropdownTextColor: AppColor.hintText,
+                          validator: Validator.validateSelection,
+                          items: const [
+                            'പക്കാ വീട്',
+                            'സെമി പക്കാ വീട്',
+                            'കച്ച വീട്',
+                            'വാടക വീട്',
+                            'വീട് ഇല്ല',
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedReletion = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 20),
                         AppDropdownField<String>(
                           label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
                           selectedValue: selectedReletion,
@@ -154,7 +195,7 @@ class _EditFamilyMemberBasicDetailsState
                               ),
                             ),
                             SizedBox(width: 20),
-                            Expanded(
+                            Flexible(
                               child: AppDropdownField<String>(
                                 label: 'വിവാഹസ്ഥിതി',
                                 selectedValue: selectedMaritalStatus,
