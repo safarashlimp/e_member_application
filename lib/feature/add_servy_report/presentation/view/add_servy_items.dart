@@ -10,6 +10,10 @@ import 'package:e_member_app/core/widget/text_field/app_ration_dropdown.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/ration_card_repository.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
@@ -71,18 +75,13 @@ class _AddServyItemsState extends State<AddServyItems> {
         child: Scaffold(
           backgroundColor: AppColor.secondary,
           body: BlocBuilder<RationCardBloc, RationCardState>(
-
-          
             builder: (context, state) {
-
-               if (state is RationCardLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-   }
-               if (state is RationCardError) {
-      return Center(child: Text(state.message));
-    }
+              if (state is RationCardLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is RationCardError) {
+                return Center(child: Text(state.message));
+              }
 
               return Column(
                 children: [
@@ -184,7 +183,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     ),
                                   ),
                                   SizedBox(width: 20),
-                                  // Wrap dropdown in Flexible instead of Expanded
+                                  
                                   Flexible(
                                     child:
                                         BlocBuilder<
@@ -227,7 +226,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                             } else {
                                               return const SizedBox();
                                             }
-                                          }
+                                          },
                                         ),
                                   ),
                                 ],
@@ -284,30 +283,40 @@ class _AddServyItemsState extends State<AddServyItems> {
                               child: AppActionButton(
                                 label: "അടുത്തത്",
                                 onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => HouseTypeBloc(
-              FamilyDropRepositoryImpl(),
-            )..add(FetchHouseTypes()),
-          ),
-          BlocProvider(
-            create: (_) => LandTypeBloc(
-              FamilyDropRepositoryImpl(),
-            )..add(FetchLandTypes()),
-          ),
-          BlocProvider(
-      create: (_) => WaterFacilityBloc(FamilyDropRepositoryImpl())..add(FetchWaterFacilities()),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (_) => HouseTypeBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchHouseTypes()),
+                                          ),
+                                          BlocProvider(
+                                            create: (_) => LandTypeBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchLandTypes()),
+                                          ),
+                                          BlocProvider(
+                                            create: (_) => WaterFacilityBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchWaterFacilities()),
+                                          ),
+                                          BlocProvider(
+                                            create: (_) => RequiredBenefitBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchRequiredBenefits()),
+                                          ),
+                                           BlocProvider(
+      create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())..add(FetchOtherBenefits()),
     ),
-        ],
-        child: const AddItemBasicDetails(),
-      ),
-    ),
-  );
-},
+                                        ],
+                                        child: const AddItemBasicDetails(),
+                                      ),
+                                    ),
+                                  );
+                                },
 
                                 labelStyle: const TextStyle(
                                   color: AppColor.white,

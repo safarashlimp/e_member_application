@@ -46,6 +46,30 @@ Future<List<FamilyDropItem>> getWaterFacilities() async {
   return model.data;
 }
 
+@override
+Future<List<FamilyDropItem>> getRequiredBenefits() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/family_drops.php?clientid=1&posistion=5",
+    ),
+  );
 
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = FamilyDropResponse.fromJson(jsonData);
+    return model.data;
+  } else {
+    throw Exception("Failed to load required benefits");
+  }
 }
-  
+@override
+Future<List<FamilyDropItem>> getOtherBenefits() async {
+  final response = await http.get(
+    Uri.parse("https://emember.org/API/family_drops.php?clientid=1&posistion=6"),
+  );
+
+  final jsonData = json.decode(response.body);
+  final model = FamilyDropResponse.fromJson(jsonData);
+  return model.data;
+}
+}

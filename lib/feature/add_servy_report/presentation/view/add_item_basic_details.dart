@@ -6,6 +6,10 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_state.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
@@ -33,10 +37,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedLandArea;
   String? selectedGeneralNeedsoftheWard;
   String? selectedRequiredBenefit;
+  String? selectedRequiredBenefitId;  
   String? selectedwaterFacilityAvailable;
   String? selectedWaterFacilityId;
   String? selectedGetBenefit;
 
+  String? selectedOtherBenefit;
+String? selectedOtherBenefitId;
   String toilet = 'yes';
   String electricityConnection = 'yes';
   String benefitsReceived = "yes";
@@ -302,34 +309,48 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 });
                               },
                             ),
+if (benefitsWanted == 'yes') ...[
+  const SizedBox(height: 18),
+  BlocBuilder<RequiredBenefitBloc, RequiredBenefitState>(
+    builder: (context, state) {
+      if (state is RequiredBenefitLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-                            if (benefitsReceived == 'yes') ...[
-                              const SizedBox(height: 18),
+      if (state is RequiredBenefitLoaded) {
+        return AppDropdownField<String>(
+          label: 'ലഭിച്ച ആനുകൂല്യം ',
+          selectedValue: selectedRequiredBenefit,
+          borderColor: AppColor.borderColor,
+          labelColor: AppColor.hintText2,
+          selectedTextColor: AppColor.primary,
+          iconColor: AppColor.black,
+          dropdownBgColor: AppColor.white,
+          dropdownTextColor: AppColor.hintText,
+          validator: Validator.validateSelection,
+          items: state.items.map((e) => e.name).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedRequiredBenefit = value;
+              selectedRequiredBenefitId =
+                  state.items.firstWhere((e) => e.name == value).id;
+            });
+          },
+        );
+      }
 
-                              AppDropdownField<String>(
-                                label: 'ലഭിച്ച ആനുകൂല്യം',
-                                selectedValue: selectedGetBenefit,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedGetBenefit = value;
-                                  });
-                                },
-                              ),
-                            ],
+      if (state is RequiredBenefitError) {
+        return Text(
+          'Error: ${state.message}',
+          style: const TextStyle(color: Colors.red),
+        );
+      }
+
+      return const SizedBox();
+    },
+  ),
+],
+
 
                             const SizedBox(height: 18),
                             AppRadioField(
@@ -348,33 +369,49 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               },
                             ),
 
-                            if (benefitsWanted == 'yes') ...[
-                              const SizedBox(height: 18),
+if (benefitsWanted == 'yes') ...[
+  const SizedBox(height: 18),
 
-                              AppDropdownField<String>(
-                                label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
-                                selectedValue: selectedRequiredBenefit,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedRequiredBenefit = value;
-                                  });
-                                },
-                              ),
-                            ],
+  BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
+    builder: (context, state) {
+      if (state is OtherBenefitLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (state is OtherBenefitLoaded) {
+        return AppDropdownField<String>(
+          label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
+          selectedValue: selectedOtherBenefit,
+          borderColor: AppColor.borderColor,
+          labelColor: AppColor.hintText2,
+          selectedTextColor: AppColor.primary,
+          iconColor: AppColor.black,
+          dropdownBgColor: AppColor.white,
+          dropdownTextColor: AppColor.hintText,
+            validator: Validator.validateSelection,
+            items: state.items.map((e) => e.name).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedOtherBenefit = value;
+                selectedOtherBenefitId =
+                  state.items.firstWhere((e) => e.name == value).id;
+            });
+          },
+        );
+      }
+
+      if (state is OtherBenefitError) {
+        return Text(
+          'Error: ${state.message}',
+          style: const TextStyle(color: Colors.red),
+        );
+      }
+
+      return const SizedBox();
+    },
+  ),
+],
+
 
                             const SizedBox(height: 18),
 
