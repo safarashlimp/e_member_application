@@ -10,11 +10,12 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_status_dart_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_status_dart_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
@@ -63,6 +64,9 @@ String? selectedEducationId;
 String? employmentStatus;
 String? employmentStatusId;
 
+// job
+String? jobStatus;
+String? jobStatusId;
 
 
   String selectedGender = 'male';
@@ -76,7 +80,7 @@ String? employmentStatusId;
   String? selectedPensionType;
   String? skillsLabel;
   String? employmentSupportLabel;
-  String? jobStatus;
+ 
   String? farmingType;
   String? requiredHealthSupports;
   String hasDisability = 'yes';
@@ -637,29 +641,50 @@ BlocBuilder<EducationBloc, EducationState>(
 ),
 
                             SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'തൊഴിൽ',
-                              selectedValue: jobStatus,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                "കർഷകൻ",
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  jobStatus = value;
-                                });
-                              },
-                            ),
+                          BlocBuilder<JobBloc, JobState>(
+  builder: (context, state) {
+    if (state is JobLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is JobLoaded) {
+      return AppDropdownField<String>(
+        label: 'തൊഴിൽ',
+        selectedValue: jobStatus,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            jobStatus = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            jobStatusId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is JobError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             SizedBox(height: 20),
                             AppMultiSelectDropdown<String>(
                               label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
