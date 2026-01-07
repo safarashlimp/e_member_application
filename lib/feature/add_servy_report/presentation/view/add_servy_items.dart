@@ -8,11 +8,18 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_ration_dropdown.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/ration_card_repository.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_event.dart';
 
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_state.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 
 import 'package:flutter/material.dart';
@@ -277,14 +284,31 @@ class _AddServyItemsState extends State<AddServyItems> {
                               child: AppActionButton(
                                 label: "അടുത്തത്",
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          AddItemBasicDetails(),
-                                    ),
-                                  );
-                                },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => HouseTypeBloc(
+              FamilyDropRepositoryImpl(),
+            )..add(FetchHouseTypes()),
+          ),
+          BlocProvider(
+            create: (_) => LandTypeBloc(
+              FamilyDropRepositoryImpl(),
+            )..add(FetchLandTypes()),
+          ),
+          BlocProvider(
+      create: (_) => WaterFacilityBloc(FamilyDropRepositoryImpl())..add(FetchWaterFacilities()),
+    ),
+        ],
+        child: const AddItemBasicDetails(),
+      ),
+    ),
+  );
+},
+
                                 labelStyle: const TextStyle(
                                   color: AppColor.white,
                                   fontSize: 15,
