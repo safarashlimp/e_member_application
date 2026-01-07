@@ -5,10 +5,13 @@ import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
+import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_state.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +24,8 @@ class AddItemBasicDetails extends StatefulWidget {
 }
 
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
+  final TextEditingController selectedLandAreaController =
+      TextEditingController();
   String? selectedHouseType;
   String? selectedHouseTypeId;
   String? selectedLandType;
@@ -29,6 +34,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedGeneralNeedsoftheWard;
   String? selectedRequiredBenefit;
   String? selectedwaterFacilityAvailable;
+  String? selectedWaterFacilityId;
   String? selectedGetBenefit;
 
   String toilet = 'yes';
@@ -56,26 +62,9 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
     '5 – 10 സെന്റ്',
     '10 സെന്റിന് മുകളിൽ',
   ];
-  final List<String> dummyWaterFacilities = [
-    'കിണർ',
-    'പൈപ്പ് വെള്ളം',
-    'പൊതു ടാപ്പ്',
-    'ബോർവെൽ',
-    'കുടിവെള്ള സൗകര്യം ഇല്ല',
-  ];
-  final List<String> dummyRequiredBenefits = [
-    'വീടിനുള്ള സഹായം',
-    'ഭൂമി ലഭ്യമാക്കൽ',
-    'കുടിവെള്ള സൗകര്യം',
-    'വൈദ്യുതി കണക്ഷൻ',
-    'ശുചിമുറി നിർമാണ സഹായം',
-  ];
-  final List<String> dummyElectricityConnection = [
-    'ഉണ്ട്',
-    'ഇല്ല',
-    'അപേക്ഷ നൽകിയിട്ടുണ്ട്',
-    'താൽക്കാലിക കണക്ഷൻ',
-  ];
+
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +74,6 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
         backgroundColor: AppColor.secondary,
         body: BlocBuilder<HouseTypeBloc, HouseTypeState>(
           builder: (context, state) {
-
             if (state is HouseTypeLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is HouseTypeError) {
@@ -107,114 +95,129 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             Row(
                               children: [
                                 Expanded(
-  child: BlocBuilder<HouseTypeBloc, HouseTypeState>(
-    builder: (context, state) {
+                                  child:
+                                      BlocBuilder<
+                                        HouseTypeBloc,
+                                        HouseTypeState
+                                      >(
+                                        builder: (context, state) {
+                                          if (state is HouseTypeLoading) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
 
-      if (state is HouseTypeLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+                                          if (state is HouseTypeLoaded) {
+                                            return AppDropdownField<String>(
+                                              label: 'വീടിന്റെ തരം',
+                                              selectedValue: selectedHouseType,
+                                              validator:
+                                                  Validator.validateSelection,
+                                              items: state.items
+                                                  .map((e) => e.name)
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedHouseType = value;
 
-      if (state is HouseTypeLoaded) {
-        return AppDropdownField<String>(
-          label: 'വീടിന്റെ തരം',
-          selectedValue: selectedHouseType,
-          validator: Validator.validateSelection,
-          items: state.items.map((e) => e.name).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedHouseType = value;
+                                                  final selectedItem = state
+                                                      .items
+                                                      .firstWhere(
+                                                        (e) => e.name == value,
+                                                      );
 
-              final selectedItem = state.items
-                  .firstWhere((e) => e.name == value);
+                                                  selectedHouseTypeId =
+                                                      selectedItem.id;
+                                                });
+                                              },
+                                            );
+                                          }
 
-              selectedHouseTypeId = selectedItem.id; 
-            });
-          },
-        );
-      }
+                                          if (state is HouseTypeError) {
+                                            return Text(
+                                              'Failed to load',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            );
+                                          }
 
-      if (state is HouseTypeError) {
-        return Text(
-          'Failed to load',
-          style: TextStyle(color: Colors.red),
-        );
-      }
-
-      return const SizedBox();
-    },
-  ),
-),
+                                          return const SizedBox();
+                                        },
+                                      ),
+                                ),
 
                                 SizedBox(width: 20),
-                             Expanded(
-  child: BlocBuilder<LandTypeBloc, LandTypeState>(
-    builder: (context, state) {
+                                Expanded(
+                                  child:
+                                      BlocBuilder<LandTypeBloc, LandTypeState>(
+                                        builder: (context, state) {
+                                          if (state is LandTypeLoading) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
 
-      if (state is LandTypeLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+                                          if (state is LandTypeLoaded) {
+                                            return AppDropdownField<String>(
+                                              label: 'ഭൂമിയുടെ തരം',
+                                              selectedValue: selectedLandType,
+                                              validator:
+                                                  Validator.validateSelection,
+                                              items: state.items
+                                                  .map((e) => e.name)
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedLandType = value;
 
-      if (state is LandTypeLoaded) {
-        return AppDropdownField<String>(
-          label: 'ഭൂമിയുടെ തരം',
-          selectedValue: selectedLandType,
-          validator: Validator.validateSelection,
-          items: state.items.map((e) => e.name).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedLandType = value;
+                                                  final selectedItem = state
+                                                      .items
+                                                      .firstWhere(
+                                                        (e) => e.name == value,
+                                                      );
 
-              final selectedItem = state.items
-                  .firstWhere((e) => e.name == value);
+                                                  selectedLandTypeId =
+                                                      selectedItem.id;
+                                                });
+                                              },
+                                            );
+                                          }
 
-              selectedLandTypeId = selectedItem.id;
-            });
-          },
-        );
-      }
+                                          if (state is LandTypeError) {
+                                            return const Text(
+                                              'Failed to load',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            );
+                                          }
 
-      if (state is LandTypeError) {
-        return const Text(
-          'Failed to load',
-          style: TextStyle(color: Colors.red),
-        );
-      }
-
-      return const SizedBox();
-    },
-  ),
-),
-
+                                          return const SizedBox();
+                                        },
+                                      ),
+                                ),
                               ],
                             ),
                             SizedBox(height: 18),
-                            AppDropdownField<String>(
+
+                            AppTextField(
+                              controller: selectedLandAreaController,
                               label: 'ഭൂമിയുടെ വിസ്തീർണ്ണം (സെന്റ്)',
-                              selectedValue: selectedLandArea,
-                              borderColor: AppColor.borderColor,
                               labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLandArea = value;
-                                });
-                              },
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+
+                              validator: Validator.validateName,
+
+                              textColor: AppColor.primary,
+                              width: double.infinity,
+                              height: 40,
                             ),
+
                             SizedBox(height: 18),
                             AppRadioField(
                               label: "ശൗചാലയം",
@@ -240,29 +243,48 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             if (electricityConnection == 'yes') ...[
                               const SizedBox(height: 18),
 
-                              AppDropdownField<String>(
-                                label: 'കുടിവെള്ള സൗകര്യം',
-                                selectedValue: selectedwaterFacilityAvailable,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedwaterFacilityAvailable = value;
-                                  });
-                                },
-                              ),
+                             if (electricityConnection == 'yes') ...[
+  const SizedBox(height: 18),
+  BlocBuilder<WaterFacilityBloc, WaterFacilityState>(
+    builder: (context, state) {
+      if (state is WaterFacilityLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (state is WaterFacilityLoaded) {
+        return AppDropdownField<String>(
+          label: 'കുടിവെള്ള സൗകര്യം',
+          selectedValue: selectedwaterFacilityAvailable,
+          borderColor: AppColor.borderColor,
+          labelColor: AppColor.hintText2,
+          selectedTextColor: AppColor.primary,
+          iconColor: AppColor.black,
+          dropdownBgColor: AppColor.white,
+          dropdownTextColor: AppColor.hintText,
+          validator: Validator.validateSelection,
+          items: state.items.map((e) => e.name).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedwaterFacilityAvailable = value;
+              selectedWaterFacilityId =
+                  state.items.firstWhere((e) => e.name == value).id;
+            });
+          },
+        );
+      }
+
+      if (state is WaterFacilityError) {
+        return Text(
+          'Error: ${state.message}',
+          style: const TextStyle(color: Colors.red),
+        );
+      }
+
+      return const SizedBox();
+    },
+  ),
+],
+
                             ],
                             SizedBox(height: 18),
                             AppRadioField(
