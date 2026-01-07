@@ -1,6 +1,7 @@
-import 'package:e_member_app/feature/login/presentation/login_view.dart';
+import 'package:e_member_app/feature/login/presentation/screen/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
