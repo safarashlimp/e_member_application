@@ -7,6 +7,7 @@ import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/ration_card_repository.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/widget/survey_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,13 +104,14 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
         bottomNavigationBar: MainBottomBar(currentIndex: 0),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-           Navigator.push(
+        Navigator.push(
   context,
   MaterialPageRoute(
     builder: (context) => BlocProvider(
       create: (_) => RationCardBloc(
         RationCardRepository(),
       )..add(FetchRationCards()),
+      child: const AddServyItems(), 
     ),
   ),
 );

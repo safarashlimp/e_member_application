@@ -58,11 +58,10 @@ class _AddServyItemsState extends State<AddServyItems> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RationCardBloc(
-      RationCardRepository(),
-    )..add(FetchRationCards()),
+      
+      create: (_) => RationCardBloc(RationCardRepository())..add(FetchRationCards()),
       child: SafeArea(
-        top: false,
+      
         child: Scaffold(
           backgroundColor: AppColor.secondary,
           body: Column(
@@ -148,64 +147,57 @@ class _AddServyItemsState extends State<AddServyItems> {
                           ),
                           SizedBox(height: 18),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppTextField(
-                                  controller:
-                                      cardNumber, // hintText: "വീട്ടു നമ്പർ",
-                                  label: "റേഷൻ കാർഡ് നമ്പർ",
-                                  type: "card_number",
-                                  validator: Validator.cardNumberValidator,
-                                  labelColor: AppColor.hintText2,
-                                  borderColor: AppColor.borderColor,
-                                  focusedBorderColor: AppColor.primary,
-                                  labelfontSizes: 12,
-                                  textColor: AppColor.primary,
-                                  width: double.infinity,
-                                  height: 40,
-                                ),
-                              ),
-                              SizedBox(width: 20),
+                        Row(
+  children: [
+    Expanded(
+      child: AppTextField(
+        controller: cardNumber,
+        label: "റേഷൻ കാർഡ് നമ്പർ",
+        type: "card_number",
+        validator: Validator.cardNumberValidator,
+        labelColor: AppColor.hintText2,
+        borderColor: AppColor.borderColor,
+        focusedBorderColor: AppColor.primary,
+        labelfontSizes: 12,
+        textColor: AppColor.primary,
+        width: double.infinity,
+        height: 40,
+      ),
+    ),
+    SizedBox(width: 20),
+    // Wrap dropdown in Flexible instead of Expanded
+    Flexible(
+      child: BlocBuilder<RationCardBloc, RationCardState>(
+        builder: (context, state) {
+          if (state is RationCardLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is RationCardLoaded) {
+            return AppRationDropdown(
+              label: "റേഷൻ കാർഡ് തരം",
+              validator: (v) => state.rationCards.isEmpty ? "Loading..." : null,
+              labelColor: AppColor.hintText2,
+              borderColor: AppColor.border,
+              iconColor: AppColor.black,
+              value: state.selectedCardId,
+              items: state.rationCards,
+              colorBuilder: rationCardBgColor,
+              onChanged: (v) {
+                context.read<RationCardBloc>().add(
+                      SelectRationCard(v!),
+                    );
+              },
+            );
+          } else if (state is RationCardError) {
+            return Center(child: Text(state.message));
+          } else {
+            return const SizedBox();
+          }
+        },
+      ),
+    ),
+  ],
+),
 
-                              // inside your _AddServyItemsState build method
-                              Expanded(
-                                child: BlocBuilder<RationCardBloc, RationCardState>(
-                                  builder: (context, state) {
-                                    if (state is RationCardLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    } else if (state is RationCardLoaded) {
-                                      return AppRationDropdown(
-                                        label: "റേഷൻ കാർഡ് തരം",
-                                        validator: (v) =>
-                                            state.rationCards.isEmpty
-                                            ? "Loading..."
-                                            : null,
-                                        labelColor: AppColor.hintText2,
-                                        borderColor: AppColor.border,
-                                        iconColor: AppColor.black,
-                                        value: state
-                                            .selectedCardId, // <-- selected value from Bloc
-                                        items: state.rationCards,
-                                        colorBuilder: rationCardBgColor,
-                                        onChanged: (v) {
-                                          context.read<RationCardBloc>().add(
-                                            SelectRationCard(v!),
-                                          );
-                                        },
-                                      );
-                                    } else if (state is RationCardError) {
-                                      return Center(child: Text(state.message));
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
 
                           const SizedBox(height: 18),
 
