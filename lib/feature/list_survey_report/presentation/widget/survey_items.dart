@@ -3,6 +3,7 @@ import 'package:e_member_app/feature/add_family_members_list/data/repository/mem
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
@@ -268,7 +269,13 @@ class PropertyCard extends StatelessWidget {
     MemberDropRepositoryImpl(),
   )..add(FetchQualifications()),
 
-)
+),
+BlocProvider(
+  create: (_) => EducationBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchEducation()),
+),
+
 
       ],
       child: AddFamilyMembers(),
