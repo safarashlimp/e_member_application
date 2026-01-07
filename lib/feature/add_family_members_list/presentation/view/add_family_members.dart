@@ -10,6 +10,8 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
@@ -67,6 +69,9 @@ String? employmentStatusId;
 // job
 String? jobStatus;
 String? jobStatusId;
+// employment support
+String? employmentSupportLabel;
+String? employmentSupportId;
 
 
   String selectedGender = 'male';
@@ -79,7 +84,7 @@ String? jobStatusId;
   String? healthInsurance;
   String? selectedPensionType;
   String? skillsLabel;
-  String? employmentSupportLabel;
+
  
   String? farmingType;
   String? requiredHealthSupports;
@@ -711,29 +716,50 @@ BlocBuilder<EducationBloc, EducationState>(
                               width: double.infinity,
                             ),
                             SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
-                              selectedValue: employmentSupportLabel,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  hasHealthIssues = value;
-                                });
-                              },
-                            ),
+                           BlocBuilder<EmploymentSupportBloc, EmploymentSupportState>(
+  builder: (context, state) {
+    if (state is EmploymentSupportLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is EmploymentSupportLoaded) {
+      return AppDropdownField<String>(
+        label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
+        selectedValue: employmentSupportLabel,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            employmentSupportLabel = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            employmentSupportId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is EmploymentSupportError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
 
                             if (employmentStatus == "പ്രവാസി") ...[
                               const SizedBox(height: 20),
