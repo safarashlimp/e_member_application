@@ -3,6 +3,7 @@ import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/servey_section.dart';
+import 'package:e_member_app/core/widget/text_field/app_drop_dowm_multiple_selector.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 
@@ -26,8 +27,12 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController whatsupNumber = TextEditingController();
   final TextEditingController treatmentPlaceLabel = TextEditingController();
   final TextEditingController surveyorNameLabel = TextEditingController();
+  final TextEditingController courseStudy = TextEditingController();
+  final TextEditingController studyCenter = TextEditingController();
+  List<String> selectedSkills = [];
   String? selectedReletion;
   String selectedGender = 'male';
+  String? selectedRlgn = 'hindu';
   String? selectedMaritalStatus;
   String? selectedCaste;
   String? selectedEducation;
@@ -54,6 +59,24 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   String student = 'yes';
   String patient = "yes";
   String needEducationHelp = 'yes';
+  final List<String> skills = [
+    'റോയിര രഴിവുകൾ',
+    'പാചക രഴിവ്',
+    'ലംബിംഗ്',
+    'മൊബൈൽ റിപ്പയർ',
+    'അഭിനയം',
+    'നൃത്തം',
+    'ഗാനാലാപനം',
+    'ചിത്രരചന',
+    'കമ്പ്യൂട്ടർ പരിജ്ഞാനം',
+    'മത്സ്യബന്ധനം',
+    'പാക്കിംഗ്',
+    'തയ്യൽ',
+    'കാർഷിക പ്രവർത്തനങ്ങൾ',
+    'പ്രഭാഷണ രഴിവ്',
+    'അധ്യാപന രഴിവ്',
+    'മറ്റ്',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -215,19 +238,19 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             vertical: 7,
                           ),
 
-                          value: selectedGender,
+                          value: selectedRlgn,
                           options: const [
-                            {'label': 'ഹിന്ദു', 'value': 'male'},
-                            {'label': 'മുസ്ലിം', 'value': 'female'},
-                            {'label': 'ക്രിസ്ത്യൻ', 'value': 'other'},
-                            {'label': 'സിഖ്', 'value': 'female'},
-                            {'label': 'ബുദ്ധ', 'value': 'other'},
-                            {'label': 'ജൈന', 'value': 'female'},
+                            {'label': 'ഹിന്ദു', 'value': 'hindu'},
+                            {'label': 'മുസ്ലിം', 'value': 'muslim'},
+                            {'label': 'ക്രിസ്ത്യൻ', 'value': 'cris'},
+                            {'label': 'സിഖ്', 'value': 'sikh'},
+                            {'label': 'ബുദ്ധ', 'value': 'budha'},
+                            {'label': 'ജൈന', 'value': 'jaina'},
                             {'label': 'മറ്റ്', 'value': 'other'},
                           ],
                           onChanged: (v) {
                             setState(() {
-                              selectedGender = v;
+                              selectedRlgn = v;
                             });
                           },
                         ),
@@ -330,7 +353,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                           ),
                           SizedBox(height: 20),
                           AppTextField(
-                            controller: familyMemberName,
+                            controller: courseStudy,
                             label: "പഠിക്കുന്ന കോഴ്‌സ്",
                             labelColor: AppColor.hintText2,
                             borderColor: AppColor.borderColor,
@@ -342,7 +365,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                           ),
                           SizedBox(height: 20),
                           AppTextField(
-                            controller: familyMemberName,
+                            controller: studyCenter,
                             label: "പഠിക്കുന്ന സ്ഥാപനം",
                             labelColor: AppColor.hintText2,
                             borderColor: AppColor.borderColor,
@@ -425,29 +448,18 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                           },
                         ),
                         SizedBox(height: 20),
-                        AppDropdownField<String>(
-                          label: 'കഴിവുകൾ / നൈപുണ്യങ്ങൾ',
-                          selectedValue: skillsLabel,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
+                        AppMultiSelectDropdown<String>(
+                          label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+                          items: skills,
+                          selectedValues: selectedSkills,
+                          //hintText: 'Select skills',
+                          onChanged: (values) {
                             setState(() {
-                              skillsLabel = value;
+                              selectedSkills = values;
                             });
                           },
                         ),
+
                         SizedBox(height: 20),
                         AppTextField(
                           controller: specifySkillLabel,
@@ -589,6 +601,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             width: double.infinity,
                           ),
                         ],
+
                         SizedBox(height: 20),
                         AppRadioField(
                           label: " ഭിന്നശേഷിയുണ്ടോ?",

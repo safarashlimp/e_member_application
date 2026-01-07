@@ -232,11 +232,12 @@ class PropertyCard extends StatelessWidget {
                 child: Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {
-  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddFamilyMembers()),
-                    );
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddFamilyMembers(),
+                        ),
+                      );
                     },
                     icon: const Icon(
                       Icons.add,

@@ -19,13 +19,15 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedHouseType;
   String? selectedLandType;
   String? selectedLandArea;
-  String? selectedWaterFacility;
+  String? selectedGeneralNeedsoftheWard;
   String? selectedRequiredBenefit;
-  String? selectedElectricityConnection;
+  String? selectedwaterFacilityAvailable;
+  String? selectedGetBenefit;
 
   String toilet = 'yes';
   String electricityConnection = 'yes';
   String benefitsReceived = "yes";
+  String benefitsWanted = 'yes';
   final List<String> dummyHouseTypes = [
     'പക്കാ വീട്',
     'സെമി പക്കാ വീട്',
@@ -192,8 +194,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                           const SizedBox(height: 18),
 
                           AppDropdownField<String>(
-                            label: 'വൈദ്യുതി കണക്ഷൻ തരം',
-                            selectedValue: selectedElectricityConnection,
+                            label: 'കുടിവെള്ള സൗകര്യം',
+                            selectedValue: selectedwaterFacilityAvailable,
                             borderColor: AppColor.borderColor,
                             labelColor: AppColor.hintText2,
                             selectedTextColor: AppColor.primary,
@@ -210,7 +212,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             ],
                             onChanged: (value) {
                               setState(() {
-                                selectedElectricityConnection = value;
+                                selectedwaterFacilityAvailable = value;
                               });
                             },
                           ),
@@ -233,6 +235,51 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                         ),
 
                         if (benefitsReceived == 'yes') ...[
+                          const SizedBox(height: 18),
+
+                          AppDropdownField<String>(
+                            label: 'ലഭിച്ച ആനുകൂല്യം',
+                            selectedValue: selectedGetBenefit,
+                            borderColor: AppColor.borderColor,
+                            labelColor: AppColor.hintText2,
+                            selectedTextColor: AppColor.primary,
+                            iconColor: AppColor.black,
+                            dropdownBgColor: AppColor.white,
+                            dropdownTextColor: AppColor.hintText,
+                            validator: Validator.validateSelection,
+                            items: const [
+                              'പക്കാ വീട്',
+                              'സെമി പക്കാ വീട്',
+                              'കച്ച വീട്',
+                              'വാടക വീട്',
+                              'വീട് ഇല്ല',
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedGetBenefit = value;
+                              });
+                            },
+                          ),
+                        ],
+
+                        const SizedBox(height: 18),
+                         AppRadioField(
+                          label: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ?",
+                          value: benefitsWanted,
+                          // onChanged: (v) => setState(() =>
+                          // electricityConnection = v),
+                          onChanged: (v) {
+                            setState(() {
+                              benefitsWanted = v;
+                              if (v == 'no') {
+                                // benefitsReceived = null;
+                                // selectedLandType = null; // reset dropdown
+                              }
+                            });
+                          },
+                        ),
+
+                        if (benefitsWanted == 'yes') ...[
                           const SizedBox(height: 18),
 
                           AppDropdownField<String>(
@@ -263,8 +310,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                         const SizedBox(height: 18),
 
                         AppDropdownField<String>(
-                          label: 'കുടിവെള്ള സൗകര്യം',
-                          selectedValue: selectedWaterFacility,
+                          label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
+                          selectedValue: selectedGeneralNeedsoftheWard,
                           borderColor: AppColor.borderColor,
                           labelColor: AppColor.hintText2,
                           selectedTextColor: AppColor.primary,
@@ -281,7 +328,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                           ],
                           onChanged: (value) {
                             setState(() {
-                              selectedWaterFacility = value;
+                              selectedGeneralNeedsoftheWard = value;
                             });
                           },
                         ),
