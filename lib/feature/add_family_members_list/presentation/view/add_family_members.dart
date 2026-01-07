@@ -25,6 +25,10 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/h
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_state.dart';
 
@@ -96,6 +100,13 @@ String? healthInsuranceId;
 String? requiredHealthSupports;
 String? requiredHealthSupportsId;
 
+// pantion type 
+String? selectedPensionType;
+String? selectedPensionTypeId;
+
+// pansion required 
+String? isPensionRequired;
+String? isPensionRequiredId;
 
 
   String selectedGender = 'male';
@@ -104,8 +115,6 @@ String? requiredHealthSupportsId;
   String? selectedBloodGroup;
 
 
-
-  String? selectedPensionType;
   String? skillsLabel;
 
   String hasDisability = 'yes';
@@ -114,8 +123,7 @@ String? requiredHealthSupportsId;
   String isIncludedInRationCard = 'yes';
   String isPensionReceiving = 'yes';
   String norkaRegisteredLabel = 'yes';
-  String? isPensionRequired; // yes / no
-
+  
   String student = 'yes';
   String patient = "yes";
   String needEducationHelp = 'yes';
@@ -1101,54 +1109,96 @@ BlocBuilder<EducationBloc, EducationState>(
                             ),
                             if (isPensionReceiving == 'yes') ...[
                               const SizedBox(height: 20),
-                              AppDropdownField<String>(
-                                label: 'പെൻഷൻ തരം',
-                                selectedValue: selectedPensionType,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedPensionType = value;
-                                  });
-                                },
-                              ),
+                              BlocBuilder<PensionTypeBloc, PensionTypeState>(
+  builder: (context, state) {
+    if (state is PensionTypeLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is PensionTypeLoaded) {
+      return AppDropdownField<String>(
+        label: 'പെൻഷൻ തരം',
+        selectedValue: selectedPensionType,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            selectedPensionType = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            selectedPensionTypeId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is PensionTypeError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             ],
                             SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
-                              selectedValue: isPensionRequired,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  isPensionRequired = value;
-                                });
-                              },
-                            ),
+                           BlocBuilder<PensionRequiredBloc, PensionRequiredState>(
+  builder: (context, state) {
+    if (state is PensionRequiredLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is PensionRequiredLoaded) {
+      return AppDropdownField<String>(
+        label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
+        selectedValue: isPensionRequired,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            isPensionRequired = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            isPensionRequiredId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is PensionRequiredError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,

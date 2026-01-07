@@ -16,6 +16,10 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/h
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
@@ -324,6 +328,16 @@ BlocProvider(
   )..add(FetchRequiredHealthSupports()),
 ),
 
+BlocProvider(
+  create: (_) => PensionTypeBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchPensionTypes()),
+),
+BlocProvider(
+  create: (_) => PensionRequiredBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchPensionRequirement()),
+),
 
       ],
       child: AddFamilyMembers(),
