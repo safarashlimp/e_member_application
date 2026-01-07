@@ -22,7 +22,7 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/f
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
@@ -30,6 +30,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/q
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,6 +92,11 @@ String? hasHealthIssuesId;
 String? healthInsurance;
 String? healthInsuranceId;
 
+// requried health product
+String? requiredHealthSupports;
+String? requiredHealthSupportsId;
+
+
 
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
@@ -101,7 +108,6 @@ String? healthInsuranceId;
   String? selectedPensionType;
   String? skillsLabel;
 
-  String? requiredHealthSupports;
   String hasDisability = 'yes';
   String disabilityBenefit = "yes";
   String healthInsuranceCard = 'yes';
@@ -1013,30 +1019,50 @@ BlocBuilder<EducationBloc, EducationState>(
 
                             ],
                             const SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
-                              selectedValue: requiredHealthSupports,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  requiredHealthSupports = value;
-                                });
-                              },
-                            ),
-                          ],
+                            BlocBuilder<RequiredHealthSupportBloc, RequiredHealthSupportState>(
+  builder: (context, state) {
+    if (state is RequiredHealthSupportLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is RequiredHealthSupportLoaded) {
+      return AppDropdownField<String>(
+        label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
+        selectedValue: requiredHealthSupports,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            requiredHealthSupports = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            requiredHealthSupportsId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is RequiredHealthSupportError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+                  ],
                         ),
                       ),
                       SizedBox(height: 50),

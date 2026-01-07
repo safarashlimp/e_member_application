@@ -13,13 +13,15 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/f
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:flutter/material.dart';
@@ -316,6 +318,12 @@ BlocProvider(
     MemberDropRepositoryImpl(),
   )..add(FetchHealthInsurance()),
 ),
+BlocProvider(
+  create: (_) => RequiredHealthSupportBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchRequiredHealthSupports()),
+),
+
 
       ],
       child: AddFamilyMembers(),
