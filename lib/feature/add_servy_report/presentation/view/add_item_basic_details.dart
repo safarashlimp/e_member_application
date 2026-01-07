@@ -39,16 +39,16 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedLandArea;
   String? selectedGeneralNeedsoftheWard;
   String? selectedRequiredBenefit;
-  String? selectedRequiredBenefitId;  
+  String? selectedRequiredBenefitId;
   String? selectedwaterFacilityAvailable;
   String? selectedWaterFacilityId;
   String? selectedGetBenefit;
-  
-String? selectedGeneralNeed;
-String? selectedGeneralNeedId;
+
+  String? selectedGeneralNeed;
+  String? selectedGeneralNeedId;
 
   String? selectedOtherBenefit;
-String? selectedOtherBenefitId;
+  String? selectedOtherBenefitId;
   String toilet = 'yes';
   String electricityConnection = 'yes';
   String benefitsReceived = "yes";
@@ -74,9 +74,6 @@ String? selectedOtherBenefitId;
     '5 – 10 സെന്റ്',
     '10 സെന്റിന് മുകളിൽ',
   ];
-
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -255,48 +252,62 @@ String? selectedOtherBenefitId;
                             if (electricityConnection == 'yes') ...[
                               const SizedBox(height: 18),
 
-                             if (electricityConnection == 'yes') ...[
-  const SizedBox(height: 18),
-  BlocBuilder<WaterFacilityBloc, WaterFacilityState>(
-    builder: (context, state) {
-      if (state is WaterFacilityLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
+                              if (electricityConnection == 'yes') ...[
+                                const SizedBox(height: 18),
+                                BlocBuilder<
+                                  WaterFacilityBloc,
+                                  WaterFacilityState
+                                >(
+                                  builder: (context, state) {
+                                    if (state is WaterFacilityLoading) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
 
-      if (state is WaterFacilityLoaded) {
-        return AppDropdownField<String>(
-          label: 'കുടിവെള്ള സൗകര്യം',
-          selectedValue: selectedwaterFacilityAvailable,
-          borderColor: AppColor.borderColor,
-          labelColor: AppColor.hintText2,
-          selectedTextColor: AppColor.primary,
-          iconColor: AppColor.black,
-          dropdownBgColor: AppColor.white,
-          dropdownTextColor: AppColor.hintText,
-          validator: Validator.validateSelection,
-          items: state.items.map((e) => e.name).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedwaterFacilityAvailable = value;
-              selectedWaterFacilityId =
-                  state.items.firstWhere((e) => e.name == value).id;
-            });
-          },
-        );
-      }
+                                    if (state is WaterFacilityLoaded) {
+                                      return AppDropdownField<String>(
+                                        label: 'കുടിവെള്ള സൗകര്യം',
+                                        selectedValue:
+                                            selectedwaterFacilityAvailable,
+                                        borderColor: AppColor.borderColor,
+                                        labelColor: AppColor.hintText2,
+                                        selectedTextColor: AppColor.primary,
+                                        iconColor: AppColor.black,
+                                        dropdownBgColor: AppColor.white,
+                                        dropdownTextColor: AppColor.hintText,
+                                        validator: Validator.validateSelection,
+                                        items: state.items
+                                            .map((e) => e.name)
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedwaterFacilityAvailable =
+                                                value;
+                                            selectedWaterFacilityId = state
+                                                .items
+                                                .firstWhere(
+                                                  (e) => e.name == value,
+                                                )
+                                                .id;
+                                          });
+                                        },
+                                      );
+                                    }
 
-      if (state is WaterFacilityError) {
-        return Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.red),
-        );
-      }
+                                    if (state is WaterFacilityError) {
+                                      return Text(
+                                        'Error: ${state.message}',
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      );
+                                    }
 
-      return const SizedBox();
-    },
-  ),
-],
-
+                                    return const SizedBox();
+                                  },
+                                ),
+                              ],
                             ],
                             SizedBox(height: 18),
                             AppRadioField(
@@ -314,48 +325,58 @@ String? selectedOtherBenefitId;
                                 });
                               },
                             ),
-if (benefitsWanted == 'yes') ...[
-  const SizedBox(height: 18),
-  BlocBuilder<RequiredBenefitBloc, RequiredBenefitState>(
-    builder: (context, state) {
-      if (state is RequiredBenefitLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
+                            if (benefitsWanted == 'yes') ...[
+                              const SizedBox(height: 18),
+                              BlocBuilder<
+                                RequiredBenefitBloc,
+                                RequiredBenefitState
+                              >(
+                                builder: (context, state) {
+                                  if (state is RequiredBenefitLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-      if (state is RequiredBenefitLoaded) {
-        return AppDropdownField<String>(
-          label: 'ലഭിച്ച ആനുകൂല്യം ',
-          selectedValue: selectedRequiredBenefit,
-          borderColor: AppColor.borderColor,
-          labelColor: AppColor.hintText2,
-          selectedTextColor: AppColor.primary,
-          iconColor: AppColor.black,
-          dropdownBgColor: AppColor.white,
-          dropdownTextColor: AppColor.hintText,
-          validator: Validator.validateSelection,
-          items: state.items.map((e) => e.name).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedRequiredBenefit = value;
-              selectedRequiredBenefitId =
-                  state.items.firstWhere((e) => e.name == value).id;
-            });
-          },
-        );
-      }
+                                  if (state is RequiredBenefitLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ലഭിച്ച ആനുകൂല്യം ',
+                                      selectedValue: selectedRequiredBenefit,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedRequiredBenefit = value;
+                                          selectedRequiredBenefitId = state
+                                              .items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              )
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-      if (state is RequiredBenefitError) {
-        return Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.red),
-        );
-      }
+                                  if (state is RequiredBenefitError) {
+                                    return Text(
+                                      'Error: ${state.message}',
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-      return const SizedBox();
-    },
-  ),
-],
-
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
 
                             const SizedBox(height: 18),
                             AppRadioField(
@@ -374,90 +395,103 @@ if (benefitsWanted == 'yes') ...[
                               },
                             ),
 
-if (benefitsWanted == 'yes') ...[
-  const SizedBox(height: 18),
+                            if (benefitsWanted == 'yes') ...[
+                              const SizedBox(height: 18),
 
-  BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
-    builder: (context, state) {
-      if (state is OtherBenefitLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
+                              BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
+                                builder: (context, state) {
+                                  if (state is OtherBenefitLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-      if (state is OtherBenefitLoaded) {
-        return AppDropdownField<String>(
-          label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
-          selectedValue: selectedOtherBenefit,
-          borderColor: AppColor.borderColor,
-          labelColor: AppColor.hintText2,
-          selectedTextColor: AppColor.primary,
-          iconColor: AppColor.black,
-          dropdownBgColor: AppColor.white,
-          dropdownTextColor: AppColor.hintText,
-            validator: Validator.validateSelection,
-            items: state.items.map((e) => e.name).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedOtherBenefit = value;
-                selectedOtherBenefitId =
-                  state.items.firstWhere((e) => e.name == value).id;
-            });
-          },
-        );
-      }
+                                  if (state is OtherBenefitLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
+                                      selectedValue: selectedOtherBenefit,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedOtherBenefit = value;
+                                          selectedOtherBenefitId = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              )
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-      if (state is OtherBenefitError) {
-        return Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.red),
-        );
-      }
+                                  if (state is OtherBenefitError) {
+                                    return Text(
+                                      'Error: ${state.message}',
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-      return const SizedBox();
-    },
-  ),
-],
-
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
 
                             const SizedBox(height: 18),
-BlocBuilder<WardGeneralNeedBloc, WardGeneralNeedState>(
-  builder: (context, state) {
-    if (state is WardGeneralNeedLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              WardGeneralNeedBloc,
+                              WardGeneralNeedState
+                            >(
+                              builder: (context, state) {
+                                if (state is WardGeneralNeedLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is WardGeneralNeedLoaded) {
-      return AppDropdownField<String>(
-        label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
-        selectedValue: selectedGeneralNeed,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
-        items: state.items.map((e) => e.name).toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedGeneralNeed = value;
-            selectedGeneralNeedId =
-                state.items.firstWhere((e) => e.name == value).id;
-          });
-        },
-      );
-    }
+                                if (state is WardGeneralNeedLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
+                                    selectedValue: selectedGeneralNeed,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedGeneralNeed = value;
+                                        selectedGeneralNeedId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is WardGeneralNeedError) {
-      return Text(
-        'Error: ${state.message}',
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is WardGeneralNeedError) {
+                                  return Text(
+                                    'Error: ${state.message}',
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-
+                                return const SizedBox();
+                              },
+                            ),
                           ],
                         ),
                       ),
