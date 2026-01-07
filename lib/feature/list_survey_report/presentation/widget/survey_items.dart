@@ -1,13 +1,15 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_event.dart';
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
@@ -296,6 +298,11 @@ BlocProvider(
   )..add(FetchEmploymentSupports()),
 ),
 
+BlocProvider(
+  create: (_) => FarmingTypeBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchFarmingTypes()),
+),
 
       ],
       child: AddFamilyMembers(),

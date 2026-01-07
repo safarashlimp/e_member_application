@@ -10,13 +10,15 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/bloc/employment_suppor_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/job/job_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
@@ -73,6 +75,9 @@ String? jobStatusId;
 String? employmentSupportLabel;
 String? employmentSupportId;
 
+// farming type
+String? farmingType;
+String? farmingTypeId;
 
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
@@ -85,8 +90,6 @@ String? employmentSupportId;
   String? selectedPensionType;
   String? skillsLabel;
 
- 
-  String? farmingType;
   String? requiredHealthSupports;
   String hasDisability = 'yes';
   String disabilityBenefit = "yes";
@@ -779,30 +782,50 @@ BlocBuilder<EducationBloc, EducationState>(
                             ],
                             if (jobStatus == "കർഷകൻ") ...[
                               const SizedBox(height: 20),
-                              AppDropdownField<String>(
-                                label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
-                                selectedValue: farmingType,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  "നെൽകൃഷി",
-                                  "പച്ചക്കറി കൃഷി",
-                                  "തോട്ടം കൃഷി",
-                                  "മൃഗസംരക്ഷണം",
-                                  "മത്സ്യകൃഷി",
-                                  "മിശ്ര കൃഷി",
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    farmingType = value;
-                                  });
-                                },
-                              ),
+                              BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
+  builder: (context, state) {
+    if (state is FarmingTypeLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is FarmingTypeLoaded) {
+      return AppDropdownField<String>(
+        label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
+        selectedValue: farmingType,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            farmingType = value;
+
+            final selectedItem =
+                state.items.firstWhere((e) => e.name == value);
+            farmingTypeId = selectedItem.id;
+          });
+        },
+      );
+    }
+
+    if (state is FarmingTypeError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             ],
                           ],
                         ),
