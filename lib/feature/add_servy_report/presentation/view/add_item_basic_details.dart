@@ -14,6 +14,8 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_dr
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_state.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
@@ -41,6 +43,9 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedwaterFacilityAvailable;
   String? selectedWaterFacilityId;
   String? selectedGetBenefit;
+  
+String? selectedGeneralNeed;
+String? selectedGeneralNeedId;
 
   String? selectedOtherBenefit;
 String? selectedOtherBenefitId;
@@ -414,30 +419,45 @@ if (benefitsWanted == 'yes') ...[
 
 
                             const SizedBox(height: 18),
+BlocBuilder<WardGeneralNeedBloc, WardGeneralNeedState>(
+  builder: (context, state) {
+    if (state is WardGeneralNeedLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-                            AppDropdownField<String>(
-                              label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
-                              selectedValue: selectedGeneralNeedsoftheWard,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedGeneralNeedsoftheWard = value;
-                                });
-                              },
-                            ),
+    if (state is WardGeneralNeedLoaded) {
+      return AppDropdownField<String>(
+        label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
+        selectedValue: selectedGeneralNeed,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+        items: state.items.map((e) => e.name).toList(),
+        onChanged: (value) {
+          setState(() {
+            selectedGeneralNeed = value;
+            selectedGeneralNeedId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
+        },
+      );
+    }
+
+    if (state is WardGeneralNeedError) {
+      return Text(
+        'Error: ${state.message}',
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                           ],
                         ),
                       ),

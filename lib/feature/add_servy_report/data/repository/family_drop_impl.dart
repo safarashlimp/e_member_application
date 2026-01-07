@@ -72,4 +72,21 @@ Future<List<FamilyDropItem>> getOtherBenefits() async {
   final model = FamilyDropResponse.fromJson(jsonData);
   return model.data;
 }
+@override
+Future<List<FamilyDropItem>> getWardGeneralNeeds() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/family_drops.php?clientid=1&posistion=7",
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = FamilyDropResponse.fromJson(jsonData);
+    return model.data;
+  } else {
+    throw Exception("Failed to load ward general needs");
+  }
+}
+
 }

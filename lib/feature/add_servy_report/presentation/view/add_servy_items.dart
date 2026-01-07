@@ -22,6 +22,8 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_typ
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_state.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
@@ -311,6 +313,11 @@ class _AddServyItemsState extends State<AddServyItems> {
                                            BlocProvider(
       create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())..add(FetchOtherBenefits()),
     ),
+    BlocProvider(
+  create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
+    ..add(FetchWardGeneralNeeds()),
+),
+
                                         ],
                                         child: const AddItemBasicDetails(),
                                       ),

@@ -6,4 +6,5 @@ abstract class FamilyDropRepository {
   Future<List<FamilyDropItem>> getWaterFacilities();
   Future<List<FamilyDropItem>> getRequiredBenefits(); 
   Future<List<FamilyDropItem>> getOtherBenefits();
+  Future<List<FamilyDropItem>> getWardGeneralNeeds();
 }
