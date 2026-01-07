@@ -101,7 +101,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 0),
+        bottomNavigationBar: AppBottomNav(selectedIndex: 0),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
         Navigator.push(

@@ -154,3 +154,5 @@ class AppUpdateDialog extends StatelessWidget {
 //     await launchUrl(Uri.parse(url));
 //   }
 // }
+
+

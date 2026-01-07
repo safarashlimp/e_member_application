@@ -1,4 +1,5 @@
-import 'package:e_member_app/feature/login/presentation/screen/login_view.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board.dart';
+//import 'package:e_member_app/feature/login/presentation/screen/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +23,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginView());
+    return MaterialApp(
+      //home: LoginView()
+      home: DashboardScreen(),);
   }
 }
