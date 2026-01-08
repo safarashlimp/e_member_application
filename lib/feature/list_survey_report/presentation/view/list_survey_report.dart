@@ -8,64 +8,77 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/ration_car
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/widget/survey_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListSurveyReport extends StatefulWidget {
-  const ListSurveyReport({super.key});
+   final FamilySurveySectionType sectionType;
+  const ListSurveyReport({super.key, required this.sectionType});
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
 }
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
+
+  String get pageTitle {
+  switch (widget.sectionType) {
+    case FamilySurveySectionType.familyBasicDetails:
+      return 'വ്യക്തിഗത വിവരം';
+    case FamilySurveySectionType.basicFacilities:
+      return 'അടിസ്ഥാന സൗകര്യങ്ങൾ';
+  }
+}
+ 
   // -------------------- update------------------------
-  @override
-  void initState() {
-    super.initState();
-    // Check for updates when home page loads
-    _checkForUpdates();
-    // Check app status
-    _checkAppStatus();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Check for updates when home page loads
+  //   _checkForUpdates();
+  //   // Check app status
+  //   _checkAppStatus();
 
    
-  }
+  // }
 
-  Future<void> _checkForUpdates() async {
-    // Simulate checking for updates
-    await Future.delayed(const Duration(milliseconds: 500));
+  // Future<void> _checkForUpdates() async {
+  //   // Simulate checking for updates
+  //   await Future.delayed(const Duration(milliseconds: 500));
 
-    // Check if update is available
-    bool isUpdateAvailable = await _isUpdateAvailable();
+  //   // Check if update is available
+  //   bool isUpdateAvailable = await _isUpdateAvailable();
 
-    if (isUpdateAvailable && mounted) {
-      showAppUpdateDialog(context);
-    }
-  }
+  //   if (isUpdateAvailable && mounted) {
+  //     showAppUpdateDialog(context);
+  //   }
+  // }
 
 
-  // This function checks if an update is available
-  // You can replace this with actual API call or version check
-  Future<bool> _isUpdateAvailable() async {
-    // Example: Compare current version with server version
-    // const String currentVersion = "1.0.0";
-    // String serverVersion = await fetchServerVersion();
-    // return serverVersion != currentVersion;
+  // // This function checks if an update is available
+  // // You can replace this with actual API call or version check
+  // Future<bool> _isUpdateAvailable() async {
+  //   // Example: Compare current version with server version
+  //   // const String currentVersion = "1.0.0";
+  //   // String serverVersion = await fetchServerVersion();
+  //   // return serverVersion != currentVersion;
 
-    // For demo purposes, return true to always show dialog
-    return true; // Change to false to hide dialog
-  }
+  //   // For demo purposes, return true to always show dialog
+  //   return true; // Change to false to hide dialog
+  // }
 
-  void showAppUpdateDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const AppUpdateDialog();
-      },
-    );
-  }
+  // void showAppUpdateDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return const AppUpdateDialog();
+  //     },
+  //   );
+  // }
 
   //--------------------------update----------------------
   //===================exp==========
@@ -101,29 +114,30 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 0),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-        Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => BlocProvider(
-      create: (_) => RationCardBloc(
-        RationCardRepository(),
-      )..add(FetchRationCards()),
-      child: const AddServyItems(), 
-    ),
-  ),
-);
+      //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
+//         floatingActionButton: FloatingActionButton(
+//           onPressed: () {
+//         Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) => BlocProvider(
+//       create: (_) => RationCardBloc(
+//         RationCardRepository(),
+//       )..add(FetchRationCards()),
+//       child:
+//        const AddServyItems(mode: PageMode.add), 
+//     ),
+//   ),
+// );
 
-          },
-          backgroundColor: AppColor.iconColor, // 💚 changes color
-          foregroundColor: AppColor.white,
-          // optional - icon color
-          shape: const CircleBorder(), // ensures circular shape
+//           },
+//           backgroundColor: AppColor.iconColor, // 💚 changes color
+//           foregroundColor: AppColor.white,
+//           // optional - icon color
+//           shape: const CircleBorder(), // ensures circular shape
 
-          child: const Icon(Icons.add, size: 24),
-        ),
+//           child: const Icon(Icons.add, size: 24),
+//         ),
 
         backgroundColor: AppColor.secondary,
         body: Column(
@@ -141,6 +155,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                   itemCount: 3,
                   itemBuilder: (context, index) {
                     return PropertyCard(
+                      sectionType: widget.sectionType,
                       houseNumber: '5/123 ',
                       houseName: "കുന്നത്ത് വീട്",
                       subtitle: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',

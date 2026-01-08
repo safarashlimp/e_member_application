@@ -38,4 +38,18 @@ class AppColor {
   static const Color grey2 = Color(0xff8F9098);
   static const Color grey1 = Color(0xffCCCCCC);
   static const Color lightGrey = Color(0xffC7C7CC);
-}
+  static const Color orange = Color(0xffFF9E42);
+  static const Color lightOrange = Color(0xffFFEAD6);
+  static const Color green = Color(0xff0FA958);
+  static const Color lightgreen = Color(0xffDDF8E2);
+  static const Color red = Color(0xffE8505B);
+  static const Color lightRed = Color(0xffFFD6DA);
+  static const Color purple = Color(0xff7A4DFF);
+  static const Color lightPurple = Color(0xffE6DCFF);
+  static const Color blue = Color(0xff1E88E5);
+  static const Color pink = Color(0xffEC407A);
+  static const Color naviBlue = Color(0xff26C6DA);
+  static const Color orange1 = Color(0xffF57C00);
+  static const Color orange2 = Color(0xffFB8C00);
+  static const Color violet = Color(0xff8E24AA);
+  static const Color darkGreen = Color(0xff2E7D32);}

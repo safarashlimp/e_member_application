@@ -1,15 +1,21 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_basic_details.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_educationdetails.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_health_details.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_sociel_details.dart';
+import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
 
-class MemberCard extends StatelessWidget {
+class MemberCard extends StatefulWidget {
   final String name;
   final String phone;
   final String whatsapp;
   final String ward;
   final String age;
   final String lastUpdated;
-
+  final SurveySectionType sectionType;
   const MemberCard({
     super.key,
     required this.name,
@@ -18,7 +24,66 @@ class MemberCard extends StatelessWidget {
     required this.ward,
     required this.age,
     required this.lastUpdated,
+     required this.sectionType,
   });
+
+  @override
+  State<MemberCard> createState() => _MemberCardState();
+}
+
+class _MemberCardState extends State<MemberCard> {
+    void onViewTap(BuildContext context) {
+  late Widget page;
+
+    switch (widget.sectionType) {
+      case SurveySectionType.personal:
+        page = const EditFamilyMemberBasicDetails(mode: PageMode.view);
+        break;
+      case SurveySectionType.education:
+        page = const EditFamilyMemberEducationdetails(mode: PageMode.view);
+        break;
+      case SurveySectionType.employment:
+        page = const EditFamilyHealthDetails(mode: PageMode.view);
+        break;
+      case SurveySectionType.health:
+        page = const EditFamilyHealthDetails(mode: PageMode.view);
+        break;
+      case SurveySectionType.welfare:
+        page = const EditFamilyMemberSocielDetails(mode: PageMode.view);
+        break;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+  }
+    void onEditTap(BuildContext context) {
+  late Widget page;
+
+    switch (widget.sectionType) {
+      case SurveySectionType.personal:
+        page = const EditFamilyMemberBasicDetails(mode: PageMode.edit);
+        break;
+      case SurveySectionType.education:
+        page = const EditFamilyMemberEducationdetails(mode: PageMode.edit);
+        break;
+      case SurveySectionType.employment:
+        page = const EditFamilyHealthDetails(mode: PageMode.edit);
+        break;
+      case SurveySectionType.health:
+        page = const EditFamilyHealthDetails(mode: PageMode.edit);
+        break;
+      case SurveySectionType.welfare:
+        page = const EditFamilyMemberSocielDetails(mode: PageMode.edit);
+        break;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +134,7 @@ class MemberCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      widget.name,
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
@@ -86,7 +151,7 @@ class MemberCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          phone,
+                          widget.phone,
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColor.hintText2,
@@ -115,7 +180,7 @@ class MemberCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          whatsapp,
+                          widget.whatsapp,
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColor.hintText2,
@@ -152,7 +217,7 @@ class MemberCard extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  ward,
+                  widget.ward,
                   style: TextStyle(
                     fontSize: 13,
                     color: AppColor.hintText2,
@@ -183,7 +248,7 @@ class MemberCard extends StatelessWidget {
 
               const SizedBox(width: 6),
               Text(
-                age,
+                widget.age,
                 style: TextStyle(
                   fontSize: 13,
                   color: AppColor.hintText2,
@@ -199,7 +264,7 @@ class MemberCard extends StatelessWidget {
               Icon(Icons.update, size: 16, color: AppColor.iconColor),
               const SizedBox(width: 6),
               Text(
-                lastUpdated,
+                widget.lastUpdated,
                 style: TextStyle(
                   fontSize: 13,
                   color: AppColor.hintText2,
@@ -215,13 +280,14 @@ class MemberCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               OutlinedButton.icon(
-                onPressed: () {
-                  //add contition
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddFamilyMembers()),
-                  );
-                },
+                onPressed: () => onViewTap(context),
+                // onPressed: () {
+                //   //add contition
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => AddFamilyMembers()),
+                //   );
+                // },
                 icon: const Icon(
                   Icons.visibility,
                   size: 14,
@@ -248,12 +314,9 @@ class MemberCard extends StatelessWidget {
               const SizedBox(width: 7),
               OutlinedButton.icon(
                 //add contition
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddFamilyMembers()),
-                  );
-                },
+                onPressed:(){
+                  onEditTap(context);
+                } ,
                 icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
                 label: const Text(
                   'Edit',

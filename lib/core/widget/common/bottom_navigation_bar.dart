@@ -1,5 +1,7 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_family_menu/presentation/view/list_family_menu.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -30,11 +32,11 @@ class _MainBottomBarState extends State<MainBottomBar> {
     Widget page;
     switch (index) {
       case 0:
-        page = const ListSurveyReport();
+        page = const ListServeyReportMenu();
         break;
 
       default:
-        page = const ListFamily();
+        page = const ListFamilyMenu();
     }
 
     Navigator.pushReplacement(

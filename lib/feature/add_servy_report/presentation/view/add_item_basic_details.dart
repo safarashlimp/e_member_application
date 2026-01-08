@@ -18,12 +18,15 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemBasicDetails extends StatefulWidget {
-  const AddItemBasicDetails({super.key});
+    final PageMode mode;
+  const AddItemBasicDetails({super.key, required this.mode});
 
   @override
   State<AddItemBasicDetails> createState() => _AddItemBasicDetailsState();
@@ -46,7 +49,9 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
 
   String? selectedGeneralNeed;
   String? selectedGeneralNeedId;
-
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
+   bool get isAdd => widget.mode == PageMode.add;
   String? selectedOtherBenefit;
   String? selectedOtherBenefitId;
   String toilet = 'yes';
@@ -496,14 +501,14 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                         ),
                       ),
                       SizedBox(height: 30),
-
+if(isEdit || isAdd  )...[
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ListSurveyReport(),
+                              builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails,),
                             ),
                           );
                         },
@@ -514,6 +519,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                         ),
                         height: 44,
                       ),
+] else if (isView) ...[
+                      SizedBox(height: 50),]
                     ],
                   ),
                 ),

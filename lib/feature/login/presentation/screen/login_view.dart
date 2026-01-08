@@ -1,9 +1,10 @@
+import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
 import 'package:e_member_app/feature/login/presentation/bloc/loginBloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
+
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
@@ -27,7 +28,7 @@ class LoginView extends StatelessWidget {
               if (state is LoginSuccess) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => ListSurveyReport()),
+                  MaterialPageRoute(builder: (_) => ListServeyReportMenu()),
                 );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(

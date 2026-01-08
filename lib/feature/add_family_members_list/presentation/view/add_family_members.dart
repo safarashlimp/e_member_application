@@ -11,6 +11,8 @@ import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 
 class AddFamilyMembers extends StatefulWidget {
@@ -846,7 +848,7 @@ void initState() {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ListFamily()),
+                        MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
                       );
                     },
                     labelStyle: const TextStyle(

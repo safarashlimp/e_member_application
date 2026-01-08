@@ -10,6 +10,7 @@ class MenuContainar extends StatelessWidget {
   final double iconSize;
   final Color backgroundColor;
   final Color titleColor;
+   final VoidCallback? onIconTap;
 
 
   const MenuContainar({
@@ -22,6 +23,7 @@ class MenuContainar extends StatelessWidget {
     this.iconSize = 40,
     this.backgroundColor = Colors.white,
     this.titleColor = Colors.black,
+     this.onIconTap,
   });
 
   @override
@@ -82,7 +84,9 @@ class MenuContainar extends StatelessWidget {
                   ),
                 ),
               
-               Icon(icon, size: iconSize, color: iconColor,),
+               GestureDetector(
+                onTap: onIconTap,
+                child: Icon(icon, size: iconSize, color: iconColor,)),
             ],
           ),
      
