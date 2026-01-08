@@ -80,7 +80,7 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                   children: [
                     MenuContainar(
                       title: 'അടിസ്ഥാന വിവരങ്ങൾ',
-                      iconAsset: 'assets/images/menu_icon11.png',
+                      iconAsset: 'assets/images/Mask group (14).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightBlue,
                       iconColor: AppColor.iconColor,
@@ -96,7 +96,7 @@ onIconTap: () {
                     MenuContainar(
 
                       title: 'അടിസ്ഥാന സൗകര്യങ്ങൾ',
-                      iconAsset: 'assets/images/menu_icon_12.png',
+                      iconAsset: 'assets/images/Mask group (15).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightgreen,
                       iconColor: AppColor.green,

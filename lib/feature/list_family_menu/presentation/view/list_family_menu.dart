@@ -86,7 +86,7 @@ onIconTap: () {
                       SizedBox(height: 15),
                     MenuContainar(
                       title: 'തൊഴിൽ',
-                      iconAsset: 'assets/images/Mask group (22).png',
+                      iconAsset: 'assets/images/Mask group (18).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightOrange,
                       iconColor: AppColor.orange,
