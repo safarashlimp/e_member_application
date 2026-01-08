@@ -5,115 +5,8 @@ import 'package:e_member_app/feature/add_servy_report/presentation/view/add_serv
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-class MainBottomBar extends StatefulWidget {
-  final int currentIndex;
-  const MainBottomBar({super.key, required this.currentIndex});
 
-  @override
-  State<MainBottomBar> createState() => _MainBottomBarState();
-}
-
-class _MainBottomBarState extends State<MainBottomBar> {
-  final navigationKey = GlobalKey<CurvedNavigationBarState>();
-  late int _index;
-
-  @override
-  void initState() {
-    super.initState();
-    _index = widget.currentIndex;
-  }
-
-  void _onNavTap(int index) {
-    if (index == _index) return;
-
-    setState(() => _index = index);
-
-    Widget page;
-    switch (index) {
-      case 0:
-        page = const ListSurveyReport();
-        break;
-
-      default:
-        page = const ListFamily();
-    }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
-  }
-
-  final items = <Widget>[
-    Icon(Icons.file_open, color: AppColor.white),
-    Image(
-      image: AssetImage("assets/images/vaadin_family.png"),
-      height: 27,
-      width: 28,
-    ),
-
-    // Image(image: AssetImage("assets/Group 2800.png"), height: 27, width: 28),
-  ];
-  final label = ['സർവേ', 'കുടുംബങ്ങൾ'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(),
-
-      child: Stack(
-        children: [
-          Positioned(
-            child: CurvedNavigationBar(
-              key: navigationKey,
-              color: AppColor.primary,
-              buttonBackgroundColor: AppColor.primary,
-
-              animationCurve: Curves.bounceIn,
-              items: items,
-
-              backgroundColor: Colors.transparent,
-
-              height: 60,
-              index: _index,
-              onTap: _onNavTap,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(label.length, (i) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _index = i;
-                      navigationKey.currentState?.setPage(i);
-                    });
-                  },
-                  child: Text(
-                    label[i],
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: _index == i
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: _index == i ? AppColor.white : AppColor.black,
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 
 
@@ -123,54 +16,39 @@ class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.selectedIndex, this.height = 80});
 
   void _onTap(BuildContext context, int index) {
+    Widget page;
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => ListSurveyReport()),
-        );
+         page = const ListSurveyReport();
         break;
+       
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const ListFamily()),
-        );
+        page = const ListFamily();
         break;
+        
       case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => AddServyItems()),
-        );
+        page = const AddServyItems();
         break;
       case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const AddFamilyMembers()),
-        );
+        page = const AddFamilyMembers();
         break;
-      case 4:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const AddItemBasicDetails()),
-        );
+     case 4:
+        page = const AddItemBasicDetails();
+       
         break;
+      default:
+        page = const ListSurveyReport();
     }
+     Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return
-    //  Container(
-    //   height: 80,
-    //   decoration: const BoxDecoration(
-    //     gradient: LinearGradient(
-    //       colors: [Color(0xff0086D1), Color(0xff004E92)],
-    //     ),
-    //     borderRadius: BorderRadius.only(
-    //       topLeft: Radius.circular(28),
-    //       topRight: Radius.circular(28),
-    //     ),
-    //   ),
+ 
      Stack(
       clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
@@ -209,17 +87,27 @@ class AppBottomNav extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: SizedBox(
-              height: height,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(5, (index) {
-                  if (index == selectedIndex) {
-                    return const SizedBox(width: 60); // Space for pop-up button
-                  }
-                  return _normalItem(context, index);
-                }),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+             child:  Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: List.generate(5, (index) {
+    if (index == selectedIndex) {
+      return const SizedBox(width: 60); // KEEP SAME
+    }
+    return _normalItem(context, index);
+  }),
+),
+
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: List.generate(5, (index) {
+              //     if (index == selectedIndex) {
+              //       return const SizedBox(width: 60); // Space for pop-up button
+              //     }
+              //     return _normalItem(context, index);
+              //   }),
+              // ),
             ),
           ),
 
@@ -231,8 +119,8 @@ class AppBottomNav extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 52,
-                    width: 52,
+                    height: 55,
+                    width: 55,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -244,13 +132,16 @@ class AppBottomNav extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      _icon(selectedIndex),
-                      size: 30,
-                      color: Colors.blue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        _image(selectedIndex),
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ),
-                  Text("fghjk")
+                 
                 ],
               ),
               
@@ -261,60 +152,94 @@ class AppBottomNav extends StatelessWidget {
       );
    // );
   }
-
-  /// NORMAL ICON
-  Widget _normalItem(BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () => _onTap(context, index),
+Widget _normalItem(BuildContext context, int index) {
+  return GestureDetector(
+    onTap: () => _onTap(context, index),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10), // 👈 SPACE ADDED
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            _icon(index),
-            color: Colors.white70,
+          Image.asset(
+            _image(index),
+            color: AppColor.white,
+            width: 24,
+            height: 24,
           ),
           const SizedBox(height: 4),
           Text(
             _label(index),
             style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
+              color: AppColor.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  IconData _icon(int index) {
+  /// NORMAL ICON
+  // Widget _normalItem(BuildContext context, int index) {
+  //   return GestureDetector(
+  //     onTap: () => _onTap(context, index),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(3.0),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Image.asset(
+  //             _image(index),
+  //             color: AppColor.white,
+  //             width: 24,
+  //             height: 24,
+  //           ),
+  //           const SizedBox(height: 4),
+  //           Text(
+  //             _label(index),
+  //             style: const TextStyle(
+  //               color: AppColor.white,
+  //               fontSize: 11,
+  //               fontWeight: FontWeight.w500
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  String _image(int index) {
     switch (index) {
       case 0:
-        return Icons.assignment;
+        return 'assets/icons/family_nav_bar.png';
       case 1:
-        return Icons.groups;
+        return 'assets/icons/family_member_nav_bar.png';
       case 2:
-        return Icons.assignment_turned_in;
+        return 'assets/icons/survey_nav_bar.png';
       case 3:
-        return Icons.trending_up;
+        return 'assets/icons/schemes_nav_bar.png'  ;
       case 4:
-        return Icons.settings;
+        return 'assets/icons/benefits_nav_bar.png';
       default:
-        return Icons.circle;
+        return '';
     }
   }
 
   String _label(int index) {
     switch (index) {
       case 0:
-        return "Family";
+        return "കുടുംബങ്ങൾ";
       case 1:
-        return "Members";
+        return "അംഗങ്ങൾ";
       case 2:
         return "Survey";
       case 3:
-        return "Progress";
+        return "പദ്ധതികൾ";
       case 4:
-        return "Settings";
+        return "ആനുകൂല്യങ്ങൾ";
       default:
         return "";
     }

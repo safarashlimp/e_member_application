@@ -19,7 +19,7 @@ class _ListFamilyState extends State<ListFamily> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 1),
+        bottomNavigationBar: AppBottomNav(selectedIndex: 1),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
