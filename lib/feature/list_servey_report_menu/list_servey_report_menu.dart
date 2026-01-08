@@ -2,6 +2,8 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
+import 'package:e_member_app/feature/add_servy_report/domain/repository/family_drop_repo.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
@@ -10,7 +12,6 @@ import 'package:e_member_app/feature/list_survey_report/presentation/view/list_s
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../add_servy_report/data/repository/ration_card_repository.dart';
 import '../add_servy_report/presentation/bloc/ration card bloc/ration_card_bloc_dart_bloc.dart';
 import '../add_servy_report/presentation/bloc/ration card bloc/ration_card_bloc_dart_event.dart';
 
@@ -35,7 +36,7 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
   MaterialPageRoute(
     builder: (context) => BlocProvider(
       create: (_) => RationCardBloc(
-        RationCardRepository(),
+        FamilyDropRepositoryImpl(),
       )..add(FetchRationCards()),
       child:
        const AddServyItems(mode: PageMode.add), 
@@ -85,10 +86,10 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                       iconColor: AppColor.iconColor,
                       titleColor: AppColor.iconColor,
 onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails,)),
-                );           
+              //  Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(builder: (_) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails,)),
+              //   );           
 },
                     ),
                     SizedBox(height: 15),
@@ -101,10 +102,10 @@ onIconTap: () {
                       iconColor: AppColor.green,
                       titleColor: AppColor.green, 
                       onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListSurveyReport(sectionType: FamilySurveySectionType.basicFacilities,)),
-                );           
+              //  Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(builder: (_) => ListSurveyReport(sectionType: FamilySurveySectionType.basicFacilities,)),
+              //   );           
 }, ),
                       
                   ],

@@ -1266,29 +1266,29 @@ BlocBuilder<EducationBloc, EducationState>(
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListFamily(),
-                            ),
-                          );
+                        // Navigator.push(
+                           // context,
+                            // MaterialPageRoute(
+                            //   builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails, headerData: widget.headerData,),
+                            // ),
+                         // );
                         },
                         labelStyle: const TextStyle(
                           color: AppColor.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
-                      ],
+                  )],
                     ),
                   ),
                   SizedBox(height: 50),
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,
@@ -1298,7 +1298,7 @@ BlocBuilder<EducationBloc, EducationState>(
                     height: 44,
                     icon: Icons.arrow_forward,
                   ),
-                ),
+          
               ],
             );
           },

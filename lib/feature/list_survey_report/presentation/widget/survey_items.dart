@@ -31,6 +31,7 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
+import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
@@ -39,6 +40,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PropertyCard extends StatefulWidget {
+  final SurveyHeaderModel headerData;
   final String houseNumber;
   final String houseName;
   final String subtitle;
@@ -53,6 +55,7 @@ class PropertyCard extends StatefulWidget {
     required this.memberCount,
     required this.lastUpdated,
     required this.sectionType,
+    required this.headerData,
   });
 
   @override
@@ -68,7 +71,7 @@ class _PropertyCardState extends State<PropertyCard> {
       page = const AddServyItems(mode: PageMode.view);
       break;
     case FamilySurveySectionType.basicFacilities:
-      page = const AddItemBasicDetails(mode: PageMode.view);
+      page = AddItemBasicDetails(mode: PageMode.view, headerData:  widget.headerData, );
       break;
  
   }
@@ -86,7 +89,7 @@ class _PropertyCardState extends State<PropertyCard> {
       page = const AddServyItems(mode: PageMode.edit);
       break;
     case FamilySurveySectionType.basicFacilities:
-      page = const AddItemBasicDetails(mode: PageMode.edit);
+      page = AddItemBasicDetails(mode: PageMode.edit,headerData:  widget.headerData,);
       break;
   }
 
