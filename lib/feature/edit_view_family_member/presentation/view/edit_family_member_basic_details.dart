@@ -7,11 +7,16 @@ import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
 
 class EditFamilyMemberBasicDetails extends StatefulWidget {
-  const EditFamilyMemberBasicDetails({super.key});
+    final PageMode mode;
+  const EditFamilyMemberBasicDetails({super.key,
+   required this.mode,
+  });
 
   @override
   State<EditFamilyMemberBasicDetails> createState() =>
@@ -31,6 +36,9 @@ class _EditFamilyMemberBasicDetailsState
   String? selectedRlgn = 'hindu';
   String? selectedMaritalStatus;
   String? selectedCaste;
+
+  bool get isEdit => widget.mode == PageMode.edit;
+
     @override
 void initState() {
   super.initState();
@@ -274,12 +282,13 @@ void initState() {
                     ),
                   ),
                   SizedBox(height: 50),
+                  if(isEdit)
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ListFamily()),
+                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
                       );
                     },
                     labelStyle: const TextStyle(

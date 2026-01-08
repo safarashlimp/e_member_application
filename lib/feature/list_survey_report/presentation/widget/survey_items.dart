@@ -31,17 +31,20 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PropertyCard extends StatelessWidget {
+class PropertyCard extends StatefulWidget {
   final String houseNumber;
   final String houseName;
   final String subtitle;
   final String memberCount;
   final String lastUpdated;
-
+ final FamilySurveySectionType sectionType;
   const PropertyCard({
     super.key,
     required this.houseNumber,
@@ -49,8 +52,49 @@ class PropertyCard extends StatelessWidget {
     required this.subtitle,
     required this.memberCount,
     required this.lastUpdated,
+    required this.sectionType,
   });
 
+  @override
+  State<PropertyCard> createState() => _PropertyCardState();
+}
+
+class _PropertyCardState extends State<PropertyCard> {
+     void onViewTap(BuildContext context) {
+ late Widget page;
+
+  switch (widget.sectionType) {
+    case FamilySurveySectionType.familyBasicDetails:
+      page = const AddServyItems(mode: PageMode.view);
+      break;
+    case FamilySurveySectionType.basicFacilities:
+      page = const AddItemBasicDetails(mode: PageMode.view);
+      break;
+ 
+  }
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => page),
+  );
+}
+  void onEditTap(BuildContext context) {
+ late Widget page;
+
+  switch (widget.sectionType) {
+    case FamilySurveySectionType.familyBasicDetails:
+      page = const AddServyItems(mode: PageMode.edit);
+      break;
+    case FamilySurveySectionType.basicFacilities:
+      page = const AddItemBasicDetails(mode: PageMode.edit);
+      break;
+  }
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => page),
+  );
+}
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,7 +141,7 @@ class PropertyCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          houseNumber,
+                          widget.houseNumber,
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
@@ -112,7 +156,7 @@ class PropertyCard extends StatelessWidget {
 
                         const SizedBox(width: 6),
                         Text(
-                          houseName,
+                          widget.houseName,
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
@@ -123,7 +167,7 @@ class PropertyCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      subtitle,
+                      widget.subtitle,
                       style: TextStyle(fontSize: 14, color: AppColor.grey),
                     ),
                   ],
@@ -153,7 +197,7 @@ class PropertyCard extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'അംഗങ്ങൾ: $memberCount',
+                'അംഗങ്ങൾ: ${widget.memberCount}',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColor.grey,
@@ -170,7 +214,7 @@ class PropertyCard extends StatelessWidget {
               Icon(Icons.update, size: 16, color: AppColor.primary),
               const SizedBox(width: 6),
               Text(
-                lastUpdated,
+                widget.lastUpdated,
                 style: TextStyle(fontSize: 13, color: AppColor.lightGrey),
               ),
             ],
@@ -183,11 +227,8 @@ class PropertyCard extends StatelessWidget {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    //add contition
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddServyItems()),
-                    );
+                   // add contition
+                    onViewTap(context);
                   },
                   icon: const Icon(
                     Icons.visibility,
@@ -223,10 +264,11 @@ class PropertyCard extends StatelessWidget {
                 child: OutlinedButton.icon(
                   //add contition
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddServyItems()),
-                    );
+                    onEditTap(context);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => AddServyItems()),
+                    // );
                   },
                   icon: const Icon(
                     Icons.edit,

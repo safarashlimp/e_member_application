@@ -1,0 +1,4 @@
+enum FamilySurveySectionType {
+  familyBasicDetails,
+  basicFacilities
+}

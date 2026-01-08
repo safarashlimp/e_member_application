@@ -27,12 +27,14 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddServyItems extends StatefulWidget {
-  const AddServyItems({super.key});
+   final PageMode mode;
+  const AddServyItems({super.key, required this.mode});
 
   @override
   State<AddServyItems> createState() => _AddServyItemsState();
@@ -53,6 +55,10 @@ class _AddServyItemsState extends State<AddServyItems> {
   int casteCert = 0;
   int disability = 0;
   int  widow = 0;
+  
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
+   bool get isAdd => widget.mode == PageMode.add;
 
   int? selectedRationCard;
 
@@ -285,7 +291,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                           ),
                         ),
                         const SizedBox(height: 24),
-
+if(isAdd)...[
                         Row(
                           children: [
                             const Spacer(), // 👈 pushes button to right half
@@ -293,6 +299,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                               width:
                                   MediaQuery.of(context).size.width *
                                   0.45, // half screen
+                                  
                               child: AppActionButton(
                                 label: "അടുത്തത്",
                                 onPressed: () {
@@ -348,6 +355,7 @@ extremePoor: widow,
                                         ],
                                         child: AddItemBasicDetails(
                                           headerData: headerData,
+                                          mode: PageMode.add
                                         ),
                                       ),
                                     ),
@@ -365,6 +373,26 @@ extremePoor: widow,
                             ),
                           ],
                         ),
+                      ],
+                      if(isEdit)...[
+
+                          AppActionButton(
+                    label: "സമർപ്പിക്കുക",
+                    onPressed: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
+                      // );
+                    },
+                    labelStyle: const TextStyle(
+                      color: AppColor.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    height: 44,
+                    icon: Icons.arrow_forward,
+                  ),
+                      ]
                       ],
                     ),
                   ),

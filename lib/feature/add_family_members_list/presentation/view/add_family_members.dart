@@ -41,6 +41,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -1276,10 +1278,25 @@ BlocBuilder<EducationBloc, EducationState>(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
-                        height: 44,
-                        icon: Icons.arrow_forward,
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  AppActionButton(
+                    label: "സമർപ്പിക്കുക",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
+                      );
+                    },
+                    labelStyle: const TextStyle(
+                      color: AppColor.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    height: 44,
+                    icon: Icons.arrow_forward,
                   ),
                 ),
               ],

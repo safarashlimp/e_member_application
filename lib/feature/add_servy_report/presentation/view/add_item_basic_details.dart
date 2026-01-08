@@ -20,13 +20,16 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemBasicDetails extends StatefulWidget {
   final SurveyHeaderModel headerData;
-  const AddItemBasicDetails({super.key,required this.headerData});
+    final PageMode mode;
+  const AddItemBasicDetails({super.key, required this.mode,required this.headerData});
 
   @override
   State<AddItemBasicDetails> createState() => _AddItemBasicDetailsState();  
@@ -42,14 +45,16 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   String? selectedLandArea;
   String? selectedGeneralNeedsoftheWard;
   String? selectedRequiredBenefit;
-  String? selectedRequiredBenefitId;  
+  String? selectedRequiredBenefitId;
   String? selectedwaterFacilityAvailable;
   String? selectedWaterFacilityId;
   String? selectedGetBenefit;
-  
-String? selectedGeneralNeed;
-String? selectedGeneralNeedId;
 
+  String? selectedGeneralNeed;
+  String? selectedGeneralNeedId;
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
+   bool get isAdd => widget.mode == PageMode.add;
   String? selectedOtherBenefit;
 String? selectedOtherBenefitId;
   int toilet = 0;
@@ -327,18 +332,45 @@ if (benefitsReceived == 1) ...[
         );
       }
 
-      if (state is RequiredBenefitError) {
-        return Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.red),
-        );
-      }
+                                  if (state is RequiredBenefitLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ലഭിച്ച ആനുകൂല്യം ',
+                                      selectedValue: selectedRequiredBenefit,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedRequiredBenefit = value;
+                                          selectedRequiredBenefitId = state
+                                              .items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              )
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-      return const SizedBox();
-    },
-  ),
-],
+                                  if (state is RequiredBenefitError) {
+                                    return Text(
+                                      'Error: ${state.message}',
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
 
                             const SizedBox(height: 18),
                             AppRadioField(
@@ -388,64 +420,105 @@ if (benefitsWanted == 1) ...[
         );
       }
 
-      if (state is OtherBenefitError) {
-        return Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.red),
-        );
-      }
+                              BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
+                                builder: (context, state) {
+                                  if (state is OtherBenefitLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-      return const SizedBox();
-    },
-  ),
-],
+                                  if (state is OtherBenefitLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
+                                      selectedValue: selectedOtherBenefit,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedOtherBenefit = value;
+                                          selectedOtherBenefitId = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              )
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
 
+                                  if (state is OtherBenefitError) {
+                                    return Text(
+                                      'Error: ${state.message}',
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
 
                             const SizedBox(height: 18),
-BlocBuilder<WardGeneralNeedBloc, WardGeneralNeedState>(
-  builder: (context, state) {
-    if (state is WardGeneralNeedLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              WardGeneralNeedBloc,
+                              WardGeneralNeedState
+                            >(
+                              builder: (context, state) {
+                                if (state is WardGeneralNeedLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is WardGeneralNeedLoaded) {
-      return AppDropdownField<String>(
-        label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
-        selectedValue: selectedGeneralNeed,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
-        items: state.items.map((e) => e.name).toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedGeneralNeed = value;
-            selectedGeneralNeedId =
-                state.items.firstWhere((e) => e.name == value).id;
-          });
-        },
-      );
-    }
+                                if (state is WardGeneralNeedLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
+                                    selectedValue: selectedGeneralNeed,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedGeneralNeed = value;
+                                        selectedGeneralNeedId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is WardGeneralNeedError) {
-      return Text(
-        'Error: ${state.message}',
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is WardGeneralNeedError) {
+                                  return Text(
+                                    'Error: ${state.message}',
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-
+                                return const SizedBox();
+                              },
+                            ),
                           ],
                         ),
                       ),
                       SizedBox(height: 30),
-
+if(isEdit || isAdd  )...[
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
                      onPressed: () async {
@@ -509,19 +582,12 @@ if (selectedHouseTypeId == null) {
 );
 
 // ✅ NAVIGATION WILL WORK NOW
-Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => ListSurveyReport(),
-  ),
-);
-
-
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ListSurveyReport()),
-    );
+  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails,),
+                            ),
+                          );
   } catch (e) {
   if (selectedHouseTypeId == null) {
   ScaffoldMessenger.of(context)
@@ -543,6 +609,8 @@ Navigator.push(
                         ),
                         height: 44,
                       ),
+] else if (isView) ...[
+                      SizedBox(height: 50),]
                     ],
                   ),
                 ),

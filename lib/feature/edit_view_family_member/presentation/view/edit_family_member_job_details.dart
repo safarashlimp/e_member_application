@@ -7,11 +7,14 @@ import 'package:e_member_app/core/widget/text_field/app_drop_dowm_multiple_selec
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
 
 class EditFamilyJobDetails extends StatefulWidget {
-  const EditFamilyJobDetails({super.key});
+  final PageMode mode;
+  const EditFamilyJobDetails({super.key, required this.mode});
 
   @override
   State<EditFamilyJobDetails> createState() => _EditFamilyJobDetailsState();
@@ -24,6 +27,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   String? employmentStatus;
   String? jobStatus;
   int norkaRegisteredLabel = 0;
+  bool get isEdit => widget.mode == PageMode.edit;
   List<String> selectedSkills = [];
   String? farmingType;
   final List<String> skills = [
@@ -208,12 +212,13 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                   ),
 
                   SizedBox(height: 50),
+                  if(isEdit)
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ListFamily()),
+                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.employment,)),
                       );
                     },
                     labelStyle: const TextStyle(
