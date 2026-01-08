@@ -10,6 +10,8 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
@@ -36,6 +38,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,7 +60,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController surveyorNameLabel = TextEditingController();
   final TextEditingController courseStudy = TextEditingController();
   final TextEditingController studyCenter = TextEditingController();
-  List<String> selectedSkills = [];
+  
   // kudumbanadhanum aayula badham
 String? selectedReletion;
 String? selectedRelationId;
@@ -88,6 +92,10 @@ String? employmentSupportId;
 String? farmingType;
 String? farmingTypeId;
 
+// blood
+String? selectedBloodGroup;
+String? selectedBloodGroupId;
+
 
 // health issue 
 String? hasHealthIssues;
@@ -108,43 +116,29 @@ String? selectedPensionTypeId;
 String? isPensionRequired;
 String? isPensionRequiredId;
 
+// skill 
+List<String> selectedSkills = [];
+List<String> selectedSkillIds = [];
 
   String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
 
-  String? selectedBloodGroup;
+  
 
 
   String? skillsLabel;
 
-  String hasDisability = 'yes';
-  String disabilityBenefit = "yes";
-  String healthInsuranceCard = 'yes';
-  String isIncludedInRationCard = 'yes';
-  String isPensionReceiving = 'yes';
-  String norkaRegisteredLabel = 'yes';
+  int hasDisability = 0;
+  int disabilityBenefit = 0;
+  int healthInsuranceCard = 0;
+  int isIncludedInRationCard = 0;
+  int isPensionReceiving = 0;
+  int norkaRegisteredLabel = 0;
   
-  String student = 'yes';
-  String patient = "yes";
-  String needEducationHelp = 'yes';
-  final List<String> skills = [
-    'റോയിര രഴിവുകൾ',
-    'പാചക രഴിവ്',
-    'ലംബിംഗ്',
-    'മൊബൈൽ റിപ്പയർ',
-    'അഭിനയം',
-    'നൃത്തം',
-    'ഗാനാലാപനം',
-    'ചിത്രരചന',
-    'കമ്പ്യൂട്ടർ പരിജ്ഞാനം',
-    'മത്സ്യബന്ധനം',
-    'പാക്കിംഗ്',
-    'തയ്യൽ',
-    'കാർഷിക പ്രവർത്തനങ്ങൾ',
-    'പ്രഭാഷണ രഴിവ്',
-    'അധ്യാപന രഴിവ്',
-    'മറ്റ്',
-  ];
+  int student = 0;
+  int patient = 0;
+  int needEducationHelp = 0;
+
   @override
   void initState() {
     super.initState();
@@ -246,27 +240,50 @@ String? isPensionRequiredId;
                               ],
                             ),
                             const SizedBox(height: 20),
-                            AppDropdownField<String>(
-                              label: 'രക്തഗ്രൂപ്പ്',
-                              selectedValue: selectedBloodGroup,
-                              borderColor: AppColor.borderColor,
-                              labelColor: AppColor.hintText2,
-                              selectedTextColor: AppColor.primary,
-                              iconColor: AppColor.black,
-                              dropdownBgColor: AppColor.white,
-                              dropdownTextColor: AppColor.hintText,
-                              validator: Validator.validateSelection,
-                              items: const [
-                                'പക്കാ വീട്',
-                                'സെമി പക്കാ വീട്',
-                                'കച്ച വീട്',
-                                'വാടക വീട്',
-                                'വീട് ഇല്ല',
-                              ],
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
+                           BlocBuilder<BloodGroupBloc, BloodGroupState>(
+  builder: (context, state) {
+    if (state is BloodGroupLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is BloodGroupLoaded) {
+      return AppDropdownField<String>(
+        label: 'രക്തഗ്രൂപ്പ്',
+        selectedValue: selectedBloodGroup,
+        borderColor: AppColor.borderColor,
+        labelColor: AppColor.hintText2,
+        selectedTextColor: AppColor.primary,
+        iconColor: AppColor.black,
+        dropdownBgColor: AppColor.white,
+        dropdownTextColor: AppColor.hintText,
+        validator: Validator.validateSelection,
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            selectedBloodGroup = value;
+
+            selectedBloodGroupId = state.items
+                .firstWhere((e) => e.name == value)
+                .id;
+          });
+        },
+      );
+    }
+
+    if (state is BloodGroupError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
                             SizedBox(height: 20),
                            BlocBuilder<RelationDropBloc, RelationDropState>(
   builder: (context, state) {
@@ -719,17 +736,46 @@ BlocBuilder<EducationBloc, EducationState>(
 ),
 
                             SizedBox(height: 20),
-                            AppMultiSelectDropdown<String>(
-                              label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
-                              items: skills,
-                              selectedValues: selectedSkills,
-                              //hintText: 'Select skills',
-                              onChanged: (values) {
-                                setState(() {
-                                  selectedSkills = values;
-                                });
-                              },
-                            ),
+                           BlocBuilder<SkillsBloc, SkillsState>(
+  builder: (context, state) {
+    if (state is SkillsLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is SkillsLoaded) {
+      return AppMultiSelectDropdown<String>(
+        label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+
+        // ✅ API DATA
+        items: state.items.map((e) => e.name).toList(),
+
+        selectedValues: selectedSkills,
+
+        onChanged: (values) {
+          setState(() {
+            selectedSkills = values;
+
+            // store selected IDs also
+            selectedSkillIds = state.items
+                .where((e) => values.contains(e.name))
+                .map((e) => e.id)
+                .toList();
+          });
+        },
+      );
+    }
+
+    if (state is SkillsError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
+    return const SizedBox();
+  },
+),
+
 
                             SizedBox(height: 20),
                             AppTextField(

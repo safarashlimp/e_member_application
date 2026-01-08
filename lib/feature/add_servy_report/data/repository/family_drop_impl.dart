@@ -5,6 +5,28 @@ import 'package:http/http.dart' as http;
 
 class FamilyDropRepositoryImpl implements FamilyDropRepository {
   @override
+Future<List<FamilyDropItem>> rationCardType() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/family_drops.php?clientid=1&posistion=1",
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = FamilyDropResponse.fromJson(jsonData);
+
+    if (model.status) {
+      return model.data;
+    } else {
+      throw Exception("API status false");
+    }
+  } else {
+    throw Exception("Server error ${response.statusCode}");
+  }
+}
+
+  @override
   Future<List<FamilyDropItem>> getHouseTypes() async {
     final response = await http.get(
       Uri.parse(

@@ -1,5 +1,7 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
@@ -26,6 +28,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:flutter/material.dart';
@@ -337,6 +341,14 @@ BlocProvider(
   create: (_) => PensionRequiredBloc(
     MemberDropRepositoryImpl(),
   )..add(FetchPensionRequirement()),
+),
+BlocProvider(
+  create: (_) =>
+      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
+),
+BlocProvider(
+  create: (_) =>
+      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
 ),
 
       ],

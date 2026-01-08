@@ -20,8 +20,8 @@ class EditFamilyMemberSocielDetails extends StatefulWidget {
 class _EditFamilyMemberSocielDetailsState
     extends State<EditFamilyMemberSocielDetails> {
   final TextEditingController surveyorNameLabel = TextEditingController();
-  String isIncludedInRationCard = 'yes';
-  String isPensionReceiving = 'yes';
+  int isIncludedInRationCard = 0;
+  int isPensionReceiving = 0;
   String? selectedPensionType;
   String? isPensionRequired; // yes / no
   @override

@@ -4,12 +4,12 @@ import 'package:e_member_app/core/widget/button/app_action_button.dart';
 
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/servey_section.dart';
+import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
-import 'package:e_member_app/core/widget/text_field/app_ration_dropdown.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-import 'package:e_member_app/feature/add_servy_report/data/repository/ration_card_repository.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_bloc.dart';
@@ -45,11 +45,14 @@ class _AddServyItemsState extends State<AddServyItems> {
   final TextEditingController anualIncome = TextEditingController();
   final TextEditingController cardNumber = TextEditingController();
 
+  String? selectedRationCardLabel;
+  String? selectedRationCardId;
+
   String? gender;
-  String rationCard = 'yes';
-  String casteCert = 'yes';
-  String disability = 'yes';
-  String widow = 'yes';
+  int rationCard = 0;
+  int casteCert = 0;
+  int disability = 0;
+  int  widow = 0;
 
   int? selectedRationCard;
 
@@ -72,7 +75,7 @@ class _AddServyItemsState extends State<AddServyItems> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          RationCardBloc(RationCardRepository())..add(FetchRationCards()),
+          RationCardBloc(FamilyDropRepositoryImpl())..add(FetchRationCards()),
       child: SafeArea(
         child: Scaffold(
           backgroundColor: AppColor.secondary,
@@ -185,7 +188,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     ),
                                   ),
                                   SizedBox(width: 20),
-                                  
+
                                   Flexible(
                                     child:
                                         BlocBuilder<
@@ -198,36 +201,44 @@ class _AddServyItemsState extends State<AddServyItems> {
                                                 child:
                                                     CircularProgressIndicator(),
                                               );
-                                            } else if (state
-                                                is RationCardLoaded) {
-                                              return AppRationDropdown(
-                                                label: "റേഷൻ കാർഡ് തരം",
-                                                validator: (v) =>
-                                                    state.rationCards.isEmpty
-                                                    ? "Loading..."
-                                                    : null,
-                                                labelColor: AppColor.hintText2,
-                                                borderColor: AppColor.border,
-                                                iconColor: AppColor.black,
-                                                value: state.selectedCardId,
-                                                items: state.rationCards,
-                                                colorBuilder: rationCardBgColor,
-                                                onChanged: (v) {
-                                                  context
-                                                      .read<RationCardBloc>()
-                                                      .add(
-                                                        SelectRationCard(v!),
-                                                      );
+                                            }
+
+                                            if (state is RationCardLoaded) {
+                                              return AppDropdownField<String>(
+                                                label: 'റേഷൻ കാർഡ് തരം',
+                                                selectedValue:
+                                                    selectedRationCardLabel,
+                                                items: state.items
+                                                    .map((e) => e.name)
+                                                    .toList(),
+                                                validator:
+                                                    Validator.validateSelection,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedRationCardLabel =
+                                                        value;
+                                                    selectedRationCardId = state
+                                                        .items
+                                                        .firstWhere(
+                                                          (e) =>
+                                                              e.name == value,
+                                                        )
+                                                        .id;
+                                                  });
                                                 },
                                               );
-                                            } else if (state
-                                                is RationCardError) {
-                                              return Center(
-                                                child: Text(state.message),
-                                              );
-                                            } else {
-                                              return const SizedBox();
                                             }
+
+                                            if (state is RationCardError) {
+                                              return Text(
+                                                state.message,
+                                                style: const TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              );
+                                            }
+
+                                            return const SizedBox();
                                           },
                                         ),
                                   ),
@@ -285,6 +296,20 @@ class _AddServyItemsState extends State<AddServyItems> {
                               child: AppActionButton(
                                 label: "അടുത്തത്",
                                 onPressed: () {
+                                  final headerData = SurveyHeaderModel(
+                                    houseChief: gardienName.text,
+                                    houseNumber: houseNumber.text,
+                                    houseName: houseName.text,
+                                    rationCardNumber: cardNumber.text,
+                                    rationCardTypeId: selectedRationCardId
+                                        .toString(),
+                                    annualIncome: anualIncome.text,
+                                   hasJobCard: rationCard,
+kudumbashreeMember: casteCert,
+govtBeneficiary: disability,
+extremePoor: widow,
+
+                                  );
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -310,16 +335,20 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               FamilyDropRepositoryImpl(),
                                             )..add(FetchRequiredBenefits()),
                                           ),
-                                           BlocProvider(
-      create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())..add(FetchOtherBenefits()),
-    ),
-    BlocProvider(
-  create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
-    ..add(FetchWardGeneralNeeds()),
-),
-
+                                          BlocProvider(
+                                            create: (_) => OtherBenefitBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchOtherBenefits()),
+                                          ),
+                                          BlocProvider(
+                                            create: (_) => WardGeneralNeedBloc(
+                                              FamilyDropRepositoryImpl(),
+                                            )..add(FetchWardGeneralNeeds()),
+                                          ),
                                         ],
-                                        child: const AddItemBasicDetails(),
+                                        child: AddItemBasicDetails(
+                                          headerData: headerData,
+                                        ),
                                       ),
                                     ),
                                   );

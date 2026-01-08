@@ -19,5 +19,7 @@ Future<List <MemberDropItem>>getHealthInsurance();
 Future<List <MemberDropItem>>getRequiredHealthSupports();
 Future<List<MemberDropItem>> getPensionTypes();
 Future<List<MemberDropItem>> getPensionRequirement();
+Future<List<MemberDropItem>> getSkills();
+Future<List<MemberDropItem>> getBloodGroups();
 
 }

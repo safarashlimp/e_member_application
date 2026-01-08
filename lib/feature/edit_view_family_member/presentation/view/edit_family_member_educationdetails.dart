@@ -24,8 +24,8 @@ class _EditFamilyMemberEducationdetailsState
   String? selectedEducation;
   String? selectedQualification;
 
-  String student = 'yes';
-  String needEducationHelp = 'yes';
+  int student = 0 ;
+  int needEducationHelp = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

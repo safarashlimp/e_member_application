@@ -23,7 +23,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   String? employmentSupportLabel;
   String? employmentStatus;
   String? jobStatus;
-  String norkaRegisteredLabel = 'yes';
+  int norkaRegisteredLabel = 0;
   List<String> selectedSkills = [];
   String? farmingType;
   final List<String> skills = [

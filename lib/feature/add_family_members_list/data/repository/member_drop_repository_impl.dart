@@ -294,6 +294,48 @@ Future<List<MemberDropItem>> getPensionRequirement() async {
     throw Exception("Server error ${response.statusCode}");
   }
 }
+@override
+Future<List<MemberDropItem>> getSkills() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=10",
+    ),
+  );
 
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = MemberDropResponse.fromJson(jsonData);
+
+    if (model.status) {
+      return model.data;
+    } else {
+      throw Exception("API status false");
+    }
+  } else {
+    throw Exception("Server error ${response.statusCode}");
+  }
+}
+
+@override
+Future<List<MemberDropItem>> getBloodGroups() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/blood_group.php?clientid=1&posistion=9",
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final model = MemberDropResponse.fromJson(jsonData);
+
+    if (model.status) {
+      return model.data;
+    } else {
+      throw Exception("API status false");
+    }
+  } else {
+    throw Exception("Server error ${response.statusCode}");
+  }
+}
 
 }

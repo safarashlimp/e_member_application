@@ -6,6 +6,8 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/HeaderSaveRepository.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/required_benifit/other_benefit_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_bloc.dart';
@@ -23,10 +25,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemBasicDetails extends StatefulWidget {
-  const AddItemBasicDetails({super.key});
+  final SurveyHeaderModel headerData;
+  const AddItemBasicDetails({super.key,required this.headerData});
 
   @override
-  State<AddItemBasicDetails> createState() => _AddItemBasicDetailsState();
+  State<AddItemBasicDetails> createState() => _AddItemBasicDetailsState();  
 }
 
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
@@ -49,32 +52,11 @@ String? selectedGeneralNeedId;
 
   String? selectedOtherBenefit;
 String? selectedOtherBenefitId;
-  String toilet = 'yes';
-  String electricityConnection = 'yes';
-  String benefitsReceived = "yes";
-  String benefitsWanted = 'yes';
-  final List<String> dummyHouseTypes = [
-    'പക്കാ വീട്',
-    'സെമി പക്കാ വീട്',
-    'കച്ച വീട്',
-    'വാടക വീട്',
-    'വീട് ഇല്ല',
-  ];
-  final List<String> dummyLandTypes = [
-    'സ്വന്തം ഭൂമി',
-    'ലീസ് ഭൂമി',
-    'പട്ടയ ഭൂമി',
-    'സർക്കാർ ഭൂമി',
-    'ഭൂമി ഇല്ല',
-  ];
-  final List<String> dummyLandArea = [
-    '1 സെന്റ് താഴെ',
-    '1 – 3 സെന്റ്',
-    '3 – 5 സെന്റ്',
-    '5 – 10 സെന്റ്',
-    '10 സെന്റിന് മുകളിൽ',
-  ];
-
+  int toilet = 0;
+  int electricityConnection = 0;
+  int benefitsReceived = 0;
+  int benefitsWanted = 1;
+  
 
  
 
@@ -223,7 +205,8 @@ String? selectedOtherBenefitId;
                               focusedBorderColor: AppColor.primary,
                               labelfontSizes: 12,
 
-                              validator: Validator.validateName,
+                              validator: Validator.validateDecimal,
+
 
                               textColor: AppColor.primary,
                               width: double.infinity,
@@ -245,17 +228,17 @@ String? selectedOtherBenefitId;
                               onChanged: (v) {
                                 setState(() {
                                   electricityConnection = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     selectedLandType = null; // reset dropdown
                                   }
                                 });
                               },
                             ),
 
-                            if (electricityConnection == 'yes') ...[
-                              const SizedBox(height: 18),
+                            // if (electricityConnection == 1) ...[
+                            //   const SizedBox(height: 18),
 
-                             if (electricityConnection == 'yes') ...[
+                            //  if (electricityConnection == 0) ...[
   const SizedBox(height: 18),
   BlocBuilder<WaterFacilityBloc, WaterFacilityState>(
     builder: (context, state) {
@@ -295,9 +278,9 @@ String? selectedOtherBenefitId;
       return const SizedBox();
     },
   ),
-],
+// ],
 
-                            ],
+//                             ],
                             SizedBox(height: 18),
                             AppRadioField(
                               label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
@@ -307,14 +290,14 @@ String? selectedOtherBenefitId;
                               onChanged: (v) {
                                 setState(() {
                                   benefitsReceived = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // benefitsReceived = null;
                                     // selectedLandType = null; // reset dropdown
                                   }
                                 });
                               },
                             ),
-if (benefitsWanted == 'yes') ...[
+if (benefitsReceived == 1) ...[
   const SizedBox(height: 18),
   BlocBuilder<RequiredBenefitBloc, RequiredBenefitState>(
     builder: (context, state) {
@@ -366,7 +349,7 @@ if (benefitsWanted == 'yes') ...[
                               onChanged: (v) {
                                 setState(() {
                                   benefitsWanted = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // benefitsReceived = null;
                                     // selectedLandType = null; // reset dropdown
                                   }
@@ -374,7 +357,7 @@ if (benefitsWanted == 'yes') ...[
                               },
                             ),
 
-if (benefitsWanted == 'yes') ...[
+if (benefitsWanted == 1) ...[
   const SizedBox(height: 18),
 
   BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
@@ -465,14 +448,94 @@ BlocBuilder<WardGeneralNeedBloc, WardGeneralNeedState>(
 
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListSurveyReport(),
-                            ),
-                          );
-                        },
+                     onPressed: () async {
+
+if (widget.headerData.houseChief.isEmpty ||
+    widget.headerData.houseNumber.isEmpty ||
+    widget.headerData.houseName.isEmpty ||
+    widget.headerData.rationCardNumber.isEmpty ||
+    widget.headerData.rationCardTypeId.isEmpty) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക")),
+  );
+  return;
+}
+
+if (selectedHouseTypeId == null) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക")),
+  );
+  return;
+}
+
+
+                      
+  try {
+    if (selectedLandAreaController.text.isNotEmpty &&
+    double.tryParse(selectedLandAreaController.text) == null) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('ഭൂമിയുടെ വിസ്തീർണ്ണം ശരിയായ സംഖ്യ നൽകുക')),
+  );
+  return;
+}
+
+   await HeaderSaveRepository().saveSurveyHeader(
+  houseChief: widget.headerData.houseChief,
+  houseNumber: widget.headerData.houseNumber,
+  houseName: widget.headerData.houseName,
+  rationCardNumber: widget.headerData.rationCardNumber,
+  rationCardTypeId: widget.headerData.rationCardTypeId,
+  annualIncome: widget.headerData.annualIncome,
+
+  hasJobCard: widget.headerData.hasJobCard,
+  kudumbashreeMember: widget.headerData.kudumbashreeMember,
+  govtBeneficiary: widget.headerData.govtBeneficiary,
+  extremePoor: widget.headerData.extremePoor,
+
+  houseTypeId: selectedHouseTypeId!,
+  landTypeId:
+      selectedLandTypeId != null ? int.parse(selectedLandTypeId!) : null,
+  landAreaCents: selectedLandAreaController.text,
+  hasToilet: toilet,
+  hasElectricity: electricityConnection,
+  drinkingWaterSourceId: selectedWaterFacilityId,
+  receivedHousingBenefit: benefitsReceived,
+  receivedBenefits:
+      benefitsReceived == 1 ? selectedRequiredBenefitId : '0',
+  needHousingBenefit: benefitsWanted,
+  benefitsRequired:
+      benefitsWanted == 1 ? selectedOtherBenefitId : '0',
+  wardNeeds: selectedGeneralNeedId,
+);
+
+// ✅ NAVIGATION WILL WORK NOW
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => ListSurveyReport(),
+  ),
+);
+
+
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ListSurveyReport()),
+    );
+  } catch (e) {
+  if (selectedHouseTypeId == null) {
+  ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക")));
+
+}
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      
+      SnackBar(content: Text(e.toString())),
+    );
+  }
+},
+
                         labelStyle: const TextStyle(
                           color: AppColor.white,
                           fontSize: 16,

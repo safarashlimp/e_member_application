@@ -51,6 +51,15 @@ class Validator {
 
     return null;
   }
+// decimal 
+static String? validateDecimal(String? value) {
+  if (value == null || value.isEmpty) return null; // optional field
+  final number = double.tryParse(value);
+  if (number == null) {
+    return 'Enter valid number';
+  }
+  return null;
+}
 
   /// Validates Full Name
 
