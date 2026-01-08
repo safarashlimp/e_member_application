@@ -8,11 +8,11 @@ class SearchFieldBar extends StatelessWidget {
   final String? hintText;
 
   const SearchFieldBar({
-    Key? key,
+    super.key,
     this.onChanged,
     this.onFilterTap,
     this.hintText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

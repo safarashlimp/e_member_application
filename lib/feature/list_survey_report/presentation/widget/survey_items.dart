@@ -1,10 +1,42 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
+import 'package:e_member_app/feature/add_family_members_list/data/repository/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_event.dart';
+
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PropertyCard extends StatefulWidget {
   final String houseNumber;
@@ -273,14 +305,102 @@ class _PropertyCardState extends State<PropertyCard> {
                 height: 24,
                 child: Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddFamilyMembers(),
-                        ),
-                      );
-                    },
+                   onPressed: () {
+  Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              RelationDropBloc(MemberDropRepositoryImpl())
+                ..add(FetchRelations()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              MaritalStatusBloc(MemberDropRepositoryImpl())
+                ..add(FetchMaritalStatus()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              CasteBloc(MemberDropRepositoryImpl())
+                ..add(FetchCastes()),
+        ),
+        BlocProvider(
+  create: (_) => QualificationBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchQualifications()),
+
+),
+BlocProvider(
+  create: (_) => EducationBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchEducation()),
+),
+BlocProvider(
+  create: (_) => EmploymentStatusBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchEmploymentStatus()),
+),
+BlocProvider(
+  create: (_) => JobBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchJobs()),
+),
+BlocProvider(
+  create: (_) => EmploymentSupportBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchEmploymentSupports()),
+),
+
+BlocProvider(
+  create: (_) => FarmingTypeBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchFarmingTypes()),
+),
+BlocProvider(
+  create: (_) => HealthIssueBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchHealthIssues()),
+),
+BlocProvider(
+  create: (_) => HealthInsuranceBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchHealthInsurance()),
+),
+BlocProvider(
+  create: (_) => RequiredHealthSupportBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchRequiredHealthSupports()),
+),
+
+BlocProvider(
+  create: (_) => PensionTypeBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchPensionTypes()),
+),
+BlocProvider(
+  create: (_) => PensionRequiredBloc(
+    MemberDropRepositoryImpl(),
+  )..add(FetchPensionRequirement()),
+),
+BlocProvider(
+  create: (_) =>
+      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
+),
+BlocProvider(
+  create: (_) =>
+      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
+),
+
+      ],
+      child: AddFamilyMembers(),
+    ),
+  ),
+);
+
+},
+
                     icon: const Icon(
                       Icons.add,
                       size: 12,

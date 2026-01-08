@@ -22,12 +22,12 @@ class EditFamilyHealthDetails extends StatefulWidget {
 
 class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
   final TextEditingController treatmentPlaceLabel = TextEditingController();
-  String patient = "yes";
+  int patient = 0;
   String? hasHealthIssues;
-  String hasDisability = 'yes';
-  String disabilityBenefit = "yes";
-  String healthInsuranceCard = 'yes';
-  String? healthInsurance;
+  int hasDisability = 0;
+  int disabilityBenefit = 0;
+  int healthInsuranceCard = 0;
+  String ? healthInsurance;
   String? requiredHealthSupports;
    bool get isEdit => widget.mode == PageMode.edit;
    bool get isView => widget.mode == PageMode.view;

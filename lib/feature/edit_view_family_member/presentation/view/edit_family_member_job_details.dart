@@ -26,8 +26,8 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   String? employmentSupportLabel;
   String? employmentStatus;
   String? jobStatus;
-   bool get isEdit => widget.mode == PageMode.edit;
-  String norkaRegisteredLabel = 'yes';
+  int norkaRegisteredLabel = 0;
+  bool get isEdit => widget.mode == PageMode.edit;
   List<String> selectedSkills = [];
   String? farmingType;
   final List<String> skills = [

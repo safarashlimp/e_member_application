@@ -26,9 +26,10 @@ class _EditFamilyMemberEducationdetailsState
   final TextEditingController studyCenter = TextEditingController();
   String? selectedEducation;
   String? selectedQualification;
- bool get isEdit => widget.mode == PageMode.edit;
-  String student = 'yes';
-  String needEducationHelp = 'yes';
+
+  int student = 0 ;
+  int needEducationHelp = 0;
+  bool get isEdit => widget.mode == PageMode.edit;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

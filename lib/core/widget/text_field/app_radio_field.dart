@@ -1,11 +1,11 @@
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/text_field/app_input_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:e_member_app/core/theme/app_color/app_color.dart';
 
 class AppRadioField extends StatelessWidget {
   final String label;
-  final String value;
-  final Function(String) onChanged;
+  final int value; // 1 = yes, 0 = no
+  final ValueChanged<int> onChanged;
   final Color borderColor;
   final Color focusedBorderColor;
   final double width;
@@ -26,18 +26,17 @@ class AppRadioField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputDecorator(
       decoration: appInputDecoration(
-        borderColor: AppColor.borderColor,
+        borderColor: borderColor,
         fillColor: AppColor.white,
-        focusedBorderColor: AppColor.primary,
+        focusedBorderColor: focusedBorderColor,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          /// 🔹 LABEL INSIDE FIELD
+          /// LABEL
           Expanded(
             child: Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColor.hintText2,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -45,15 +44,11 @@ class AppRadioField extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20),
-
-          /// 🔹 RADIO BUTTONS
+          /// RADIO BUTTONS
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _radio("ഉണ്ട്", "yes"),
-              //const SizedBox(width: ),
-              _radio("ഇല്ല", "no"),
+              _radio("ഉണ്ട്", 1),
+              _radio("ഇല്ല", 0),
             ],
           ),
         ],
@@ -61,18 +56,16 @@ class AppRadioField extends StatelessWidget {
     );
   }
 
-  Widget _radio(String title, String val) {
+  Widget _radio(String title, int val) {
     return Row(
       children: [
-        Radio<String>(
+        Radio<int>(
           value: val,
           groupValue: value,
           onChanged: (v) => onChanged(v!),
           activeColor: AppColor.primary,
-
           visualDensity: VisualDensity.compact,
         ),
-
         Text(
           title,
           style: const TextStyle(

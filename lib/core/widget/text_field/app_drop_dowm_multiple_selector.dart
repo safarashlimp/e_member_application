@@ -45,7 +45,7 @@ class AppMultiSelectDropdown<T> extends StatelessWidget {
         child: Text(
           displayText,
           maxLines: 1,
-          overflow: TextOverflow.ellipsis, // ✅ same as your dropdown
+          overflow: TextOverflow.ellipsis, 
           style: TextStyle(
             color: displayText.isEmpty
                 ? Colors.grey
@@ -112,7 +112,7 @@ class AppMultiSelectDropdown<T> extends StatelessWidget {
        setState(() { 
        if (checked == true) {
       if (!tempSelected.contains(item)) {
-        tempSelected.add(item); // ✅ add only once
+        tempSelected.add(item); 
       }
        } else {
       tempSelected.remove(item);
