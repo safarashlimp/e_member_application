@@ -27,12 +27,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemBasicDetails extends StatefulWidget {
-  final SurveyHeaderModel headerData;
+  final  SurveyHeaderModel? headerData;
   final PageMode mode;
   const AddItemBasicDetails({
     super.key,
     required this.mode,
-    required this.headerData,
+     this.headerData,
   });
 
   @override
@@ -544,22 +544,25 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                       SizedBox(height: 30),
                       if (isEdit || isAdd) ...[
                         AppActionButton(
+
+                          
                           label: "സമർപ്പിക്കുക",
                           onPressed: () async {
-                            if (widget.headerData.houseChief.isEmpty ||
-                                widget.headerData.houseNumber.isEmpty ||
-                                widget.headerData.houseName.isEmpty ||
-                                widget.headerData.rationCardNumber.isEmpty ||
-                                widget.headerData.rationCardTypeId.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക",
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
+                            final header  = widget.headerData;
+                           
+if (header == null ||
+    header.houseChief.isEmpty ||
+    header.houseNumber.isEmpty ||
+    header.houseName.isEmpty ||
+    header.rationCardNumber.isEmpty ||
+    header.rationCardTypeId.isEmpty) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text("അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക"),
+    ),
+  );
+  return;
+}
 
                             if (selectedHouseTypeId == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -587,21 +590,18 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               }
 
                               await HeaderSaveRepository().saveSurveyHeader(
-                                houseChief: widget.headerData.houseChief,
-                                houseNumber: widget.headerData.houseNumber,
-                                houseName: widget.headerData.houseName,
-                                rationCardNumber:
-                                    widget.headerData.rationCardNumber,
-                                rationCardTypeId:
-                                    widget.headerData.rationCardTypeId,
-                                annualIncome: widget.headerData.annualIncome,
+  houseChief: widget.headerData?.houseChief,
+  houseNumber: widget.headerData?.houseNumber ?? '',
+  houseName: widget.headerData?.houseName ?? '',
+  rationCardNumber: widget.headerData?.rationCardNumber ?? '',
+  rationCardTypeId: widget.headerData?.rationCardTypeId ?? '',
+  annualIncome: widget.headerData?.annualIncome,
 
-                                hasJobCard: widget.headerData.hasJobCard,
-                                kudumbashreeMember:
-                                    widget.headerData.kudumbashreeMember,
-                                govtBeneficiary:
-                                    widget.headerData.govtBeneficiary,
-                                extremePoor: widget.headerData.extremePoor,
+  hasJobCard: widget.headerData?.hasJobCard ?? 0,
+  kudumbashreeMember: widget.headerData?.kudumbashreeMember ?? 0,
+  govtBeneficiary: widget.headerData?.govtBeneficiary ?? 0,
+  extremePoor: widget.headerData?.extremePoor ?? 0,
+
 
                                 houseTypeId: selectedHouseTypeId!,
                                 landTypeId: selectedLandTypeId != null
@@ -629,7 +629,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                   builder: (context) => ListSurveyReport(
                                     sectionType: FamilySurveySectionType
                                         .familyBasicDetails,
-                                    headerData: widget.headerData,
+                                  
                                   ),
                                 ),
                               );

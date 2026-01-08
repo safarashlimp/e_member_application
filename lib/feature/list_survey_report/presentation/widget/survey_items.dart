@@ -40,7 +40,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PropertyCard extends StatefulWidget {
-  final SurveyHeaderModel headerData;
+  // final SurveyHeaderModel? headerData;
   final String houseNumber;
   final String houseName;
   final String subtitle;
@@ -55,7 +55,7 @@ class PropertyCard extends StatefulWidget {
     required this.memberCount,
     required this.lastUpdated,
     required this.sectionType,
-    required this.headerData,
+    // required this.headerData,
   });
 
   @override
@@ -71,7 +71,7 @@ class _PropertyCardState extends State<PropertyCard> {
       page = const AddServyItems(mode: PageMode.view);
       break;
     case FamilySurveySectionType.basicFacilities:
-      page = AddItemBasicDetails(mode: PageMode.view, headerData:  widget.headerData, );
+      page = AddItemBasicDetails(mode: PageMode.view,   );
       break;
  
   }
@@ -89,7 +89,7 @@ class _PropertyCardState extends State<PropertyCard> {
       page = const AddServyItems(mode: PageMode.edit);
       break;
     case FamilySurveySectionType.basicFacilities:
-      page = AddItemBasicDetails(mode: PageMode.edit,headerData:  widget.headerData,);
+      page = AddItemBasicDetails(mode: PageMode.edit,);
       break;
   }
 

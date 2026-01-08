@@ -1,24 +1,17 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
-import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
-import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
-import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
-import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/widget/survey_items.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ListSurveyReport extends StatefulWidget {
-   final SurveyHeaderModel headerData;
+  
    final FamilySurveySectionType sectionType;
-  const ListSurveyReport({super.key, required this.sectionType, required this.headerData});
+  const ListSurveyReport({super.key, required this.sectionType,});
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
@@ -157,8 +150,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                   itemCount: 3,
                   itemBuilder: (context, index) {
                     return PropertyCard(
-                      headerData: widget
-                      .headerData,
+                     
                       sectionType: widget.sectionType,
                       houseNumber: '5/123 ',
                       houseName: "കുന്നത്ത് വീട്",
