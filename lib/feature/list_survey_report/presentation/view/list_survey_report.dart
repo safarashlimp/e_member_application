@@ -13,7 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListSurveyReport extends StatefulWidget {
   final FamilySurveySectionType sectionType;
-  const ListSurveyReport({super.key, required this.sectionType});
+  final String postion;
+  const ListSurveyReport({super.key, required this.sectionType, required this.postion});
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
@@ -33,7 +34,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   @override
   void initState() {
     super.initState();
-    context.read<HeaderListBloc>().add(FetchHeaderList('1'));
+    context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
   }
 
   // }

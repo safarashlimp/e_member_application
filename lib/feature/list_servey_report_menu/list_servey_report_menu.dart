@@ -101,6 +101,7 @@ onIconTap: () {   Navigator.push(
       )..add(FetchHeaderList('1')),
       child: const ListSurveyReport(
         sectionType: FamilySurveySectionType.familyBasicDetails,
+        postion: '1',
       ),
     ),
   ),
@@ -127,6 +128,7 @@ onIconTap: () {   Navigator.push(
       )..add(FetchHeaderList('2')),
       child: const ListSurveyReport(
         sectionType: FamilySurveySectionType.basicFacilities,
+        postion: '2',
       ),
     ),
   ),

@@ -614,7 +614,7 @@ if (header == null ||
                               }
 
                               await HeaderSaveRepository().saveSurveyHeader(
-                                
+
                                 surveyor: surveyornamecontroller.text,
   houseChief: widget.headerData?.houseChief,
   houseNumber: widget.headerData?.houseNumber ?? '',
@@ -660,6 +660,7 @@ if (header == null ||
       )..add(FetchHeaderList('1')),
       child: const ListSurveyReport(
         sectionType: FamilySurveySectionType.familyBasicDetails,
+        postion: '1',
       ),
     ),
   ),
