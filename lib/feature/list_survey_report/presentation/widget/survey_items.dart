@@ -31,9 +31,12 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
 
-import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/header_load/data/repository/header_load_repository_impl.dart';
 import 'package:e_member_app/feature/header_load/presentation/HEADER%20LOAD/header_load_bloc.dart';
@@ -108,21 +111,61 @@ class _PropertyCardState extends State<PropertyCard> {
 //   );
 // }
 
+// void openWithLoad(BuildContext context, PageMode mode) {
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (_) => BlocProvider(
+//         create: (_) => HeaderLoadBloc(
+//           HeaderLoadRepositoryImpl(http.Client()),
+//         )..add(
+//             FetchHeaderLoad(
+//               editId: widget.editId,
+//               position: widget.position,
+//             ),
+//           ),
+//         child: HeaderLoadGate(
+          
+//           mode: mode,
+//           position: widget.position,
+//         ),
+//       ),
+//     ),
+//   );
+// }
+
 void openWithLoad(BuildContext context, PageMode mode) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (_) => BlocProvider(
-        create: (_) => HeaderLoadBloc(
-          HeaderLoadRepositoryImpl(http.Client()),
-        )..add(
-            FetchHeaderLoad(
-              editId: widget.editId,
-              position: widget.position,
-            ),
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          // 1️⃣ Header Load
+          BlocProvider(
+            create: (_) => HeaderLoadBloc(
+              HeaderLoadRepositoryImpl(http.Client()),
+            )..add(
+                FetchHeaderLoad(
+                  editId: widget.editId,
+                  position: widget.position,
+                ),
+              ),
           ),
+
+          // 2️⃣ REQUIRED BLOCS FOR AddServyItems / AddItemBasicDetails
+          BlocProvider(
+            create: (_) => RationCardBloc(
+              FamilyDropRepositoryImpl(),
+            )..add(FetchRationCards()),
+          ),
+
+          BlocProvider(
+            create: (_) => HouseTypeBloc(
+              FamilyDropRepositoryImpl(),
+            )..add(FetchHouseTypes()),
+          ),
+        ],
         child: HeaderLoadGate(
-          
           mode: mode,
           position: widget.position,
         ),
@@ -130,7 +173,6 @@ void openWithLoad(BuildContext context, PageMode mode) {
     ),
   );
 }
-
 
   @override
   Widget build(BuildContext context) {
