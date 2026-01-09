@@ -10,36 +10,36 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/emloyment/employment_status_dart_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/caste/caste_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/jobs/job_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/marital_status/maritalstatus_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pansion_type/pansion_type_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/pension_required/pension_required_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/blood_group/blood_group_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/employment%20support/employment_suppor_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/emloyment/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/emloyment/employment_status_dart_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/caste/caste_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/caste/caste_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/farming%20type/farming_bloc_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/farming%20type/farming_bloc_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/health%20issue/health_issue_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/health%20issue/health_issue_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/health_insurance/health_insurance_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/jobs/job_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/marital_status/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/marital_status/maritalstatus_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/pansion_type/pansion_type_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/pension_required/pension_required_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/qualification/qualification_state.dart';
 
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_state.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/relation_drop/relation_drop_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/relation_drop/relation_drop_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/required_health/requried_health_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/required_health/requried_health_state.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/skill/skill_bloc.dart';
+import 'package:e_member_app/feature/alldropdownlist/presentation/bloc/bloc/skill/skill_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
@@ -546,14 +546,14 @@ List<String> selectedSkillIds = [];
                               onChanged: (v) {
                                 setState(() {
                                   student = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (student == 'yes') ...[
+                            if (student == 1) ...[
                               const SizedBox(height: 20),
 BlocBuilder<EducationBloc, EducationState>(
   builder: (context, state) {
@@ -630,7 +630,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     needEducationHelp = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -845,7 +845,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     norkaRegisteredLabel = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
