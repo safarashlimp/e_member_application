@@ -88,6 +88,11 @@ void initState() {
     cardNumber.text = widget.headerData!.rationCardNumber;
     anualIncome.text = widget.headerData!.annualIncome;
     selectedRationCardId = widget.headerData!.rationCardTypeId;
+    rationCard = widget.headerData!.hasJobCard;
+    casteCert = widget.headerData!.kudumbashreeMember;
+    disability = widget.headerData!.govtBeneficiary;
+    widow = widget.headerData!.extremePoor;
+
   }
 }
 
@@ -224,6 +229,14 @@ void initState() {
                                             }
 
                                             if (state is RationCardLoaded) {
+                                                if (selectedRationCardId != null && selectedRationCardLabel == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedRationCardId,
+      orElse: () => state.items.first,
+    );
+
+    selectedRationCardLabel = match.name;
+  }
                                               return AppDropdownField<String>(
                                                 label: 'റേഷൻ കാർഡ് തരം',
                                                 selectedValue:
@@ -234,17 +247,12 @@ void initState() {
                                                 validator:
                                                     Validator.validateSelection,
                                                 onChanged: (value) {
-                                                  setState(() {
-                                                    selectedRationCardLabel =
-                                                        value;
-                                                    selectedRationCardId = state
-                                                        .items
-                                                        .firstWhere(
-                                                          (e) =>
-                                                              e.name == value,
-                                                        )
-                                                        .id;
-                                                  });
+                                                   setState(() {
+        selectedRationCardLabel = value;
+        selectedRationCardId = state.items
+            .firstWhere((e) => e.name == value)
+            .id;
+      }); 
                                                 },
                                               );
                                             }
