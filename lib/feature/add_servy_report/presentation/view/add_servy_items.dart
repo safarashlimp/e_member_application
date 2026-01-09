@@ -252,7 +252,7 @@ void initState() {
         selectedRationCardId = state.items
             .firstWhere((e) => e.name == value)
             .id;
-      }); 
+      });  
                                                 },
                                               );
                                             }
