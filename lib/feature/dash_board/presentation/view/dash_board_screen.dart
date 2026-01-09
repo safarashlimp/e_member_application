@@ -26,7 +26,6 @@ class _DashboardPageState extends State<DashboardPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             /// 🔒 FIXED HEADER (NO SCROLL)
             DashBoardHeader(),
 
@@ -36,8 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   // const SizedBox(height: 12),
-
+                    // const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: TopStats(),
@@ -78,8 +76,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
 
                     BottomCards(),
-
-                    const SizedBox(height: 90),
                   ],
                 ),
               ),

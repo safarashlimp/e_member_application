@@ -13,19 +13,19 @@ class _TopStatsState extends State<TopStats> {
     return Row(
       children: const [
         _StatCard(
-          icon: 'assets/icons/home.png',
+          icon: 'assets/images/home.png',
           label: 'വീടുകൾ',
           value: '350',
         ),
         SizedBox(width: 12),
         _StatCard(
-          icon: 'assets/icons/family.png',
+          icon: 'assets/images/Mask group (25).png',
           label: 'കുടുംബങ്ങൾ',
           value: '350',
         ),
         SizedBox(width: 12),
         _StatCard(
-          icon: 'assets/icons/users.png',
+          icon: 'assets/images/Mask group (26).png',
           label: 'ജനസംഖ്യ',
           value: '1500',
         ),

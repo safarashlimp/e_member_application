@@ -149,9 +149,9 @@ class AppBottomNav extends StatelessWidget {
       case 1:
         page = const ListServeyReportMenu();
         break;
-      // case 2:
-      //   page = const ListFamily(();
-      //   break;
+      //case 2:
+       // page = const ListFamily();
+        //break;
       // case 3:
       //   page = const AddItemBasicDetails();
       //   break;
@@ -257,7 +257,7 @@ class AppBottomNav extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Image.asset(
-                  'assets/icons/survey_nav_bar.png',
+                  'assets/images/Mask group (24).png',
                 ),
               ),
             ),
@@ -299,15 +299,15 @@ class AppBottomNav extends StatelessWidget {
   /// ---------------- ICONS ----------------
   String _image(int index) {
     switch (index) {
-      case 0:
-        return 'assets/images/Vector (1).png';
+      case 0: 
+        return 'assets/images/Vector (2).png';
       case 1:
-        return 'assets/icons/family_nav_bar.png';
+        return 'assets/images/Mask group (22).png';
       case 2:
-        return 'assets/icons/family_member_nav_bar.png';
-    
+        return 'assets/images/Mask group (23).png';
+      
       default:
-        return 'assets/icons/benefits_nav_bar.png';
+        return 'assets/images/Group 1171275074.png';
     }
   }
 

@@ -72,7 +72,7 @@ class DashBoardHeader extends StatelessWidget {
                      
                       const CircleAvatar(
             radius: 22,
-            backgroundImage: AssetImage('assets/images/profile.png',
+            backgroundImage: AssetImage('assets/images/Ellipse 1216.png',
             
             ),
                       ),

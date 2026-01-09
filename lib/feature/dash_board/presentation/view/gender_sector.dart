@@ -35,9 +35,9 @@ class _GenderSectionState extends State<GenderSection> {
 
       
               children: const [
-                _GenderCard('assets/icons/male.png', 'പുരുഷൻ', '540', AppColor.blue, 12),
-                _GenderCard('assets/icons/female.png', 'സ്ത്രീ', '540', AppColor.pink, 12),
-                _GenderCard('assets/icons/child.png', 'കുട്ടികൾ', '540', AppColor.naviBlue, 12),
+                _GenderCard('assets/images/avatar-design 1.png', 'പുരുഷൻ', '540', AppColor.blue, 12),
+                _GenderCard('assets/images/businesswoman 1.png', 'സ്ത്രീ', '540', AppColor.pink, 12),
+                _GenderCard('assets/images/people 1.png', 'കുട്ടികൾ', '540', AppColor.naviBlue, 12),
               ],
             ),
 
@@ -49,9 +49,9 @@ class _GenderSectionState extends State<GenderSection> {
 
         
               children: const [
-                _GenderCard('assets/icons/male.png', 'വയോജനങ്ങൾ', '540', AppColor.orange1, 10),
-                _GenderCard('assets/icons/female.png', 'ഭിന്നശേഷിക്കാർ', '540', AppColor.violet,10),
-                _GenderCard('assets/icons/child.png', 'കർഷകർ', '540', AppColor.darkGreen,12),
+                _GenderCard('assets/images/avatar 1.png', 'വയോജനങ്ങൾ', '540', AppColor.orange1, 10),
+                _GenderCard('assets/images/disabled-person 1.png', 'ഭിന്നശേഷിക്കാർ', '540', AppColor.violet,10),
+                _GenderCard('assets/images/farmer 1.png', 'കർഷകർ', '540', AppColor.darkGreen,12),
               ],
             ),
           ],
