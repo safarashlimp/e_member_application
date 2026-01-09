@@ -35,7 +35,7 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
       final items = await usecase(
         clientId,
         userId,
-        event.position, // "1"
+        event.position, 
       );
 
       emit(HeaderListLoaded(items));

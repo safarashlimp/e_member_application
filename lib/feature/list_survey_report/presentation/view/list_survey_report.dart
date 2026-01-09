@@ -11,34 +11,30 @@ import 'package:e_member_app/feature/list_survey_report/presentation/widget/surv
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
 class ListSurveyReport extends StatefulWidget {
-  
-   final FamilySurveySectionType sectionType;
-  const ListSurveyReport({super.key, required this.sectionType,});
+  final FamilySurveySectionType sectionType;
+  const ListSurveyReport({super.key, required this.sectionType});
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
 }
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
-
   String get pageTitle {
-  switch (widget.sectionType) {
-    case FamilySurveySectionType.familyBasicDetails:
-      return 'വ്യക്തിഗത വിവരം';
-    case FamilySurveySectionType.basicFacilities:
-      return 'അടിസ്ഥാന സൗകര്യങ്ങൾ';
+    switch (widget.sectionType) {
+      case FamilySurveySectionType.familyBasicDetails:
+        return 'വ്യക്തിഗത വിവരം';
+      case FamilySurveySectionType.basicFacilities:
+        return 'അടിസ്ഥാന സൗകര്യങ്ങൾ';
+    }
   }
-}
- 
+
   // -------------------- update------------------------
-@override
-void initState() {
-  super.initState();
-  context.read<HeaderListBloc>().add(FetchHeaderList('1'));
-}
+  @override
+  void initState() {
+    super.initState();
+    context.read<HeaderListBloc>().add(FetchHeaderList('1'));
+  }
 
   // }
 
@@ -53,7 +49,6 @@ void initState() {
   //     showAppUpdateDialog(context);
   //   }
   // }
-
 
   // // This function checks if an update is available
   // // You can replace this with actual API call or version check
@@ -111,31 +106,30 @@ void initState() {
     return SafeArea(
       top: false,
       child: Scaffold(
-      //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
-//         floatingActionButton: FloatingActionButton(
-//           onPressed: () {
-//         Navigator.push(
-//   context,
-//   MaterialPageRoute(
-//     builder: (context) => BlocProvider(
-//       create: (_) => RationCardBloc(
-//         RationCardRepository(),
-//       )..add(FetchRationCards()),
-//       child:
-//        const AddServyItems(mode: PageMode.add), 
-//     ),
-//   ),
-// );
+        //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
+        //         floatingActionButton: FloatingActionButton(
+        //           onPressed: () {
+        //         Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => BlocProvider(
+        //       create: (_) => RationCardBloc(
+        //         RationCardRepository(),
+        //       )..add(FetchRationCards()),
+        //       child:
+        //        const AddServyItems(mode: PageMode.add),
+        //     ),
+        //   ),
+        // );
 
-//           },
-//           backgroundColor: AppColor.iconColor, // 💚 changes color
-//           foregroundColor: AppColor.white,
-//           // optional - icon color
-//           shape: const CircleBorder(), // ensures circular shape
+        //           },
+        //           backgroundColor: AppColor.iconColor, // 💚 changes color
+        //           foregroundColor: AppColor.white,
+        //           // optional - icon color
+        //           shape: const CircleBorder(), // ensures circular shape
 
-//           child: const Icon(Icons.add, size: 24),
-//         ),
-
+        //           child: const Icon(Icons.add, size: 24),
+        //         ),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
@@ -147,44 +141,39 @@ void initState() {
             Expanded(
               child: Container(
                 color: AppColor.white,
-                child:
-                
-                
-                BlocBuilder<HeaderListBloc, HeaderListState>(
-  builder: (context, state) {
-    if (state is HeaderListLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                child: BlocBuilder<HeaderListBloc, HeaderListState>(
+                  builder: (context, state) {
+                    if (state is HeaderListLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-    if (state is HeaderListLoaded) {
-      return ListView.builder(
-        itemCount: state.items.length,
-        itemBuilder: (context, index) {
-          final item = state.items[index];
-          return PropertyCard(
-            sectionType: widget.sectionType,
-            houseNumber: item.houseNumber,
-            houseName: item.houseName,
-            subtitle: item.houseChief,
-            memberCount: item.memberCount,
-            lastUpdated: 'Updated on ${item.lastModified}',
-          );
-        },
-      );
-    }
+                    if (state is HeaderListLoaded) {
+                      return ListView.builder(
+                        itemCount: state.items.length,
 
-    if (state is HeaderListError) {
-      return Center(child: Text(state.message));
-    }
+                        itemBuilder: (context, index) {
+                          final item = state.items[index];
+                          return PropertyCard(
+                            editId: item.editId,
+                            position: '1',
+                            sectionType: widget.sectionType,
+                            houseNumber: item.houseNumber,
+                            houseName: item.houseName,
+                            subtitle: item.houseChief,
+                            memberCount: item.memberCount,
+                            lastUpdated: 'Updated on ${item.lastModified}',
+                          );
+                        },
+                      );
+                    }
 
-    return const SizedBox();
-  },
-)
+                    if (state is HeaderListError) {
+                      return Center(child: Text(state.message));
+                    }
 
-
-
-
-
+                    return const SizedBox();
+                  },
+                ),
               ),
             ),
           ],

@@ -1,7 +1,7 @@
 abstract class HeaderListEvent {}
 
 class FetchHeaderList extends HeaderListEvent {
-  final String position; // "1"
+  final String position; 
 
   FetchHeaderList(this.position);
 }

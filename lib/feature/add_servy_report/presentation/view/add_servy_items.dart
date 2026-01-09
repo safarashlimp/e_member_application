@@ -34,7 +34,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddServyItems extends StatefulWidget {
    final PageMode mode;
-  const AddServyItems({super.key, required this.mode});
+   final SurveyHeaderModel? headerData;
+  const AddServyItems({super.key, required this.mode,this.headerData });
 
   @override
   State<AddServyItems> createState() => _AddServyItemsState();
@@ -76,6 +77,19 @@ bool get isEdit => widget.mode == PageMode.edit;
         return Colors.white;
     }
   }
+@override
+void initState() {
+  super.initState();
+
+  if (widget.headerData != null) {
+    gardienName.text = widget.headerData!.houseChief;
+    houseName.text = widget.headerData!.houseName;
+    houseNumber.text = widget.headerData!.houseNumber;
+    cardNumber.text = widget.headerData!.rationCardNumber;
+    anualIncome.text = widget.headerData!.annualIncome;
+    selectedRationCardId = widget.headerData!.rationCardTypeId;
+  }
+}
 
   @override
   Widget build(BuildContext context) {

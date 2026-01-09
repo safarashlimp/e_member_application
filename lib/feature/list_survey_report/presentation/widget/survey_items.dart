@@ -35,9 +35,14 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/view/a
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/header_load/data/repository/header_load_repository_impl.dart';
+import 'package:e_member_app/feature/header_load/presentation/HEADER%20LOAD/header_load_bloc.dart';
+import 'package:e_member_app/feature/header_load/presentation/HEADER%20LOAD/header_load_event.dart';
+import 'package:e_member_app/feature/header_load/presentation/view/header_load_gate.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class PropertyCard extends StatefulWidget {
   // final SurveyHeaderModel? headerData;
@@ -46,9 +51,13 @@ class PropertyCard extends StatefulWidget {
   final String subtitle;
   final String memberCount;
   final String lastUpdated;
+  final String editId;
+  final String position;
  final FamilySurveySectionType sectionType;
   const PropertyCard({
     super.key,
+    required this.editId,
+    required this.position,
     required this.houseNumber,
     required this.houseName,
     required this.subtitle,
@@ -63,41 +72,66 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-     void onViewTap(BuildContext context) {
- late Widget page;
+//      void onViewTap(BuildContext context) {
+//  late Widget page;
 
-  switch (widget.sectionType) {
-    case FamilySurveySectionType.familyBasicDetails:
-      page = const AddServyItems(mode: PageMode.view);
-      break;
-    case FamilySurveySectionType.basicFacilities:
-      page = AddItemBasicDetails(mode: PageMode.view,   );
-      break;
+//   switch (widget.sectionType) {
+//     case FamilySurveySectionType.familyBasicDetails:
+//       page = const AddServyItems(mode: PageMode.view);
+//       break;
+//     case FamilySurveySectionType.basicFacilities:
+//       page = AddItemBasicDetails(mode: PageMode.view,   );
+//       break;
  
-  }
+//   }
 
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(builder: (_) => page),
+//   );
+// }
+//   void onEditTap(BuildContext context) {
+//  late Widget page;
+
+//   switch (widget.sectionType) {
+//     case FamilySurveySectionType.familyBasicDetails:
+//       page = const AddServyItems(mode: PageMode.edit);
+//       break;
+//     case FamilySurveySectionType.basicFacilities:
+//       page = AddItemBasicDetails(mode: PageMode.edit,);
+//       break;
+//   }
+
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(builder: (_) => page),
+//   );
+// }
+
+void openWithLoad(BuildContext context, PageMode mode) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (_) => page),
+    MaterialPageRoute(
+      builder: (_) => BlocProvider(
+        create: (_) => HeaderLoadBloc(
+          HeaderLoadRepositoryImpl(http.Client()),
+        )..add(
+            FetchHeaderLoad(
+              editId: widget.editId,
+              position: widget.position,
+            ),
+          ),
+        child: HeaderLoadGate(
+          
+          mode: mode,
+          position: widget.position,
+        ),
+      ),
+    ),
   );
 }
-  void onEditTap(BuildContext context) {
- late Widget page;
 
-  switch (widget.sectionType) {
-    case FamilySurveySectionType.familyBasicDetails:
-      page = const AddServyItems(mode: PageMode.edit);
-      break;
-    case FamilySurveySectionType.basicFacilities:
-      page = AddItemBasicDetails(mode: PageMode.edit,);
-      break;
-  }
 
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (_) => page),
-  );
-}
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -231,7 +265,7 @@ class _PropertyCardState extends State<PropertyCard> {
                 child: OutlinedButton.icon(
                   onPressed: () {
                    // add contition
-                    onViewTap(context);
+                   openWithLoad(context, PageMode.view);
                   },
                   icon: const Icon(
                     Icons.visibility,
@@ -267,7 +301,7 @@ class _PropertyCardState extends State<PropertyCard> {
                 child: OutlinedButton.icon(
                   //add contition
                   onPressed: () {
-                    onEditTap(context);
+                    openWithLoad(context, PageMode.edit);
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => AddServyItems()),

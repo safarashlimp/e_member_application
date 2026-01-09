@@ -1,5 +1,4 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_basic_details.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_educationdetails.dart';
