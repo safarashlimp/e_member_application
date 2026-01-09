@@ -2,7 +2,13 @@ import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_mo
 
 class HeaderMapper {
   static SurveyHeaderModel fromApi(Map<String, dynamic> json) {
-    final data = json['data'] ?? json;
+    final List list = json['data'];
+
+    if (list.isEmpty) {
+      throw Exception('Header data empty');
+    }
+
+    final Map<String, dynamic> data = list.first;
 
     return SurveyHeaderModel(
       houseChief: data['house_chief'] ?? '',
@@ -10,14 +16,14 @@ class HeaderMapper {
       houseName: data['house_name'] ?? '',
       rationCardNumber: data['ration_card_number'] ?? '',
       rationCardTypeId: data['ration_card_type_id']?.toString() ?? '',
-      annualIncome: data['annual_income'].toString(),
-      hasJobCard: int.tryParse(data['has_job_card']?.toString() ?? '0') ?? 0,
+      annualIncome: data['annual_income']?.toString() ?? '',
+      hasJobCard: int.parse(data['has_job_card'].toString()),
       kudumbashreeMember:
-          int.tryParse(data['kudumbashree_member']?.toString() ?? '0') ?? 0,
+          int.parse(data['kudumbashree_member'].toString()),
       govtBeneficiary:
-          int.tryParse(data['govt_beneficiary']?.toString() ?? '0') ?? 0,
+          int.parse(data['govt_beneficiary'].toString()),
       extremePoor:
-          int.tryParse(data['extreme_poor']?.toString() ?? '0') ?? 0,
+          int.parse(data['extreme_poor'].toString()),
     );
   }
 }

@@ -155,7 +155,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                           final item = state.items[index];
                           return PropertyCard(
                             editId: item.editId,
-                            position: '1',
+                            position: item.position,
                             sectionType: widget.sectionType,
                             houseNumber: item.houseNumber,
                             houseName: item.houseName,

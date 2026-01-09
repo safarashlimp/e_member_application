@@ -47,6 +47,9 @@ class AddItemBasicDetails extends StatefulWidget {
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   final TextEditingController selectedLandAreaController =
       TextEditingController();
+
+        final TextEditingController surveyornamecontroller =
+      TextEditingController();
   String? selectedHouseType;
   String? selectedHouseTypeId;
   String? selectedLandType;
@@ -543,6 +546,22 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 return const SizedBox();
                               },
                             ),
+                            SizedBox(height: 20,)
+
+                             ,AppTextField(
+                              controller: surveyornamecontroller,
+                              label: 'സർവ്വേ ചെയ്ത വ്വേര്:',
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+
+                              validator: Validator.validateName,
+
+                              textColor: AppColor.primary,
+                              width: double.infinity,
+                              height: 40,
+                            ),
                           ],
                         ),
                       ),
@@ -595,6 +614,8 @@ if (header == null ||
                               }
 
                               await HeaderSaveRepository().saveSurveyHeader(
+                                
+                                surveyor: surveyornamecontroller.text,
   houseChief: widget.headerData?.houseChief,
   houseNumber: widget.headerData?.houseNumber ?? '',
   houseName: widget.headerData?.houseName ?? '',
