@@ -4,8 +4,13 @@ import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
 
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_state.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/widget/survey_items.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 
 class ListSurveyReport extends StatefulWidget {
@@ -29,15 +34,12 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
 }
  
   // -------------------- update------------------------
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Check for updates when home page loads
-  //   _checkForUpdates();
-  //   // Check app status
-  //   _checkAppStatus();
+@override
+void initState() {
+  super.initState();
+  context.read<HeaderListBloc>().add(FetchHeaderList('1'));
+}
 
-   
   // }
 
   // Future<void> _checkForUpdates() async {
@@ -145,21 +147,44 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
             Expanded(
               child: Container(
                 color: AppColor.white,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return PropertyCard(
-                     
-                      sectionType: widget.sectionType,
-                      houseNumber: '5/123 ',
-                      houseName: "കുന്നത്ത് വീട്",
-                      subtitle: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
-                      memberCount: '5',
-                      lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
-                    );
-                  },
-                ),
+                child:
+                
+                
+                BlocBuilder<HeaderListBloc, HeaderListState>(
+  builder: (context, state) {
+    if (state is HeaderListLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is HeaderListLoaded) {
+      return ListView.builder(
+        itemCount: state.items.length,
+        itemBuilder: (context, index) {
+          final item = state.items[index];
+          return PropertyCard(
+            sectionType: widget.sectionType,
+            houseNumber: item.houseNumber,
+            houseName: item.houseName,
+            subtitle: item.houseChief,
+            memberCount: item.memberCount,
+            lastUpdated: 'Updated on ${item.lastModified}',
+          );
+        },
+      );
+    }
+
+    if (state is HeaderListError) {
+      return Center(child: Text(state.message));
+    }
+
+    return const SizedBox();
+  },
+)
+
+
+
+
+
               ),
             ),
           ],

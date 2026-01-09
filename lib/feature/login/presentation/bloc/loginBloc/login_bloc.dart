@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
 
 import 'package:e_member_app/feature/login/data/model/usermodel.dart';
@@ -26,15 +27,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // Save Clientid
         final prefs = await SharedPreferences.getInstance();
         // Save fields separately
-  await prefs.setString('clientid', user.data.first.clientid); // Clientid
-  await prefs.setString('userid', user.data.first.id);        // normal id
-  await prefs.setString('username', user.data.first.name);    // name
-  await prefs.setString('mobile', user.data.first.mobile);  
+  // await prefs.setString('clientid', user.data.first.clientid); // Clientid
+  // await prefs.setString('userid', user.data.first.id);        // normal id
+  // await prefs.setString('username', user.data.first.name);    // name
+  // await prefs.setString('mobile', user.data.first.mobile);  
         
-        print("Saved clientid: ${user.data.first.clientid}");
-        print("Saved userid: ${user.data.first.id}");
-        print("Saved username: ${user.data.first.name}"); 
-        print("Saved mobile: ${user.data.first.mobile}");
+
+         await prefs.setString(
+            PrefKeys.clientId, user.data.first.clientid);
+        await prefs.setString(
+            PrefKeys.userId, user.data.first.id);
+        await prefs.setString(
+            PrefKeys.userName, user.data.first.name);
+        await prefs.setString(
+            PrefKeys.mobile, user.data.first.mobile);
+        // print("Saved clientid: ${user.data.first.clientid}");
+        // print("Saved userid: ${user.data.first.id}");
+        // print("Saved username: ${user.data.first.name}"); 
+        // print("Saved mobile: ${user.data.first.mobile}");
 
         emit(LoginSuccess(user: user));
       } else {

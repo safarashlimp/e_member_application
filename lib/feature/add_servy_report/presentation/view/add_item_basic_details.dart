@@ -22,9 +22,14 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-fa
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
+import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class AddItemBasicDetails extends StatefulWidget {
   final  SurveyHeaderModel? headerData;
@@ -623,16 +628,23 @@ if (header == null ||
                               );
 
                               // ✅ NAVIGATION WILL WORK NOW
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ListSurveyReport(
-                                    sectionType: FamilySurveySectionType
-                                        .familyBasicDetails,
-                                  
-                                  ),
-                                ),
-                              );
+       Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => HeaderListBloc(
+        GetHeaderListUsecase(
+          HeaderListRepositoryImpl(http.Client()),
+        ),
+      )..add(FetchHeaderList('1')),
+      child: const ListSurveyReport(
+        sectionType: FamilySurveySectionType.familyBasicDetails,
+      ),
+    ),
+  ),
+);
+
+
                             } catch (e) {
                               if (selectedHouseTypeId == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
