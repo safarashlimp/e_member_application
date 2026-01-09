@@ -162,6 +162,13 @@ void initState() {
                                           }
 
                                           if (state is HouseTypeLoaded) {
+                                              if (selectedHouseTypeId != null && selectedHouseType == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedHouseTypeId,
+      orElse: () => state.items.first,
+    );
+    selectedHouseType = match.name; // ✅ ID → NAME
+  }
                                             return AppDropdownField<String>(
                                               label: 'വീടിന്റെ തരം',
                                               
@@ -172,18 +179,11 @@ void initState() {
                                                   .map((e) => e.name)
                                                   .toList(),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  selectedHouseType = value;
-
-                                                  final selectedItem = state
-                                                      .items
-                                                      .firstWhere(
-                                                        (e) => e.name == value,
-                                                      );
-
-                                                  selectedHouseTypeId =
-                                                      selectedItem.id;
-                                                });
+                                                    setState(() {
+        selectedHouseType = value;
+        selectedHouseTypeId =
+            state.items.firstWhere((e) => e.name == value).id;
+      });
                                               },
                                             );
                                           }
@@ -215,6 +215,14 @@ void initState() {
                                           }
 
                                           if (state is LandTypeLoaded) {
+                                             if (selectedLandTypeId != null && selectedLandType == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedLandTypeId,
+          orElse: () => state.items.first,
+        );
+        selectedLandType = match.name;
+      }
+
                                             return AppDropdownField<String>(
                                               label: 'ഭൂമിയുടെ തരം',
                                               selectedValue: selectedLandType,
@@ -224,18 +232,11 @@ void initState() {
                                                   .map((e) => e.name)
                                                   .toList(),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  selectedLandType = value;
-
-                                                  final selectedItem = state
-                                                      .items
-                                                      .firstWhere(
-                                                        (e) => e.name == value,
-                                                      );
-
-                                                  selectedLandTypeId =
-                                                      selectedItem.id;
-                                                });
+                                                 setState(() {
+            selectedLandType = value;
+            selectedLandTypeId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                               },
                                             );
                                           }
@@ -310,6 +311,14 @@ void initState() {
                                 }
 
                                 if (state is WaterFacilityLoaded) {
+                                   if (selectedWaterFacilityId != null &&
+          selectedwaterFacilityAvailable == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedWaterFacilityId,
+          orElse: () => state.items.first,
+        );
+        selectedwaterFacilityAvailable = match.name;
+      }
                                   return AppDropdownField<String>(
                                     label: 'കുടിവെള്ള സൗകര്യം',
                                     selectedValue:
@@ -326,11 +335,10 @@ void initState() {
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
-                                        selectedwaterFacilityAvailable = value;
-                                        selectedWaterFacilityId = state.items
-                                            .firstWhere((e) => e.name == value)
-                                            .id;
-                                      });
+            selectedwaterFacilityAvailable = value;
+            selectedWaterFacilityId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                     },
                                   );
                                 }
@@ -406,6 +414,14 @@ void initState() {
                                   // }
 
                                   if (state is RequiredBenefitLoaded) {
+                                     if (selectedRequiredBenefitId != null &&
+          selectedRequiredBenefit == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedRequiredBenefitId,
+          orElse: () => state.items.first,
+        );
+        selectedRequiredBenefit = match.name;
+      }
                                     return AppDropdownField<String>(
                                       label: 'ലഭിച്ച ആനുകൂല്യം ',
                                       selectedValue: selectedRequiredBenefit,
@@ -421,14 +437,10 @@ void initState() {
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedRequiredBenefit = value;
-                                          selectedRequiredBenefitId = state
-                                              .items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
+            selectedRequiredBenefit = value;
+            selectedRequiredBenefitId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                       },
                                     );
                                   }
@@ -474,6 +486,14 @@ void initState() {
                                   }
 
                                   if (state is OtherBenefitLoaded) {
+                                     if (selectedOtherBenefitId != null &&
+          selectedOtherBenefit == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedOtherBenefitId,
+          orElse: () => state.items.first,
+        );
+        selectedOtherBenefit = match.name;
+      }
                                     return AppDropdownField<String>(
                                       label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
                                       selectedValue: selectedOtherBenefit,
@@ -489,13 +509,10 @@ void initState() {
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedOtherBenefit = value;
-                                          selectedOtherBenefitId = state.items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
+            selectedOtherBenefit = value;
+            selectedOtherBenefitId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                       },
                                     );
                                   }
@@ -560,6 +577,13 @@ void initState() {
                                 }
 
                                 if (state is WardGeneralNeedLoaded) {
+                                    if (selectedGeneralNeedId != null && selectedGeneralNeed == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedGeneralNeedId,
+          orElse: () => state.items.first,
+        );
+        selectedGeneralNeed = match.name;
+      }
                                   return AppDropdownField<String>(
                                     label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
                                     selectedValue: selectedGeneralNeed,
@@ -575,11 +599,10 @@ void initState() {
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
-                                        selectedGeneralNeed = value;
-                                        selectedGeneralNeedId = state.items
-                                            .firstWhere((e) => e.name == value)
-                                            .id;
-                                      });
+            selectedGeneralNeed = value;
+            selectedGeneralNeedId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                     },
                                   );
                                 }
