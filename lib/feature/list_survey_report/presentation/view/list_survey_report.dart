@@ -16,9 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListSurveyReport extends StatefulWidget {
-   final SurveyHeaderModel headerData;
+
    final FamilySurveySectionType sectionType;
-  const ListSurveyReport({super.key, required this.sectionType, required this.headerData});
+  const ListSurveyReport({super.key, required this.sectionType, });
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
@@ -157,8 +157,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                   itemCount: 3,
                   itemBuilder: (context, index) {
                     return PropertyCard(
-                      headerData: widget
-                      .headerData,
+                     
                       sectionType: widget.sectionType,
                       houseNumber: '5/123 ',
                       houseName: "കുന്നത്ത് വീട്",
