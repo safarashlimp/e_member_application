@@ -12,7 +12,7 @@ class GradientHeader extends StatelessWidget {
     super.key,
     this.title,
     this.showBack = true,
-    this.height = 150,
+    this.height = 100,
     this.backText,
   });
 
@@ -47,16 +47,16 @@ class GradientHeader extends StatelessWidget {
 
           /// 🔹 WHITE OVERLAP
           Positioned(
-            top: height - 30,
+            top: height - 10,
             left: 0,
             right: 0,
             child: Container(
-              height: 40,
+              height: 30,
               decoration: BoxDecoration(
                 color: AppColor.secondary,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
               ),
             ),

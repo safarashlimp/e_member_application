@@ -41,14 +41,14 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: TopStats(),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
 
                     GenderSection(),
 
-                    const SizedBox(height: 8),
+                    //const SizedBox(height: 5),
 
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8),
                       child: Text(
                         'റേഷൻ കാർഡ് വിതരണം',
                         style: TextStyle(
@@ -61,10 +61,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
                     RationSection(),
 
-                    const SizedBox(height: 16),
+                  
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
                       child: Text(
                         'ക്ഷേമ ഗ്രൂപ്പുകൾ',
                         style: TextStyle(
@@ -76,6 +76,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
 
                     BottomCards(),
+                   // const SizedBox(height: 30),
                   ],
                 ),
               ),

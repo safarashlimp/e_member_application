@@ -33,39 +33,51 @@ class _ListFamilyState extends State<ListFamily> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-            GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(),
-            ),
-            Expanded(
-              child: Container(
-                color: AppColor.white,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return MemberCard(
-                      sectionType: widget.sectionType,
-                      name: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
-                      phone: '+91 860662705',
-                      whatsapp: '+91 860662705',
-                      ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: മകൾ',
-                      age: 'വയസ്: 18',
-                      lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
-                    );
-                  },
+      return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/home',
+          (route) => false,
+        );
+      },
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
+          backgroundColor: AppColor.secondary,
+          body: Column(
+            children: [
+              GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SearchFieldBar(),
+              ),
+              Expanded(
+                child: Container(
+                  color: AppColor.white,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return MemberCard(
+                        sectionType: widget.sectionType,
+                        name: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
+                        phone: '+91 860662705',
+                        whatsapp: '+91 860662705',
+                        ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: മകൾ',
+                        age: 'വയസ്: 18',
+                        lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

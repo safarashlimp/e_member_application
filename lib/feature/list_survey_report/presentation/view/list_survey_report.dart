@@ -113,63 +113,75 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   //=============exp=============
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-      //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
-//         floatingActionButton: FloatingActionButton(
-//           onPressed: () {
-//         Navigator.push(
-//   context,
-//   MaterialPageRoute(
-//     builder: (context) => BlocProvider(
-//       create: (_) => RationCardBloc(
-//         RationCardRepository(),
-//       )..add(FetchRationCards()),
-//       child:
-//        const AddServyItems(mode: PageMode.add), 
-//     ),
-//   ),
-// );
+     return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
 
-//           },
-//           backgroundColor: AppColor.iconColor, // 💚 changes color
-//           foregroundColor: AppColor.white,
-//           // optional - icon color
-//           shape: const CircleBorder(), // ensures circular shape
-
-//           child: const Icon(Icons.add, size: 24),
-//         ),
-
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-            GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
-            ),
-            Expanded(
-              child: Container(
-                color: AppColor.white,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return PropertyCard(
-                     
-                      sectionType: widget.sectionType,
-                      houseNumber: '5/123 ',
-                      houseName: "കുന്നത്ത് വീട്",
-                      subtitle: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
-                      memberCount: '5',
-                      lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
-                    );
-                  },
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/home',
+          (route) => false,
+        );
+      },
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+        //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
+      //         floatingActionButton: FloatingActionButton(
+      //           onPressed: () {
+      //         Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => BlocProvider(
+      //       create: (_) => RationCardBloc(
+      //         RationCardRepository(),
+      //       )..add(FetchRationCards()),
+      //       child:
+      //        const AddServyItems(mode: PageMode.add), 
+      //     ),
+      //   ),
+      // );
+      
+      //           },
+      //           backgroundColor: AppColor.iconColor, // 💚 changes color
+      //           foregroundColor: AppColor.white,
+      //           // optional - icon color
+      //           shape: const CircleBorder(), // ensures circular shape
+      
+      //           child: const Icon(Icons.add, size: 24),
+      //         ),
+      
+          backgroundColor: AppColor.secondary,
+          body: Column(
+            children: [
+              GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+              ),
+              Expanded(
+                child: Container(
+                  color: AppColor.white,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return PropertyCard(
+                       
+                        sectionType: widget.sectionType,
+                        houseNumber: '5/123 ',
+                        houseName: "കുന്നത്ത് വീട്",
+                        subtitle: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
+                        memberCount: '5',
+                        lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

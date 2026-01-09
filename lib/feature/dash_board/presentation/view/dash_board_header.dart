@@ -12,7 +12,7 @@ class DashBoardHeader extends StatelessWidget {
     super.key,
     this.title,
     this.showBack = true,
-    this.height = 150,
+    this.height = 100,
     this.backText,
   });
 
@@ -35,7 +35,7 @@ class DashBoardHeader extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              height: height * 0.5,
+              height: height * 0.5  ,
               decoration: BoxDecoration(
                 gradient: AppColor.primaryGradientLight,
                 borderRadius: const BorderRadius.only(
@@ -47,16 +47,16 @@ class DashBoardHeader extends StatelessWidget {
 
           /// 🔹 WHITE OVERLAP
           Positioned(
-            top: height - 30,
+            top: height - 10,
             left: 0,
             right: 0,
             child: Container(
-              height: 40,
+              height: 30,
               decoration: BoxDecoration(
                 color: AppColor.secondary,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
               ),
             ),
@@ -64,9 +64,9 @@ class DashBoardHeader extends StatelessWidget {
 
           /// 🔹 BACK + TITLE (SAME LINE, SAME POSITION)
           Positioned(
-            top: height * 0.30, // 🎯 exact partition point
-            left: 8,
-            right: 8,
+            top: height * 0.20, // 🎯 exact partition point
+            left: 16,
+            right: 16,
             child: Row(
               children: [
                      
@@ -78,7 +78,7 @@ class DashBoardHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       SizedBox(
-                        width: 265,
+                        width: 260,
 
                         child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +92,7 @@ class DashBoardHeader extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 3),
                                       Text(
                                         'Ward 12 – Green Valley',
                                         style: TextStyle(color: AppColor.white.withOpacity(0.8), fontSize: 12,fontWeight: FontWeight.w500),
