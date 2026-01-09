@@ -28,30 +28,30 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
       return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 0) ,
-            floatingActionButton: FloatingActionButton(
-          onPressed: () {
-        Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => BlocProvider(
-      create: (_) => RationCardBloc(
-        FamilyDropRepositoryImpl(),
-      )..add(FetchRationCards()),
-      child:
-       const AddServyItems(mode: PageMode.add), 
-    ),
-  ),
-);
+        bottomNavigationBar: const AppBottomNav(selectedIndex: 1),
+//             floatingActionButton: FloatingActionButton(
+//           onPressed: () {
+//         Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) => BlocProvider(
+//       create: (_) => RationCardBloc(
+//         FamilyDropRepositoryImpl(),
+//       )..add(FetchRationCards()),
+//       child:
+//        const AddServyItems(mode: PageMode.add), 
+//     ),
+//   ),
+// );
 
-          },
-          backgroundColor: AppColor.iconColor, // 💚 changes color
-          foregroundColor: AppColor.white,
-          // optional - icon color
-          shape: const CircleBorder(), // ensures circular shape
+//           },
+//           backgroundColor: AppColor.iconColor, // 💚 changes color
+//           foregroundColor: AppColor.white,
+//           // optional - icon color
+//           shape: const CircleBorder(), // ensures circular shape
 
-          child: const Icon(Icons.add, size: 24),
-        ),
+//           child: const Icon(Icons.add, size: 24),
+      //  ),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [

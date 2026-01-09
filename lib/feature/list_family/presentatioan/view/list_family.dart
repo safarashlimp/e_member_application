@@ -36,7 +36,7 @@ class _ListFamilyState extends State<ListFamily> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 1),
+        bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
