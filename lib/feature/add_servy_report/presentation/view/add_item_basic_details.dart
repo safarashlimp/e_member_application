@@ -21,6 +21,7 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/header_load/domain/scareen2model.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
 import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
@@ -33,11 +34,13 @@ import 'package:http/http.dart' as http;
 
 class AddItemBasicDetails extends StatefulWidget {
   final  SurveyHeaderModel? headerData;
+   final Screen2Model? screen2HeaderData;
   final PageMode mode;
   const AddItemBasicDetails({
     super.key,
     required this.mode,
      this.headerData,
+     this.screen2HeaderData
   });
 
   @override
@@ -45,6 +48,43 @@ class AddItemBasicDetails extends StatefulWidget {
 }
 
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
+
+
+
+void _populateFieldsFromScreen2(Datum datum) {
+  // Dropdown IDs
+  selectedHouseTypeId = datum.houseTypeId;
+  selectedLandTypeId = datum.landTypeId;
+  selectedWaterFacilityId = datum.drinkingWaterSourceId;
+  selectedRequiredBenefitId = datum.receivedBenefits;
+  selectedOtherBenefitId = datum.benefitsRequired;
+  selectedGeneralNeedId = datum.wardNeeds;
+
+  // Radio buttons
+  toilet = int.tryParse(datum.hasToilet) ?? 0;
+  electricityConnection = int.tryParse(datum.hasElectricity) ?? 0;
+  benefitsReceived = int.tryParse(datum.receivedHousingBenefit) ?? 0;
+  benefitsWanted = int.tryParse(datum.needHousingBenefit) ?? 0;
+
+  // Text fields
+  selectedLandAreaController.text = datum.landAreaCents;
+  surveyornamecontroller.text = datum.surveyor;
+}
+
+
+@override
+void initState() {
+  super.initState();
+
+  if (!isAdd && widget.screen2HeaderData != null) {
+    _populateFieldsFromScreen2(widget.screen2HeaderData!.data.first);
+  }
+}
+
+
+
+
+
   final TextEditingController selectedLandAreaController =
       TextEditingController();
 
@@ -74,8 +114,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   int benefitsReceived = 0;
   int benefitsWanted = 1;
 
-  @override
+
+
   Widget build(BuildContext context) {
+    
+
+
+
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -119,6 +164,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           if (state is HouseTypeLoaded) {
                                             return AppDropdownField<String>(
                                               label: 'വീടിന്റെ തരം',
+                                              
                                               selectedValue: selectedHouseType,
                                               validator:
                                                   Validator.validateSelection,
