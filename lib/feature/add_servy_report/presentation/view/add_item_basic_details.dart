@@ -241,9 +241,11 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               onChanged: (v) {
                                 setState(() {
                                   electricityConnection = v;
-                                  if (v == 0) {
-                                    selectedLandType = null; // reset dropdown
-                                  }
+                                 if (v == 0) {
+  selectedWaterFacilityId = null;
+  selectedwaterFacilityAvailable = null;
+}
+
                                 });
                               },
                             ),
@@ -329,33 +331,33 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                     );
                                   }
 
-                                  if (state is RequiredBenefitLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'ലഭിച്ച ആനുകൂല്യം ',
-                                      selectedValue: selectedRequiredBenefit,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedRequiredBenefit = value;
-                                          selectedRequiredBenefitId = state
-                                              .items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
-                                      },
-                                    );
-                                  }
+                                  // if (state is RequiredBenefitLoaded) {
+                                  //   return AppDropdownField<String>(
+                                  //     label: 'ലഭിച്ച ആനുകൂല്യം ',
+                                  //     selectedValue: selectedRequiredBenefit,
+                                  //     borderColor: AppColor.borderColor,
+                                  //     labelColor: AppColor.hintText2,
+                                  //     selectedTextColor: AppColor.primary,
+                                  //     iconColor: AppColor.black,
+                                  //     dropdownBgColor: AppColor.white,
+                                  //     dropdownTextColor: AppColor.hintText,
+                                  //     validator: Validator.validateSelection,
+                                  //     items: state.items
+                                  //         .map((e) => e.name)
+                                  //         .toList(),
+                                  //     onChanged: (value) {
+                                  //       setState(() {
+                                  //         selectedRequiredBenefit = value;
+                                  //         selectedRequiredBenefitId = state
+                                  //             .items
+                                  //             .firstWhere(
+                                  //               (e) => e.name == value,
+                                  //             )
+                                  //             .id;
+                                  //       });
+                                  //     },
+                                  //   );
+                                  // }
 
                                   if (state is RequiredBenefitLoaded) {
                                     return AppDropdownField<String>(
@@ -630,13 +632,15 @@ if (header == null ||
 
 
                                 houseTypeId: selectedHouseTypeId!,
-                                landTypeId: selectedLandTypeId != null
-                                    ? int.parse(selectedLandTypeId!)
-                                    : null,
+                                landTypeId: (selectedLandTypeId != null &&
+        selectedLandTypeId!.isNotEmpty)
+    ? int.tryParse(selectedLandTypeId!)
+    : null,
+
                                 landAreaCents: selectedLandAreaController.text,
                                 hasToilet: toilet,
                                 hasElectricity: electricityConnection,
-                                drinkingWaterSourceId: selectedWaterFacilityId,
+                                drinkingWaterSourceId: selectedWaterFacilityId?? '0',
                                 receivedHousingBenefit: benefitsReceived,
                                 receivedBenefits: benefitsReceived == 1
                                     ? selectedRequiredBenefitId
