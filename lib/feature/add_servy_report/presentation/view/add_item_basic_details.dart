@@ -21,18 +21,26 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/header_load/domain/scareen2model.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
+import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class AddItemBasicDetails extends StatefulWidget {
-  final SurveyHeaderModel? headerData;
+  final  SurveyHeaderModel? headerData;
+   final Screen2Model? screen2HeaderData;
   final PageMode mode;
   const AddItemBasicDetails({
     super.key,
     required this.mode,
-    this.headerData,
+     this.headerData,
+     this.screen2HeaderData
   });
 
   @override
@@ -40,7 +48,47 @@ class AddItemBasicDetails extends StatefulWidget {
 }
 
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
+
+
+
+void _populateFieldsFromScreen2(Datum datum) {
+  // Dropdown IDs
+  selectedHouseTypeId = datum.houseTypeId;
+  selectedLandTypeId = datum.landTypeId;
+  selectedWaterFacilityId = datum.drinkingWaterSourceId;
+  selectedRequiredBenefitId = datum.receivedBenefits;
+  selectedOtherBenefitId = datum.benefitsRequired;
+  selectedGeneralNeedId = datum.wardNeeds;
+
+  // Radio buttons
+  toilet = int.tryParse(datum.hasToilet) ?? 0;
+  electricityConnection = int.tryParse(datum.hasElectricity) ?? 0;
+  benefitsReceived = int.tryParse(datum.receivedHousingBenefit) ?? 0;
+  benefitsWanted = int.tryParse(datum.needHousingBenefit) ?? 0;
+
+  // Text fields
+  selectedLandAreaController.text = datum.landAreaCents;
+  surveyornamecontroller.text = datum.surveyor;
+}
+
+
+@override
+void initState() {
+  super.initState();
+
+  if (!isAdd && widget.screen2HeaderData != null) {
+    _populateFieldsFromScreen2(widget.screen2HeaderData!.data.first);
+  }
+}
+
+
+
+
+
   final TextEditingController selectedLandAreaController =
+      TextEditingController();
+
+        final TextEditingController surveyornamecontroller =
       TextEditingController();
   String? selectedHouseType;
   String? selectedHouseTypeId;
@@ -66,8 +114,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   int benefitsReceived = 0;
   int benefitsWanted = 1;
 
-  @override
+
+
   Widget build(BuildContext context) {
+    
+
+
+
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -111,6 +164,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           }
 
                                           if (state is HouseTypeLoaded) {
+                                              if (selectedHouseTypeId != null && selectedHouseType == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedHouseTypeId,
+      orElse: () => state.items.first,
+    );
+    selectedHouseType = match.name; // ✅ ID → NAME
+  }
                                             return AppDropdownField<String>(
                                               label: 'വീടിന്റെ തരം',
                                                       borderColor: AppColor.borderColor,
@@ -127,18 +187,11 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                                   .map((e) => e.name)
                                                   .toList(),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  selectedHouseType = value;
-
-                                                  final selectedItem = state
-                                                      .items
-                                                      .firstWhere(
-                                                        (e) => e.name == value,
-                                                      );
-
-                                                  selectedHouseTypeId =
-                                                      selectedItem.id;
-                                                });
+                                                    setState(() {
+        selectedHouseType = value;
+        selectedHouseTypeId =
+            state.items.firstWhere((e) => e.name == value).id;
+      });
                                               },
                                             );
                                           }
@@ -170,6 +223,14 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           }
 
                                           if (state is LandTypeLoaded) {
+                                             if (selectedLandTypeId != null && selectedLandType == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedLandTypeId,
+          orElse: () => state.items.first,
+        );
+        selectedLandType = match.name;
+      }
+
                                             return AppDropdownField<String>(
                                               label: 'ഭൂമിയുടെ തരം',
                                                       borderColor: AppColor.borderColor,
@@ -186,18 +247,11 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                                   .map((e) => e.name)
                                                   .toList(),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  selectedLandType = value;
-
-                                                  final selectedItem = state
-                                                      .items
-                                                      .firstWhere(
-                                                        (e) => e.name == value,
-                                                      );
-
-                                                  selectedLandTypeId =
-                                                      selectedItem.id;
-                                                });
+                                                 setState(() {
+            selectedLandType = value;
+            selectedLandTypeId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                               },
                                             );
                                           }
@@ -248,9 +302,11 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               onChanged: (v) {
                                 setState(() {
                                   electricityConnection = v;
-                                  if (v == 0) {
-                                    selectedLandType = null; // reset dropdown
-                                  }
+                                 if (v == 0) {
+  selectedWaterFacilityId = null;
+  selectedwaterFacilityAvailable = null;
+}
+
                                 });
                               },
                             ),
@@ -266,6 +322,14 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 }
 
                                 if (state is WaterFacilityLoaded) {
+                                   if (selectedWaterFacilityId != null &&
+          selectedwaterFacilityAvailable == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedWaterFacilityId,
+          orElse: () => state.items.first,
+        );
+        selectedwaterFacilityAvailable = match.name;
+      }
                                   return AppDropdownField<String>(
                                     label: 'കുടിവെള്ള സൗകര്യം',
                                     selectedValue:
@@ -282,11 +346,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
-                                        selectedwaterFacilityAvailable = value;
-                                        selectedWaterFacilityId = state.items
-                                            .firstWhere((e) => e.name == value)
-                                            .id;
-                                      });
+            selectedwaterFacilityAvailable = value;
+            selectedWaterFacilityId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                     },
                                   );
                                 }
@@ -329,35 +392,43 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                     );
                                   }
 
-                                  if (state is RequiredBenefitLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'ലഭിച്ച ആനുകൂല്യം ',
-                                      selectedValue: selectedRequiredBenefit,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedRequiredBenefit = value;
-                                          selectedRequiredBenefitId = state
-                                              .items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
-                                      },
-                                    );
-                                  }
+                                  // if (state is RequiredBenefitLoaded) {
+                                  //   return AppDropdownField<String>(
+                                  //     label: 'ലഭിച്ച ആനുകൂല്യം ',
+                                  //     selectedValue: selectedRequiredBenefit,
+                                  //     borderColor: AppColor.borderColor,
+                                  //     labelColor: AppColor.hintText2,
+                                  //     selectedTextColor: AppColor.primary,
+                                  //     iconColor: AppColor.black,
+                                  //     dropdownBgColor: AppColor.white,
+                                  //     dropdownTextColor: AppColor.hintText,
+                                  //     validator: Validator.validateSelection,
+                                  //     items: state.items
+                                  //         .map((e) => e.name)
+                                  //         .toList(),
+                                  //     onChanged: (value) {
+                                  //       setState(() {
+                                  //         selectedRequiredBenefit = value;
+                                  //         selectedRequiredBenefitId = state
+                                  //             .items
+                                  //             .firstWhere(
+                                  //               (e) => e.name == value,
+                                  //             )
+                                  //             .id;
+                                  //       });
+                                  //     },
+                                  //   );
+                                  // }
 
                                   if (state is RequiredBenefitLoaded) {
+                                     if (selectedRequiredBenefitId != null &&
+          selectedRequiredBenefit == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedRequiredBenefitId,
+          orElse: () => state.items.first,
+        );
+        selectedRequiredBenefit = match.name;
+      }
                                     return AppDropdownField<String>(
                                       label: 'ലഭിച്ച ആനുകൂല്യം ',
                                       selectedValue: selectedRequiredBenefit,
@@ -373,14 +444,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedRequiredBenefit = value;
-                                          selectedRequiredBenefitId = state
-                                              .items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
+            selectedRequiredBenefit = value;
+            selectedRequiredBenefitId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                       },
                                     );
                                   }
@@ -424,6 +491,14 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                   }
 
                                   if (state is OtherBenefitLoaded) {
+                                     if (selectedOtherBenefitId != null &&
+          selectedOtherBenefit == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedOtherBenefitId,
+          orElse: () => state.items.first,
+        );
+        selectedOtherBenefit = match.name;
+      }
                                     return AppDropdownField<String>(
                                       label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
                                       selectedValue: selectedOtherBenefit,
@@ -439,13 +514,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedOtherBenefit = value;
-                                          selectedOtherBenefitId = state.items
-                                              .firstWhere(
-                                                (e) => e.name == value,
-                                              )
-                                              .id;
-                                        });
+            selectedOtherBenefit = value;
+            selectedOtherBenefitId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                       },
                                     );
                                   }
@@ -470,6 +542,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 }
 
                                 if (state is WardGeneralNeedLoaded) {
+                                    if (selectedGeneralNeedId != null && selectedGeneralNeed == null) {
+        final match = state.items.firstWhere(
+          (e) => e.id == selectedGeneralNeedId,
+          orElse: () => state.items.first,
+        );
+        selectedGeneralNeed = match.name;
+      }
                                   return AppDropdownField<String>(
                                     label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
                                     selectedValue: selectedGeneralNeed,
@@ -485,11 +564,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                         .toList(),
                                     onChanged: (value) {
                                       setState(() {
-                                        selectedGeneralNeed = value;
-                                        selectedGeneralNeedId = state.items
-                                            .firstWhere((e) => e.name == value)
-                                            .id;
-                                      });
+            selectedGeneralNeed = value;
+            selectedGeneralNeedId =
+                state.items.firstWhere((e) => e.name == value).id;
+          });
                                     },
                                   );
                                 }
@@ -504,32 +582,47 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 return const SizedBox();
                               },
                             ),
+                            SizedBox(height: 20,)
+
+                             ,AppTextField(
+                              controller: surveyornamecontroller,
+                              label: 'സർവ്വേ ചെയ്ത വ്വേര്:',
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+
+                              validator: Validator.validateName,
+
+                              textColor: AppColor.primary,
+                              width: double.infinity,
+                              height: 40,
+                            ),
                           ],
                         ),
                       ),
                       SizedBox(height: 30),
                       if (isEdit || isAdd) ...[
                         AppActionButton(
+
+                          
                           label: "സമർപ്പിക്കുക",
                           onPressed: () async {
-                            
-                           final header  = widget.headerData;
+                            final header  = widget.headerData;
                            
 if (header == null ||
     header.houseChief.isEmpty ||
     header.houseNumber.isEmpty ||
     header.houseName.isEmpty ||
     header.rationCardNumber.isEmpty ||
-    header.rationCardTypeId.isEmpty){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക",
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
+    header.rationCardTypeId.isEmpty) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text("അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക"),
+    ),
+  );
+  return;
+}
 
                             if (selectedHouseTypeId == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -556,7 +649,9 @@ if (header == null ||
                                 return;
                               }
 
-                            await HeaderSaveRepository().saveSurveyHeader(
+                              await HeaderSaveRepository().saveSurveyHeader(
+
+                                surveyor: surveyornamecontroller.text,
   houseChief: widget.headerData?.houseChief,
   houseNumber: widget.headerData?.houseNumber ?? '',
   houseName: widget.headerData?.houseName ?? '',
@@ -571,13 +666,15 @@ if (header == null ||
 
 
                                 houseTypeId: selectedHouseTypeId!,
-                                landTypeId: selectedLandTypeId != null
-                                    ? int.parse(selectedLandTypeId!)
-                                    : null,
+                                landTypeId: (selectedLandTypeId != null &&
+        selectedLandTypeId!.isNotEmpty)
+    ? int.tryParse(selectedLandTypeId!)
+    : null,
+
                                 landAreaCents: selectedLandAreaController.text,
                                 hasToilet: toilet,
                                 hasElectricity: electricityConnection,
-                                drinkingWaterSourceId: selectedWaterFacilityId,
+                                drinkingWaterSourceId: selectedWaterFacilityId?? '0',
                                 receivedHousingBenefit: benefitsReceived,
                                 receivedBenefits: benefitsReceived == 1
                                     ? selectedRequiredBenefitId
@@ -590,18 +687,24 @@ if (header == null ||
                               );
 
                               // ✅ NAVIGATION WILL WORK NOW
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (c) => 
-                                  ListSurveyReport(
-                                    sectionType: FamilySurveySectionType
-                                        .familyBasicDetails,
+       Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => HeaderListBloc(
+        GetHeaderListUsecase(
+          HeaderListRepositoryImpl(http.Client()),
+        ),
+      )..add(FetchHeaderList('1')),
+      child: const ListSurveyReport(
+        sectionType: FamilySurveySectionType.familyBasicDetails,
+        postion: '1',
+      ),
+    ),
+  ),
+);
 
-                              
-                                  ),
-                                ),
-                              );
+
                             } catch (e) {
                               if (selectedHouseTypeId == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(

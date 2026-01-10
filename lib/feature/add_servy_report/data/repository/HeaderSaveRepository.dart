@@ -28,10 +28,11 @@ class HeaderSaveRepository {
     int? needHousingBenefit,
     String? benefitsRequired,
     String? wardNeeds,
+    String?surveyor,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString('clientid');
-    final surveyorId = prefs.getString('userid');
+    final userid = prefs.getString('userid');
 
     if (clientId == null || clientId.isEmpty) {
       throw Exception('Client ID not found. Please login again.');
@@ -46,6 +47,7 @@ class HeaderSaveRepository {
       },
       body: {
         'clientid': clientId,
+          'userid': userid,
         'house_chief': houseChief ?? '',
         'house_number': houseNumber,
         'house_name': houseName,
@@ -58,8 +60,8 @@ class HeaderSaveRepository {
         'kudumbashree_member': kudumbashreeMember.toString(),
         'govt_beneficiary': govtBeneficiary.toString(),
         'extreme_poor': extremePoor.toString(),
-
-        'surveyor': surveyorId ?? '',
+             'surveyor': surveyor ?? '',
+        // 'surveyor': surveyorId ?? '',
         'house_type_id': houseTypeId,
         'land_type_id': (landTypeId ?? 0).toString(),
         'land_area_cents':

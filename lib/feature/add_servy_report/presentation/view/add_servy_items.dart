@@ -37,7 +37,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddServyItems extends StatefulWidget {
    final PageMode mode;
-  const AddServyItems({super.key, required this.mode});
+   final SurveyHeaderModel? headerData;
+  const AddServyItems({super.key, required this.mode,this.headerData });
 
   @override
   State<AddServyItems> createState() => _AddServyItemsState();
@@ -79,6 +80,24 @@ bool get isEdit => widget.mode == PageMode.edit;
         return Colors.white;
     }
   }
+@override
+void initState() {
+  super.initState();
+
+  if (widget.headerData != null) {
+    gardienName.text = widget.headerData!.houseChief;
+    houseName.text = widget.headerData!.houseName;
+    houseNumber.text = widget.headerData!.houseNumber;
+    cardNumber.text = widget.headerData!.rationCardNumber;
+    anualIncome.text = widget.headerData!.annualIncome;
+    selectedRationCardId = widget.headerData!.rationCardTypeId;
+    rationCard = widget.headerData!.hasJobCard;
+    casteCert = widget.headerData!.kudumbashreeMember;
+    disability = widget.headerData!.govtBeneficiary;
+    widow = widget.headerData!.extremePoor;
+
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +132,7 @@ bool get isEdit => widget.mode == PageMode.edit;
                           title: 'കുടുംബത്തിന്റെ അടിസ്ഥാന വിവരങ്ങൾ',
                           iconAsset: 'assets/images/family servy.png',
                           child: Column(
-                            children: [
+                            children: [ 
                               AppTextField(
                                 controller: gardienName,
                                 label: "കുടുംബനാഥൻ്റെ പേര്",
@@ -215,6 +234,14 @@ bool get isEdit => widget.mode == PageMode.edit;
                                             }
 
                                             if (state is RationCardLoaded) {
+                                                if (selectedRationCardId != null && selectedRationCardLabel == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedRationCardId,
+      orElse: () => state.items.first,
+    );
+
+    selectedRationCardLabel = match.name;
+  }
                                               return AppDropdownField<String>(
                                                 label: 'റേഷൻ കാർഡ് തരം',
                                                 selectedValue:
@@ -232,17 +259,12 @@ bool get isEdit => widget.mode == PageMode.edit;
                                                 validator:
                                                     Validator.validateSelection,
                                                 onChanged: (value) {
-                                                  setState(() {
-                                                    selectedRationCardLabel =
-                                                        value;
-                                                    selectedRationCardId = state
-                                                        .items
-                                                        .firstWhere(
-                                                          (e) =>
-                                                              e.name == value,
-                                                        )
-                                                        .id;
-                                                  });
+                                                   setState(() {
+        selectedRationCardLabel = value;
+        selectedRationCardId = state.items
+            .firstWhere((e) => e.name == value)
+            .id;
+      });  
                                                 },
                                               );
                                             }

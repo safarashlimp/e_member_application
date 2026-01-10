@@ -1,0 +1,10 @@
+//  dropdown model for  acessing dropdwong values  
+class DropdownItem {
+  final String id;
+  final String name;
+
+  DropdownItem({required this.id, required this.name});
+
+  @override
+  String toString() => name; // 👈 VERY IMPORTANT
+}

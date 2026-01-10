@@ -2,10 +2,22 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
+
+import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
+import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+
+import '../add_servy_report/presentation/bloc/ration card bloc/ration_card_bloc_dart_bloc.dart';
+import '../add_servy_report/presentation/bloc/ration card bloc/ration_card_bloc_dart_event.dart';
 
 class ListServeyReportMenu extends StatefulWidget {
   const ListServeyReportMenu({super.key});
@@ -55,17 +67,23 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                       backgroundColor: AppColor.lightBlue,
                       iconColor: AppColor.iconColor,  
                       titleColor: AppColor.iconColor,
-                      onIconTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>     ListSurveyReport(
-                              sectionType:
-                                  FamilySurveySectionType.familyBasicDetails,
-                            ),
-                          ),
-                        );
-                      },
+onIconTap: () {   Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => HeaderListBloc(
+        GetHeaderListUsecase(
+          HeaderListRepositoryImpl(http.Client()),
+        ),
+      )..add(FetchHeaderList('1')),
+      child: const ListSurveyReport(
+        sectionType: FamilySurveySectionType.familyBasicDetails,
+        postion: '1',
+      ),
+    ),
+  ),
+);        
+},
                     ),
                     SizedBox(height: 15),
                     MenuContainar(
@@ -74,19 +92,25 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightgreen,
                       iconColor: AppColor.green,
-                      titleColor: AppColor.green,
-                      onIconTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ListSurveyReport(
-                              sectionType:
-                                  FamilySurveySectionType.basicFacilities,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                      titleColor: AppColor.green, 
+       onIconTap: () {   Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => HeaderListBloc(
+        GetHeaderListUsecase(
+          HeaderListRepositoryImpl(http.Client()),
+        ),
+      )..add(FetchHeaderList('2')),
+      child: const ListSurveyReport(
+        sectionType: FamilySurveySectionType.basicFacilities,
+        postion: '2',
+      ),
+    ),
+  ),
+);      
+}, ),
+                      
                   ],
                 ),
               ),
