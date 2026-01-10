@@ -134,7 +134,9 @@ void initState() {
             }
             return Column(
               children: [
-                GradientHeader(backText: 'back'),
+                GradientHeader(backText: 'back',onPress: () {
+                    Navigator.pop(context);
+                },),
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.all(13),
@@ -171,7 +173,13 @@ void initState() {
   }
                                             return AppDropdownField<String>(
                                               label: 'വീടിന്റെ തരം',
-                                              
+                                                      borderColor: AppColor.borderColor,
+                                      selectedTextColor: AppColor.primary,
+                                      dropdownTextColor: AppColor.hintText2,
+                                      dropdownBgColor: AppColor.white,
+                                      labelColor: AppColor.hintText2
+                                      ,
+                                      iconColor: AppColor.black,
                                               selectedValue: selectedHouseType,
                                               validator:
                                                   Validator.validateSelection,
@@ -225,6 +233,13 @@ void initState() {
 
                                             return AppDropdownField<String>(
                                               label: 'ഭൂമിയുടെ തരം',
+                                                      borderColor: AppColor.borderColor,
+                                      selectedTextColor: AppColor.primary,
+                                      dropdownTextColor: AppColor.hintText2,
+                                      dropdownBgColor: AppColor.white,
+                                      labelColor: AppColor.hintText2
+                                      ,
+                                      iconColor: AppColor.black,
                                               selectedValue: selectedLandType,
                                               validator:
                                                   Validator.validateSelection,
@@ -283,8 +298,7 @@ void initState() {
                             AppRadioField(
                               label: "വൈദ്യുതി കണക്ഷൻ",
                               value: electricityConnection,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                            
                               onChanged: (v) {
                                 setState(() {
                                   electricityConnection = v;
@@ -297,10 +311,7 @@ void initState() {
                               },
                             ),
 
-                            // if (electricityConnection == 1) ...[
-                            //   const SizedBox(height: 18),
-
-                            //  if (electricityConnection == 0) ...[
+                         
                             const SizedBox(height: 18),
                             BlocBuilder<WaterFacilityBloc, WaterFacilityState>(
                               builder: (context, state) {
@@ -353,21 +364,17 @@ void initState() {
                                 return const SizedBox();
                               },
                             ),
-                            // ],
-
-                            //                             ],
+                         
                             SizedBox(height: 18),
                             AppRadioField(
                               label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
                               value: benefitsReceived,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                      
                               onChanged: (v) {
                                 setState(() {
                                   benefitsReceived = v;
                                   if (v == 0) {
-                                    // benefitsReceived = null;
-                                    // selectedLandType = null; // reset dropdown
+                          
                                   }
                                 });
                               },
@@ -461,14 +468,12 @@ void initState() {
                             AppRadioField(
                               label: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ?",
                               value: benefitsWanted,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                            
                               onChanged: (v) {
                                 setState(() {
                                   benefitsWanted = v;
                                   if (v == 0) {
-                                    // benefitsReceived = null;
-                                    // selectedLandType = null; // reset dropdown
+                                  
                                   }
                                 });
                               },
@@ -517,47 +522,7 @@ void initState() {
                                     );
                                   }
 
-                                  // BlocBuilder<OtherBenefitBloc, OtherBenefitState>(
-                                  //   builder: (context, state) {
-                                  //     if (state is OtherBenefitLoading) {
-                                  //       return const Center(
-                                  //         child: CircularProgressIndicator(),
-                                  //       );
-                                  //     }
-
-                                  //     if (state is OtherBenefitLoaded) {
-                                  //       return AppDropdownField<String>(
-                                  //         label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
-                                  //         selectedValue: selectedOtherBenefit,
-                                  //         borderColor: AppColor.borderColor,
-                                  //         labelColor: AppColor.hintText2,
-                                  //         selectedTextColor: AppColor.primary,
-                                  //         iconColor: AppColor.black,
-                                  //         dropdownBgColor: AppColor.white,
-                                  //         dropdownTextColor: AppColor.hintText,
-                                  //         validator: Validator.validateSelection,
-                                  //         items: state.items
-                                  //             .map((e) => e.name)
-                                  //             .toList(),
-                                  //         onChanged: (value) {
-                                  //           setState(() {
-                                  //             selectedOtherBenefit = value;
-                                  //             selectedOtherBenefitId = state.items
-                                  //                 .firstWhere(
-                                  //                   (e) => e.name == value,
-                                  //                 )
-                                  //                 .id;
-                                  //           });
-                                  //         },
-                                  //       );
-                                  //     }
-
-                                  //     if (state is OtherBenefitError) {
-                                  //       return Text(
-                                  //         'Error: ${state.message}',
-                                  //         style: const TextStyle(color: Colors.red),
-                                  //       );
-                                  //     }
+                         
 
                                   return const SizedBox();
                                 },

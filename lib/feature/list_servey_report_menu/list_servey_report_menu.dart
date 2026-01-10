@@ -12,7 +12,6 @@ import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_heade
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -30,44 +29,22 @@ class ListServeyReportMenu extends StatefulWidget {
 class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
   @override
   Widget build(BuildContext context) {
-      return SafeArea(
+    return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 0) ,
-            floatingActionButton: FloatingActionButton(
-          onPressed: () {
-        Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => BlocProvider(
-      create: (_) => RationCardBloc(
-        FamilyDropRepositoryImpl(),
-      )..add(FetchRationCards()),
-      child:
-       const AddServyItems(mode: PageMode.add), 
-    ),
-  ),
-);
-
-          },
-          backgroundColor: AppColor.iconColor, // 💚 changes color
-          foregroundColor: AppColor.white,
-          // optional - icon color
-          shape: const CircleBorder(), // ensures circular shape
-
-          child: const Icon(Icons.add, size: 24),
-        ),
+        bottomNavigationBar: const AppBottomNav(selectedIndex: 1),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(backText: 'back'),
+            GradientHeader(backText: 'back',onPress: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+            },),
             SizedBox(height: 20),
             Container(
               height: 400,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
-                
                 color: AppColor.secondary,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
@@ -88,7 +65,7 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                       iconAsset: 'assets/images/Mask group (14).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightBlue,
-                      iconColor: AppColor.iconColor,
+                      iconColor: AppColor.iconColor,  
                       titleColor: AppColor.iconColor,
 onIconTap: () {   Navigator.push(
   context,
@@ -110,7 +87,6 @@ onIconTap: () {   Navigator.push(
                     ),
                     SizedBox(height: 15),
                     MenuContainar(
-
                       title: 'അടിസ്ഥാന സൗകര്യങ്ങൾ',
                       iconAsset: 'assets/images/Mask group (15).png',
                       icon: Icons.navigate_next,

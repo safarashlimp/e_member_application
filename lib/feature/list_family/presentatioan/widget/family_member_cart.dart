@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 class MemberCard extends StatefulWidget {
   final String name;
+    final String houseNumber;
+  final String houseName;
   final String phone;
   final String whatsapp;
   final String ward;
@@ -18,6 +20,8 @@ class MemberCard extends StatefulWidget {
   const MemberCard({
     super.key,
     required this.name,
+      required this.houseNumber,
+    required this.houseName,
     required this.phone,
     required this.whatsapp,
     required this.ward,
@@ -141,6 +145,35 @@ class _MemberCardState extends State<MemberCard> {
                       ),
                     ),
                     SizedBox(height: 2),
+                     Row(
+                       children: [
+                         Text(
+                           widget.houseNumber,
+                           style: const TextStyle(
+                             fontSize: 17,
+                             fontWeight: FontWeight.w400,
+                             color: AppColor.black,
+                           ),
+                         ),
+                         const SizedBox(width: 4),
+                         const Text(
+                           '|',
+                           style: TextStyle(fontSize: 13, color: AppColor.black),
+                         ),
+                     
+                         const SizedBox(width: 6),
+                         Text(
+                           widget.houseName,
+                           style: const TextStyle(
+                             fontSize: 17,
+                             fontWeight: FontWeight.w400,
+                             color: AppColor.black,
+                           ),
+                         ),
+                       ],
+                     ),
+                     const SizedBox(height: 2),
+                    
                     Row(
                       children: [
                         const Icon(

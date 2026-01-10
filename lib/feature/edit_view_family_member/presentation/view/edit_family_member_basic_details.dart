@@ -28,8 +28,9 @@ class _EditFamilyMemberBasicDetailsState
   final TextEditingController specifySkillLabel = TextEditingController();
   final TextEditingController familyMemberName = TextEditingController();
   final TextEditingController mobileNumber = TextEditingController();
-
+  final TextEditingController selectedDate = TextEditingController();
   final TextEditingController whatsupNumber = TextEditingController();
+  final TextEditingController surveyorNameLabel = TextEditingController();
   String? selectedBloodGroup;
   String? selectedReletion;
   String selectedGender = 'male';
@@ -63,7 +64,9 @@ void initState() {
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+            GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
+              Navigator.pop(context);
+            },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -199,7 +202,8 @@ void initState() {
                                 iconColor: AppColor.hintText2,
                                 textColor: AppColor.primary,
                                 validator: Validator.validateDate,
-                                controller: TextEditingController(),
+                                controller:selectedDate,
+focusedBorderColor: AppColor.borderColor,
                               ),
                             ),
                             SizedBox(width: 20),
@@ -278,9 +282,23 @@ void initState() {
                             });
                           },
                         ),
+                         SizedBox(height: 20),
+                            AppTextField(
+                              controller: surveyorNameLabel,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
                       ],
                     ),
+                    
                   ),
+                 
                   SizedBox(height: 50),
                   if(isEdit)
                   AppActionButton(

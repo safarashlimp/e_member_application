@@ -7,13 +7,15 @@ class GradientHeader extends StatelessWidget {
   final bool showBack;
   final double height;
   final String? backText;
+  final VoidCallback? onPress;
 
   const GradientHeader({
     super.key,
     this.title,
     this.showBack = true,
-    this.height = 150,
+    this.height = 100,
     this.backText,
+    this.onPress,
   });
 
   @override
@@ -47,16 +49,16 @@ class GradientHeader extends StatelessWidget {
 
           /// 🔹 WHITE OVERLAP
           Positioned(
-            top: height - 30,
+            top: height - 10,
             left: 0,
             right: 0,
             child: Container(
-              height: 40,
+              height: 30,
               decoration: BoxDecoration(
                 color: AppColor.secondary,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
               ),
             ),
@@ -72,7 +74,7 @@ class GradientHeader extends StatelessWidget {
                 if (showBack) ...[
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: onPress ,
                   ),
                   if (backText != null)
                     Text(

@@ -1,4 +1,4 @@
- import 'package:e_member_app/core/theme/app_color/app_color.dart';
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
@@ -6,10 +6,8 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_dowm_multiple_selector.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
-
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
-import 'package:e_member_app/core/widget/text_field/radio_field.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/blood_group/blood_group_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/employment%20support/employment_suppor_bloc.dart';
@@ -21,6 +19,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/c
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/gender_bloc/gender_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/gender_bloc/gender_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
@@ -36,11 +36,14 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/q
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/religion_bloc/religion_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/religion_bloc/religion_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_state.dart';
-
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,71 +63,74 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController surveyorNameLabel = TextEditingController();
   final TextEditingController courseStudy = TextEditingController();
   final TextEditingController studyCenter = TextEditingController();
-  
+  final TextEditingController selectedDate = TextEditingController();
+
   // kudumbanadhanum aayula badham
-String? selectedReletion;
-String? selectedRelationId;
-//  marital status
-String? selectedMaritalStatus;
-String? selectedMaritalStatusId;
-// caste
-String? selectedCaste;
-String? selectedCasteId;
+  String? selectedReletion;
+  String? selectedRelationId;
+  //  marital status
+  String? selectedMaritalStatus;
+  String? selectedMaritalStatusId;
 
-// qualification
-String? selectedQualification;
-String? selectedQualificationId;
-// education
-String? selectedEducation;
-String? selectedEducationId;
-// employment status 
-String? employmentStatus;
-String? employmentStatusId;
+  // gender
+  String? selectedGender;
+  String? selectedGenderId;
+  // Religion
+  String? selectedReligion;
+  String? selectedReligionId;
+  // caste
+  String? selectedCaste;
+  String? selectedCasteId;
 
-// job
-String? jobStatus;
-String? jobStatusId;
-// employment support
-String? employmentSupportLabel;
-String? employmentSupportId;
+  // qualification
+  String? selectedQualification;
+  String? selectedQualificationId;
+  // education
+  String? selectedEducation;
+  String? selectedEducationId;
+  // employment status
+  String? employmentStatus;
+  String? employmentStatusId;
 
-// farming type
-String? farmingType;
-String? farmingTypeId;
+  // job
+  String? jobStatus;
+  String? jobStatusId;
+  // employment support
+  String? employmentSupportLabel;
+  String? employmentSupportId;
 
-// blood
-String? selectedBloodGroup;
-String? selectedBloodGroupId;
+  // farming type
+  String? farmingType;
+  String? farmingTypeId;
 
+  // blood
+  String? selectedBloodGroup;
+  String? selectedBloodGroupId;
 
-// health issue 
-String? hasHealthIssues;
-String? hasHealthIssuesId;
-// health insurance 
-String? healthInsurance;
-String? healthInsuranceId;
+  // health issue
+  String? hasHealthIssues;
+  String? hasHealthIssuesId;
+  // health insurance
+  String? healthInsurance;
+  String? healthInsuranceId;
 
-// requried health product
-String? requiredHealthSupports;
-String? requiredHealthSupportsId;
+  // requried health product
+  String? requiredHealthSupports;
+  String? requiredHealthSupportsId;
 
-// pantion type 
-String? selectedPensionType;
-String? selectedPensionTypeId;
+  // pantion type
+  String? selectedPensionType;
+  String? selectedPensionTypeId;
 
-// pansion required 
-String? isPensionRequired;
-String? isPensionRequiredId;
+  // pansion required
+  String? isPensionRequired;
+  String? isPensionRequiredId;
 
-// skill 
-List<String> selectedSkills = [];
-List<String> selectedSkillIds = [];
+  // skill
+  List<String> selectedSkills = [];
+  List<String> selectedSkillIds = [];
 
-  String selectedGender = 'male';
   String? selectedRlgn = 'hindu';
-
-  
-
 
   String? skillsLabel;
 
@@ -134,7 +140,7 @@ List<String> selectedSkillIds = [];
   int isIncludedInRationCard = 0;
   int isPensionReceiving = 0;
   int norkaRegisteredLabel = 0;
-  
+
   int student = 0;
   int patient = 0;
   int needEducationHelp = 0;
@@ -164,21 +170,18 @@ List<String> selectedSkillIds = [];
         backgroundColor: AppColor.secondary,
         body: BlocBuilder<RelationDropBloc, RelationDropState>(
           builder: (context, state) {
-  if (state is RelationDropLoading ||
-        state is RelationDropInitial) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+            if (state is RelationDropLoading || state is RelationDropInitial) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-    if (state is RelationDropError) {
-      return Center(
-        child: Text(
-          state.message,
-          style: const TextStyle(color: Colors.red),
-        ),
-      );
-    }
+            if (state is RelationDropError) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
 
             return Column(
               //mainAxisSize: .min,
@@ -240,114 +243,149 @@ List<String> selectedSkillIds = [];
                               ],
                             ),
                             const SizedBox(height: 20),
-                           BlocBuilder<BloodGroupBloc, BloodGroupState>(
-  builder: (context, state) {
-    if (state is BloodGroupLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<BloodGroupBloc, BloodGroupState>(
+                              builder: (context, state) {
+                                if (state is BloodGroupLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is BloodGroupLoaded) {
-      return AppDropdownField<String>(
-        label: 'രക്തഗ്രൂപ്പ്',
-        selectedValue: selectedBloodGroup,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is BloodGroupLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'രക്തഗ്രൂപ്പ്',
+                                    selectedValue: selectedBloodGroup,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedBloodGroup = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedBloodGroup = value;
 
-            selectedBloodGroupId = state.items
-                .firstWhere((e) => e.name == value)
-                .id;
-          });
-        },
-      );
-    }
+                                        selectedBloodGroupId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is BloodGroupError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is BloodGroupError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-
-                            SizedBox(height: 20),
-                           BlocBuilder<RelationDropBloc, RelationDropState>(
-  builder: (context, state) {
-    if (state is RelationDropLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state is RelationDropLoaded) {
-      return AppDropdownField<String>(
-        label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
-        selectedValue: selectedReletion,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
-
-        // ✅ API DATA HERE
-        items: state.items.map((e) => e.name).toList(),
-
-        onChanged: (value) {
-          setState(() {
-            selectedReletion = value;
-
-           
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedRelationId = selectedItem.id;
-          });
-        },
-      );
-    }
-
-    if (state is RelationDropError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
-
-    return const SizedBox();
-  },
-),
+                                return const SizedBox();
+                              },
+                            ),
 
                             SizedBox(height: 20),
-                            AppRadioButtonField(
-                              label: "ലിംഗം",
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 7,
-                              ),
+                            BlocBuilder<RelationDropBloc, RelationDropState>(
+                              builder: (context, state) {
+                                if (state is RelationDropLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-                              value: selectedGender,
-                              options: const [
-                                {'label': 'പുരുഷൻ', 'value': 'male'},
-                                {'label': 'സ്ത്രീ', 'value': 'female'},
-                                {'label': 'മറ്റ്', 'value': 'other'},
-                              ],
-                              onChanged: (v) {
-                                setState(() {
-                                  selectedGender = v;
-                                });
+                                if (state is RelationDropLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
+                                    selectedValue: selectedReletion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA HERE
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReletion = value;
+
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        selectedRelationId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is RelationDropError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+
+                            SizedBox(height: 20),
+                            BlocBuilder<GenderBloc, GenderState>(
+                              builder: (context, state) {
+                                if (state is GenderLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is GenderLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ലിംഗം',
+                                    selectedValue: selectedGender,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedGender = value;
+
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        selectedGenderId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is GenderError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
                               },
                             ),
                             SizedBox(height: 20),
@@ -361,128 +399,175 @@ List<String> selectedSkillIds = [];
                                     labelColor: AppColor.hintText2,
                                     iconColor: AppColor.hintText2,
                                     textColor: AppColor.primary,
+
+                                    focusedBorderColor: AppColor.borderColor,
                                     validator: Validator.validateDate,
-                                    controller: TextEditingController(),
+                                    controller: selectedDate,
                                   ),
                                 ),
                                 SizedBox(width: 20),
                                 Flexible(
-                                  child: BlocBuilder<MaritalStatusBloc, MaritalStatusState>(
-  builder: (context, state) {
-    if (state is MaritalStatusLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                                  child:
+                                      BlocBuilder<
+                                        MaritalStatusBloc,
+                                        MaritalStatusState
+                                      >(
+                                        builder: (context, state) {
+                                          if (state is MaritalStatusLoading) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
 
-    if (state is MaritalStatusLoaded) {
-      return AppDropdownField<String>(
-        label: 'വിവാഹസ്ഥിതി',
-        selectedValue: selectedMaritalStatus,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                          if (state is MaritalStatusLoaded) {
+                                            return AppDropdownField<String>(
+                                              label: 'വിവാഹസ്ഥിതി',
+                                              selectedValue:
+                                                  selectedMaritalStatus,
+                                              borderColor: AppColor.borderColor,
+                                              labelColor: AppColor.hintText2,
+                                              selectedTextColor:
+                                                  AppColor.primary,
+                                              iconColor: AppColor.black,
+                                              dropdownBgColor: AppColor.white,
+                                              dropdownTextColor:
+                                                  AppColor.hintText,
+                                              validator:
+                                                  Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                              // ✅ API DATA
+                                              items: state.items
+                                                  .map((e) => e.name)
+                                                  .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedMaritalStatus = value;
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedMaritalStatus = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedMaritalStatusId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                                  final selectedItem = state
+                                                      .items
+                                                      .firstWhere(
+                                                        (e) => e.name == value,
+                                                      );
+                                                  selectedMaritalStatusId =
+                                                      selectedItem.id;
+                                                });
+                                              },
+                                            );
+                                          }
 
-    if (state is MaritalStatusError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                          if (state is MaritalStatusError) {
+                                            return Text(
+                                              state.message,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            );
+                                          }
 
-    return const SizedBox();
-  },
-),
-
+                                          return const SizedBox();
+                                        },
+                                      ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 20),
-                            AppRadioButtonField(
-                              label: "മതം",
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 7,
-                              ),
+                            BlocBuilder<ReligionBloc, ReligionState>(
+                              builder: (context, state) {
+                                if (state is ReligionLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-                              value: selectedRlgn,
-                              options: const [
-                                {'label': 'ഹിന്ദു', 'value': 'hindu'},
-                                {'label': 'മുസ്ലിം', 'value': 'muslim'},
-                                {'label': 'ക്രിസ്ത്യൻ', 'value': 'cris'},
-                                {'label': 'സിഖ്', 'value': 'sikh'},
-                                {'label': 'ബുദ്ധ', 'value': 'budha'},
-                                {'label': 'ജൈന', 'value': 'jaina'},
-                                {'label': 'മറ്റ്', 'value': 'other'},
-                              ],
-                              onChanged: (v) {
-                                setState(() {
-                                  selectedRlgn = v;
-                                });
+                                if (state is ReligionLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'മതം',
+                                    selectedValue: selectedReligion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReligion = value;
+
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        selectedReligionId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is ReligionError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
                               },
                             ),
                             SizedBox(height: 20),
-                           BlocBuilder<CasteBloc, CasteState>(
-  builder: (context, state) {
-    if (state is CasteLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<CasteBloc, CasteState>(
+                              builder: (context, state) {
+                                if (state is CasteLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is CasteLoaded) {
-      return AppDropdownField<String>(
-        label: 'ജാതി',
-        selectedValue: selectedCaste,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is CasteLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ജാതി',
+                                    selectedValue: selectedCaste,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedCaste = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCaste = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedCasteId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        selectedCasteId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is CasteError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is CasteError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-
+                                return const SizedBox();
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -493,49 +578,54 @@ List<String> selectedSkillIds = [];
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                           BlocBuilder<QualificationBloc, QualificationState>(
-  builder: (context, state) {
-    if (state is QualificationLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<QualificationBloc, QualificationState>(
+                              builder: (context, state) {
+                                if (state is QualificationLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is QualificationLoaded) {
-      return AppDropdownField<String>(
-        label: 'വിദ്യാഭ്യാസ യോഗ്യത',
-        selectedValue: selectedQualification,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is QualificationLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'വിദ്യാഭ്യാസ യോഗ്യത',
+                                    selectedValue: selectedQualification,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedQualification = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedQualification = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedQualificationId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        selectedQualificationId =
+                                            selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is QualificationError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is QualificationError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
+                                return const SizedBox();
+                              },
+                            ),
 
                             SizedBox(height: 20),
                             AppRadioField(
@@ -544,58 +634,64 @@ List<String> selectedSkillIds = [];
                               onChanged: (v) {
                                 setState(() {
                                   student = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (student == 'yes') ...[
+                            if (student == 1) ...[
                               const SizedBox(height: 20),
-BlocBuilder<EducationBloc, EducationState>(
-  builder: (context, state) {
-    if (state is EducationLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                              BlocBuilder<EducationBloc, EducationState>(
+                                builder: (context, state) {
+                                  if (state is EducationLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-    if (state is EducationLoaded) {
-      return AppDropdownField<String>(
-        label: ' പഠനം',
-        selectedValue: selectedEducation,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                  if (state is EducationLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: ' പഠനം',
+                                      selectedValue: selectedEducation,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedEducation = value;
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedEducation = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedEducationId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                          final selectedItem = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              );
+                                          selectedEducationId = selectedItem.id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-    if (state is EducationError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                  if (state is EducationError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-    return const SizedBox();
-  },
-),
+                                  return const SizedBox();
+                                },
+                              ),
 
                               SizedBox(height: 20),
                               AppTextField(
@@ -628,7 +724,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     needEducationHelp = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -646,136 +742,152 @@ BlocBuilder<EducationBloc, EducationState>(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BlocBuilder<EmploymentStatusBloc, EmploymentStatusState>(
-  builder: (context, state) {
-    if (state is EmploymentStatusLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              EmploymentStatusBloc,
+                              EmploymentStatusState
+                            >(
+                              builder: (context, state) {
+                                if (state is EmploymentStatusLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is EmploymentStatusLoaded) {
-      return AppDropdownField<String>(
-        label: 'തൊഴിൽ നില',
-        selectedValue: employmentStatus,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is EmploymentStatusLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ നില',
+                                    selectedValue: employmentStatus,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            employmentStatus = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        employmentStatus = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            employmentStatusId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        employmentStatusId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is EmploymentStatusError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is EmploymentStatusError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-
-                            SizedBox(height: 20),
-                          BlocBuilder<JobBloc, JobState>(
-  builder: (context, state) {
-    if (state is JobLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state is JobLoaded) {
-      return AppDropdownField<String>(
-        label: 'തൊഴിൽ',
-        selectedValue: jobStatus,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
-
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
-
-        onChanged: (value) {
-          setState(() {
-            jobStatus = value;
-
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            jobStatusId = selectedItem.id;
-          });
-        },
-      );
-    }
-
-    if (state is JobError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
-
-    return const SizedBox();
-  },
-),
+                                return const SizedBox();
+                              },
+                            ),
 
                             SizedBox(height: 20),
-                           BlocBuilder<SkillsBloc, SkillsState>(
-  builder: (context, state) {
-    if (state is SkillsLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<JobBloc, JobState>(
+                              builder: (context, state) {
+                                if (state is JobLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is SkillsLoaded) {
-      return AppMultiSelectDropdown<String>(
-        label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+                                if (state is JobLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ',
+                                    selectedValue: jobStatus,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        selectedValues: selectedSkills,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        jobStatus = value;
 
-        onChanged: (values) {
-          setState(() {
-            selectedSkills = values;
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        jobStatusId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-            // store selected IDs also
-            selectedSkillIds = state.items
-                .where((e) => values.contains(e.name))
-                .map((e) => e.id)
-                .toList();
-          });
-        },
-      );
-    }
+                                if (state is JobError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    if (state is SkillsError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                return const SizedBox();
+                              },
+                            ),
 
-    return const SizedBox();
-  },
-),
+                            SizedBox(height: 20),
+                            BlocBuilder<SkillsBloc, SkillsState>(
+                              builder: (context, state) {
+                                if (state is SkillsLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
+                                if (state is SkillsLoaded) {
+                                  return AppMultiSelectDropdown<String>(
+                                    label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
+
+                                    selectedValues: selectedSkills,
+
+                                    onChanged: (values) {
+                                      setState(() {
+                                        selectedSkills = values;
+
+                                        // store selected IDs also
+                                        selectedSkillIds = state.items
+                                            .where(
+                                              (e) => values.contains(e.name),
+                                            )
+                                            .map((e) => e.id)
+                                            .toList();
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is SkillsError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
 
                             SizedBox(height: 20),
                             AppTextField(
@@ -790,52 +902,58 @@ BlocBuilder<EducationBloc, EducationState>(
                               width: double.infinity,
                             ),
                             SizedBox(height: 20),
-                           BlocBuilder<EmploymentSupportBloc, EmploymentSupportState>(
-  builder: (context, state) {
-    if (state is EmploymentSupportLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              EmploymentSupportBloc,
+                              EmploymentSupportState
+                            >(
+                              builder: (context, state) {
+                                if (state is EmploymentSupportLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is EmploymentSupportLoaded) {
-      return AppDropdownField<String>(
-        label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
-        selectedValue: employmentSupportLabel,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is EmploymentSupportLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
+                                    selectedValue: employmentSupportLabel,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            employmentSupportLabel = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        employmentSupportLabel = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            employmentSupportId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        employmentSupportId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is EmploymentSupportError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is EmploymentSupportError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
+                                return const SizedBox();
+                              },
+                            ),
 
-
-                            if (employmentStatus == "പ്രവാസി") ...[
+                            if (employmentStatus == "വിദേശത്ത്") ...[
                               const SizedBox(height: 20),
                               AppRadioField(
                                 label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
@@ -843,7 +961,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     norkaRegisteredLabel = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -854,49 +972,54 @@ BlocBuilder<EducationBloc, EducationState>(
                             if (jobStatus == "കർഷകൻ") ...[
                               const SizedBox(height: 20),
                               BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
-  builder: (context, state) {
-    if (state is FarmingTypeLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                                builder: (context, state) {
+                                  if (state is FarmingTypeLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-    if (state is FarmingTypeLoaded) {
-      return AppDropdownField<String>(
-        label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
-        selectedValue: farmingType,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                  if (state is FarmingTypeLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
+                                      selectedValue: farmingType,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            farmingType = value;
+                                      onChanged: (value) {
+                                        setState(() {
+                                          farmingType = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            farmingTypeId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                          final selectedItem = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              );
+                                          farmingTypeId = selectedItem.id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-    if (state is FarmingTypeError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                  if (state is FarmingTypeError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-    return const SizedBox();
-  },
-),
-
+                                  return const SizedBox();
+                                },
+                              ),
                             ],
                           ],
                         ),
@@ -914,58 +1037,64 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   patient = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (patient == 'yes') ...[
+                            if (patient == 1) ...[
                               const SizedBox(height: 20),
                               BlocBuilder<HealthIssueBloc, HealthIssueState>(
-  builder: (context, state) {
-    if (state is HealthIssueLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                                builder: (context, state) {
+                                  if (state is HealthIssueLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-    if (state is HealthIssueLoaded) {
-      return AppDropdownField<String>(
-        label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
-        selectedValue: hasHealthIssues,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                  if (state is HealthIssueLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
+                                      selectedValue: hasHealthIssues,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            hasHealthIssues = value;
+                                      onChanged: (value) {
+                                        setState(() {
+                                          hasHealthIssues = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            hasHealthIssuesId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                          final selectedItem = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              );
+                                          hasHealthIssuesId = selectedItem.id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-    if (state is HealthIssueError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                  if (state is HealthIssueError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-    return const SizedBox();
-  },
-),
+                                  return const SizedBox();
+                                },
+                              ),
 
                               SizedBox(height: 20),
                               AppTextField(
@@ -988,14 +1117,14 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   hasDisability = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (hasDisability == 'yes') ...[
+                            if (hasDisability == 1) ...[
                               const SizedBox(height: 20),
                               AppRadioField(
                                 label: " ഭിന്നശേഷി ആനുകൂല്യം ലഭിക്കുന്നുണ്ടോ?",
@@ -1003,7 +1132,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     disabilityBenefit = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -1018,105 +1147,121 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   healthInsuranceCard = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (healthInsuranceCard == 'yes') ...[
+                            if (healthInsuranceCard == 1) ...[
                               const SizedBox(height: 20),
-                             BlocBuilder<HealthInsuranceBloc, HealthInsuranceState>(
-  builder: (context, state) {
-    if (state is HealthInsuranceLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                              BlocBuilder<
+                                HealthInsuranceBloc,
+                                HealthInsuranceState
+                              >(
+                                builder: (context, state) {
+                                  if (state is HealthInsuranceLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-    if (state is HealthInsuranceLoaded) {
-      return AppDropdownField<String>(
-        label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
-        selectedValue: healthInsurance,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                  if (state is HealthInsuranceLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
+                                      selectedValue: healthInsurance,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            healthInsurance = value;
+                                      onChanged: (value) {
+                                        setState(() {
+                                          healthInsurance = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            healthInsuranceId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                          final selectedItem = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              );
+                                          healthInsuranceId = selectedItem.id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-    if (state is HealthInsuranceError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                  if (state is HealthInsuranceError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-    return const SizedBox();
-  },
-),
-
+                                  return const SizedBox();
+                                },
+                              ),
                             ],
                             const SizedBox(height: 20),
-                            BlocBuilder<RequiredHealthSupportBloc, RequiredHealthSupportState>(
-  builder: (context, state) {
-    if (state is RequiredHealthSupportLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              RequiredHealthSupportBloc,
+                              RequiredHealthSupportState
+                            >(
+                              builder: (context, state) {
+                                if (state is RequiredHealthSupportLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is RequiredHealthSupportLoaded) {
-      return AppDropdownField<String>(
-        label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
-        selectedValue: requiredHealthSupports,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is RequiredHealthSupportLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
+                                    selectedValue: requiredHealthSupports,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            requiredHealthSupports = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        requiredHealthSupports = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            requiredHealthSupportsId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        requiredHealthSupportsId =
+                                            selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is RequiredHealthSupportError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is RequiredHealthSupportError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
-                  ],
+                                return const SizedBox();
+                              },
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(height: 50),
@@ -1132,7 +1277,7 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   isIncludedInRationCard = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
@@ -1146,104 +1291,117 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   isPensionReceiving = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (isPensionReceiving == 'yes') ...[
+                            if (isPensionReceiving == 1) ...[
                               const SizedBox(height: 20),
                               BlocBuilder<PensionTypeBloc, PensionTypeState>(
-  builder: (context, state) {
-    if (state is PensionTypeLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                                builder: (context, state) {
+                                  if (state is PensionTypeLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
 
-    if (state is PensionTypeLoaded) {
-      return AppDropdownField<String>(
-        label: 'പെൻഷൻ തരം',
-        selectedValue: selectedPensionType,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                  if (state is PensionTypeLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'പെൻഷൻ തരം',
+                                      selectedValue: selectedPensionType,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedPensionType = value;
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedPensionType = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            selectedPensionTypeId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                          final selectedItem = state.items
+                                              .firstWhere(
+                                                (e) => e.name == value,
+                                              );
+                                          selectedPensionTypeId =
+                                              selectedItem.id;
+                                        });
+                                      },
+                                    );
+                                  }
 
-    if (state is PensionTypeError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                  if (state is PensionTypeError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
 
-    return const SizedBox();
-  },
-),
-
+                                  return const SizedBox();
+                                },
+                              ),
                             ],
                             SizedBox(height: 20),
-                           BlocBuilder<PensionRequiredBloc, PensionRequiredState>(
-  builder: (context, state) {
-    if (state is PensionRequiredLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                            BlocBuilder<
+                              PensionRequiredBloc,
+                              PensionRequiredState
+                            >(
+                              builder: (context, state) {
+                                if (state is PensionRequiredLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-    if (state is PensionRequiredLoaded) {
-      return AppDropdownField<String>(
-        label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
-        selectedValue: isPensionRequired,
-        borderColor: AppColor.borderColor,
-        labelColor: AppColor.hintText2,
-        selectedTextColor: AppColor.primary,
-        iconColor: AppColor.black,
-        dropdownBgColor: AppColor.white,
-        dropdownTextColor: AppColor.hintText,
-        validator: Validator.validateSelection,
+                                if (state is PensionRequiredLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
+                                    selectedValue: isPensionRequired,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
 
-        // ✅ API DATA
-        items: state.items.map((e) => e.name).toList(),
+                                    // ✅ API DATA
+                                    items: state.items
+                                        .map((e) => e.name)
+                                        .toList(),
 
-        onChanged: (value) {
-          setState(() {
-            isPensionRequired = value;
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isPensionRequired = value;
 
-            final selectedItem =
-                state.items.firstWhere((e) => e.name == value);
-            isPensionRequiredId = selectedItem.id;
-          });
-        },
-      );
-    }
+                                        final selectedItem = state.items
+                                            .firstWhere((e) => e.name == value);
+                                        isPensionRequiredId = selectedItem.id;
+                                      });
+                                    },
+                                  );
+                                }
 
-    if (state is PensionRequiredError) {
-      return Text(
-        state.message,
-        style: const TextStyle(color: Colors.red),
-      );
-    }
+                                if (state is PensionRequiredError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
 
-    return const SizedBox();
-  },
-),
+                                return const SizedBox();
+                              },
+                            ),
 
                             SizedBox(height: 20),
                             AppTextField(
@@ -1264,39 +1422,26 @@ BlocBuilder<EducationBloc, EducationState>(
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
                         onPressed: () {
-                        // Navigator.push(
-                           // context,
-                            // MaterialPageRoute(
-                            //   builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails, headerData: widget.headerData,),
-                            // ),
-                         // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListSurveyReport(
+                                sectionType:
+                                    FamilySurveySectionType.familyBasicDetails,
+                              ),
+                            ),
+                          );
                         },
                         labelStyle: const TextStyle(
                           color: AppColor.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
-                  )],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 50),
-                  AppActionButton(
-                    label: "സമർപ്പിക്കുക",
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
-                      // );
-                    },
-                    labelStyle: const TextStyle(
-                      color: AppColor.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    height: 44,
-                    icon: Icons.arrow_forward,
-                  ),
-          
+                ),
+                SizedBox(height: 50),
               ],
             );
           },

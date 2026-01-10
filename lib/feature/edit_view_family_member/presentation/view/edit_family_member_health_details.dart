@@ -22,6 +22,7 @@ class EditFamilyHealthDetails extends StatefulWidget {
 
 class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
   final TextEditingController treatmentPlaceLabel = TextEditingController();
+   final TextEditingController surveyorNameLabel= TextEditingController();
   int patient = 0;
   String? hasHealthIssues;
   int hasDisability = 0;
@@ -39,7 +40,9 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+           GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
+              Navigator.pop(context);
+            },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -57,14 +60,14 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                           onChanged: (v) {
                             setState(() {
                               patient = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
                           },
                           // onChanged: (v) => setState(() => student = v),
                         ),
-                        if (patient == 'yes') ...[
+                        if (patient == 1) ...[
                           const SizedBox(height: 20),
                           AppDropdownField<String>(
                             label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
@@ -109,14 +112,14 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                           onChanged: (v) {
                             setState(() {
                               hasDisability = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
                           },
                           // onChanged: (v) => setState(() => student = v),
                         ),
-                        if (hasDisability == 'yes') ...[
+                        if (hasDisability == 1) ...[
                           const SizedBox(height: 20),
                           AppRadioField(
                             label: " ഭിന്നശേഷി ആനുകൂല്യം ലഭിക്കുന്നുണ്ടോ?",
@@ -124,7 +127,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             onChanged: (v) {
                               setState(() {
                                 disabilityBenefit = v;
-                                if (v == 'no') {
+                                if (v == 0) {
                                   // student = null; // reset dropdown
                                 }
                               });
@@ -139,14 +142,14 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                           onChanged: (v) {
                             setState(() {
                               healthInsuranceCard = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
                           },
                           // onChanged: (v) => setState(() => student = v),
                         ),
-                        if (healthInsuranceCard == 'yes') ...[
+                        if (healthInsuranceCard == 1) ...[
                           const SizedBox(height: 20),
                           AppDropdownField<String>(
                             label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
@@ -196,9 +199,22 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             });
                           },
                         ),
+                         SizedBox(height: 20),
+                            AppTextField(
+                              controller: surveyorNameLabel,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
                       ],
                     ),
                   ),
+                  
                   SizedBox(height: 50),
                   if(isEdit)
                   AppActionButton(

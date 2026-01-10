@@ -2,7 +2,14 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
-
+import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
+import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
+import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
+import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -75,19 +82,19 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
 
   //--------------------------update----------------------
   //===================exp==========
-  Future<void> _checkAppStatus() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+  // Future<void> _checkAppStatus() async {
+  //   await Future.delayed(const Duration(milliseconds: 500));
 
-    bool expired = await isAppExpired();
+  //   bool expired = await isAppExpired();
 
-    if (expired && mounted) {
-      showAppExpiredDialog(context);
-    }
-  }
+  //   if (expired && mounted) {
+  //     showAppExpiredDialog(context);
+  //   }
+  // }
 
   // }
   // Optional: Function to check if app is expired
-  Future<bool> isAppExpired() async {
+  // Future<bool> isAppExpired() async {
     // Example 1: Check with server
     // final response = await http.get(Uri.parse('https://your-api.com/app-status'));
     // final data = json.decode(response.body);
@@ -98,8 +105,8 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     // return DateTime.now().isAfter(expiryDate);
 
     // For demo purposes
-    return false; // Change to true to test the dialog
-  }
+  //   return false; // Change to true to test the dialog
+  // }
 
   //=============exp=============
   @override
@@ -179,7 +186,34 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
             ),
           ],
         ),
-      ),
-    );
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+                 child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+               ),
+               Expanded(
+                 child: Container(
+                   color: AppColor.white,
+                   child: ListView.builder(
+                     padding: const EdgeInsets.all(16),
+                     itemCount: 3,
+                     itemBuilder: (context, index) {
+                       return PropertyCard(
+                        
+                         sectionType: widget.sectionType,
+                         houseNumber: '5/123 ',
+                         houseName: "കുന്നത്ത് വീട്",
+                         subtitle: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
+                         memberCount: '5',
+                         lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
+                       );
+                     },
+                   ),
+                 ),
+               ),
+             ],
+           ),
+         ),
+       ),
+     );
   }
 }

@@ -1,4 +1,5 @@
-import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
 import 'package:e_member_app/feature/login/presentation/bloc/loginBloc/login_bloc.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class LoginView extends StatelessWidget {
               if (state is LoginSuccess) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => ListServeyReportMenu()),
+                  MaterialPageRoute(builder: (_) => DashboardPage()),
                 );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(

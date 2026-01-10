@@ -2,6 +2,7 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
@@ -20,12 +21,14 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: MainBottomBar(currentIndex: 1) ,
+        bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
 
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(backText: 'back'),
+             GradientHeader(backText: 'back',onPress: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+            },),
             SizedBox(height: 20),
             Container(
               
