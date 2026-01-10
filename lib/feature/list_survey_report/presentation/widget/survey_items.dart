@@ -86,13 +86,13 @@ class _PropertyCardState extends State<PropertyCard> {
 //      void onViewTap(BuildContext context) {
 //  late Widget page;
 
-  switch (widget.sectionType) {
-    case FamilySurveySectionType.familyBasicDetails:
-      page = const AddServyItems(mode: PageMode.view);
-      break;
-    case FamilySurveySectionType.basicFacilities:
-      page = AddItemBasicDetails(mode: PageMode.view,  );
-      break;
+  // switch (widget.sectionType) {
+  //   case FamilySurveySectionType.familyBasicDetails:
+  //     page = const AddServyItems(mode: PageMode.view);
+  //     break;
+  //   case FamilySurveySectionType.basicFacilities:
+  //     page = AddItemBasicDetails(mode: PageMode.view,  );
+  //     break;
  
 //   }
 

@@ -1427,7 +1427,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             MaterialPageRoute(
                               builder: (context) => ListSurveyReport(
                                 sectionType:
-                                    FamilySurveySectionType.familyBasicDetails,
+                                    FamilySurveySectionType.familyBasicDetails, postion: '1',
                               ),
                             ),
                           );
