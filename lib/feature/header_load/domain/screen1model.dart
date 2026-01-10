@@ -99,3 +99,7 @@ class Datum {
         "updated_at": updatedAt,
     };
 }
+// To parse this JSON data, do
+//
+//     final screen1Model = screen1ModelFromJson(jsonString);
+

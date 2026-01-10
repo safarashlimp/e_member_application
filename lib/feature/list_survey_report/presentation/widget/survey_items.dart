@@ -2,14 +2,13 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_event.dart';
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_bloc.dart';
@@ -34,6 +33,9 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_event.dart';
+
+
+
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
@@ -56,7 +58,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyCard extends StatefulWidget {
-
+  // final SurveyHeaderModel? headerData;
   final String houseNumber;
   final String houseName;
   final String subtitle;
@@ -75,7 +77,7 @@ class PropertyCard extends StatefulWidget {
     required this.memberCount,
     required this.lastUpdated,
     required this.sectionType,
-   
+    // required this.headerData,
   });
 
   @override
@@ -86,13 +88,13 @@ class _PropertyCardState extends State<PropertyCard> {
 //      void onViewTap(BuildContext context) {
 //  late Widget page;
 
-  // switch (widget.sectionType) {
-  //   case FamilySurveySectionType.familyBasicDetails:
-  //     page = const AddServyItems(mode: PageMode.view);
-  //     break;
-  //   case FamilySurveySectionType.basicFacilities:
-  //     page = AddItemBasicDetails(mode: PageMode.view,  );
-  //     break;
+//   switch (widget.sectionType) {
+//     case FamilySurveySectionType.familyBasicDetails:
+//       page = const AddServyItems(mode: PageMode.view);
+//       break;
+//     case FamilySurveySectionType.basicFacilities:
+//       page = AddItemBasicDetails(mode: PageMode.view,   );
+//       break;
  
 //   }
 
@@ -160,7 +162,16 @@ void openWithLoad(BuildContext context, PageMode mode) {
                 ),
               ),
           ),
-
+BlocProvider(
+                          create: (_) =>
+                              ReligionBloc(MemberDropRepositoryImpl())
+                                ..add(FetchReligion()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              GenderBloc(MemberDropRepositoryImpl())
+                                ..add(FetchGender()),
+                        ),
           BlocProvider(
             create: (_) => RationCardBloc(repo)..add(FetchRationCards()),
           ),
@@ -404,16 +415,6 @@ void openWithLoad(BuildContext context, PageMode mode) {
                           create: (_) =>
                               RelationDropBloc(MemberDropRepositoryImpl())
                                 ..add(FetchRelations()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              ReligionBloc(MemberDropRepositoryImpl())
-                                ..add(FetchReligion()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              GenderBloc(MemberDropRepositoryImpl())
-                                ..add(FetchGender()),
                         ),
                         BlocProvider(
                           create: (_) =>
