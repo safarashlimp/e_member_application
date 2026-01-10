@@ -7,6 +7,7 @@ class GradientHeader extends StatelessWidget {
   final bool showBack;
   final double height;
   final String? backText;
+  final VoidCallback? onPress;
 
   const GradientHeader({
     super.key,
@@ -14,6 +15,7 @@ class GradientHeader extends StatelessWidget {
     this.showBack = true,
     this.height = 100,
     this.backText,
+    this.onPress,
   });
 
   @override
@@ -72,7 +74,7 @@ class GradientHeader extends StatelessWidget {
                 if (showBack) ...[
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: onPress ,
                   ),
                   if (backText != null)
                     Text(

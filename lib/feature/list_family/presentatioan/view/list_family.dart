@@ -2,6 +2,7 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/widget/family_member_cart.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
@@ -33,25 +34,16 @@ class _ListFamilyState extends State<ListFamily> {
 
   @override
   Widget build(BuildContext context) {
-      return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (didPop) return;
-
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/home',
-          (route) => false,
-        );
-      },
-      child: SafeArea(
+      return SafeArea(
         top: false,
         child: Scaffold(
-          bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
+         // bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
           backgroundColor: AppColor.secondary,
           body: Column(
             children: [
-              GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
+              GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ',   onPress: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+              },  ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SearchFieldBar(),
@@ -66,6 +58,8 @@ class _ListFamilyState extends State<ListFamily> {
                       return MemberCard(
                         sectionType: widget.sectionType,
                         name: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
+                        houseName:'കുന്നത്ത് വീട്' ,
+                        houseNumber: '5/123',
                         phone: '+91 860662705',
                         whatsapp: '+91 860662705',
                         ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: മകൾ',
@@ -79,7 +73,6 @@ class _ListFamilyState extends State<ListFamily> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

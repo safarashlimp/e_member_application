@@ -37,7 +37,9 @@ class _EditFamilyMemberSocielDetailsState
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+          GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
+              Navigator.pop(context);
+            },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -55,7 +57,7 @@ class _EditFamilyMemberSocielDetailsState
                           onChanged: (v) {
                             setState(() {
                               isIncludedInRationCard = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
@@ -69,14 +71,14 @@ class _EditFamilyMemberSocielDetailsState
                           onChanged: (v) {
                             setState(() {
                               isPensionReceiving = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
                           },
                           // onChanged: (v) => setState(() => student = v),
                         ),
-                        if (isPensionReceiving == 'yes') ...[
+                        if (isPensionReceiving == 1) ...[
                           const SizedBox(height: 20),
                           AppDropdownField<String>(
                             label: 'പെൻഷൻ തരം',
@@ -138,6 +140,7 @@ class _EditFamilyMemberSocielDetailsState
                           validator: Validator.validateName,
                           width: double.infinity,
                         ),
+                    
                       ],
                     ),
                   ),

@@ -29,12 +29,38 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
       throw Exception("Server error ${response.statusCode}");
     }
   }
+
+  @override
+Future<List<MemberDropItem>> getGender() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=2",
+    ),
+  );
+
+  final jsonData = json.decode(response.body);
+  final model = MemberDropResponse.fromJson(jsonData);
+  return model.data;
+}
+  
 // member_drop_repository_impl.dart
 @override
 Future<List<MemberDropItem>> getMaritalStatus() async {
   final response = await http.get(
     Uri.parse(
       "https://emember.org/API/member_drops.php?clientid=1&posistion=3",
+    ),
+  );
+
+  final jsonData = json.decode(response.body);
+  final model = MemberDropResponse.fromJson(jsonData);
+  return model.data;
+}
+  @override
+Future<List<MemberDropItem>> getReligion() async {
+  final response = await http.get(
+    Uri.parse(
+      "https://emember.org/API/member_drops.php?clientid=1&posistion=4",
     ),
   );
 

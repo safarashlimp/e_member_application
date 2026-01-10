@@ -40,7 +40,6 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/r
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_state.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +61,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController surveyorNameLabel = TextEditingController();
   final TextEditingController courseStudy = TextEditingController();
   final TextEditingController studyCenter = TextEditingController();
+    final TextEditingController selectedDate = TextEditingController();
   
   // kudumbanadhanum aayula badham
 String? selectedReletion;
@@ -363,8 +363,10 @@ List<String> selectedSkillIds = [];
                                     labelColor: AppColor.hintText2,
                                     iconColor: AppColor.hintText2,
                                     textColor: AppColor.primary,
+
+                                   focusedBorderColor: AppColor.borderColor,
                                     validator: Validator.validateDate,
-                                    controller: TextEditingController(),
+                                    controller: selectedDate,
                                   ),
                                 ),
                                 SizedBox(width: 20),
@@ -546,14 +548,14 @@ List<String> selectedSkillIds = [];
                               onChanged: (v) {
                                 setState(() {
                                   student = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (student == 'yes') ...[
+                            if (student == 1) ...[
                               const SizedBox(height: 20),
 BlocBuilder<EducationBloc, EducationState>(
   builder: (context, state) {
@@ -630,7 +632,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     needEducationHelp = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -837,7 +839,7 @@ BlocBuilder<EducationBloc, EducationState>(
 ),
 
 
-                            if (employmentStatus == "പ്രവാസി") ...[
+                            if (employmentStatus == "വിദേശത്ത്") ...[
                               const SizedBox(height: 20),
                               AppRadioField(
                                 label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
@@ -845,7 +847,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     norkaRegisteredLabel = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -916,14 +918,14 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   patient = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (patient == 'yes') ...[
+                            if (patient == 1) ...[
                               const SizedBox(height: 20),
                               BlocBuilder<HealthIssueBloc, HealthIssueState>(
   builder: (context, state) {
@@ -990,14 +992,14 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   hasDisability = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (hasDisability == 'yes') ...[
+                            if (hasDisability == 1) ...[
                               const SizedBox(height: 20),
                               AppRadioField(
                                 label: " ഭിന്നശേഷി ആനുകൂല്യം ലഭിക്കുന്നുണ്ടോ?",
@@ -1005,7 +1007,7 @@ BlocBuilder<EducationBloc, EducationState>(
                                 onChanged: (v) {
                                   setState(() {
                                     disabilityBenefit = v;
-                                    if (v == 'no') {
+                                    if (v == 0) {
                                       // student = null; // reset dropdown
                                     }
                                   });
@@ -1020,14 +1022,14 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   healthInsuranceCard = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (healthInsuranceCard == 'yes') ...[
+                            if (healthInsuranceCard == 1) ...[
                               const SizedBox(height: 20),
                              BlocBuilder<HealthInsuranceBloc, HealthInsuranceState>(
   builder: (context, state) {
@@ -1134,7 +1136,7 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   isIncludedInRationCard = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
@@ -1148,14 +1150,14 @@ BlocBuilder<EducationBloc, EducationState>(
                               onChanged: (v) {
                                 setState(() {
                                   isPensionReceiving = v;
-                                  if (v == 'no') {
+                                  if (v == 0) {
                                     // student = null; // reset dropdown
                                   }
                                 });
                               },
                               // onChanged: (v) => setState(() => student = v),
                             ),
-                            if (isPensionReceiving == 'yes') ...[
+                            if (isPensionReceiving == 1) ...[
                               const SizedBox(height: 20),
                               BlocBuilder<PensionTypeBloc, PensionTypeState>(
   builder: (context, state) {
@@ -1266,12 +1268,12 @@ BlocBuilder<EducationBloc, EducationState>(
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
                         onPressed: () {
-                        // Navigator.push(
-                           // context,
-                            // MaterialPageRoute(
-                            //   builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails, headerData: widget.headerData,),
-                            // ),
-                         // );
+                        Navigator.push(
+                           context,
+                            MaterialPageRoute(
+                              builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails, ),
+                            ),
+                         );
                         },
                         labelStyle: const TextStyle(
                           color: AppColor.white,
@@ -1282,22 +1284,7 @@ BlocBuilder<EducationBloc, EducationState>(
                     ),
                   ),
                   SizedBox(height: 50),
-                  AppActionButton(
-                    label: "സമർപ്പിക്കുക",
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ListSurveyReport(sectionType: FamilySurveySectionType.familyBasicDetails)),
-                      // );
-                    },
-                    labelStyle: const TextStyle(
-                      color: AppColor.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    height: 44,
-                    icon: Icons.arrow_forward,
-                  ),
+                 
           
               ],
             );

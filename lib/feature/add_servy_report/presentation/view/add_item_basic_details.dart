@@ -81,7 +81,9 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
             }
             return Column(
               children: [
-                GradientHeader(backText: 'back'),
+                GradientHeader(backText: 'back',onPress: () {
+                    Navigator.pop(context);
+                },),
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.all(13),
@@ -111,6 +113,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           if (state is HouseTypeLoaded) {
                                             return AppDropdownField<String>(
                                               label: 'വീടിന്റെ തരം',
+                                                      borderColor: AppColor.borderColor,
+                                      selectedTextColor: AppColor.primary,
+                                      dropdownTextColor: AppColor.hintText2,
+                                      dropdownBgColor: AppColor.white,
+                                      labelColor: AppColor.hintText2
+                                      ,
+                                      iconColor: AppColor.black,
                                               selectedValue: selectedHouseType,
                                               validator:
                                                   Validator.validateSelection,
@@ -163,6 +172,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                           if (state is LandTypeLoaded) {
                                             return AppDropdownField<String>(
                                               label: 'ഭൂമിയുടെ തരം',
+                                                      borderColor: AppColor.borderColor,
+                                      selectedTextColor: AppColor.primary,
+                                      dropdownTextColor: AppColor.hintText2,
+                                      dropdownBgColor: AppColor.white,
+                                      labelColor: AppColor.hintText2
+                                      ,
+                                      iconColor: AppColor.black,
                                               selectedValue: selectedLandType,
                                               validator:
                                                   Validator.validateSelection,
@@ -228,8 +244,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             AppRadioField(
                               label: "വൈദ്യുതി കണക്ഷൻ",
                               value: electricityConnection,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                            
                               onChanged: (v) {
                                 setState(() {
                                   electricityConnection = v;
@@ -240,10 +255,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               },
                             ),
 
-                            // if (electricityConnection == 1) ...[
-                            //   const SizedBox(height: 18),
-
-                            //  if (electricityConnection == 0) ...[
+                         
                             const SizedBox(height: 18),
                             BlocBuilder<WaterFacilityBloc, WaterFacilityState>(
                               builder: (context, state) {
@@ -289,21 +301,17 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 return const SizedBox();
                               },
                             ),
-                            // ],
-
-                            //                             ],
+                         
                             SizedBox(height: 18),
                             AppRadioField(
                               label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
                               value: benefitsReceived,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                      
                               onChanged: (v) {
                                 setState(() {
                                   benefitsReceived = v;
                                   if (v == 0) {
-                                    // benefitsReceived = null;
-                                    // selectedLandType = null; // reset dropdown
+                          
                                   }
                                 });
                               },
@@ -393,14 +401,12 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             AppRadioField(
                               label: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ?",
                               value: benefitsWanted,
-                              // onChanged: (v) => setState(() =>
-                              // electricityConnection = v),
+                            
                               onChanged: (v) {
                                 setState(() {
                                   benefitsWanted = v;
                                   if (v == 0) {
-                                    // benefitsReceived = null;
-                                    // selectedLandType = null; // reset dropdown
+                                  
                                   }
                                 });
                               },

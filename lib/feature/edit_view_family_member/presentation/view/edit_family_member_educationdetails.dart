@@ -16,7 +16,7 @@ class EditFamilyMemberEducationdetails extends StatefulWidget {
   const EditFamilyMemberEducationdetails({super.key, required this.mode});
  bool get isEdit => mode == PageMode.edit;
   @override
-  State<EditFamilyMemberEducationdetails> createState() =>
+  State<EditFamilyMemberEducationdetails> createState() => 
       _EditFamilyMemberEducationdetailsState();
 }
 
@@ -24,6 +24,7 @@ class _EditFamilyMemberEducationdetailsState
     extends State<EditFamilyMemberEducationdetails> {
   final TextEditingController courseStudy = TextEditingController();
   final TextEditingController studyCenter = TextEditingController();
+  final TextEditingController surveyorNameLabel= TextEditingController();
   String? selectedEducation;
   String? selectedQualification;
 
@@ -38,7 +39,9 @@ class _EditFamilyMemberEducationdetailsState
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+             GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
+              Navigator.pop(context);
+            },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -80,14 +83,14 @@ class _EditFamilyMemberEducationdetailsState
                           onChanged: (v) {
                             setState(() {
                               student = v;
-                              if (v == 'no') {
+                              if (v == 0) {
                                 // student = null; // reset dropdown
                               }
                             });
                           },
                           // onChanged: (v) => setState(() => student = v),
                         ),
-                        if (student == 'yes') ...[
+                        if (student == 1) ...[
                           const SizedBox(height: 20),
 
                           AppDropdownField<String>(
@@ -144,17 +147,30 @@ class _EditFamilyMemberEducationdetailsState
                             onChanged: (v) {
                               setState(() {
                                 needEducationHelp = v;
-                                if (v == 'no') {
+                                if (v == 0) {
                                   // student = null; // reset dropdown
                                 }
                               });
                             },
                             // onChanged: (v) => setState(() => student = v),
-                          ),
-                        ],
+                          ),],
+                           SizedBox(height: 20),
+                            AppTextField(
+                              controller: surveyorNameLabel,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                        
                       ],
                     ),
                   ),
+                  
                   SizedBox(height: 50),
                   if(isEdit)
                   AppActionButton(

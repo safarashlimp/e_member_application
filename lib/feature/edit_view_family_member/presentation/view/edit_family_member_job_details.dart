@@ -22,6 +22,7 @@ class EditFamilyJobDetails extends StatefulWidget {
 
 class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   final TextEditingController specifySkillLabel = TextEditingController();
+    final TextEditingController surveyorNameLabel = TextEditingController();
   String? skillsLabel;
   String? employmentSupportLabel;
   String? employmentStatus;
@@ -56,7 +57,9 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            const GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+             GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: () {
+              Navigator.pop(context);
+            },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -206,6 +209,18 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                               });
                             },
                           ),
+                           SizedBox(height: 20),
+                            AppTextField(
+                              controller: surveyorNameLabel,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
                         ],
                       ],
                     ),

@@ -62,6 +62,7 @@ class AppDropdownField<T> extends StatelessWidget {
       decoration: appInputDecoration(
         borderColor: borderColor,
         hintText: hintText,
+        focusedBorderColor: AppColor.borderColor,
       ),
       //validator: validator ?? Validator.validateSelection<T>,
       dropdownColor: dropdownBgColor,

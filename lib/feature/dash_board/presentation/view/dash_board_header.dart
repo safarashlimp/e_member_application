@@ -64,7 +64,7 @@ class DashBoardHeader extends StatelessWidget {
 
           /// 🔹 BACK + TITLE (SAME LINE, SAME POSITION)
           Positioned(
-            top: height * 0.20, // 🎯 exact partition point
+            top: height * 0.30, // 🎯 exact partition point
             left: 16,
             right: 16,
             child: Row(

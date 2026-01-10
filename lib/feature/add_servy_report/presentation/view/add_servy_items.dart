@@ -27,7 +27,10 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
+
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,7 +99,9 @@ bool get isEdit => widget.mode == PageMode.edit;
 
               return Column(
                 children: [
-                  GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ'),
+                  GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: () {
+                    Navigator.pop(context);
+                  },),
 
                   Expanded(
                     child: ListView(
@@ -214,6 +219,13 @@ bool get isEdit => widget.mode == PageMode.edit;
                                                 label: 'റേഷൻ കാർഡ് തരം',
                                                 selectedValue:
                                                     selectedRationCardLabel,
+                                                    borderColor: AppColor.borderColor,
+                                      selectedTextColor: AppColor.primary,
+                                      dropdownTextColor: AppColor.hintText2,
+                                      labelColor: AppColor.hintText2
+                                      ,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
                                                 items: state.items
                                                     .map((e) => e.name)
                                                     .toList(),
@@ -379,10 +391,10 @@ extremePoor: widow,
                           AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
+                      );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,

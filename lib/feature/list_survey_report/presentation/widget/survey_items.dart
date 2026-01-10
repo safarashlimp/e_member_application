@@ -306,136 +306,134 @@ class _PropertyCardState extends State<PropertyCard> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.40,
                 height: 24,
-                child: Expanded(
-                  child: ElevatedButton.icon(
-                   onPressed: () {
-  Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) =>
-              RelationDropBloc(MemberDropRepositoryImpl())
-                ..add(FetchRelations()),
-        ),
-        BlocProvider(
-          create: (_) =>
-              MaritalStatusBloc(MemberDropRepositoryImpl())
-                ..add(FetchMaritalStatus()),
-        ),
-        BlocProvider(
-          create: (_) =>
-              CasteBloc(MemberDropRepositoryImpl())
-                ..add(FetchCastes()),
-        ),
-        BlocProvider(
-  create: (_) => QualificationBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchQualifications()),
-
-),
-BlocProvider(
-  create: (_) => EducationBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchEducation()),
-),
-BlocProvider(
-  create: (_) => EmploymentStatusBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchEmploymentStatus()),
-),
-BlocProvider(
-  create: (_) => JobBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchJobs()),
-),
-BlocProvider(
-  create: (_) => EmploymentSupportBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchEmploymentSupports()),
-),
-
-BlocProvider(
-  create: (_) => FarmingTypeBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchFarmingTypes()),
-),
-BlocProvider(
-  create: (_) => HealthIssueBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchHealthIssues()),
-),
-BlocProvider(
-  create: (_) => HealthInsuranceBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchHealthInsurance()),
-),
-BlocProvider(
-  create: (_) => RequiredHealthSupportBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchRequiredHealthSupports()),
-),
-
-BlocProvider(
-  create: (_) => PensionTypeBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchPensionTypes()),
-),
-BlocProvider(
-  create: (_) => PensionRequiredBloc(
-    MemberDropRepositoryImpl(),
-  )..add(FetchPensionRequirement()),
-),
-BlocProvider(
-  create: (_) =>
-      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
-),
-BlocProvider(
-  create: (_) =>
-      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
-),
-
-      ],
-      child: AddFamilyMembers(),
-    ),
-  ),
-);
-
-},
-
-                    icon: const Icon(
-                      Icons.add,
-                      size: 12,
-                      color: AppColor.white,
-                    ),
-                    label: const Text(
-                      'അംഗം ചേർക്കുക',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.button,
-                      foregroundColor: Colors.white,
-
-                      elevation: 0,
-                      // minimumSize: const Size(144, 24),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(
-                          color: AppColor.iconColor, // 👈 border color
-                          width: 1, // 👈 border thickness
+                child: ElevatedButton.icon(
+                 onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (_) =>
+                              RelationDropBloc(MemberDropRepositoryImpl())
+                                ..add(FetchRelations()),
                         ),
+                        BlocProvider(
+                          create: (_) =>
+                              MaritalStatusBloc(MemberDropRepositoryImpl())
+                                ..add(FetchMaritalStatus()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              CasteBloc(MemberDropRepositoryImpl())
+                                ..add(FetchCastes()),
+                        ),
+                        BlocProvider(
+                  create: (_) => QualificationBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchQualifications()),
+                
+                ),
+                BlocProvider(
+                  create: (_) => EducationBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEducation()),
+                ),
+                BlocProvider(
+                  create: (_) => EmploymentStatusBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEmploymentStatus()),
+                ),
+                BlocProvider(
+                  create: (_) => JobBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchJobs()),
+                ),
+                BlocProvider(
+                  create: (_) => EmploymentSupportBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEmploymentSupports()),
+                ),
+                
+                BlocProvider(
+                  create: (_) => FarmingTypeBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchFarmingTypes()),
+                ),
+                BlocProvider(
+                  create: (_) => HealthIssueBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchHealthIssues()),
+                ),
+                BlocProvider(
+                  create: (_) => HealthInsuranceBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchHealthInsurance()),
+                ),
+                BlocProvider(
+                  create: (_) => RequiredHealthSupportBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchRequiredHealthSupports()),
+                ),
+                
+                BlocProvider(
+                  create: (_) => PensionTypeBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchPensionTypes()),
+                ),
+                BlocProvider(
+                  create: (_) => PensionRequiredBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchPensionRequirement()),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
+                ),
+                
+                      ],
+                      child: AddFamilyMembers(),
+                    ),
+                  ),
+                );
+                
+                },
+                
+                  icon: const Icon(
+                    Icons.add,
+                    size: 12,
+                    color: AppColor.white,
+                  ),
+                  label: const Text(
+                    'അംഗം ചേർക്കുക',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColor.button,
+                    foregroundColor: Colors.white,
+                
+                    elevation: 0,
+                    // minimumSize: const Size(144, 24),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                        color: AppColor.iconColor, // 👈 border color
+                        width: 1, // 👈 border thickness
                       ),
-
-                      padding: const EdgeInsets.only(
-                        top: 4,
-                        left: 4,
-                        right: 4,
-                        bottom: 3,
-                      ),
+                    ),
+                
+                    padding: const EdgeInsets.only(
+                      top: 4,
+                      left: 4,
+                      right: 4,
+                      bottom: 3,
                     ),
                   ),
                 ),

@@ -11,9 +11,13 @@ class AppDateField extends StatelessWidget {
   final Color labelColor;
   final Color textColor;
   final Color borderColor;
+  final Color focusedBorderColor;
   final Color iconColor;
+
   final Widget? suffixIcon;
+
   final String? Function(String?)? validator;
+
 
   const AppDateField({
     super.key,
@@ -23,6 +27,7 @@ class AppDateField extends StatelessWidget {
     this.labelColor = AppColor.white,
     this.textColor = AppColor.white,
     this.borderColor = AppColor.white,
+    this.focusedBorderColor = AppColor.primary,
     this.iconColor = AppColor.white,
     this.suffixIcon,
     this.validator,
@@ -36,6 +41,7 @@ class AppDateField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         readOnly: true,
+      
         style: TextStyle(color: textColor, fontSize: 14),
         validator: validator ?? Validator.validateDate,
         decoration: appInputDecoration(
@@ -43,6 +49,8 @@ class AppDateField extends StatelessWidget {
               suffixIcon ??
               Icon(Icons.calendar_month, color: iconColor, size: 18),
           borderColor: borderColor,
+          focusedBorderColor: AppColor.primary,
+        
         ),
         onTap: () async {
           final DateTime? pickedDate = await showDatePicker(
@@ -61,7 +69,7 @@ class AppDateField extends StatelessWidget {
                   ),
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
-                      foregroundColor: AppColor.primary,
+                      foregroundColor:focusedBorderColor
                     ),
                   ),
                   dialogTheme: DialogThemeData(backgroundColor: AppColor.white),
