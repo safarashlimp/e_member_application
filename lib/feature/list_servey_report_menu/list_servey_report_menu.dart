@@ -2,11 +2,7 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
-import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-
-import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
 import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
@@ -16,8 +12,6 @@ import 'package:e_member_app/feature/list_survey_report/presentation/view/list_s
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-
-
 
 class ListServeyReportMenu extends StatefulWidget {
   const ListServeyReportMenu({super.key});
@@ -36,9 +30,15 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-            GradientHeader(backText: 'back',onPress: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
-            },),
+            GradientHeader(
+              backText: 'back',
+              onPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardPage()),
+                );
+              },
+            ),
             SizedBox(height: 20),
             Container(
               height: 400,
@@ -65,25 +65,27 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                       iconAsset: 'assets/images/Mask group (14).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightBlue,
-                      iconColor: AppColor.iconColor,  
+                      iconColor: AppColor.iconColor,
                       titleColor: AppColor.iconColor,
-onIconTap: () {   Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => BlocProvider(
-      create: (_) => HeaderListBloc(
-        GetHeaderListUsecase(
-          HeaderListRepositoryImpl(http.Client()),
-        ),
-      )..add(FetchHeaderList('1')),
-      child: const ListSurveyReport(
-        sectionType: FamilySurveySectionType.familyBasicDetails,
-        postion: '1',
-      ),
-    ),
-  ),
-);        
-},
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider(
+                              create: (_) => HeaderListBloc(
+                                GetHeaderListUsecase(
+                                  HeaderListRepositoryImpl(http.Client()),
+                                ),
+                              )..add(FetchHeaderList('1')),
+                              child: const ListSurveyReport(
+                                sectionType:
+                                    FamilySurveySectionType.familyBasicDetails,
+                                postion: '1',
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 15),
                     MenuContainar(
@@ -92,25 +94,27 @@ onIconTap: () {   Navigator.push(
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightgreen,
                       iconColor: AppColor.green,
-                      titleColor: AppColor.green, 
-       onIconTap: () {   Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => BlocProvider(
-      create: (_) => HeaderListBloc(
-        GetHeaderListUsecase(
-          HeaderListRepositoryImpl(http.Client()),
-        ),
-      )..add(FetchHeaderList('2')),
-      child: const ListSurveyReport(
-        sectionType: FamilySurveySectionType.basicFacilities,
-        postion: '2',
-      ),
-    ),
-  ),
-);      
-}, ),
-                      
+                      titleColor: AppColor.green,
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider(
+                              create: (_) => HeaderListBloc(
+                                GetHeaderListUsecase(
+                                  HeaderListRepositoryImpl(http.Client()),
+                                ),
+                              )..add(FetchHeaderList('2')),
+                              child: const ListSurveyReport(
+                                sectionType:
+                                    FamilySurveySectionType.basicFacilities,
+                                postion: '2',
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

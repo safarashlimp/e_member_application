@@ -1,16 +1,7 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
-import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
-import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
-import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
-import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -20,26 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListSurveyReport extends StatefulWidget {
-
-   final FamilySurveySectionType sectionType;
+  final FamilySurveySectionType sectionType;
   final String postion;
-  const ListSurveyReport({super.key, required this.sectionType, required this.postion});
+  const ListSurveyReport({
+    super.key,
+    required this.sectionType,
+    required this.postion,
+  });
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
 }
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
-
   String get pageTitle {
-  switch (widget.sectionType) {
-    case FamilySurveySectionType.familyBasicDetails:
-      return 'വ്യക്തിഗത വിവരം';
-    case FamilySurveySectionType.basicFacilities:
-      return 'അടിസ്ഥാന സൗകര്യങ്ങൾ';
+    switch (widget.sectionType) {
+      case FamilySurveySectionType.familyBasicDetails:
+        return 'വ്യക്തിഗത വിവരം';
+      case FamilySurveySectionType.basicFacilities:
+        return 'അടിസ്ഥാന സൗകര്യങ്ങൾ';
+    }
   }
-}
- 
+
   // -------------------- update------------------------
   // @override
   // void initState() {
@@ -49,7 +42,6 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   //   // Check app status
   //   _checkAppStatus();
 
-   
   // }
 
   // Future<void> _checkForUpdates() async {
@@ -63,7 +55,6 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   //     showAppUpdateDialog(context);
   //   }
   // }
-
 
   // // This function checks if an update is available
   // // You can replace this with actual API call or version check
@@ -102,21 +93,21 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   // }
   // Optional: Function to check if app is expired
   // Future<bool> isAppExpired() async {
-    // Example 1: Check with server
-    // final response = await http.get(Uri.parse('https://your-api.com/app-status'));
-    // final data = json.decode(response.body);
-    // return data['is_expired'] ?? false;
+  // Example 1: Check with server
+  // final response = await http.get(Uri.parse('https://your-api.com/app-status'));
+  // final data = json.decode(response.body);
+  // return data['is_expired'] ?? false;
 
-    // Example 2: Check expiry date
-    // final expiryDate = DateTime(2024, 12, 31);
-    // return DateTime.now().isAfter(expiryDate);
+  // Example 2: Check expiry date
+  // final expiryDate = DateTime(2024, 12, 31);
+  // return DateTime.now().isAfter(expiryDate);
 
-    // For demo purposes
+  // For demo purposes
   //   return false; // Change to true to test the dialog
   // }
 
   //=============exp=============
-   @override
+  @override
   void initState() {
     super.initState();
     context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
@@ -124,81 +115,81 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
 
   @override
   Widget build(BuildContext context) {
-     return SafeArea(
-       top: false,
-       child: PopScope(
-                canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-    if (didPop) return;
+    return SafeArea(
+      top: false,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
 
-Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(builder: (_) => DashboardPage()),
-  (route) => false,
-);},
-         child: Scaffold(
-               
-              
-           backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-            GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ',onPress: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
-            },),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
-            ),
-            Expanded(
-              child: Container(
-                color: AppColor.white,
-                child: BlocBuilder<HeaderListBloc, HeaderListState>(
-                  builder: (context, state) {
-                    if (state is HeaderListLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => DashboardPage()),
+            (route) => false,
+          );
+        },
+        child: Scaffold(
+          backgroundColor: AppColor.secondary,
+          body: Column(
+            children: [
+              GradientHeader(
+                title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardPage()),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+              ),
+              Expanded(
+                child: Container(
+                  color: AppColor.white,
+                  child: BlocBuilder<HeaderListBloc, HeaderListState>(
+                    builder: (context, state) {
+                      if (state is HeaderListLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                    if (state is HeaderListLoaded) {
-                      return ListView.builder(
-                        itemCount: state.items.length,
+                      if (state is HeaderListLoaded) {
+                        return ListView.builder(
+                          itemCount: state.items.length,
 
-                        itemBuilder: (context, index) {
-                          final item = state.items[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: PropertyCard(
-                              editId: item.editId,
-                              position: item.position,
-                              sectionType: widget.sectionType,
-                              houseNumber: item.houseNumber,
-                              houseName: item.houseName,
-                              subtitle: item.houseChief,
-                              memberCount: item.memberCount,
-                              lastUpdated: 'Updated on ${item.lastModified}',
-                            ),
-                          );
-                        },
-                      );
-                    }
+                          itemBuilder: (context, index) {
+                            final item = state.items[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: PropertyCard(
+                                editId: item.editId,
+                                position: item.position,
+                                sectionType: widget.sectionType,
+                                houseNumber: item.houseNumber,
+                                houseName: item.houseName,
+                                subtitle: item.houseChief,
+                                memberCount: item.memberCount,
+                                lastUpdated: 'Updated on ${item.lastModified}',
+                              ),
+                            );
+                          },
+                        );
+                      }
 
-                    if (state is HeaderListError) {
-                      return Center(child: Text(state.message));
-                    }
+                      if (state is HeaderListError) {
+                        return Center(child: Text(state.message));
+                      }
 
-                    return const SizedBox();
-                  },
+                      return const SizedBox();
+                    },
+                  ),
                 ),
               ),
-            ),
-         
-     
-          
-              ],
+            ],
+          ),
         ),
-           ),
-         ),
-       
-         );
-     
+      ),
+    );
   }
 }
