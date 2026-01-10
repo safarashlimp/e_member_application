@@ -28,70 +28,73 @@ class MenuContainar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColor.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(color: AppColor.grey.withOpacity(0.2), blurRadius: 5, spreadRadius: 1),
-        ],
-       
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Header
-          Row(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: 55,
-                    height: 55,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                       borderRadius: BorderRadius.circular(15),
-                      color: backgroundColor,
+    return GestureDetector(
+      onTap: onIconTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColor.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(color: AppColor.grey.withOpacity(0.2), blurRadius: 5, spreadRadius: 1),
+          ],
+         
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Row(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                         borderRadius: BorderRadius.circular(15),
+                        color: backgroundColor,
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: Image.asset(
-                      iconAsset,
-                      width: 35,
-                      height: 35,
-                      fit: BoxFit.contain,
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Image.asset(
+                        iconAsset,
+                        width: 35,
+                        height: 35,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 8),
-              
-                Flexible(
-                  child: SizedBox(
-                    width: 223,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                  ],
+                ),
+                const SizedBox(width: 8),
+                
+                  Flexible(
+                    child: SizedBox(
+                      width: 223,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          color: titleColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              
-               GestureDetector(
-                onTap: onIconTap,
-                child: Icon(icon, size: iconSize, color: iconColor,)),
-            ],
-          ),
-     
-  
-        ],
+                
+                
+                
+                   Icon(icon, size: iconSize, color: iconColor,)
+              ],
+            ),
+       
+        
+          ],
+        ),
       ),
     );
   }

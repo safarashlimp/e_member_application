@@ -112,9 +112,9 @@ void initState() {
   int toilet = 0;
   int electricityConnection = 0;
   int benefitsReceived = 0;
-  int benefitsWanted = 1;
+  int benefitsWanted = 0;
 
-
+@override
 
   Widget build(BuildContext context) {
     
@@ -584,19 +584,16 @@ void initState() {
                             ),
                             SizedBox(height: 20,)
 
-                             ,AppTextField(
+                             ,      AppTextField(
                               controller: surveyornamecontroller,
-                              label: 'സർവ്വേ ചെയ്ത വ്വേര്:',
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
                               borderColor: AppColor.borderColor,
                               focusedBorderColor: AppColor.primary,
                               labelfontSizes: 12,
-
-                              validator: Validator.validateName,
-
                               textColor: AppColor.primary,
+                              validator: Validator.validateName,
                               width: double.infinity,
-                              height: 40,
                             ),
                           ],
                         ),

@@ -41,10 +41,7 @@ class _BottomCardsState extends State<BottomCards> {
               _MiniCard('assets/images/Mask group (28).png', 'ഫോൺ ഡയറക്ടറി'),
               _MiniCard('assets/images/Mask group (29).png', 'ബ്ലഡ് ബാങ്ക്'),
               _MiniCard('assets/images/Mask group (30).png', 'പദ്ധതികൾ'),
-              _MiniCard(
-                'assets/images/Mask group (31).png',
-                'സർക്കാർ സേവനങ്ങൾ',
-              ),
+              _MiniCard('assets/images/Mask group (31).png','സർക്കാർ സേവനങ്ങൾ'),
             ],
           ),
         ],
@@ -70,7 +67,7 @@ class _MiniCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        mainAxisAlignment: .start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset(icon, height: 20, width: 22),
           const SizedBox(height: 4),

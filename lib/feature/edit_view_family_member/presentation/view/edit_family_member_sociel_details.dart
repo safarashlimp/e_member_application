@@ -27,7 +27,8 @@ class _EditFamilyMemberSocielDetailsState
   int isPensionReceiving = 0;
   String? selectedPensionType;
  bool get isEdit => widget.mode == PageMode.edit;
-  String? isPensionRequired; // yes / no
+  String? isPensionRequired; 
+  String? selectedProvertyPrgm;// yes / no
   
   @override
   Widget build(BuildContext context) {
@@ -128,6 +129,31 @@ class _EditFamilyMemberSocielDetailsState
                             });
                           },
                         ),
+                        SizedBox(height: 20,),
+                        AppDropdownField<String>(
+                                label: 'താങ്കൾ ദരിദ്ര നിർമാർജ്ജന പദ്ധതികളിൽ അംഗമാണോ?',
+                                selectedValue: selectedProvertyPrgm,
+                                borderColor: AppColor.borderColor,
+                                labelColor: AppColor.hintText2,
+                                selectedTextColor: AppColor.primary,
+                                iconColor: AppColor.black,
+                                dropdownBgColor: AppColor.white,
+                                dropdownTextColor: AppColor.hintText,
+                                validator: Validator.validateSelection,
+                                items: const [
+                                  ' അല്ല',
+                                  'തൊഴിലുറപ്പ്',
+                                  'കുടുംബശ്രീ',
+                                  'ഹരിത കർമ്മസേന',
+                                  
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedProvertyPrgm = value;
+                                  });
+                                },
+                              ),
+                       
                         SizedBox(height: 20),
                         AppTextField(
                           controller: surveyorNameLabel,

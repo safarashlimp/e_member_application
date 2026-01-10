@@ -50,6 +50,7 @@ class _AddServyItemsState extends State<AddServyItems> {
   final TextEditingController houseNumber = TextEditingController();
   final TextEditingController anualIncome = TextEditingController();
   final TextEditingController cardNumber = TextEditingController();
+    final TextEditingController surveyornamecontroller = TextEditingController();
 
   String? selectedRationCardLabel;
   String? selectedRationCardId;
@@ -287,41 +288,54 @@ void initState() {
 
                               const SizedBox(height: 18),
 
-                              Column(
-                                children: [
-                                  AppRadioField(
-                                    label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
-                                    value: rationCard,
-                                    onChanged: (v) =>
-                                        setState(() => rationCard = v),
-                                  ),
-                                  const SizedBox(height: 18),
-
-                                  AppRadioField(
-                                    label: "കുടുംബശ്രീ അംഗമാണോ?",
-                                    value: casteCert,
-                                    onChanged: (v) =>
-                                        setState(() => casteCert = v),
-                                  ),
-                                  const SizedBox(height: 18),
-
-                                  AppRadioField(
-                                    label:
-                                        "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
-                                    value: disability,
-                                    onChanged: (v) =>
-                                        setState(() => disability = v),
-                                  ),
-                                  const SizedBox(height: 18),
-
-                                  AppRadioField(
-                                    label: "അതിദരിദ്ര കുടുംബമാണോ?",
-                                    value: widow,
-                                    onChanged: (v) => setState(() => widow = v),
-                                  ),
-                                ],
+                              AppRadioField(
+                                label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
+                                value: rationCard,
+                                onChanged: (v) =>
+                                    setState(() => rationCard = v),
                               ),
+                              const SizedBox(height: 18),
+                              
+                              AppRadioField(
+                                label: "കുടുംബശ്രീ അംഗമാണോ?",
+                                value: casteCert,
+                                onChanged: (v) =>
+                                    setState(() => casteCert = v),
+                              ),
+                              const SizedBox(height: 18),
+                              
+                              AppRadioField(
+                                label:
+                                    "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
+                                value: disability,
+                                onChanged: (v) =>
+                                    setState(() => disability = v),
+                              ),
+                              const SizedBox(height: 18),
+                              
+                              AppRadioField(
+                                label: "അതിദരിദ്ര കുടുംബമാണോ?",
+                                value: widow,
+                                onChanged: (v) => setState(() => widow = v),
+                              ),
+                              if(isEdit || isView)...[
+SizedBox(height: 18,),
+
+                                   AppTextField(
+                              controller: surveyornamecontroller,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                              ]
+
                             ],
+
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -405,6 +419,8 @@ extremePoor: widow,
                                 icon: Icons.arrow_forward,
                               ),
                             ),
+
+
                           ],
                         ),
                       ],
