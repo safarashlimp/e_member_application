@@ -12,6 +12,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/c
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/education/education_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/farming%20type/farming_bloc_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/gender_bloc/gender_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/gender_bloc/gender_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health%20issue/health_issue_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/health_insurance/health_insurance_bloc.dart';
@@ -26,6 +28,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/q
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/qualification/qualification_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/relation_drop/relation_drop_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/religion_bloc/religion_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/religion_bloc/religion_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/required_health/requried_health_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/skill/skill_bloc.dart';
@@ -317,6 +321,16 @@ class _PropertyCardState extends State<PropertyCard> {
                           create: (_) =>
                               RelationDropBloc(MemberDropRepositoryImpl())
                                 ..add(FetchRelations()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              ReligionBloc(MemberDropRepositoryImpl())
+                                ..add(FetchReligion()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              GenderBloc(MemberDropRepositoryImpl())
+                                ..add(FetchGender()),
                         ),
                         BlocProvider(
                           create: (_) =>
