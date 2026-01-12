@@ -599,7 +599,7 @@ void initState() {
                         ),
                       ),
                       SizedBox(height: 30),
-                      if (isEdit || isAdd) ...[
+                      if ( isAdd) ...[
                         AppActionButton(
 
                           
@@ -728,9 +728,26 @@ if (header == null ||
                           ),
                           height: 44,
                         ),
-                      ] else if (isView) ...[
-                        SizedBox(height: 50),
-                      ],
+                      ] else if (isEdit) ...[
+                   AppActionButton(
+                          
+                          label: "അപ്ഡേറ്റ് ചെയ്യുക",
+                          onPressed: () {
+                            // Handle update action
+                          },
+                          labelStyle: const TextStyle(
+                            color: AppColor.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          height: 44,
+                   )
+                      ] else if (isView)...[
+
+                        SizedBox(height: 20,)
+                        
+                      ]
+
                     ],
                   ),
                 ),
