@@ -33,11 +33,18 @@ import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/househ
 import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_state.dart';
 
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
+import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
+import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
+import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
+import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 // import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 // import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class AddServyItems extends StatefulWidget {
   final PageMode mode;
@@ -438,7 +445,23 @@ class _AddServyItemsState extends State<AddServyItems> {
                                   const SnackBar(
                                       content: Text('Submitted successfully')),
                                 );
-                                Navigator.pop(context);
+                                       Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => HeaderListBloc(
+        GetHeaderListUsecase(
+          HeaderListRepositoryImpl(http.Client()),
+        ),
+      )..add(FetchHeaderList('1')),
+      child: const ListSurveyReport(
+        sectionType: FamilySurveySectionType.familyBasicDetails,
+        postion: '1',
+      ),
+    ),
+  ),
+);
+
                               }
 
                               if (state is HouseholdSubmitFailure) {
