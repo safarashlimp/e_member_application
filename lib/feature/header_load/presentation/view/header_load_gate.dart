@@ -49,11 +49,23 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/family_dro
           if (state is HeaderLoadLoaded) {
             
             if (position == '1') {
-              // Screen 1 → Text fields only
+
+             int? editId;
+
+final list = state.data['data'];
+if (list != null && list.isNotEmpty) {
+  editId = int.tryParse(list[0]['id'].toString());
+}
+
+            
               final screen1Data = HeaderMapper.fromApiToScreen1(state.data);
+              // final String editId = state.data['editId']?.toString() ?? ''; 
+              // print('Loaded Edit ID: $editId');
               return AddServyItems(
+                
                 mode: mode, // ✅ Pass the enum directly
                 headerData: screen1Data,
+                editId:  editId
               );
             }
 

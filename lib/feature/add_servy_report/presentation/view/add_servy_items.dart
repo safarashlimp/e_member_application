@@ -27,18 +27,24 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
+import 'package:e_member_app/feature/edit_survey_report/data/repository/edit_survay_report_imp.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_bloc.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_event.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_state.dart';
 
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
-import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
+// import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
+// import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddServyItems extends StatefulWidget {
-   final PageMode mode;
-   final SurveyHeaderModel? headerData;
-  const AddServyItems({super.key, required this.mode,this.headerData });
+  final PageMode mode;
+  final SurveyHeaderModel? headerData;
+  final int? editId;
+  const AddServyItems(
+      {super.key, required this.mode, this.headerData, this.editId});
 
   @override
   State<AddServyItems> createState() => _AddServyItemsState();
@@ -50,7 +56,7 @@ class _AddServyItemsState extends State<AddServyItems> {
   final TextEditingController houseNumber = TextEditingController();
   final TextEditingController anualIncome = TextEditingController();
   final TextEditingController cardNumber = TextEditingController();
-    final TextEditingController surveyornamecontroller = TextEditingController();
+  final TextEditingController surveyornamecontroller = TextEditingController();
 
   String? selectedRationCardLabel;
   String? selectedRationCardId;
@@ -59,11 +65,11 @@ class _AddServyItemsState extends State<AddServyItems> {
   int rationCard = 0;
   int casteCert = 0;
   int disability = 0;
-  int  widow = 0;
-  
-bool get isEdit => widget.mode == PageMode.edit;
-   bool get isView => widget.mode == PageMode.view;
-   bool get isAdd => widget.mode == PageMode.add;
+  int widow = 0;
+
+  bool get isEdit => widget.mode == PageMode.edit;
+  bool get isView => widget.mode == PageMode.view;
+  bool get isAdd => widget.mode == PageMode.add;
 
   int? selectedRationCard;
 
@@ -81,30 +87,41 @@ bool get isEdit => widget.mode == PageMode.edit;
         return Colors.white;
     }
   }
-@override
-void initState() {
-  super.initState();
 
-  if (widget.headerData != null) {
-    gardienName.text = widget.headerData!.houseChief;
-    houseName.text = widget.headerData!.houseName;
-    houseNumber.text = widget.headerData!.houseNumber;
-    cardNumber.text = widget.headerData!.rationCardNumber;
-    anualIncome.text = widget.headerData!.annualIncome;
-    selectedRationCardId = widget.headerData!.rationCardTypeId;
-    rationCard = widget.headerData!.hasJobCard;
-    casteCert = widget.headerData!.kudumbashreeMember;
-    disability = widget.headerData!.govtBeneficiary;
-    widow = widget.headerData!.extremePoor;
+  @override
+  void initState() {
+    super.initState();
 
+    debugPrint('Edit ID in initState: ${widget.editId ?? 'No Edit ID'}');
+
+    if (widget.headerData != null) {
+      gardienName.text = widget.headerData!.houseChief;
+      houseName.text = widget.headerData!.houseName;
+      houseNumber.text = widget.headerData!.houseNumber;
+      cardNumber.text = widget.headerData!.rationCardNumber;
+      anualIncome.text = widget.headerData!.annualIncome;
+      selectedRationCardId = widget.headerData!.rationCardTypeId;
+      rationCard = widget.headerData!.hasJobCard;
+      casteCert = widget.headerData!.kudumbashreeMember;
+      disability = widget.headerData!.govtBeneficiary;
+      widow = widget.headerData!.extremePoor;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          RationCardBloc(FamilyDropRepositoryImpl())..add(FetchRationCards()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => RationCardBloc(FamilyDropRepositoryImpl())
+            ..add(FetchRationCards()),
+        ),
+         BlocProvider(
+          create: (_) => HouseholdSubmitBloc(
+            repository: HouseholdRepository(),
+          ),
+        )
+      ],
       child: SafeArea(
         child: Scaffold(
           backgroundColor: AppColor.secondary,
@@ -119,21 +136,22 @@ void initState() {
 
               return Column(
                 children: [
-                  GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: () {
-                    Navigator.pop(context);
-                  },),
-
+                  GradientHeader(
+                    title: 'സമ്പൂർണ്ണ സർവ്വേ',
+                    onPress: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.all(13),
                       physics: const BouncingScrollPhysics(),
-
                       children: [
                         SurveySection(
                           title: 'കുടുംബത്തിന്റെ അടിസ്ഥാന വിവരങ്ങൾ',
                           iconAsset: 'assets/images/family servy.png',
                           child: Column(
-                            children: [ 
+                            children: [
                               AppTextField(
                                 controller: gardienName,
                                 label: "കുടുംബനാഥൻ്റെ പേര്",
@@ -142,12 +160,10 @@ void initState() {
                                 focusedBorderColor: AppColor.primary,
                                 labelfontSizes: 12,
                                 validator: Validator.validateName,
-
                                 textColor: AppColor.primary,
                                 width: double.infinity,
                                 height: 40,
                               ),
-
                               SizedBox(height: 18),
                               AppTextField(
                                 controller: houseName, //hintText: "വീട്ടുപേര്",
@@ -162,7 +178,6 @@ void initState() {
                                 height: 40,
                               ),
                               SizedBox(height: 18),
-
                               Row(
                                 children: [
                                   Expanded(
@@ -200,7 +215,6 @@ void initState() {
                                 ],
                               ),
                               SizedBox(height: 18),
-
                               Row(
                                 children: [
                                   Expanded(
@@ -219,75 +233,74 @@ void initState() {
                                     ),
                                   ),
                                   SizedBox(width: 20),
-
                                   Flexible(
-                                    child:
-                                        BlocBuilder<
-                                          RationCardBloc,
-                                          RationCardState
-                                        >(
-                                          builder: (context, state) {
-                                            if (state is RationCardLoading) {
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              );
-                                            }
+                                    child: BlocBuilder<RationCardBloc,
+                                        RationCardState>(
+                                      builder: (context, state) {
+                                        if (state is RationCardLoading) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
 
-                                            if (state is RationCardLoaded) {
-                                                if (selectedRationCardId != null && selectedRationCardLabel == null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedRationCardId,
-      orElse: () => state.items.first,
-    );
+                                        if (state is RationCardLoaded) {
+                                          if (selectedRationCardId != null &&
+                                              selectedRationCardLabel == null) {
+                                            final match =
+                                                state.items.firstWhere(
+                                              (e) =>
+                                                  e.id == selectedRationCardId,
+                                              orElse: () => state.items.first,
+                                            );
 
-    selectedRationCardLabel = match.name;
-  }
-                                              return AppDropdownField<String>(
-                                                label: 'റേഷൻ കാർഡ് തരം',
-                                                selectedValue:
-                                                    selectedRationCardLabel,
-                                                    borderColor: AppColor.borderColor,
-                                      selectedTextColor: AppColor.primary,
-                                      dropdownTextColor: AppColor.hintText2,
-                                      labelColor: AppColor.hintText2
-                                      ,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                                items: state.items
-                                                    .map((e) => e.name)
-                                                    .toList(),
-                                                validator:
-                                                    Validator.validateSelection,
-                                                onChanged: (value) {
-                                                   setState(() {
-        selectedRationCardLabel = value;
-        selectedRationCardId = state.items
-            .firstWhere((e) => e.name == value)
-            .id;
-      });  
-                                                },
-                                              );
-                                            }
+                                            selectedRationCardLabel =
+                                                match.name;
+                                          }
+                                          return AppDropdownField<String>(
+                                            label: 'റേഷൻ കാർഡ് തരം',
+                                            selectedValue:
+                                                selectedRationCardLabel,
+                                            borderColor: AppColor.borderColor,
+                                            selectedTextColor: AppColor.primary,
+                                            dropdownTextColor:
+                                                AppColor.hintText2,
+                                            labelColor: AppColor.hintText2,
+                                            iconColor: AppColor.black,
+                                            dropdownBgColor: AppColor.white,
+                                            items: state.items
+                                                .map((e) => e.name)
+                                                .toList(),
+                                            validator:
+                                                Validator.validateSelection,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedRationCardLabel = value;
+                                                selectedRationCardId = state
+                                                    .items
+                                                    .firstWhere(
+                                                        (e) => e.name == value)
+                                                    .id;
+                                              });
+                                            },
+                                          );
+                                        }
 
-                                            if (state is RationCardError) {
-                                              return Text(
-                                                state.message,
-                                                style: const TextStyle(
-                                                  color: Colors.red,
-                                                ),
-                                              );
-                                            }
+                                        if (state is RationCardError) {
+                                          return Text(
+                                            state.message,
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          );
+                                        }
 
-                                            return const SizedBox();
-                                          },
-                                        ),
+                                        return const SizedBox();
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
-
                               const SizedBox(height: 18),
-
                               AppRadioField(
                                 label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
                                 value: rationCard,
@@ -295,157 +308,196 @@ void initState() {
                                     setState(() => rationCard = v),
                               ),
                               const SizedBox(height: 18),
-                              
                               AppRadioField(
                                 label: "കുടുംബശ്രീ അംഗമാണോ?",
                                 value: casteCert,
-                                onChanged: (v) =>
-                                    setState(() => casteCert = v),
+                                onChanged: (v) => setState(() => casteCert = v),
                               ),
                               const SizedBox(height: 18),
-                              
                               AppRadioField(
-                                label:
-                                    "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
+                                label: "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
                                 value: disability,
                                 onChanged: (v) =>
                                     setState(() => disability = v),
                               ),
                               const SizedBox(height: 18),
-                              
                               AppRadioField(
                                 label: "അതിദരിദ്ര കുടുംബമാണോ?",
                                 value: widow,
                                 onChanged: (v) => setState(() => widow = v),
                               ),
-                              if(isEdit || isView)...[
-SizedBox(height: 18,),
-
-                                   AppTextField(
-                              controller: surveyornamecontroller,
-                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
-                              labelColor: AppColor.hintText2,
-                              borderColor: AppColor.borderColor,
-                              focusedBorderColor: AppColor.primary,
-                              labelfontSizes: 12,
-                              textColor: AppColor.primary,
-                              validator: Validator.validateName,
-                              width: double.infinity,
-                            ),
+                              if (isEdit || isView) ...[
+                                SizedBox(
+                                  height: 18,
+                                ),
+                                AppTextField(
+                                  controller: surveyornamecontroller,
+                                  label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                  labelColor: AppColor.hintText2,
+                                  borderColor: AppColor.borderColor,
+                                  focusedBorderColor: AppColor.primary,
+                                  labelfontSizes: 12,
+                                  textColor: AppColor.primary,
+                                  validator: Validator.validateName,
+                                  width: double.infinity,
+                                ),
                               ]
-
                             ],
-
                           ),
                         ),
                         const SizedBox(height: 24),
-if(isAdd)...[
-                        Row(
-                          children: [
-                            const Spacer(), // 👈 pushes button to right half
-                            SizedBox(
-                              width:
-                                  MediaQuery.of(context).size.width *
-                                  0.45, // half screen
-                                  
-                              child: AppActionButton(
-                                label: "അടുത്തത്",
-                                onPressed: () {
-                                  final headerData = SurveyHeaderModel(
-                                    houseChief: gardienName.text,
-                                    houseNumber: houseNumber.text,
-                                    houseName: houseName.text,
-                                    rationCardNumber: cardNumber.text,
-                                    rationCardTypeId: selectedRationCardId
-                                        .toString(),
-                                    annualIncome: anualIncome.text,
-                                   hasJobCard: rationCard,
-kudumbashreeMember: casteCert,
-govtBeneficiary: disability,
-extremePoor: widow,
+                        if (isAdd) ...[
+                          Row(
+                            children: [
+                              const Spacer(), // 👈 pushes button to right half
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width *
+                                    0.45, // half screen
 
-                                  );
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider(
-                                            create: (_) => HouseTypeBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchHouseTypes()),
-                                          ),
-                                          BlocProvider(
-                                            create: (_) => LandTypeBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchLandTypes()),
-                                          ),
-                                          BlocProvider(
-                                            create: (_) => WaterFacilityBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchWaterFacilities()),
-                                          ),
-                                          BlocProvider(
-                                            create: (_) => RequiredBenefitBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchRequiredBenefits()),
-                                          ),
-                                          BlocProvider(
-                                            create: (_) => OtherBenefitBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchOtherBenefits()),
-                                          ),
-                                          BlocProvider(
-                                            create: (_) => WardGeneralNeedBloc(
-                                              FamilyDropRepositoryImpl(),
-                                            )..add(FetchWardGeneralNeeds()),
-                                          ),
-                                        ],
-                                        child: AddItemBasicDetails(
-                                          headerData: headerData,
-                                          mode: PageMode.add
+                                child: AppActionButton(
+                                  label: "അടുത്തത്",
+                                  onPressed: () {
+                                    final headerData = SurveyHeaderModel(
+                                      houseChief: gardienName.text,
+                                      houseNumber: houseNumber.text,
+                                      houseName: houseName.text,
+                                      rationCardNumber: cardNumber.text,
+                                      rationCardTypeId:
+                                          selectedRationCardId.toString(),
+                                      annualIncome: anualIncome.text,
+                                      hasJobCard: rationCard,
+                                      kudumbashreeMember: casteCert,
+                                      govtBeneficiary: disability,
+                                      extremePoor: widow,
+                                    );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider(
+                                              create: (_) => HouseTypeBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchHouseTypes()),
+                                            ),
+                                            BlocProvider(
+                                              create: (_) => LandTypeBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchLandTypes()),
+                                            ),
+                                            BlocProvider(
+                                              create: (_) => WaterFacilityBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchWaterFacilities()),
+                                            ),
+                                            BlocProvider(
+                                              create: (_) =>
+                                                  RequiredBenefitBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchRequiredBenefits()),
+                                            ),
+                                            BlocProvider(
+                                              create: (_) => OtherBenefitBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchOtherBenefits()),
+                                            ),
+                                            BlocProvider(
+                                              create: (_) =>
+                                                  WardGeneralNeedBloc(
+                                                FamilyDropRepositoryImpl(),
+                                              )..add(FetchWardGeneralNeeds()),
+                                            ),
+                                          ],
+                                          child: AddItemBasicDetails(
+                                              headerData: headerData,
+                                              mode: PageMode.add),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                  labelStyle: const TextStyle(
+                                    color: AppColor.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  height: 44,
+                                  icon: Icons.arrow_forward,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                        if (isEdit) ...[
+                   
+                          BlocConsumer<HouseholdSubmitBloc,
+                              HouseholdSubmitState>(
+                            listener: (context, state) {
+                                    //  print('Edit ID: ${widget.editId?? 0}');
+                              if (state is HouseholdSubmitSuccess) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Submitted successfully')),
+                                );
+                                Navigator.pop(context);
+                              }
 
+                              if (state is HouseholdSubmitFailure) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(state.message)),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is HouseholdSubmitting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+ 
+ print('EDIT ID TYPE: ${widget.editId.runtimeType}');
+print('EDIT ID VALUE: ${widget.editId}');
+
+                              return AppActionButton(
+                                label: 'സമർപ്പിക്കുക',
+                                onPressed: () {
+                                    if (isEdit && widget.editId == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Edit ID missing')),
+    );
+    return;
+  }
+                                  context.read<HouseholdSubmitBloc>().add(
+                                        SubmitHouseholdEvent(
+                                          data: SurveyHeaderModel(
+                                            houseChief: gardienName.text,
+                                            houseNumber: houseNumber.text,
+                                            houseName: houseName.text,
+                                            rationCardNumber: cardNumber.text,
+                                            rationCardTypeId:
+                                                selectedRationCardId.toString(),
+                                            annualIncome: anualIncome.text,
+                                            hasJobCard: rationCard,
+                                            kudumbashreeMember: casteCert,
+                                            govtBeneficiary: disability,
+                                            extremePoor: widow,
+                                          ),
+                                          editId: widget.editId
+                                          
+                                        ),
+                                      );
+                                      
+                                },
                                 labelStyle: const TextStyle(
                                   color: AppColor.white,
-                                  fontSize: 15,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 height: 44,
                                 icon: Icons.arrow_forward,
-                              ),
-                            ),
-
-
-                          ],
-                        ),
-                      ],
-                      if(isEdit)...[
-
-                          AppActionButton(
-                    label: "സമർപ്പിക്കുക",
-                    onPressed: () {
-
-
-                      
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
-                      );
-                    },
-                    labelStyle: const TextStyle(
-                      color: AppColor.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    height: 44,
-                    icon: Icons.arrow_forward,
-                  ),
-                      ]
+                              );
+                            },
+                          )
+                        ]
                       ],
                     ),
                   ),

@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 
 class HouseholdRepository {
   Future<void> submitHousehold({
-    required int clientId,
+    required String clientId,
     int? editId,
     required SurveyHeaderModel data,
-    required int surveyorId,
+    // required int surveyorId,
   }) async {
 
     final response = await http.post(
@@ -26,16 +26,32 @@ class HouseholdRepository {
         'kudumbashree_member': data.kudumbashreeMember.toString(),
         'govt_beneficiary': data.govtBeneficiary.toString(),
         'extreme_poor': data.extremePoor.toString(),
-        'surveyor': surveyorId.toString(),
+        'surveyor': 'vinayak',
       },
     );
 
     final decoded = jsonDecode(response.body);
 
-    if (decoded['Status'] != true) {
-      throw Exception(
-        decoded['data']?[0]?['error'] ?? 'Submission failed',
-      );
-    }
+// Convert string "True"/"False" to boolean
+final status = decoded['Status'].toString().toLowerCase() == 'true';
+
+if (!status) {
+   print('Submission failed: ${response.body}');
+  throw Exception(decoded['data'] ?? 'Submission failed');
+}
+
+// Optionally print success
+print('Submission success, data: ${decoded['data']}');
+
+
+    // final decoded = jsonDecode(response.body);
+
+    // if (decoded['Status'] != true) {
+    //   print('Submission failed: ${response.body}');
+    //   print('issue is here not in other place ');
+    //   throw Exception(
+    //     decoded['data']?[0]?['error'] ?? 'Submission failed',
+    //   );
+    // }
   }
 }

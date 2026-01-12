@@ -1,6 +1,12 @@
-// part of 'household_bloc.dart';
+abstract class HouseholdSubmitState {}
 
-// @freezed
-// class HouseholdState with _$HouseholdState {
-//   const factory HouseholdState.initial() = _Initial;
-// }
+class HouseholdInitial extends HouseholdSubmitState {}
+
+class HouseholdSubmitting extends HouseholdSubmitState {}
+
+class HouseholdSubmitSuccess extends HouseholdSubmitState {}
+
+class HouseholdSubmitFailure extends HouseholdSubmitState {
+  final String message;
+  HouseholdSubmitFailure(this.message);
+}

@@ -1,6 +1,13 @@
-// part of 'household_bloc.dart';
+import 'package:e_member_app/feature/add_servy_report/data/model/screen1_data_model.dart';
 
-// @freezed
-// class HouseholdEvent with _$HouseholdEvent {
-//   const factory HouseholdEvent.started() = _Started;
-// }
+abstract class HouseholdSubmitEvent {}
+
+class SubmitHouseholdEvent extends HouseholdSubmitEvent {
+  final SurveyHeaderModel data;
+  final int? editId;
+
+  SubmitHouseholdEvent({
+    required this.data,
+    this.editId,
+  });
+}
