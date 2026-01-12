@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HeaderSaveRepository {
   Future<int> saveSurveyHeader({
+    
+    //required String clientId, 
     String? houseChief,
     required String houseNumber,
     required String houseName,
@@ -30,12 +33,22 @@ class HeaderSaveRepository {
     String? wardNeeds,
     String?surveyor,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final clientId = prefs.getString('clientid');
-    final userid = prefs.getString('userid');
+final prefs = await SharedPreferences.getInstance();
+final clientId = prefs.getString(PrefKeys.clientId);
+final userId   = prefs.getString(PrefKeys.userId);
+
+    // DEBUG
+    print('CLIENTID FROM PREF: $clientId' );
+    print('USERID FROM PREF: $userId');
 
     if (clientId == null || clientId.isEmpty) {
       throw Exception('Client ID not found. Please login again.');
+    // final prefs = await SharedPreferences.getInstance();
+    // final clientId = prefs.getString('clientid');
+    // final userid = prefs.getString('userid');
+
+    // if (clientId == null || clientId.isEmpty) {
+    //   throw Exception('Client ID not found. Please login again.');
     }
 
     final uri = Uri.parse("https://emember.org/API/header_save.php");
@@ -47,7 +60,7 @@ class HeaderSaveRepository {
       },
       body: {
         'clientid': clientId,
-          'userid': userid,
+          'userid': userId,
         'house_chief': houseChief ?? '',
         'house_number': houseNumber,
         'house_name': houseName,
@@ -56,10 +69,10 @@ class HeaderSaveRepository {
         'annual_income': annualIncome ?? '',
 
         // RADIO (0 / 1)
-        'has_job_card': hasJobCard.toString(),
-        'kudumbashree_member': kudumbashreeMember.toString(),
-        'govt_beneficiary': govtBeneficiary.toString(),
-        'extreme_poor': extremePoor.toString(),
+        'has_job_card': (hasJobCard).toString(),
+        'kudumbashree_member': (kudumbashreeMember).toString(),
+        'govt_beneficiary': (govtBeneficiary).toString(),
+        'extreme_poor': (extremePoor).toString(),
              'surveyor': surveyor ?? '',
         // 'surveyor': surveyorId ?? '',
         'house_type_id': houseTypeId,

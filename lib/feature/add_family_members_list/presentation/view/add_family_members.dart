@@ -1,4 +1,4 @@
-import 'package:e_member_app/core/error/failure.dart';
+
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
@@ -181,8 +181,8 @@ String? selectedProvertyPrgm;
     return SafeArea(
       top: false,
       child: BlocListener<AddFamilyMemberBloc, AddFamilyMemberState>(
-  listener: (context, state) {
-    state.whenOrNull(
+        listener: (context, state) {
+          state.whenOrNull(
       loading: () {
         showDialog(
           context: context,
@@ -191,13 +191,13 @@ String? selectedProvertyPrgm;
               const Center(child: CircularProgressIndicator()),
         );
       },
-     loaded : (detailId) {
+           loaded : (detailId) {
         Navigator.pop(context); // close loader
-
+      
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Saved successfully")),
         );
-
+      
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -215,8 +215,8 @@ String? selectedProvertyPrgm;
           SnackBar(content: Text(failure.message)),
         );
       },
-    );
-  },
+          );
+        },
         child: Scaffold(
           backgroundColor: AppColor.secondary,
           body: BlocBuilder<RelationDropBloc, RelationDropState>(
@@ -1501,21 +1501,28 @@ String? selectedProvertyPrgm;
                         AppActionButton(
                           label: "സമർപ്പിക്കുക",
                           onPressed: () {
-                             context.read<AddFamilyMemberBloc>().add(
-          AddFamilyMemberEvent.addFamilyMember(
-            params: viewModel.addFamilyMemberViewModel(),
-          ),
-        );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ListSurveyReport(
-                                  sectionType:
-                                      FamilySurveySectionType.familyBasicDetails,
-                                  postion: '1',
+                          
+                          // ✅ CORRECTED: Only dispatch the event
+                          context.read<AddFamilyMemberBloc>().add(
+                                AddFamilyMemberEvent.addFamilyMember(
+                                  params: viewModel.addFamilyMemberViewModel(),
                                 ),
-                              ),
-                            );
+                              );
+        //                      context.read<AddFamilyMemberBloc>().add(
+        //   AddFamilyMemberEvent.addFamilyMember(
+        //     params: viewModel.addFamilyMemberViewModel(),
+        //   ),
+        // );
+        //                     Navigator.push(
+        //                       context,
+        //                       MaterialPageRoute(
+        //                         builder: (context) => ListSurveyReport(
+        //                           sectionType:
+        //                               FamilySurveySectionType.familyBasicDetails,
+        //                           postion: '1',
+        //                         ),
+        //                       ),
+        //                     );
                           },
                           labelStyle: const TextStyle(
                             color: AppColor.white,

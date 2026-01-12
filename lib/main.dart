@@ -26,18 +26,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider
-    (
-      
-providers: [
-  BlocProvider<AddFamilyMemberBloc>(
-          create: (_) => AddFamilyMemberBloc(
-            repository: getIt<AddFamilyMemberRepository>(),
-          ),
-        ),
-],
-      child: MaterialApp(home: LoginView())
-      
-      );
+    return MaterialApp(home: LoginView());
   }
 }

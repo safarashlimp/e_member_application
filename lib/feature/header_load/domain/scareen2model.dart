@@ -44,8 +44,8 @@ class Datum {
     String wardNeeds;
     String surveyor;
     String wardMember;
-    DateTime createdAt;
-    DateTime updatedAt;
+    // DateTime createdAt;
+    // DateTime updatedAt;
 
     Datum({
         required this.id,
@@ -63,8 +63,8 @@ class Datum {
         required this.wardNeeds,
         required this.surveyor,
         required this.wardMember,
-        required this.createdAt,
-        required this.updatedAt,
+        // required this.createdAt,
+        // required this.updatedAt,
     });
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -83,8 +83,8 @@ class Datum {
         wardNeeds: json["ward_needs"],
         surveyor: json["surveyor"],
         wardMember: json["ward_member"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        // createdAt: DateTime.parse(json["created_at"]),
+        // updatedAt: DateTime.parse(json["updated_at"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -103,7 +103,7 @@ class Datum {
         "ward_needs": wardNeeds,
         "surveyor": surveyor,
         "ward_member": wardMember,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        // "created_at": createdAt.toIso8601String(),
+        // "updated_at": updatedAt.toIso8601String(),
     };
 }
