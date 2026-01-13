@@ -12,38 +12,43 @@ part of 'add_family_member_event.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddFamilyMemberEvent {
-  Map<String, dynamic> get params => throw _privateConstructorUsedError;
+  AddFamilyMemberViewModel get params => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Map<String, dynamic> params) addFamilyMember,
-  }) => throw _privateConstructorUsedError;
+    required TResult Function(AddFamilyMemberViewModel params) addFamilyMember,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Map<String, dynamic> params)? addFamilyMember,
-  }) => throw _privateConstructorUsedError;
+    TResult? Function(AddFamilyMemberViewModel params)? addFamilyMember,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Map<String, dynamic> params)? addFamilyMember,
+    TResult Function(AddFamilyMemberViewModel params)? addFamilyMember,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_AddFamilyMember value) addFamilyMember,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AddFamilyMember value)? addFamilyMember,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AddFamilyMember value)? addFamilyMember,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of AddFamilyMemberEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -54,19 +59,18 @@ mixin _$AddFamilyMemberEvent {
 
 /// @nodoc
 abstract class $AddFamilyMemberEventCopyWith<$Res> {
-  factory $AddFamilyMemberEventCopyWith(
-    AddFamilyMemberEvent value,
-    $Res Function(AddFamilyMemberEvent) then,
-  ) = _$AddFamilyMemberEventCopyWithImpl<$Res, AddFamilyMemberEvent>;
+  factory $AddFamilyMemberEventCopyWith(AddFamilyMemberEvent value,
+          $Res Function(AddFamilyMemberEvent) then) =
+      _$AddFamilyMemberEventCopyWithImpl<$Res, AddFamilyMemberEvent>;
   @useResult
-  $Res call({Map<String, dynamic> params});
+  $Res call({AddFamilyMemberViewModel params});
+
+  $AddFamilyMemberViewModelCopyWith<$Res> get params;
 }
 
 /// @nodoc
-class _$AddFamilyMemberEventCopyWithImpl<
-  $Res,
-  $Val extends AddFamilyMemberEvent
->
+class _$AddFamilyMemberEventCopyWithImpl<$Res,
+        $Val extends AddFamilyMemberEvent>
     implements $AddFamilyMemberEventCopyWith<$Res> {
   _$AddFamilyMemberEventCopyWithImpl(this._value, this._then);
 
@@ -79,29 +83,40 @@ class _$AddFamilyMemberEventCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? params = null}) {
-    return _then(
-      _value.copyWith(
-            params: null == params
-                ? _value.params
-                : params // ignore: cast_nullable_to_non_nullable
-                      as Map<String, dynamic>,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? params = null,
+  }) {
+    return _then(_value.copyWith(
+      params: null == params
+          ? _value.params
+          : params // ignore: cast_nullable_to_non_nullable
+              as AddFamilyMemberViewModel,
+    ) as $Val);
+  }
+
+  /// Create a copy of AddFamilyMemberEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AddFamilyMemberViewModelCopyWith<$Res> get params {
+    return $AddFamilyMemberViewModelCopyWith<$Res>(_value.params, (value) {
+      return _then(_value.copyWith(params: value) as $Val);
+    });
   }
 }
 
 /// @nodoc
 abstract class _$$AddFamilyMemberImplCopyWith<$Res>
     implements $AddFamilyMemberEventCopyWith<$Res> {
-  factory _$$AddFamilyMemberImplCopyWith(
-    _$AddFamilyMemberImpl value,
-    $Res Function(_$AddFamilyMemberImpl) then,
-  ) = __$$AddFamilyMemberImplCopyWithImpl<$Res>;
+  factory _$$AddFamilyMemberImplCopyWith(_$AddFamilyMemberImpl value,
+          $Res Function(_$AddFamilyMemberImpl) then) =
+      __$$AddFamilyMemberImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, dynamic> params});
+  $Res call({AddFamilyMemberViewModel params});
+
+  @override
+  $AddFamilyMemberViewModelCopyWith<$Res> get params;
 }
 
 /// @nodoc
@@ -109,39 +124,32 @@ class __$$AddFamilyMemberImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberEventCopyWithImpl<$Res, _$AddFamilyMemberImpl>
     implements _$$AddFamilyMemberImplCopyWith<$Res> {
   __$$AddFamilyMemberImplCopyWithImpl(
-    _$AddFamilyMemberImpl _value,
-    $Res Function(_$AddFamilyMemberImpl) _then,
-  ) : super(_value, _then);
+      _$AddFamilyMemberImpl _value, $Res Function(_$AddFamilyMemberImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? params = null}) {
-    return _then(
-      _$AddFamilyMemberImpl(
-        params: null == params
-            ? _value._params
-            : params // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>,
-      ),
-    );
+  $Res call({
+    Object? params = null,
+  }) {
+    return _then(_$AddFamilyMemberImpl(
+      params: null == params
+          ? _value.params
+          : params // ignore: cast_nullable_to_non_nullable
+              as AddFamilyMemberViewModel,
+    ));
   }
 }
 
 /// @nodoc
 
 class _$AddFamilyMemberImpl implements _AddFamilyMember {
-  const _$AddFamilyMemberImpl({required final Map<String, dynamic> params})
-    : _params = params;
+  const _$AddFamilyMemberImpl({required this.params});
 
-  final Map<String, dynamic> _params;
   @override
-  Map<String, dynamic> get params {
-    if (_params is EqualUnmodifiableMapView) return _params;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_params);
-  }
+  final AddFamilyMemberViewModel params;
 
   @override
   String toString() {
@@ -153,12 +161,11 @@ class _$AddFamilyMemberImpl implements _AddFamilyMember {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddFamilyMemberImpl &&
-            const DeepCollectionEquality().equals(other._params, _params));
+            (identical(other.params, params) || other.params == params));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_params));
+  int get hashCode => Object.hash(runtimeType, params);
 
   /// Create a copy of AddFamilyMemberEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -167,14 +174,12 @@ class _$AddFamilyMemberImpl implements _AddFamilyMember {
   @pragma('vm:prefer-inline')
   _$$AddFamilyMemberImplCopyWith<_$AddFamilyMemberImpl> get copyWith =>
       __$$AddFamilyMemberImplCopyWithImpl<_$AddFamilyMemberImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Map<String, dynamic> params) addFamilyMember,
+    required TResult Function(AddFamilyMemberViewModel params) addFamilyMember,
   }) {
     return addFamilyMember(params);
   }
@@ -182,7 +187,7 @@ class _$AddFamilyMemberImpl implements _AddFamilyMember {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Map<String, dynamic> params)? addFamilyMember,
+    TResult? Function(AddFamilyMemberViewModel params)? addFamilyMember,
   }) {
     return addFamilyMember?.call(params);
   }
@@ -190,7 +195,7 @@ class _$AddFamilyMemberImpl implements _AddFamilyMember {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Map<String, dynamic> params)? addFamilyMember,
+    TResult Function(AddFamilyMemberViewModel params)? addFamilyMember,
     required TResult orElse(),
   }) {
     if (addFamilyMember != null) {
@@ -229,11 +234,11 @@ class _$AddFamilyMemberImpl implements _AddFamilyMember {
 }
 
 abstract class _AddFamilyMember implements AddFamilyMemberEvent {
-  const factory _AddFamilyMember({required final Map<String, dynamic> params}) =
-      _$AddFamilyMemberImpl;
+  const factory _AddFamilyMember(
+      {required final AddFamilyMemberViewModel params}) = _$AddFamilyMemberImpl;
 
   @override
-  Map<String, dynamic> get params;
+  AddFamilyMemberViewModel get params;
 
   /// Create a copy of AddFamilyMemberEvent
   /// with the given fields replaced by the non-null parameter values.

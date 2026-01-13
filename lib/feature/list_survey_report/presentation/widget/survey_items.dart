@@ -493,13 +493,22 @@ BlocProvider(
                 ),
                 BlocProvider(
                   create: (_) =>
-                      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
+                     BloodGroupBloc(
+        MemberDropRepositoryImpl(),
+      )..add(FetchBloodGroups()),
                 ),
-                  BlocProvider<AddFamilyMemberBloc>(
-          create: (_) => AddFamilyMemberBloc(
-            repository: getIt<AddFamilyMemberRepository>(),
-          ),
-        ),
+
+                BlocProvider(
+                          create: (_) =>
+                              ReligionBloc(MemberDropRepositoryImpl())
+                                ..add(FetchReligion()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              GenderBloc(MemberDropRepositoryImpl())
+                                ..add(FetchGender()),
+                        ),
+           
                       ],
                       child: AddFamilyMembers(),
                     ),

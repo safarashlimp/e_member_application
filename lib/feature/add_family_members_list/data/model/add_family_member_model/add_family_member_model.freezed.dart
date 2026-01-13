@@ -12,8 +12,7 @@ part of 'add_family_member_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 AddFamilyMemberModel _$AddFamilyMemberModelFromJson(Map<String, dynamic> json) {
   return _AddFamilyMemberModel.fromJson(json);
@@ -38,24 +37,19 @@ mixin _$AddFamilyMemberModel {
 
 /// @nodoc
 abstract class $AddFamilyMemberModelCopyWith<$Res> {
-  factory $AddFamilyMemberModelCopyWith(
-    AddFamilyMemberModel value,
-    $Res Function(AddFamilyMemberModel) then,
-  ) = _$AddFamilyMemberModelCopyWithImpl<$Res, AddFamilyMemberModel>;
+  factory $AddFamilyMemberModelCopyWith(AddFamilyMemberModel value,
+          $Res Function(AddFamilyMemberModel) then) =
+      _$AddFamilyMemberModelCopyWithImpl<$Res, AddFamilyMemberModel>;
   @useResult
-  $Res call({
-    @JsonKey(name: "Status") bool status,
-    @JsonKey(name: "data") Data data,
-  });
+  $Res call(
+      {@JsonKey(name: "Status") bool status, @JsonKey(name: "data") Data data});
 
   $DataCopyWith<$Res> get data;
 }
 
 /// @nodoc
-class _$AddFamilyMemberModelCopyWithImpl<
-  $Res,
-  $Val extends AddFamilyMemberModel
->
+class _$AddFamilyMemberModelCopyWithImpl<$Res,
+        $Val extends AddFamilyMemberModel>
     implements $AddFamilyMemberModelCopyWith<$Res> {
   _$AddFamilyMemberModelCopyWithImpl(this._value, this._then);
 
@@ -68,20 +62,20 @@ class _$AddFamilyMemberModelCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
-    return _then(
-      _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            data: null == data
-                ? _value.data
-                : data // ignore: cast_nullable_to_non_nullable
-                      as Data,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? status = null,
+    Object? data = null,
+  }) {
+    return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as bool,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Data,
+    ) as $Val);
   }
 
   /// Create a copy of AddFamilyMemberModel
@@ -98,16 +92,13 @@ class _$AddFamilyMemberModelCopyWithImpl<
 /// @nodoc
 abstract class _$$AddFamilyMemberModelImplCopyWith<$Res>
     implements $AddFamilyMemberModelCopyWith<$Res> {
-  factory _$$AddFamilyMemberModelImplCopyWith(
-    _$AddFamilyMemberModelImpl value,
-    $Res Function(_$AddFamilyMemberModelImpl) then,
-  ) = __$$AddFamilyMemberModelImplCopyWithImpl<$Res>;
+  factory _$$AddFamilyMemberModelImplCopyWith(_$AddFamilyMemberModelImpl value,
+          $Res Function(_$AddFamilyMemberModelImpl) then) =
+      __$$AddFamilyMemberModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: "Status") bool status,
-    @JsonKey(name: "data") Data data,
-  });
+  $Res call(
+      {@JsonKey(name: "Status") bool status, @JsonKey(name: "data") Data data});
 
   @override
   $DataCopyWith<$Res> get data;
@@ -117,38 +108,37 @@ abstract class _$$AddFamilyMemberModelImplCopyWith<$Res>
 class __$$AddFamilyMemberModelImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberModelCopyWithImpl<$Res, _$AddFamilyMemberModelImpl>
     implements _$$AddFamilyMemberModelImplCopyWith<$Res> {
-  __$$AddFamilyMemberModelImplCopyWithImpl(
-    _$AddFamilyMemberModelImpl _value,
-    $Res Function(_$AddFamilyMemberModelImpl) _then,
-  ) : super(_value, _then);
+  __$$AddFamilyMemberModelImplCopyWithImpl(_$AddFamilyMemberModelImpl _value,
+      $Res Function(_$AddFamilyMemberModelImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
-    return _then(
-      _$AddFamilyMemberModelImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        data: null == data
-            ? _value.data
-            : data // ignore: cast_nullable_to_non_nullable
-                  as Data,
-      ),
-    );
+  $Res call({
+    Object? status = null,
+    Object? data = null,
+  }) {
+    return _then(_$AddFamilyMemberModelImpl(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as bool,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Data,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$AddFamilyMemberModelImpl implements _AddFamilyMemberModel {
-  const _$AddFamilyMemberModelImpl({
-    @JsonKey(name: "Status") required this.status,
-    @JsonKey(name: "data") required this.data,
-  });
+  const _$AddFamilyMemberModelImpl(
+      {@JsonKey(name: "Status") required this.status,
+      @JsonKey(name: "data") required this.data});
 
   factory _$AddFamilyMemberModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AddFamilyMemberModelImplFromJson(json);
@@ -184,23 +174,23 @@ class _$AddFamilyMemberModelImpl implements _AddFamilyMemberModel {
   @override
   @pragma('vm:prefer-inline')
   _$$AddFamilyMemberModelImplCopyWith<_$AddFamilyMemberModelImpl>
-  get copyWith =>
-      __$$AddFamilyMemberModelImplCopyWithImpl<_$AddFamilyMemberModelImpl>(
-        this,
-        _$identity,
-      );
+      get copyWith =>
+          __$$AddFamilyMemberModelImplCopyWithImpl<_$AddFamilyMemberModelImpl>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AddFamilyMemberModelImplToJson(this);
+    return _$$AddFamilyMemberModelImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _AddFamilyMemberModel implements AddFamilyMemberModel {
-  const factory _AddFamilyMemberModel({
-    @JsonKey(name: "Status") required final bool status,
-    @JsonKey(name: "data") required final Data data,
-  }) = _$AddFamilyMemberModelImpl;
+  const factory _AddFamilyMemberModel(
+          {@JsonKey(name: "Status") required final bool status,
+          @JsonKey(name: "data") required final Data data}) =
+      _$AddFamilyMemberModelImpl;
 
   factory _AddFamilyMemberModel.fromJson(Map<String, dynamic> json) =
       _$AddFamilyMemberModelImpl.fromJson;
@@ -217,7 +207,7 @@ abstract class _AddFamilyMemberModel implements AddFamilyMemberModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddFamilyMemberModelImplCopyWith<_$AddFamilyMemberModelImpl>
-  get copyWith => throw _privateConstructorUsedError;
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 Data _$DataFromJson(Map<String, dynamic> json) {
@@ -260,25 +250,23 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? detailId = null}) {
-    return _then(
-      _value.copyWith(
-            detailId: null == detailId
-                ? _value.detailId
-                : detailId // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? detailId = null,
+  }) {
+    return _then(_value.copyWith(
+      detailId: null == detailId
+          ? _value.detailId
+          : detailId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$DataImplCopyWith<$Res> implements $DataCopyWith<$Res> {
   factory _$$DataImplCopyWith(
-    _$DataImpl value,
-    $Res Function(_$DataImpl) then,
-  ) = __$$DataImplCopyWithImpl<$Res>;
+          _$DataImpl value, $Res Function(_$DataImpl) then) =
+      __$$DataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@JsonKey(name: "detail_id") int detailId});
@@ -289,21 +277,21 @@ class __$$DataImplCopyWithImpl<$Res>
     extends _$DataCopyWithImpl<$Res, _$DataImpl>
     implements _$$DataImplCopyWith<$Res> {
   __$$DataImplCopyWithImpl(_$DataImpl _value, $Res Function(_$DataImpl) _then)
-    : super(_value, _then);
+      : super(_value, _then);
 
   /// Create a copy of Data
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? detailId = null}) {
-    return _then(
-      _$DataImpl(
-        detailId: null == detailId
-            ? _value.detailId
-            : detailId // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
+  $Res call({
+    Object? detailId = null,
+  }) {
+    return _then(_$DataImpl(
+      detailId: null == detailId
+          ? _value.detailId
+          : detailId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -347,14 +335,15 @@ class _$DataImpl implements _Data {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DataImplToJson(this);
+    return _$$DataImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _Data implements Data {
-  const factory _Data({
-    @JsonKey(name: "detail_id") required final int detailId,
-  }) = _$DataImpl;
+  const factory _Data(
+      {@JsonKey(name: "detail_id") required final int detailId}) = _$DataImpl;
 
   factory _Data.fromJson(Map<String, dynamic> json) = _$DataImpl.fromJson;
 

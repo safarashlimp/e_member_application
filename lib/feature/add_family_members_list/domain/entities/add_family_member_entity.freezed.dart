@@ -12,8 +12,7 @@ part of 'add_family_member_entity.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddFamilyMemberEntity {
@@ -29,10 +28,9 @@ mixin _$AddFamilyMemberEntity {
 
 /// @nodoc
 abstract class $AddFamilyMemberEntityCopyWith<$Res> {
-  factory $AddFamilyMemberEntityCopyWith(
-    AddFamilyMemberEntity value,
-    $Res Function(AddFamilyMemberEntity) then,
-  ) = _$AddFamilyMemberEntityCopyWithImpl<$Res, AddFamilyMemberEntity>;
+  factory $AddFamilyMemberEntityCopyWith(AddFamilyMemberEntity value,
+          $Res Function(AddFamilyMemberEntity) then) =
+      _$AddFamilyMemberEntityCopyWithImpl<$Res, AddFamilyMemberEntity>;
   @useResult
   $Res call({bool status, AddFamilyMemberDataEntity data});
 
@@ -40,10 +38,8 @@ abstract class $AddFamilyMemberEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AddFamilyMemberEntityCopyWithImpl<
-  $Res,
-  $Val extends AddFamilyMemberEntity
->
+class _$AddFamilyMemberEntityCopyWithImpl<$Res,
+        $Val extends AddFamilyMemberEntity>
     implements $AddFamilyMemberEntityCopyWith<$Res> {
   _$AddFamilyMemberEntityCopyWithImpl(this._value, this._then);
 
@@ -56,20 +52,20 @@ class _$AddFamilyMemberEntityCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
-    return _then(
-      _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            data: null == data
-                ? _value.data
-                : data // ignore: cast_nullable_to_non_nullable
-                      as AddFamilyMemberDataEntity,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? status = null,
+    Object? data = null,
+  }) {
+    return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as bool,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as AddFamilyMemberDataEntity,
+    ) as $Val);
   }
 
   /// Create a copy of AddFamilyMemberEntity
@@ -87,9 +83,9 @@ class _$AddFamilyMemberEntityCopyWithImpl<
 abstract class _$$AddFamilyMemberEntityImplCopyWith<$Res>
     implements $AddFamilyMemberEntityCopyWith<$Res> {
   factory _$$AddFamilyMemberEntityImplCopyWith(
-    _$AddFamilyMemberEntityImpl value,
-    $Res Function(_$AddFamilyMemberEntityImpl) then,
-  ) = __$$AddFamilyMemberEntityImplCopyWithImpl<$Res>;
+          _$AddFamilyMemberEntityImpl value,
+          $Res Function(_$AddFamilyMemberEntityImpl) then) =
+      __$$AddFamilyMemberEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool status, AddFamilyMemberDataEntity data});
@@ -100,31 +96,31 @@ abstract class _$$AddFamilyMemberEntityImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AddFamilyMemberEntityImplCopyWithImpl<$Res>
-    extends
-        _$AddFamilyMemberEntityCopyWithImpl<$Res, _$AddFamilyMemberEntityImpl>
+    extends _$AddFamilyMemberEntityCopyWithImpl<$Res,
+        _$AddFamilyMemberEntityImpl>
     implements _$$AddFamilyMemberEntityImplCopyWith<$Res> {
-  __$$AddFamilyMemberEntityImplCopyWithImpl(
-    _$AddFamilyMemberEntityImpl _value,
-    $Res Function(_$AddFamilyMemberEntityImpl) _then,
-  ) : super(_value, _then);
+  __$$AddFamilyMemberEntityImplCopyWithImpl(_$AddFamilyMemberEntityImpl _value,
+      $Res Function(_$AddFamilyMemberEntityImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
-    return _then(
-      _$AddFamilyMemberEntityImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        data: null == data
-            ? _value.data
-            : data // ignore: cast_nullable_to_non_nullable
-                  as AddFamilyMemberDataEntity,
-      ),
-    );
+  $Res call({
+    Object? status = null,
+    Object? data = null,
+  }) {
+    return _then(_$AddFamilyMemberEntityImpl(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as bool,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as AddFamilyMemberDataEntity,
+    ));
   }
 }
 
@@ -161,18 +157,15 @@ class _$AddFamilyMemberEntityImpl implements _AddFamilyMemberEntity {
   @override
   @pragma('vm:prefer-inline')
   _$$AddFamilyMemberEntityImplCopyWith<_$AddFamilyMemberEntityImpl>
-  get copyWith =>
-      __$$AddFamilyMemberEntityImplCopyWithImpl<_$AddFamilyMemberEntityImpl>(
-        this,
-        _$identity,
-      );
+      get copyWith => __$$AddFamilyMemberEntityImplCopyWithImpl<
+          _$AddFamilyMemberEntityImpl>(this, _$identity);
 }
 
 abstract class _AddFamilyMemberEntity implements AddFamilyMemberEntity {
-  const factory _AddFamilyMemberEntity({
-    required final bool status,
-    required final AddFamilyMemberDataEntity data,
-  }) = _$AddFamilyMemberEntityImpl;
+  const factory _AddFamilyMemberEntity(
+          {required final bool status,
+          required final AddFamilyMemberDataEntity data}) =
+      _$AddFamilyMemberEntityImpl;
 
   @override
   bool get status;
@@ -184,7 +177,7 @@ abstract class _AddFamilyMemberEntity implements AddFamilyMemberEntity {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddFamilyMemberEntityImplCopyWith<_$AddFamilyMemberEntityImpl>
-  get copyWith => throw _privateConstructorUsedError;
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -200,19 +193,16 @@ mixin _$AddFamilyMemberDataEntity {
 
 /// @nodoc
 abstract class $AddFamilyMemberDataEntityCopyWith<$Res> {
-  factory $AddFamilyMemberDataEntityCopyWith(
-    AddFamilyMemberDataEntity value,
-    $Res Function(AddFamilyMemberDataEntity) then,
-  ) = _$AddFamilyMemberDataEntityCopyWithImpl<$Res, AddFamilyMemberDataEntity>;
+  factory $AddFamilyMemberDataEntityCopyWith(AddFamilyMemberDataEntity value,
+          $Res Function(AddFamilyMemberDataEntity) then) =
+      _$AddFamilyMemberDataEntityCopyWithImpl<$Res, AddFamilyMemberDataEntity>;
   @useResult
   $Res call({int detailId});
 }
 
 /// @nodoc
-class _$AddFamilyMemberDataEntityCopyWithImpl<
-  $Res,
-  $Val extends AddFamilyMemberDataEntity
->
+class _$AddFamilyMemberDataEntityCopyWithImpl<$Res,
+        $Val extends AddFamilyMemberDataEntity>
     implements $AddFamilyMemberDataEntityCopyWith<$Res> {
   _$AddFamilyMemberDataEntityCopyWithImpl(this._value, this._then);
 
@@ -225,16 +215,15 @@ class _$AddFamilyMemberDataEntityCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? detailId = null}) {
-    return _then(
-      _value.copyWith(
-            detailId: null == detailId
-                ? _value.detailId
-                : detailId // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? detailId = null,
+  }) {
+    return _then(_value.copyWith(
+      detailId: null == detailId
+          ? _value.detailId
+          : detailId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
   }
 }
 
@@ -242,9 +231,9 @@ class _$AddFamilyMemberDataEntityCopyWithImpl<
 abstract class _$$AddFamilyMemberDataEntityImplCopyWith<$Res>
     implements $AddFamilyMemberDataEntityCopyWith<$Res> {
   factory _$$AddFamilyMemberDataEntityImplCopyWith(
-    _$AddFamilyMemberDataEntityImpl value,
-    $Res Function(_$AddFamilyMemberDataEntityImpl) then,
-  ) = __$$AddFamilyMemberDataEntityImplCopyWithImpl<$Res>;
+          _$AddFamilyMemberDataEntityImpl value,
+          $Res Function(_$AddFamilyMemberDataEntityImpl) then) =
+      __$$AddFamilyMemberDataEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int detailId});
@@ -252,30 +241,27 @@ abstract class _$$AddFamilyMemberDataEntityImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AddFamilyMemberDataEntityImplCopyWithImpl<$Res>
-    extends
-        _$AddFamilyMemberDataEntityCopyWithImpl<
-          $Res,
-          _$AddFamilyMemberDataEntityImpl
-        >
+    extends _$AddFamilyMemberDataEntityCopyWithImpl<$Res,
+        _$AddFamilyMemberDataEntityImpl>
     implements _$$AddFamilyMemberDataEntityImplCopyWith<$Res> {
   __$$AddFamilyMemberDataEntityImplCopyWithImpl(
-    _$AddFamilyMemberDataEntityImpl _value,
-    $Res Function(_$AddFamilyMemberDataEntityImpl) _then,
-  ) : super(_value, _then);
+      _$AddFamilyMemberDataEntityImpl _value,
+      $Res Function(_$AddFamilyMemberDataEntityImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberDataEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? detailId = null}) {
-    return _then(
-      _$AddFamilyMemberDataEntityImpl(
-        detailId: null == detailId
-            ? _value.detailId
-            : detailId // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
+  $Res call({
+    Object? detailId = null,
+  }) {
+    return _then(_$AddFamilyMemberDataEntityImpl(
+      detailId: null == detailId
+          ? _value.detailId
+          : detailId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -310,10 +296,8 @@ class _$AddFamilyMemberDataEntityImpl implements _AddFamilyMemberDataEntity {
   @override
   @pragma('vm:prefer-inline')
   _$$AddFamilyMemberDataEntityImplCopyWith<_$AddFamilyMemberDataEntityImpl>
-  get copyWith =>
-      __$$AddFamilyMemberDataEntityImplCopyWithImpl<
-        _$AddFamilyMemberDataEntityImpl
-      >(this, _$identity);
+      get copyWith => __$$AddFamilyMemberDataEntityImplCopyWithImpl<
+          _$AddFamilyMemberDataEntityImpl>(this, _$identity);
 }
 
 abstract class _AddFamilyMemberDataEntity implements AddFamilyMemberDataEntity {
@@ -328,5 +312,5 @@ abstract class _AddFamilyMemberDataEntity implements AddFamilyMemberDataEntity {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddFamilyMemberDataEntityImplCopyWith<_$AddFamilyMemberDataEntityImpl>
-  get copyWith => throw _privateConstructorUsedError;
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -1,0 +1,91 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'add_family_member_params.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$AddFamilyMemberViewModelImpl _$$AddFamilyMemberViewModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AddFamilyMemberViewModelImpl(
+      name: json['name'] as String?,
+      mobile: json['mobile'] as String?,
+      bloodgroup: (json['bloodgroup'] as num?)?.toInt(),
+      casteId: (json['caste_id'] as num?)?.toInt(),
+      maritalStatusId: (json['marital_status_id'] as num?)?.toInt(),
+      whatsapp: json['WhatsApp'] as String?,
+      relationId: json['relation_id'] as String?,
+      genderId: json['gender_id'] as String?,
+      dob: json['dob'] as String?,
+      religionId: json['religion_id'] as String?,
+      surveyor: json['surveyor'] as String?,
+      qualificationId: json['qualification_id'] as String?,
+      currentlyStudying: (json['currently_studying'] as num?)?.toInt(),
+      courseOther: json['course_other'] as String?,
+      institution: json['institution'] as String?,
+      needEducationSupport: (json['need_education_support'] as num?)?.toInt(),
+      employmentStatusId: json['employment_status_id'] as String?,
+      occupationId: json['occupation_id'] as String?,
+      skills: json['skills'] as String?,
+      skillDetails: json['skill_details'] as String?,
+      needJobSupportId: json['need_job_support_id'] as String?,
+      norkaRegistered: (json['norka_registered'] as num?)?.toInt(),
+      agricultureType: (json['agriculure_type'] as num?)?.toInt(),
+      isPatient: (json['is_patient'] as num?)?.toInt(),
+      treatmentPlace: json['treatment_place'] as String?,
+      disabled: (json['disabled'] as num?)?.toInt(),
+      disabilityBenefit: (json['disability_benefit'] as num?)?.toInt(),
+      insuranceCard: (json['insurance_card'] as num?)?.toInt(),
+      insuranceTypeId: (json['insurance_type_id'] as num?)?.toInt(),
+      healthHelp: json['health_help'] as String?,
+      courseId: (json['course_id'] as num?)?.toInt(),
+      diseases: (json['diseases'] as num?)?.toInt(),
+      pensionTypeId: (json['pension_type_id'] as num?)?.toInt(),
+      includedInRation: (json['included_in_ration'] as num?)?.toInt(),
+      receivingPension: (json['receiving_pension'] as num?)?.toInt(),
+      needPensionTypeId: json['need_pension_type_id'] as String?,
+      povertyPgm: (json['poverty_pgm'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$AddFamilyMemberViewModelImplToJson(
+        _$AddFamilyMemberViewModelImpl instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'mobile': instance.mobile,
+      'bloodgroup': instance.bloodgroup,
+      'caste_id': instance.casteId,
+      'marital_status_id': instance.maritalStatusId,
+      'WhatsApp': instance.whatsapp,
+      'relation_id': instance.relationId,
+      'gender_id': instance.genderId,
+      'dob': instance.dob,
+      'religion_id': instance.religionId,
+      'surveyor': instance.surveyor,
+      'qualification_id': instance.qualificationId,
+      'currently_studying': instance.currentlyStudying,
+      'course_other': instance.courseOther,
+      'institution': instance.institution,
+      'need_education_support': instance.needEducationSupport,
+      'employment_status_id': instance.employmentStatusId,
+      'occupation_id': instance.occupationId,
+      'skills': instance.skills,
+      'skill_details': instance.skillDetails,
+      'need_job_support_id': instance.needJobSupportId,
+      'norka_registered': instance.norkaRegistered,
+      'agriculure_type': instance.agricultureType,
+      'is_patient': instance.isPatient,
+      'treatment_place': instance.treatmentPlace,
+      'disabled': instance.disabled,
+      'disability_benefit': instance.disabilityBenefit,
+      'insurance_card': instance.insuranceCard,
+      'insurance_type_id': instance.insuranceTypeId,
+      'health_help': instance.healthHelp,
+      'course_id': instance.courseId,
+      'diseases': instance.diseases,
+      'pension_type_id': instance.pensionTypeId,
+      'included_in_ration': instance.includedInRation,
+      'receiving_pension': instance.receivingPension,
+      'need_pension_type_id': instance.needPensionTypeId,
+      'poverty_pgm': instance.povertyPgm,
+    };

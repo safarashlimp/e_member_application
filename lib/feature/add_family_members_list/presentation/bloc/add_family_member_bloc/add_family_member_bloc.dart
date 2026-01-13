@@ -21,7 +21,8 @@ class AddFamilyMemberBloc
       addFamilyMember: (e) async {
         emit(const AddFamilyMemberState.loading());
 
-        final result = await repository.addFamilyMember(params: e.params);
+   final result = await repository.addFamilyMember(params: e.params);
+
 
         result.fold(
           (failure) => emit(AddFamilyMemberState.error(failure: failure)),

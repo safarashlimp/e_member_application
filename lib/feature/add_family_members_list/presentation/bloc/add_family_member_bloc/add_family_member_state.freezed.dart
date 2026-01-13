@@ -12,8 +12,7 @@ part of 'add_family_member_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddFamilyMemberState {
@@ -23,14 +22,16 @@ mixin _$AddFamilyMemberState {
     required TResult Function() loading,
     required TResult Function(Failure failure) error,
     required TResult Function(int detailId) loaded,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Failure failure)? error,
     TResult? Function(int detailId)? loaded,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -38,21 +39,24 @@ mixin _$AddFamilyMemberState {
     TResult Function(Failure failure)? error,
     TResult Function(int detailId)? loaded,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
     required TResult Function(Error value) error,
     required TResult Function(Loaded value) loaded,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
     TResult? Function(Error value)? error,
     TResult? Function(Loaded value)? loaded,
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
@@ -60,22 +64,20 @@ mixin _$AddFamilyMemberState {
     TResult Function(Error value)? error,
     TResult Function(Loaded value)? loaded,
     required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+  }) =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AddFamilyMemberStateCopyWith<$Res> {
-  factory $AddFamilyMemberStateCopyWith(
-    AddFamilyMemberState value,
-    $Res Function(AddFamilyMemberState) then,
-  ) = _$AddFamilyMemberStateCopyWithImpl<$Res, AddFamilyMemberState>;
+  factory $AddFamilyMemberStateCopyWith(AddFamilyMemberState value,
+          $Res Function(AddFamilyMemberState) then) =
+      _$AddFamilyMemberStateCopyWithImpl<$Res, AddFamilyMemberState>;
 }
 
 /// @nodoc
-class _$AddFamilyMemberStateCopyWithImpl<
-  $Res,
-  $Val extends AddFamilyMemberState
->
+class _$AddFamilyMemberStateCopyWithImpl<$Res,
+        $Val extends AddFamilyMemberState>
     implements $AddFamilyMemberStateCopyWith<$Res> {
   _$AddFamilyMemberStateCopyWithImpl(this._value, this._then);
 
@@ -91,9 +93,8 @@ class _$AddFamilyMemberStateCopyWithImpl<
 /// @nodoc
 abstract class _$$InitialImplCopyWith<$Res> {
   factory _$$InitialImplCopyWith(
-    _$InitialImpl value,
-    $Res Function(_$InitialImpl) then,
-  ) = __$$InitialImplCopyWithImpl<$Res>;
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -101,9 +102,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
-    _$InitialImpl _value,
-    $Res Function(_$InitialImpl) _then,
-  ) : super(_value, _then);
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberState
   /// with the given fields replaced by the non-null parameter values.
@@ -210,9 +210,8 @@ abstract class Initial implements AddFamilyMemberState {
 /// @nodoc
 abstract class _$$LoadingImplCopyWith<$Res> {
   factory _$$LoadingImplCopyWith(
-    _$LoadingImpl value,
-    $Res Function(_$LoadingImpl) then,
-  ) = __$$LoadingImplCopyWithImpl<$Res>;
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -220,9 +219,8 @@ class __$$LoadingImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
-    _$LoadingImpl _value,
-    $Res Function(_$LoadingImpl) _then,
-  ) : super(_value, _then);
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberState
   /// with the given fields replaced by the non-null parameter values.
@@ -329,9 +327,8 @@ abstract class Loading implements AddFamilyMemberState {
 /// @nodoc
 abstract class _$$ErrorImplCopyWith<$Res> {
   factory _$$ErrorImplCopyWith(
-    _$ErrorImpl value,
-    $Res Function(_$ErrorImpl) then,
-  ) = __$$ErrorImplCopyWithImpl<$Res>;
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Failure failure});
 }
@@ -341,23 +338,22 @@ class __$$ErrorImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
-    _$ErrorImpl _value,
-    $Res Function(_$ErrorImpl) _then,
-  ) : super(_value, _then);
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? failure = null}) {
-    return _then(
-      _$ErrorImpl(
-        failure: null == failure
-            ? _value.failure
-            : failure // ignore: cast_nullable_to_non_nullable
-                  as Failure,
-      ),
-    );
+  $Res call({
+    Object? failure = null,
+  }) {
+    return _then(_$ErrorImpl(
+      failure: null == failure
+          ? _value.failure
+          : failure // ignore: cast_nullable_to_non_nullable
+              as Failure,
+    ));
   }
 }
 
@@ -483,9 +479,8 @@ abstract class Error implements AddFamilyMemberState {
 /// @nodoc
 abstract class _$$LoadedImplCopyWith<$Res> {
   factory _$$LoadedImplCopyWith(
-    _$LoadedImpl value,
-    $Res Function(_$LoadedImpl) then,
-  ) = __$$LoadedImplCopyWithImpl<$Res>;
+          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
+      __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int detailId});
 }
@@ -495,23 +490,22 @@ class __$$LoadedImplCopyWithImpl<$Res>
     extends _$AddFamilyMemberStateCopyWithImpl<$Res, _$LoadedImpl>
     implements _$$LoadedImplCopyWith<$Res> {
   __$$LoadedImplCopyWithImpl(
-    _$LoadedImpl _value,
-    $Res Function(_$LoadedImpl) _then,
-  ) : super(_value, _then);
+      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of AddFamilyMemberState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? detailId = null}) {
-    return _then(
-      _$LoadedImpl(
-        null == detailId
-            ? _value.detailId
-            : detailId // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
+  $Res call({
+    Object? detailId = null,
+  }) {
+    return _then(_$LoadedImpl(
+      null == detailId
+          ? _value.detailId
+          : detailId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
