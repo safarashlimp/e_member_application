@@ -9,6 +9,7 @@ class SurveyHeaderModel {
   final int kudumbashreeMember;
   final int govtBeneficiary;
   final int extremePoor;
+  final String? surveyor;
 
   SurveyHeaderModel({
     required this.houseChief,
@@ -21,5 +22,6 @@ class SurveyHeaderModel {
     required this.kudumbashreeMember,
     required this.govtBeneficiary,
     required this.extremePoor,
+    this.surveyor
   });
 }

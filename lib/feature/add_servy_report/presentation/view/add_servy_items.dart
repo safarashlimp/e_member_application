@@ -112,6 +112,7 @@ class _AddServyItemsState extends State<AddServyItems> {
       casteCert = widget.headerData!.kudumbashreeMember;
       disability = widget.headerData!.govtBeneficiary;
       widow = widget.headerData!.extremePoor;
+      surveyornamecontroller.text = widget.headerData?.surveyor?? '';
     }
   }
 
@@ -506,6 +507,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               kudumbashreeMember: casteCert,
                                               govtBeneficiary: disability,
                                               extremePoor: widow,
+                                              surveyor: surveyornamecontroller.text
                                             ),
                                             editId: widget.editId),
                                       );

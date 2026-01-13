@@ -32,6 +32,7 @@ class HeaderMapper {
       kudumbashreeMember: parseIntSafe(data['kudumbashree_member']),
       govtBeneficiary: parseIntSafe(data['govt_beneficiary']),
       extremePoor: parseIntSafe(data['extreme_poor']),
+      surveyor:   data['surveyor']??''
     );
   }
 

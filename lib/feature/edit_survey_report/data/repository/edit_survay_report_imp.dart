@@ -26,7 +26,7 @@ class HouseholdRepository {
         'kudumbashree_member': data.kudumbashreeMember.toString(),
         'govt_beneficiary': data.govtBeneficiary.toString(),
         'extreme_poor': data.extremePoor.toString(),
-        'surveyor': 'vinayak',
+        'surveyor': data.surveyor,
       },
     );
 
