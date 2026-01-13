@@ -740,7 +740,24 @@ if (header == null ||
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Updated successfully')),
         );
-        Navigator.pop(context);
+         Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider(
+                                      create: (_) => HeaderListBloc(
+                                        GetHeaderListUsecase(
+                                          HeaderListRepositoryImpl(
+                                              http.Client()),
+                                        ),
+                                      )..add(FetchHeaderList('1')),
+                                      child: const ListSurveyReport(
+                                        sectionType: FamilySurveySectionType
+                                            .familyBasicDetails,
+                                        postion: '2',
+                                      ),
+                                    ),
+                                  ),
+                                );
       }
 
       if (state is HouseDetailsError) {
