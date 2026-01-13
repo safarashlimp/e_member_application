@@ -1,4 +1,4 @@
-
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
@@ -9,10 +9,8 @@ import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
-import 'package:e_member_app/feature/add_family_members_list/data/view_model/add_family_member_params.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/add_family_member_bloc/add_family_member_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/add_family_member_bloc/add_family_member_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/add_family_member_bloc/add_family_member_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/detail_save_repo/detail_save_repo.dart';
+
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
@@ -47,13 +45,14 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_state.dart';
-import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
-import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddFamilyMembers extends StatefulWidget {
-  const AddFamilyMembers({super.key});
+  final String editId;
+  const AddFamilyMembers({super.key, required this.editId});
 
   @override
   State<AddFamilyMembers> createState() => _AddFamilyMembersState();
@@ -107,6 +106,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   // farming type
   String? farmingType;
   String? farmingTypeId;
+  DateTime? selectedDob;
 
   // blood
   String? selectedBloodGroup;
@@ -149,7 +149,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   int student = 0;
   int patient = 0;
   int needEducationHelp = 0;
-String? selectedProvertyPrgm;
+  String? selectedProvertyPrgm;
 
   final Map<String, int> povertyProgramMap = {
     'അല്ല': 0,
@@ -157,12 +157,11 @@ String? selectedProvertyPrgm;
     'കുടുംബശ്രീ': 2,
     'ഹരിത കർമ്മസേന': 3,
   };
-  late AddFamilyMemberViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
- viewModel = AddFamilyMemberViewModel();
+
     mobileNumber.addListener(() {
       // copy text only if whatsapp field is empty OR same
       if (whatsupNumber.text != mobileNumber.text) {
@@ -180,137 +179,484 @@ String? selectedProvertyPrgm;
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: BlocListener<AddFamilyMemberBloc, AddFamilyMemberState>(
-        listener: (context, state) {
-          state.whenOrNull(
-      loading: () {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) =>
-              const Center(child: CircularProgressIndicator()),
-        );
-      },
-           loaded : (detailId) {
-        Navigator.pop(context); // close loader
-      
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Saved successfully")),
-        );
-      
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ListSurveyReport(
-              sectionType:
-                  FamilySurveySectionType.familyBasicDetails,
-              postion: detailId.toString(),
-            ),
-          ),
-        );
-      },
-      error: (failure) {
-        Navigator.pop(context); // close loader
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
-        );
-      },
-          );
-        },
-        child: Scaffold(
-          backgroundColor: AppColor.secondary,
-          body: BlocBuilder<RelationDropBloc, RelationDropState>(
-            builder: (context, state) {
-              if (state is RelationDropLoading || state is RelationDropInitial) {
-                return const Center(child: CircularProgressIndicator());
-              }
-        
-              if (state is RelationDropError) {
-                return Center(
-                  child: Text(
-                    state.message,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              }
-        
-              return Column(
-                //mainAxisSize: .min,
-                children: [
-                  GradientHeader(
-                    title: 'സമ്പൂർണ്ണ സർവ്വേ',
-                    onPress: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.all(13),
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        SurveySection(
-                          title: "കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരങ്ങൾ",
-                          iconAsset: "assets/images/house.png",
-                          child: Column(
-                            children: [
-                              AppTextField(
-                                controller: familyMemberName,
-                                label: "കുടുംബാംഗത്തിന്റെ പേര്",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateName,
-                                width: double.infinity,
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: AppTextField(
-                                      controller: mobileNumber,
-                                      label: "മൊബൈൽ നമ്പർ",
-                                      labelColor: AppColor.hintText2,
-                                      borderColor: AppColor.borderColor,
-                                      focusedBorderColor: AppColor.primary,
-                                      labelfontSizes: 12,
-                                      textColor: AppColor.primary,
-                                      validator: Validator.validateMobile,
-                                      type: "mobile",
-                                      width: double.infinity,
-                                    ),
+      child: Scaffold(
+        backgroundColor: AppColor.secondary,
+        body: BlocBuilder<RelationDropBloc, RelationDropState>(
+          builder: (context, state) {
+            if (state is RelationDropLoading || state is RelationDropInitial) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state is RelationDropError) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            return Column(
+              //mainAxisSize: .min,
+              children: [
+                GradientHeader(
+                  title: 'സമ്പൂർണ്ണ സർവ്വേ',
+                  onPress: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.all(13),
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      SurveySection(
+                        title: "കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരങ്ങൾ",
+                        iconAsset: "assets/images/house.png",
+                        child: Column(
+                          children: [
+                            AppTextField(
+                              controller: familyMemberName,
+                              label: "കുടുംബാംഗത്തിന്റെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppTextField(
+                                    controller: mobileNumber,
+                                    label: "മൊബൈൽ നമ്പർ",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateMobile,
+                                    type: "mobile",
+                                    width: double.infinity,
                                   ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    child: AppTextField(
-                                      controller: whatsupNumber,
-                                      label: "വാട്സ്ആപ്പ് നമ്പർ",
-                                      labelColor: AppColor.hintText2,
-                                      borderColor: AppColor.borderColor,
-                                      focusedBorderColor: AppColor.primary,
-                                      labelfontSizes: 12,
-                                      textColor: AppColor.primary,
-                                      validator: Validator.validateMobile,
-                                      type: "mobile",
-                                      width: double.infinity,
-                                    ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: AppTextField(
+                                    controller: whatsupNumber,
+                                    label: "വാട്സ്ആപ്പ് നമ്പർ",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateMobile,
+                                    type: "mobile",
+                                    width: double.infinity,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            BlocBuilder<BloodGroupBloc, BloodGroupState>(
+                              builder: (context, state) {
+                                if (state is BloodGroupLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is BloodGroupLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'രക്തഗ്രൂപ്പ്',
+                                    selectedValue: selectedBloodGroup,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedBloodGroup = value;
+
+                                        selectedBloodGroupId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is BloodGroupError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<RelationDropBloc, RelationDropState>(
+                              builder: (context, state) {
+                                if (state is RelationDropLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is RelationDropLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
+                                    selectedValue: selectedReletion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA HERE
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReletion = value;
+
+                                        selectedRelationId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is RelationDropError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<GenderBloc, GenderState>(
+                              builder: (context, state) {
+                                if (state is GenderLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is GenderLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ലിംഗം',
+                                    selectedValue: selectedGender,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedGender = value;
+                                        selectedGenderId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is GenderError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppDateField(
+                                    context: context,
+                                    label: 'ജനനത്തീയതി',
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    iconColor: AppColor.hintText2,
+                                    textColor: AppColor.primary,
+                                    focusedBorderColor: AppColor.borderColor,
+                                    validator: Validator.validateDate,
+                                    controller: selectedDate,
+                                      onDateSelected: (DateTime date) {
+    setState(() {
+      selectedDob = date;
+    });}  
+                                   //  selectedDob = date;
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Flexible(
+                                  child: BlocBuilder<MaritalStatusBloc,
+                                      MaritalStatusState>(
+                                    builder: (context, state) {
+                                      if (state is MaritalStatusLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+
+                                      if (state is MaritalStatusLoaded) {
+                                        return AppDropdownField<String>(
+                                          label: 'വിവാഹസ്ഥിതി',
+                                          selectedValue: selectedMaritalStatus,
+                                          borderColor: AppColor.borderColor,
+                                          labelColor: AppColor.hintText2,
+                                          selectedTextColor: AppColor.primary,
+                                          iconColor: AppColor.black,
+                                          dropdownBgColor: AppColor.white,
+                                          dropdownTextColor: AppColor.hintText,
+                                          validator:
+                                              Validator.validateSelection,
+
+                                          // ✅ API DATA
+                                          items: state.items
+                                              .map((e) => e.name)
+                                              .toList(),
+
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedMaritalStatus = value;
+
+                                              selectedMaritalStatusId = state
+                                                  .items
+                                                  .firstWhere(
+                                                      (e) => e.name == value)
+                                                  .id;
+                                            });
+                                          },
+                                        );
+                                      }
+
+                                      if (state is MaritalStatusError) {
+                                        return Text(
+                                          state.message,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        );
+                                      }
+
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<ReligionBloc, ReligionState>(
+                              builder: (context, state) {
+                                if (state is ReligionLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is ReligionLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'മതം',
+                                    selectedValue: selectedReligion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReligion = value;
+
+                                        selectedReligionId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is ReligionError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<CasteBloc, CasteState>(
+                              builder: (context, state) {
+                                if (state is CasteLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is CasteLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ജാതി',
+                                    selectedValue: selectedCaste,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCaste = value;
+
+                                        selectedCasteId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is CasteError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                      SurveySection(
+                        title: "വിദ്യാഭ്യാസ വിവരം",
+                        iconAsset: "assets/images/education.png",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BlocBuilder<QualificationBloc, QualificationState>(
+                              builder: (context, state) {
+                                if (state is QualificationLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is QualificationLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'വിദ്യാഭ്യാസ യോഗ്യത',
+                                    selectedValue: selectedQualification,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedQualification = value;
+
+                                        selectedQualificationId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is QualificationError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            AppRadioField(
+                              label: " ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ?",
+                              value: student,
+                              onChanged: (v) {
+                                setState(() {
+                                  student = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            if (student == 1) ...[
                               const SizedBox(height: 20),
-                              BlocBuilder<BloodGroupBloc, BloodGroupState>(
+                              BlocBuilder<EducationBloc, EducationState>(
                                 builder: (context, state) {
-                                  if (state is BloodGroupLoading) {
+                                  if (state is EducationLoading) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
-        
-                                  if (state is BloodGroupLoaded) {
+
+                                  if (state is EducationLoaded) {
                                     return AppDropdownField<String>(
-                                      label: 'രക്തഗ്രൂപ്പ്',
-                                      selectedValue: selectedBloodGroup,
+                                      label: ' പഠനം',
+                                      selectedValue: selectedEducation,
                                       borderColor: AppColor.borderColor,
                                       labelColor: AppColor.hintText2,
                                       selectedTextColor: AppColor.primary,
@@ -318,637 +664,39 @@ String? selectedProvertyPrgm;
                                       dropdownBgColor: AppColor.white,
                                       dropdownTextColor: AppColor.hintText,
                                       validator: Validator.validateSelection,
-        
+
                                       // ✅ API DATA
                                       items: state.items
                                           .map((e) => e.name)
                                           .toList(),
-        
+
                                       onChanged: (value) {
                                         setState(() {
-                                          selectedBloodGroup = value;
-        
-                                          selectedBloodGroupId = state.items
-                                              .firstWhere((e) => e.name == value)
+                                          selectedEducation = value;
+
+                                          selectedEducationId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
                                               .id;
                                         });
                                       },
                                     );
                                   }
-        
-                                  if (state is BloodGroupError) {
+
+                                  if (state is EducationError) {
                                     return Text(
                                       state.message,
                                       style: const TextStyle(color: Colors.red),
                                     );
                                   }
-        
+
                                   return const SizedBox();
                                 },
                               ),
-        
-                              SizedBox(height: 20),
-                              BlocBuilder<RelationDropBloc, RelationDropState>(
-                                builder: (context, state) {
-                                  if (state is RelationDropLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is RelationDropLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
-                                      selectedValue: selectedReletion,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA HERE
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedReletion = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          selectedRelationId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is RelationDropError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-        
-                              SizedBox(height: 20),
-                              BlocBuilder<GenderBloc, GenderState>(
-                                builder: (context, state) {
-                                  if (state is GenderLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is GenderLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'ലിംഗം',
-                                      selectedValue: selectedGender,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedGender = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          selectedGenderId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is GenderError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-                              SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: AppDateField(
-                                      context: context,
-                                      label: 'ജനനത്തീയതി',
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      iconColor: AppColor.hintText2,
-                                      textColor: AppColor.primary,
-        
-                                      focusedBorderColor: AppColor.borderColor,
-                                      validator: Validator.validateDate,
-                                      controller: selectedDate,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Flexible(
-                                    child:
-                                        BlocBuilder<
-                                          MaritalStatusBloc,
-                                          MaritalStatusState
-                                        >(
-                                          builder: (context, state) {
-                                            if (state is MaritalStatusLoading) {
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              );
-                                            }
-        
-                                            if (state is MaritalStatusLoaded) {
-                                              return AppDropdownField<String>(
-                                                label: 'വിവാഹസ്ഥിതി',
-                                                selectedValue:
-                                                    selectedMaritalStatus,
-                                                borderColor: AppColor.borderColor,
-                                                labelColor: AppColor.hintText2,
-                                                selectedTextColor:
-                                                    AppColor.primary,
-                                                iconColor: AppColor.black,
-                                                dropdownBgColor: AppColor.white,
-                                                dropdownTextColor:
-                                                    AppColor.hintText,
-                                                validator:
-                                                    Validator.validateSelection,
-        
-                                                // ✅ API DATA
-                                                items: state.items
-                                                    .map((e) => e.name)
-                                                    .toList(),
-        
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedMaritalStatus = value;
-        
-                                                    final selectedItem = state
-                                                        .items
-                                                        .firstWhere(
-                                                          (e) => e.name == value,
-                                                        );
-                                                    selectedMaritalStatusId =
-                                                        selectedItem.id;
-                                                  });
-                                                },
-                                              );
-                                            }
-        
-                                            if (state is MaritalStatusError) {
-                                              return Text(
-                                                state.message,
-                                                style: const TextStyle(
-                                                  color: Colors.red,
-                                                ),
-                                              );
-                                            }
-        
-                                            return const SizedBox();
-                                          },
-                                        ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 20),
-                              BlocBuilder<ReligionBloc, ReligionState>(
-                                builder: (context, state) {
-                                  if (state is ReligionLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is ReligionLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'മതം',
-                                      selectedValue: selectedReligion,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedReligion = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          selectedReligionId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is ReligionError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-                              SizedBox(height: 20),
-                              BlocBuilder<CasteBloc, CasteState>(
-                                builder: (context, state) {
-                                  if (state is CasteLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is CasteLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'ജാതി',
-                                      selectedValue: selectedCaste,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedCaste = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          selectedCasteId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is CasteError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 50),
-                        SurveySection(
-                          title: "വിദ്യാഭ്യാസ വിവരം",
-                          iconAsset: "assets/images/education.png",
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              BlocBuilder<QualificationBloc, QualificationState>(
-                                builder: (context, state) {
-                                  if (state is QualificationLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is QualificationLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'വിദ്യാഭ്യാസ യോഗ്യത',
-                                      selectedValue: selectedQualification,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedQualification = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          selectedQualificationId =
-                                              selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is QualificationError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-        
-                              SizedBox(height: 20),
-                              AppRadioField(
-                                label: " ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ?",
-                                value: student,
-                                onChanged: (v) {
-                                  setState(() {
-                                    student = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              if (student == 1) ...[
-                                const SizedBox(height: 20),
-                                BlocBuilder<EducationBloc, EducationState>(
-                                  builder: (context, state) {
-                                    if (state is EducationLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-        
-                                    if (state is EducationLoaded) {
-                                      return AppDropdownField<String>(
-                                        label: ' പഠനം',
-                                        selectedValue: selectedEducation,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-        
-                                        // ✅ API DATA
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-        
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedEducation = value;
-        
-                                            final selectedItem = state.items
-                                                .firstWhere(
-                                                  (e) => e.name == value,
-                                                );
-                                            selectedEducationId = selectedItem.id;
-                                          });
-                                        },
-                                      );
-                                    }
-        
-                                    if (state is EducationError) {
-                                      return Text(
-                                        state.message,
-                                        style: const TextStyle(color: Colors.red),
-                                      );
-                                    }
-        
-                                    return const SizedBox();
-                                  },
-                                ),
-        
-                                SizedBox(height: 20),
-                                AppTextField(
-                                  controller: courseStudy,
-                                  label: "പഠിക്കുന്ന കോഴ്‌സ്",
-                                  labelColor: AppColor.hintText2,
-                                  borderColor: AppColor.borderColor,
-                                  focusedBorderColor: AppColor.primary,
-                                  labelfontSizes: 12,
-                                  textColor: AppColor.primary,
-                                  validator: Validator.validateName,
-                                  width: double.infinity,
-                                ),
-                                SizedBox(height: 20),
-                                AppTextField(
-                                  controller: studyCenter,
-                                  label: "പഠിക്കുന്ന സ്ഥാപനം",
-                                  labelColor: AppColor.hintText2,
-                                  borderColor: AppColor.borderColor,
-                                  focusedBorderColor: AppColor.primary,
-                                  labelfontSizes: 12,
-                                  textColor: AppColor.primary,
-                                  validator: Validator.validateName,
-                                  width: double.infinity,
-                                ),
-                                SizedBox(height: 20),
-                                AppRadioField(
-                                  label: "വിദ്യാഭ്യാസ സഹായം ആവശ്യമുണ്ടോ?",
-                                  value: needEducationHelp,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      needEducationHelp = v;
-                                      if (v == 0) {
-                                        // student = null; // reset dropdown
-                                      }
-                                    });
-                                  },
-                                  // onChanged: (v) => setState(() => student = v),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 50),
-                        SurveySection(
-                          title: "തൊഴിൽ വിവരം",
-                          iconAsset: "assets/images/job.png",
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              BlocBuilder<
-                                EmploymentStatusBloc,
-                                EmploymentStatusState
-                              >(
-                                builder: (context, state) {
-                                  if (state is EmploymentStatusLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is EmploymentStatusLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'തൊഴിൽ നില',
-                                      selectedValue: employmentStatus,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          employmentStatus = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          employmentStatusId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is EmploymentStatusError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-        
-                              SizedBox(height: 20),
-                              BlocBuilder<JobBloc, JobState>(
-                                builder: (context, state) {
-                                  if (state is JobLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is JobLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'തൊഴിൽ',
-                                      selectedValue: jobStatus,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          jobStatus = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          jobStatusId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is JobError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-        
-                              SizedBox(height: 20),
-                              BlocBuilder<SkillsBloc, SkillsState>(
-                                builder: (context, state) {
-                                  if (state is SkillsLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is SkillsLoaded) {
-                                    return AppMultiSelectDropdown<String>(
-                                      label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      selectedValues: selectedSkills,
-        
-                                      onChanged: (values) {
-                                        setState(() {
-                                          selectedSkills = values;
-        
-                                          // store selected IDs also
-                                          selectedSkillIds = state.items
-                                              .where(
-                                                (e) => values.contains(e.name),
-                                              )
-                                              .map((e) => e.id)
-                                              .toList();
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is SkillsError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
-                              ),
-        
                               SizedBox(height: 20),
                               AppTextField(
-                                controller: specifySkillLabel,
-                                label: "കഴിവ് വ്യക്തമാക്കുക",
+                                controller: courseStudy,
+                                label: "പഠിക്കുന്ന കോഴ്‌സ്",
                                 labelColor: AppColor.hintText2,
                                 borderColor: AppColor.borderColor,
                                 focusedBorderColor: AppColor.primary,
@@ -958,329 +706,271 @@ String? selectedProvertyPrgm;
                                 width: double.infinity,
                               ),
                               SizedBox(height: 20),
-                              BlocBuilder<
-                                EmploymentSupportBloc,
-                                EmploymentSupportState
-                              >(
-                                builder: (context, state) {
-                                  if (state is EmploymentSupportLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-        
-                                  if (state is EmploymentSupportLoaded) {
-                                    return AppDropdownField<String>(
-                                      label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
-                                      selectedValue: employmentSupportLabel,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-        
-                                      // ✅ API DATA
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-        
-                                      onChanged: (value) {
-                                        setState(() {
-                                          employmentSupportLabel = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          employmentSupportId = selectedItem.id;
-                                        });
-                                      },
-                                    );
-                                  }
-        
-                                  if (state is EmploymentSupportError) {
-                                    return Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-        
-                                  return const SizedBox();
-                                },
+                              AppTextField(
+                                controller: studyCenter,
+                                label: "പഠിക്കുന്ന സ്ഥാപനം",
+                                labelColor: AppColor.hintText2,
+                                borderColor: AppColor.borderColor,
+                                focusedBorderColor: AppColor.primary,
+                                labelfontSizes: 12,
+                                textColor: AppColor.primary,
+                                validator: Validator.validateName,
+                                width: double.infinity,
                               ),
-        
-                              if (employmentStatus == "വിദേശത്ത്") ...[
-                                const SizedBox(height: 20),
-                                AppRadioField(
-                                  label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
-                                  value: norkaRegisteredLabel,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      norkaRegisteredLabel = v;
-                                      if (v == 0) {
-                                        // student = null; // reset dropdown
-                                      }
-                                    });
-                                  },
-                                  // onChanged: (v) => setState(() => student = v),
-                                ),
-                              ],
-                              if (jobStatus == "കർഷകൻ") ...[
-                                const SizedBox(height: 20),
-                                BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
-                                  builder: (context, state) {
-                                    if (state is FarmingTypeLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
+                              SizedBox(height: 20),
+                              AppRadioField(
+                                label: "വിദ്യാഭ്യാസ സഹായം ആവശ്യമുണ്ടോ?",
+                                value: needEducationHelp,
+                                onChanged: (v) {
+                                  setState(() {
+                                    needEducationHelp = v;
+                                    if (v == 0) {
+                                      // student = null; // reset dropdown
                                     }
-        
-                                    if (state is FarmingTypeLoaded) {
-                                      return AppDropdownField<String>(
-                                        label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
-                                        selectedValue: farmingType,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-        
-                                        // ✅ API DATA
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-        
-                                        onChanged: (value) {
-                                          setState(() {
-                                            farmingType = value;
-        
-                                            final selectedItem = state.items
-                                                .firstWhere(
-                                                  (e) => e.name == value,
-                                                );
-                                            farmingTypeId = selectedItem.id;
-                                          });
-                                        },
-                                      );
-                                    }
-        
-                                    if (state is FarmingTypeError) {
-                                      return Text(
-                                        state.message,
-                                        style: const TextStyle(color: Colors.red),
-                                      );
-                                    }
-        
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
+                                  });
+                                },
+                                // onChanged: (v) => setState(() => student = v),
+                              ),
                             ],
-                          ),
+                          ],
                         ),
-                        SizedBox(height: 50),
-                        SurveySection(
-                          title: "ആരോഗ്യ വിവരം",
-                          iconAsset: "assets/images/health.png",
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppRadioField(
-                                label: " രോഗിയാണോ ?",
-                                value: patient,
-                                onChanged: (v) {
-                                  setState(() {
-                                    patient = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              if (patient == 1) ...[
-                                const SizedBox(height: 20),
-                                BlocBuilder<HealthIssueBloc, HealthIssueState>(
-                                  builder: (context, state) {
-                                    if (state is HealthIssueLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-        
-                                    if (state is HealthIssueLoaded) {
-                                      return AppDropdownField<String>(
-                                        label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
-                                        selectedValue: hasHealthIssues,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-        
-                                        // ✅ API DATA
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-        
-                                        onChanged: (value) {
-                                          setState(() {
-                                            hasHealthIssues = value;
-        
-                                            final selectedItem = state.items
-                                                .firstWhere(
-                                                  (e) => e.name == value,
-                                                );
-                                            hasHealthIssuesId = selectedItem.id;
-                                          });
-                                        },
-                                      );
-                                    }
-        
-                                    if (state is HealthIssueError) {
-                                      return Text(
-                                        state.message,
-                                        style: const TextStyle(color: Colors.red),
-                                      );
-                                    }
-        
-                                    return const SizedBox();
-                                  },
-                                ),
-        
-                                SizedBox(height: 20),
-                                AppTextField(
-                                  controller: treatmentPlaceLabel,
-                                  label: "ചികിത്സ നടത്തുന്ന സ്ഥലം",
-                                  labelColor: AppColor.hintText2,
-                                  borderColor: AppColor.borderColor,
-                                  focusedBorderColor: AppColor.primary,
-                                  labelfontSizes: 12,
-                                  textColor: AppColor.primary,
-                                  validator: Validator.validateName,
-                                  width: double.infinity,
-                                ),
-                              ],
-        
-                              SizedBox(height: 20),
-                              AppRadioField(
-                                label: " ഭിന്നശേഷിയുണ്ടോ?",
-                                value: hasDisability,
-                                onChanged: (v) {
-                                  setState(() {
-                                    hasDisability = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              if (hasDisability == 1) ...[
-                                const SizedBox(height: 20),
-                                AppRadioField(
-                                  label: " ഭിന്നശേഷി ആനുകൂല്യം ലഭിക്കുന്നുണ്ടോ?",
-                                  value: disabilityBenefit,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      disabilityBenefit = v;
-                                      if (v == 0) {
-                                        // student = null; // reset dropdown
-                                      }
-                                    });
-                                  },
-                                  // onChanged: (v) => setState(() => student = v),
-                                ),
-                              ],
-                              SizedBox(height: 20),
-                              AppRadioField(
-                                label: " ഹെൽത്ത് ഇൻഷൂറൻസ് കാർഡ് ഉണ്ടോ?",
-                                value: healthInsuranceCard,
-                                onChanged: (v) {
-                                  setState(() {
-                                    healthInsuranceCard = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              if (healthInsuranceCard == 1) ...[
-                                const SizedBox(height: 20),
-                                BlocBuilder<
-                                  HealthInsuranceBloc,
-                                  HealthInsuranceState
-                                >(
-                                  builder: (context, state) {
-                                    if (state is HealthInsuranceLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-        
-                                    if (state is HealthInsuranceLoaded) {
-                                      return AppDropdownField<String>(
-                                        label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
-                                        selectedValue: healthInsurance,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-        
-                                        // ✅ API DATA
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-        
-                                        onChanged: (value) {
-                                          setState(() {
-                                            healthInsurance = value;
-        
-                                            final selectedItem = state.items
-                                                .firstWhere(
-                                                  (e) => e.name == value,
-                                                );
-                                            healthInsuranceId = selectedItem.id;
-                                          });
-                                        },
-                                      );
-                                    }
-        
-                                    if (state is HealthInsuranceError) {
-                                      return Text(
-                                        state.message,
-                                        style: const TextStyle(color: Colors.red),
-                                      );
-                                    }
-        
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
+                      ),
+                      SizedBox(height: 50),
+                      SurveySection(
+                        title: "തൊഴിൽ വിവരം",
+                        iconAsset: "assets/images/job.png",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BlocBuilder<EmploymentStatusBloc,
+                                EmploymentStatusState>(
+                              builder: (context, state) {
+                                if (state is EmploymentStatusLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is EmploymentStatusLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ നില',
+                                    selectedValue: employmentStatus,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        employmentStatus = value;
+
+                                        employmentStatusId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is EmploymentStatusError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<JobBloc, JobState>(
+                              builder: (context, state) {
+                                if (state is JobLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is JobLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ',
+                                    selectedValue: jobStatus,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        jobStatus = value;
+
+                                        jobStatusId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is JobError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<SkillsBloc, SkillsState>(
+                              builder: (context, state) {
+                                if (state is SkillsLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is SkillsLoaded) {
+                                  return AppMultiSelectDropdown<String>(
+                                    label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    selectedValues: selectedSkills,
+
+                                    onChanged: (values) {
+                                      setState(() {
+                                        selectedSkills = values;
+
+                                        // store selected IDs also
+                                        selectedSkillIds = state.items
+                                            .where(
+                                              (e) => values.contains(e.name),
+                                            )
+                                            .map((e) => e.id)
+                                            .toList();
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is SkillsError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            AppTextField(
+                              controller: specifySkillLabel,
+                              label: "കഴിവ് വ്യക്തമാക്കുക",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<EmploymentSupportBloc,
+                                EmploymentSupportState>(
+                              builder: (context, state) {
+                                if (state is EmploymentSupportLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is EmploymentSupportLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
+                                    selectedValue: employmentSupportLabel,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        employmentSupportLabel = value;
+
+                                        employmentSupportId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is EmploymentSupportError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            if (employmentStatus == "വിദേശത്ത്") ...[
                               const SizedBox(height: 20),
-                              BlocBuilder<
-                                RequiredHealthSupportBloc,
-                                RequiredHealthSupportState
-                              >(
+                              AppRadioField(
+                                label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
+                                value: norkaRegisteredLabel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    norkaRegisteredLabel = v;
+                                    if (v == 0) {
+                                      // student = null; // reset dropdown
+                                    }
+                                  });
+                                },
+                                // onChanged: (v) => setState(() => student = v),
+                              ),
+                            ],
+                            if (jobStatus == "കർഷകൻ") ...[
+                              const SizedBox(height: 20),
+                              BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
                                 builder: (context, state) {
-                                  if (state is RequiredHealthSupportLoading) {
+                                  if (state is FarmingTypeLoading) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
-        
-                                  if (state is RequiredHealthSupportLoaded) {
+
+                                  if (state is FarmingTypeLoaded) {
                                     return AppDropdownField<String>(
-                                      label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
-                                      selectedValue: requiredHealthSupports,
+                                      label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
+                                      selectedValue: farmingType,
                                       borderColor: AppColor.borderColor,
                                       labelColor: AppColor.hintText2,
                                       selectedTextColor: AppColor.primary,
@@ -1288,141 +978,73 @@ String? selectedProvertyPrgm;
                                       dropdownBgColor: AppColor.white,
                                       dropdownTextColor: AppColor.hintText,
                                       validator: Validator.validateSelection,
-        
+
                                       // ✅ API DATA
                                       items: state.items
                                           .map((e) => e.name)
                                           .toList(),
-        
+
                                       onChanged: (value) {
                                         setState(() {
-                                          requiredHealthSupports = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          requiredHealthSupportsId =
-                                              selectedItem.id;
+                                          farmingType = value;
+
+                                          farmingTypeId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
                                         });
                                       },
                                     );
                                   }
-        
-                                  if (state is RequiredHealthSupportError) {
+
+                                  if (state is FarmingTypeError) {
                                     return Text(
                                       state.message,
                                       style: const TextStyle(color: Colors.red),
                                     );
                                   }
-        
+
                                   return const SizedBox();
                                 },
                               ),
                             ],
-                          ),
+                          ],
                         ),
-                        SizedBox(height: 50),
-                        SurveySection(
-                          title: "സാമൂഹിക  /  ക്ഷേമ വിവരങ്ങൾ",
-                          iconAsset: "assets/images/social.png",
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppRadioField(
-                                label: " റേഷൻ കാർഡിൽ ഉൾപ്പെടുത്തിയിട്ടുണ്ടോ?",
-                                value: isIncludedInRationCard,
-                                onChanged: (v) {
-                                  setState(() {
-                                    isIncludedInRationCard = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              SizedBox(height: 20),
-                              AppRadioField(
-                                label: " പെൻഷൻ ലഭിക്കുന്നുണ്ടോ?",
-                                value: isPensionReceiving,
-                                onChanged: (v) {
-                                  setState(() {
-                                    isPensionReceiving = v;
-                                    if (v == 0) {
-                                      // student = null; // reset dropdown
-                                    }
-                                  });
-                                },
-                                // onChanged: (v) => setState(() => student = v),
-                              ),
-                              if (isPensionReceiving == 1) ...[
-                                const SizedBox(height: 20),
-                                BlocBuilder<PensionTypeBloc, PensionTypeState>(
-                                  builder: (context, state) {
-                                    if (state is PensionTypeLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-        
-                                    if (state is PensionTypeLoaded) {
-                                      return AppDropdownField<String>(
-                                        label: 'പെൻഷൻ തരം',
-                                        selectedValue: selectedPensionType,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-        
-                                        // ✅ API DATA
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-        
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedPensionType = value;
-        
-                                            final selectedItem = state.items
-                                                .firstWhere(
-                                                  (e) => e.name == value,
-                                                );
-                                            selectedPensionTypeId =
-                                                selectedItem.id;
-                                          });
-                                        },
-                                      );
-                                    }
-        
-                                    if (state is PensionTypeError) {
-                                      return Text(
-                                        state.message,
-                                        style: const TextStyle(color: Colors.red),
-                                      );
-                                    }
-        
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
-                              SizedBox(height: 20),
-                              BlocBuilder<
-                                PensionRequiredBloc,
-                                PensionRequiredState
-                              >(
+                      ),
+                      SizedBox(height: 50),
+                      SurveySection(
+                        title: "ആരോഗ്യ വിവരം",
+                        iconAsset: "assets/images/health.png",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppRadioField(
+                              label: " രോഗിയാണോ ?",
+                              value: patient,
+                              onChanged: (v) {
+                                setState(() {
+                                  patient = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            if (patient == 1) ...[
+                              const SizedBox(height: 20),
+                              BlocBuilder<HealthIssueBloc, HealthIssueState>(
                                 builder: (context, state) {
-                                  if (state is PensionRequiredLoading) {
+                                  if (state is HealthIssueLoading) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
-        
-                                  if (state is PensionRequiredLoaded) {
+
+                                  if (state is HealthIssueLoaded) {
                                     return AppDropdownField<String>(
-                                      label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
-                                      selectedValue: isPensionRequired,
+                                      label: 'ആരോഗ്യ പ്രശ്നങ്ങൾ',
+                                      selectedValue: hasHealthIssues,
                                       borderColor: AppColor.borderColor,
                                       labelColor: AppColor.hintText2,
                                       selectedTextColor: AppColor.primary,
@@ -1430,62 +1052,39 @@ String? selectedProvertyPrgm;
                                       dropdownBgColor: AppColor.white,
                                       dropdownTextColor: AppColor.hintText,
                                       validator: Validator.validateSelection,
-        
+
                                       // ✅ API DATA
                                       items: state.items
                                           .map((e) => e.name)
                                           .toList(),
-        
+
                                       onChanged: (value) {
                                         setState(() {
-                                          isPensionRequired = value;
-        
-                                          final selectedItem = state.items
-                                              .firstWhere((e) => e.name == value);
-                                          isPensionRequiredId = selectedItem.id;
+                                          hasHealthIssues = value;
+
+                                          hasHealthIssuesId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
                                         });
                                       },
                                     );
                                   }
-        
-                                  if (state is PensionRequiredError) {
+
+                                  if (state is HealthIssueError) {
                                     return Text(
                                       state.message,
                                       style: const TextStyle(color: Colors.red),
                                     );
                                   }
-        
+
                                   return const SizedBox();
                                 },
                               ),
                               SizedBox(height: 20),
-                              AppDropdownField<String>(
-                                label:
-                                    'താങ്കൾ ദരിദ്ര നിർമാർജ്ജന പദ്ധതികളിൽ അംഗമാണോ?',
-                                selectedValue: selectedProvertyPrgm,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  ' അല്ല',
-                                  'തൊഴിലുറപ്പ്',
-                                  'കുടുംബശ്രീ',
-                                  'ഹരിത കർമ്മസേന',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedProvertyPrgm = value;
-                                  });
-                                },
-                              ),
-                              SizedBox(height: 20),
                               AppTextField(
-                                controller: surveyorNameLabel,
-                                label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                controller: treatmentPlaceLabel,
+                                label: "ചികിത്സ നടത്തുന്ന സ്ഥലം",
                                 labelColor: AppColor.hintText2,
                                 borderColor: AppColor.borderColor,
                                 focusedBorderColor: AppColor.primary,
@@ -1495,49 +1094,466 @@ String? selectedProvertyPrgm;
                                 width: double.infinity,
                               ),
                             ],
-                          ),
+                            SizedBox(height: 20),
+                            AppRadioField(
+                              label: " ഭിന്നശേഷിയുണ്ടോ?",
+                              value: hasDisability,
+                              onChanged: (v) {
+                                setState(() {
+                                  hasDisability = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            if (hasDisability == 1) ...[
+                              const SizedBox(height: 20),
+                              AppRadioField(
+                                label: " ഭിന്നശേഷി ആനുകൂല്യം ലഭിക്കുന്നുണ്ടോ?",
+                                value: disabilityBenefit,
+                                onChanged: (v) {
+                                  setState(() {
+                                    disabilityBenefit = v;
+                                    if (v == 0) {
+                                      // student = null; // reset dropdown
+                                    }
+                                  });
+                                },
+                                // onChanged: (v) => setState(() => student = v),
+                              ),
+                            ],
+                            SizedBox(height: 20),
+                            AppRadioField(
+                              label: " ഹെൽത്ത് ഇൻഷൂറൻസ് കാർഡ് ഉണ്ടോ?",
+                              value: healthInsuranceCard,
+                              onChanged: (v) {
+                                setState(() {
+                                  healthInsuranceCard = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            if (healthInsuranceCard == 1) ...[
+                              const SizedBox(height: 20),
+                              BlocBuilder<HealthInsuranceBloc,
+                                  HealthInsuranceState>(
+                                builder: (context, state) {
+                                  if (state is HealthInsuranceLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  if (state is HealthInsuranceLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'ഹെൽത്ത് ഇൻഷൂറൻസ്',
+                                      selectedValue: healthInsurance,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          healthInsurance = value;
+                                          healthInsuranceId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
+
+                                  if (state is HealthInsuranceError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
+                            const SizedBox(height: 20),
+                            BlocBuilder<RequiredHealthSupportBloc,
+                                RequiredHealthSupportState>(
+                              builder: (context, state) {
+                                if (state is RequiredHealthSupportLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is RequiredHealthSupportLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ',
+                                    selectedValue: requiredHealthSupports,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        requiredHealthSupports = value;
+
+                                        requiredHealthSupportsId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is RequiredHealthSupportError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 50),
-                        AppActionButton(
-                          label: "സമർപ്പിക്കുക",
-                          onPressed: () {
-                          
-                          // ✅ CORRECTED: Only dispatch the event
-                          context.read<AddFamilyMemberBloc>().add(
-                                AddFamilyMemberEvent.addFamilyMember(
-                                  params: viewModel.addFamilyMemberViewModel(),
-                                ),
-                              );
-        //                      context.read<AddFamilyMemberBloc>().add(
-        //   AddFamilyMemberEvent.addFamilyMember(
-        //     params: viewModel.addFamilyMemberViewModel(),
-        //   ),
-        // );
-        //                     Navigator.push(
-        //                       context,
-        //                       MaterialPageRoute(
-        //                         builder: (context) => ListSurveyReport(
-        //                           sectionType:
-        //                               FamilySurveySectionType.familyBasicDetails,
-        //                           postion: '1',
-        //                         ),
-        //                       ),
-        //                     );
-                          },
-                          labelStyle: const TextStyle(
-                            color: AppColor.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      ),
+                      SizedBox(height: 50),
+                      SurveySection(
+                        title: "സാമൂഹിക  /  ക്ഷേമ വിവരങ്ങൾ",
+                        iconAsset: "assets/images/social.png",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppRadioField(
+                              label: " റേഷൻ കാർഡിൽ ഉൾപ്പെടുത്തിയിട്ടുണ്ടോ?",
+                              value: isIncludedInRationCard,
+                              onChanged: (v) {
+                                setState(() {
+                                  isIncludedInRationCard = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            SizedBox(height: 20),
+                            AppRadioField(
+                              label: " പെൻഷൻ ലഭിക്കുന്നുണ്ടോ?",
+                              value: isPensionReceiving,
+                              onChanged: (v) {
+                                setState(() {
+                                  isPensionReceiving = v;
+                                  if (v == 0) {
+                                    // student = null; // reset dropdown
+                                  }
+                                });
+                              },
+                              // onChanged: (v) => setState(() => student = v),
+                            ),
+                            if (isPensionReceiving == 1) ...[
+                              const SizedBox(height: 20),
+                              BlocBuilder<PensionTypeBloc, PensionTypeState>(
+                                builder: (context, state) {
+                                  if (state is PensionTypeLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  if (state is PensionTypeLoaded) {
+                                    return AppDropdownField<String>(
+                                      label: 'പെൻഷൻ തരം',
+                                      selectedValue: selectedPensionType,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedPensionType = value;
+
+                                          selectedPensionTypeId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
+
+                                  if (state is PensionTypeError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
+                              ),
+                            ],
+                            SizedBox(height: 20),
+                            BlocBuilder<PensionRequiredBloc,
+                                PensionRequiredState>(
+                              builder: (context, state) {
+                                if (state is PensionRequiredLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is PensionRequiredLoaded) {
+                                  return AppDropdownField<String>(
+                                    label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
+                                    selectedValue: isPensionRequired,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isPensionRequired = value;
+
+                                        isPensionRequiredId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is PensionRequiredError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            AppDropdownField<String>(
+                              label:
+                                  'താങ്കൾ ദരിദ്ര നിർമാർജ്ജന പദ്ധതികളിൽ അംഗമാണോ?',
+                              selectedValue: selectedProvertyPrgm,
+                              borderColor: AppColor.borderColor,
+                              labelColor: AppColor.hintText2,
+                              selectedTextColor: AppColor.primary,
+                              iconColor: AppColor.black,
+                              dropdownBgColor: AppColor.white,
+                              dropdownTextColor: AppColor.hintText,
+                              validator: Validator.validateSelection,
+                              items: const [
+                                ' അല്ല',
+                                'തൊഴിലുറപ്പ്',
+                                'കുടുംബശ്രീ',
+                                'ഹരിത കർമ്മസേന',
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedProvertyPrgm = value;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            AppTextField(
+                              controller: surveyorNameLabel,
+                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 50),
+                      AppActionButton(
+                        label: "സമർപ്പിക്കുക",
+
+                        onPressed: () async {
+                          // 🔹 BASIC VALIDATION
+                          if (familyMemberName.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("കുടുംബാംഗത്തിന്റെ പേര് നൽകുക")),
+                            );
+                            return;
+                          }
+
+                          if (selectedRelationId == null ||
+                              selectedGenderId == null ||
+                              selectedBloodGroupId == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "അനിവാര്യമായ വിവരങ്ങൾ തിരഞ്ഞെടുക്കുക")),
+                            );
+                            return;
+                          }
+                           final dobApi =
+                    "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
+
+                          try {
+                            // 🔹 GET USER ID (ward_member + surveyor)
+                            final prefs = await SharedPreferences.getInstance();
+                            final userId =
+                                int.parse(prefs.getString(PrefKeys.userId)!);
+
+                            await FamilyMemberSaveRepository().saveFamilyMember(
+                              // 🔹 REQUIRED
+                              householdId: widget.editId, // 👈 editId from list
+                              surveyor: userId,
+
+                              // 🔹 BASIC DETAILS
+                              name: familyMemberName.text.trim(),
+                              mobile: mobileNumber.text,
+                              whatsapp: whatsupNumber.text,
+
+                              bloodGroupId:
+                                  int.parse(selectedBloodGroupId ?? '0'),
+                              relationId: int.parse(selectedRelationId ?? '0'),
+                              genderId: int.parse(selectedGenderId ?? '0'),
+                              dob: dobApi,
+
+                              maritalStatusId:
+                                  int.parse(selectedMaritalStatusId ?? '0'),
+                              religionId: int.parse(selectedReligionId ?? '0'),
+                              casteId: int.parse(selectedCasteId ?? '0'),
+
+                              // 🔹 EDUCATION
+                              qualificationId:
+                                  int.parse(selectedQualificationId ?? '0'),
+                              currentlyStudying: student,
+                              courseId: int.parse(selectedEducationId ?? '0'),
+                              courseOther: courseStudy.text,
+                              institution: studyCenter.text,
+                              needEducationSupport: needEducationHelp,
+
+                              // 🔹 EMPLOYMENT
+                              employmentStatusId:
+                                  int.parse(employmentStatusId ?? '0'),
+                              occupationId: int.parse(jobStatusId ?? '0'),
+                              skills: selectedSkillIds.join(','),
+                              skillDetails: specifySkillLabel.text,
+                              needJobSupportId:
+                                  int.parse(employmentSupportId ?? '0'),
+
+                              // 🔹 OTHER
+                              norkaRegistered: norkaRegisteredLabel,
+                              agricultureType: int.parse(farmingTypeId ?? '0'),
+                              isPatient: patient,
+
+                              // 🔹 HEALTH
+                            diseases: (hasHealthIssuesId == '1' 
+             ? int.tryParse(requiredHealthSupports ?? '0') ?? 0 
+             : 0).toString(),
+                              treatmentPlace: treatmentPlaceLabel.text,
+                              disabled: hasDisability,
+                              disabilityBenefit: disabilityBenefit,
+                              insuranceCard: healthInsuranceCard,
+                              insuranceTypeId:
+                                  int.parse(healthInsuranceId ?? '0'),
+                              healthHelp:
+                                  int.parse(requiredHealthSupportsId ?? '0'),
+
+                              // 🔹 SOCIAL SECURITY
+                              includedInRation: isIncludedInRationCard,
+                              receivingPension: isPensionReceiving,
+                              pensionTypeId:
+                                  int.parse(selectedPensionTypeId ?? '0'),
+                              needPensionTypeId:
+                                  int.parse(isPensionRequiredId ?? '0'),
+                              povertyPgm:
+                                  povertyProgramMap[selectedProvertyPrgm] ?? 0,
+                            );
+
+                            // ✅ SUCCESS
+                            Navigator.pop(context, true);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                          }
+                        },
+
+                        // ✅ CORRECTED: Only dispatch the event
+
+                        //                      context.read<AddFamilyMemberBloc>().add(
+                        //   AddFamilyMemberEvent.addFamilyMember(
+                        //     params: viewModel.addFamilyMemberViewModel(),
+                        //   ),
+                        // );
+                        //                     Navigator.push(
+                        //                       context,
+                        //                       MaterialPageRoute(
+                        //                         builder: (context) => ListSurveyReport(
+                        //                           sectionType:
+                        //                               FamilySurveySectionType.familyBasicDetails,
+                        //                           postion: '1',
+                        //                         ),
+                        //                       ),
+                        //                     );
+
+                        labelStyle: const TextStyle(
+                          color: AppColor.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 50),
-                ],
-              );
-            },
-          ),
+                ),
+                SizedBox(height: 50),
+              ],
+            );
+          },
         ),
       ),
     );

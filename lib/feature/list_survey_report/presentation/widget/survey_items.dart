@@ -1,8 +1,7 @@
 import 'package:e_member_app/core/service_locator/service_locator.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/add_family_members_list/domain/repository/add_family_member/add_family_member_repo.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/add_family_member_bloc/add_family_member_bloc.dart';
+
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
@@ -495,13 +494,18 @@ BlocProvider(
                   create: (_) =>
                       BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
                 ),
-                  BlocProvider<AddFamilyMemberBloc>(
-          create: (_) => AddFamilyMemberBloc(
-            repository: getIt<AddFamilyMemberRepository>(),
-          ),
-        ),
+           BlocProvider(
+                          create: (_) =>
+                              ReligionBloc(MemberDropRepositoryImpl())
+                                ..add(FetchReligion()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              GenderBloc(MemberDropRepositoryImpl())
+                                ..add(FetchGender()),
+                        ),
                       ],
-                      child: AddFamilyMembers(),
+                      child: AddFamilyMembers(editId: widget.editId,),
                     ),
                   ),
                 );
