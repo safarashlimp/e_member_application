@@ -20,6 +20,9 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_bloc.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_event.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/header_load/domain/scareen2model.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
@@ -172,7 +175,7 @@ void initState() {
     selectedHouseType = match.name; // ✅ ID → NAME
   }
                                             return AppDropdownField<String>(
-                                              label: 'വീടിന്റെ തരം',
+                                              label: '* വീടിന്റെ തരം',
                                                       borderColor: AppColor.borderColor,
                                       selectedTextColor: AppColor.primary,
                                       dropdownTextColor: AppColor.hintText2,
@@ -728,21 +731,78 @@ if (header == null ||
                           ),
                           height: 44,
                         ),
-                      ] else if (isEdit) ...[
-                   AppActionButton(
-                          
-                          label: "അപ്ഡേറ്റ് ചെയ്യുക",
-                          onPressed: () {
-                            // Handle update action
-                          },
-                          labelStyle: const TextStyle(
-                            color: AppColor.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          height: 44,
-                   )
-                      ] else if (isView)...[
+                      ]
+                      
+                       else if (isEdit) ...[
+  BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
+    listener: (context, state) {
+      if (state is HouseDetailsSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Updated successfully')),
+        );
+        Navigator.pop(context);
+      }
+
+      if (state is HouseDetailsError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(state.message)),
+        );
+      }
+    },
+    builder: (context, state) {
+      if (state is HouseDetailsLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return AppActionButton(
+        label: "അപ്ഡേറ്റ് ചെയ്യുക",
+        onPressed: () {
+          final screen2 = widget.screen2HeaderData!;
+
+          final int editId =
+              int.parse(screen2.data.first.id); // ✅ SCREEN-2 ID
+
+          final int householdId =
+              int.parse(screen2.data.first.householdId); // ✅ FK
+            
+      
+
+          context.read<HouseDetailsBloc>().add(
+            SubmitHouseDetails(
+             
+              editId: editId,
+              householdId: householdId,
+              houseTypeId: int.parse(selectedHouseTypeId!),
+              landTypeId: selectedLandTypeId != null
+                  ? int.parse(selectedLandTypeId!)
+                  : null,
+              landAreaCents: selectedLandAreaController.text,
+              hasToilet: toilet,
+              hasElectricity: electricityConnection,
+              drinkingWaterSourceId:
+                  selectedWaterFacilityId ?? '0',
+              receivedHousingBenefit: benefitsReceived,
+              receivedBenefits: selectedRequiredBenefitId,
+              needHousingBenefit: benefitsWanted,
+              benefitsRequired: selectedOtherBenefitId,
+              wardNeeds: selectedGeneralNeedId,
+              surveyor: surveyornamecontroller.text,
+            ),
+          );
+        },
+        labelStyle: const TextStyle(
+          color: AppColor.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        height: 44,
+      );
+    },
+  ),
+]
+
+                      
+                      else if (isView)...[
 
                         SizedBox(height: 20,)
                         

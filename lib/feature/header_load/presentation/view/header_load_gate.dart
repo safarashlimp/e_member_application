@@ -1,3 +1,4 @@
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_bloc.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/bloc/hadBenefitBloc/required_benefit_bloc_event.dart';
@@ -13,6 +14,9 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/family_dro
   import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+// import 'package:e_member_app/feature/edit_survey_report/data/repository/edit_survay_report_imp.dart';
+import 'package:e_member_app/feature/edit_survey_report/data/repository/house_details_repository.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_bloc.dart';
   import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
   import 'package:e_member_app/feature/header_load/data/mapper/header_mapper.dart';
   import 'package:e_member_app/feature/header_load/domain/scareen2model.dart';
@@ -42,7 +46,9 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/family_dro
         builder: (context, state) {
           if (state is HeaderLoadLoading) {
             return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(child: CircularProgressIndicator(
+            color:     AppColor.iconColor,
+              )),
             );
           }
 
@@ -75,6 +81,9 @@ if (list != null && list.isNotEmpty) {
               
               return MultiBlocProvider(
                 providers: [
+                  
+
+                 
                   BlocProvider(
                     create: (_) => HouseTypeBloc(FamilyDropRepositoryImpl())
                       ..add(FetchHouseTypes()),
@@ -99,6 +108,9 @@ if (list != null && list.isNotEmpty) {
                     create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
                       ..add(FetchWardGeneralNeeds()),
                   ),
+                     BlocProvider(
+        create: (_) => HouseDetailsBloc(HouseDetailsRepository()),
+      ),
                 ],
                 child: AddItemBasicDetails(
                   mode: mode, // ✅ Pass the enum directly

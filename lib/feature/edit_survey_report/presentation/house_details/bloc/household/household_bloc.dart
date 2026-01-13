@@ -67,8 +67,8 @@
 
 import 'package:e_member_app/feature/edit_survey_report/data/repository/edit_survay_report_imp.dart';
 import 'package:e_member_app/feature/edit_survey_report/domain/getclintid.dart';
-import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_event.dart';
-import 'package:e_member_app/feature/edit_survey_report/presentation/bloc/household/household_state.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/household/household_event.dart';
+import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/household/household_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HouseholdSubmitBloc extends Bloc<HouseholdSubmitEvent, HouseholdSubmitState> {
