@@ -510,7 +510,7 @@ BlocProvider(
                         ),
            
                       ],
-                      child: AddFamilyMembers(),
+                      child: AddFamilyMembers(editId:   widget.editId,),
                     ),
                   ),
                 );

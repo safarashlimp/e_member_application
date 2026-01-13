@@ -250,7 +250,7 @@ void initState() {
                                                  setState(() {
             selectedLandType = value;
             selectedLandTypeId =
-                state.items.firstWhere((e) => e.name == value).id;
+                state.items.firstWhere((e) => e.name == value).id;  
           });
                                               },
                                             );

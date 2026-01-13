@@ -10,7 +10,9 @@ _$AddFamilyMemberModelImpl _$$AddFamilyMemberModelImplFromJson(
         Map<String, dynamic> json) =>
     _$AddFamilyMemberModelImpl(
       status: json['Status'] as bool,
-      data: Data.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AddFamilyMemberModelImplToJson(

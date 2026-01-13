@@ -23,7 +23,7 @@ mixin _$AddFamilyMemberModel {
   @JsonKey(name: "Status")
   bool get status => throw _privateConstructorUsedError;
   @JsonKey(name: "data")
-  Data get data => throw _privateConstructorUsedError;
+  Data? get data => throw _privateConstructorUsedError;
 
   /// Serializes this AddFamilyMemberModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,9 +42,10 @@ abstract class $AddFamilyMemberModelCopyWith<$Res> {
       _$AddFamilyMemberModelCopyWithImpl<$Res, AddFamilyMemberModel>;
   @useResult
   $Res call(
-      {@JsonKey(name: "Status") bool status, @JsonKey(name: "data") Data data});
+      {@JsonKey(name: "Status") bool status,
+      @JsonKey(name: "data") Data? data});
 
-  $DataCopyWith<$Res> get data;
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -64,17 +65,17 @@ class _$AddFamilyMemberModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? status = null,
-    Object? data = null,
+    Object? data = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as bool,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as Data?,
     ) as $Val);
   }
 
@@ -82,8 +83,12 @@ class _$AddFamilyMemberModelCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $DataCopyWith<$Res> get data {
-    return $DataCopyWith<$Res>(_value.data, (value) {
+  $DataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $DataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -98,10 +103,11 @@ abstract class _$$AddFamilyMemberModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "Status") bool status, @JsonKey(name: "data") Data data});
+      {@JsonKey(name: "Status") bool status,
+      @JsonKey(name: "data") Data? data});
 
   @override
-  $DataCopyWith<$Res> get data;
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -118,17 +124,17 @@ class __$$AddFamilyMemberModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? data = null,
+    Object? data = freezed,
   }) {
     return _then(_$AddFamilyMemberModelImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as bool,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as Data?,
     ));
   }
 }
@@ -138,7 +144,7 @@ class __$$AddFamilyMemberModelImplCopyWithImpl<$Res>
 class _$AddFamilyMemberModelImpl implements _AddFamilyMemberModel {
   const _$AddFamilyMemberModelImpl(
       {@JsonKey(name: "Status") required this.status,
-      @JsonKey(name: "data") required this.data});
+      @JsonKey(name: "data") this.data});
 
   factory _$AddFamilyMemberModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AddFamilyMemberModelImplFromJson(json);
@@ -148,7 +154,7 @@ class _$AddFamilyMemberModelImpl implements _AddFamilyMemberModel {
   final bool status;
   @override
   @JsonKey(name: "data")
-  final Data data;
+  final Data? data;
 
   @override
   String toString() {
@@ -188,9 +194,8 @@ class _$AddFamilyMemberModelImpl implements _AddFamilyMemberModel {
 
 abstract class _AddFamilyMemberModel implements AddFamilyMemberModel {
   const factory _AddFamilyMemberModel(
-          {@JsonKey(name: "Status") required final bool status,
-          @JsonKey(name: "data") required final Data data}) =
-      _$AddFamilyMemberModelImpl;
+      {@JsonKey(name: "Status") required final bool status,
+      @JsonKey(name: "data") final Data? data}) = _$AddFamilyMemberModelImpl;
 
   factory _AddFamilyMemberModel.fromJson(Map<String, dynamic> json) =
       _$AddFamilyMemberModelImpl.fromJson;
@@ -200,7 +205,7 @@ abstract class _AddFamilyMemberModel implements AddFamilyMemberModel {
   bool get status;
   @override
   @JsonKey(name: "data")
-  Data get data;
+  Data? get data;
 
   /// Create a copy of AddFamilyMemberModel
   /// with the given fields replaced by the non-null parameter values.

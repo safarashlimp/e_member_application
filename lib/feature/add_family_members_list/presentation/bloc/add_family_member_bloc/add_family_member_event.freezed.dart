@@ -64,8 +64,6 @@ abstract class $AddFamilyMemberEventCopyWith<$Res> {
       _$AddFamilyMemberEventCopyWithImpl<$Res, AddFamilyMemberEvent>;
   @useResult
   $Res call({AddFamilyMemberViewModel params});
-
-  $AddFamilyMemberViewModelCopyWith<$Res> get params;
 }
 
 /// @nodoc
@@ -93,16 +91,6 @@ class _$AddFamilyMemberEventCopyWithImpl<$Res,
               as AddFamilyMemberViewModel,
     ) as $Val);
   }
-
-  /// Create a copy of AddFamilyMemberEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AddFamilyMemberViewModelCopyWith<$Res> get params {
-    return $AddFamilyMemberViewModelCopyWith<$Res>(_value.params, (value) {
-      return _then(_value.copyWith(params: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -114,9 +102,6 @@ abstract class _$$AddFamilyMemberImplCopyWith<$Res>
   @override
   @useResult
   $Res call({AddFamilyMemberViewModel params});
-
-  @override
-  $AddFamilyMemberViewModelCopyWith<$Res> get params;
 }
 
 /// @nodoc

@@ -3,4 +3,5 @@ class PrefKeys {
   static const userId = 'userId';
   static const userName = 'userName';
   static const mobile = 'mobile';
+  
 }
