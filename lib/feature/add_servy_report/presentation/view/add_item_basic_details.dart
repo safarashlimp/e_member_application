@@ -930,7 +930,7 @@ if (isAdd) ...[
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(e.toString())));
   } finally {
-    setState(() => _isSaving = false); // ✅ stop loader
+    setState(() => _isSaving = false); 
   }
 }
 
