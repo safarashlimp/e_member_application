@@ -365,6 +365,20 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 child: AppActionButton(
                                   label: "അടുത്തത്",
                                   onPressed: () {
+
+                                                             if (gardienName.text.trim().isEmpty ||
+    houseNumber.text.trim().isEmpty ||
+    houseName.text.trim().isEmpty ||
+    cardNumber.text.trim().isEmpty ||
+    selectedRationCardId == null) {
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
+    ),
+  );
+  return;
+}
                                     final headerData = SurveyHeaderModel(
                                       houseChief: gardienName.text,
                                       houseNumber: houseNumber.text,
@@ -485,6 +499,21 @@ class _AddServyItemsState extends State<AddServyItems> {
                               return AppActionButton(
                                 label: 'സമർപ്പിക്കുക',
                                 onPressed: () {
+
+                                 if (gardienName.text.trim().isEmpty ||
+    houseNumber.text.trim().isEmpty ||
+    houseName.text.trim().isEmpty ||
+    cardNumber.text.trim().isEmpty ||
+    selectedRationCardId == null) {
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
+    ),
+  );
+  return;
+}
+
                                   if (isEdit && widget.editId == null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -492,7 +521,10 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     );
                                     return;
                                   }
+
+
                                   context.read<HouseholdSubmitBloc>().add(
+                                      
                                         SubmitHouseholdEvent(
                                             data: SurveyHeaderModel(
                                               houseChief: gardienName.text,
