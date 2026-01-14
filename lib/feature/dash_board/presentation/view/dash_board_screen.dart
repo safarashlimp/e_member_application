@@ -78,7 +78,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
         
-                      RationSection(),
+                      RationSection(
+                        aayCount: 0,
+                         phhCount: 0,
+                          nphhCount: 0,
+                           npnsCount: 0),
         
                     
         
@@ -94,7 +98,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
         
-                      BottomCards(),
+                      BottomCards(
+                        thozhilurapCount: 0,
+                         kudumbasreeCount: 0, 
+                         harithakarmasenaCount: 0),
                      // const SizedBox(height: 30),
                     ],
                   ),
