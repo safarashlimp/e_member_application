@@ -1,11 +1,11 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 
-import 'package:e_member_app/feature/dash_board/presentation/view/bottom_cart.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_header.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/gender_sector.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/ration_sector.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/top_sats.dart';
+import 'package:e_member_app/feature/dash_board/presentation/widget/bottom_cart.dart';
+import 'package:e_member_app/feature/dash_board/presentation/widget/dash_board_header.dart';
+import 'package:e_member_app/feature/dash_board/presentation/widget/gender_sector.dart';
+import 'package:e_member_app/feature/dash_board/presentation/widget/ration_sector.dart';
+import 'package:e_member_app/feature/dash_board/presentation/widget/top_sats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -47,12 +47,22 @@ class _DashboardPageState extends State<DashboardPage> {
                       // const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: TopStats(),
+                        child: TopStats(
+                          housecount: 0, 
+                          familiesCount: 0,
+                           memeberscount: 0),
                       ),
         
                       const SizedBox(height: 8),
         
-                      GenderSection(),
+                      GenderSection(
+                        maleCount: 0,
+                         femaleCount: 0,
+                          childrenCount: 0,
+                           elderlyCount: 0,
+                            disabledCount: 0,
+                             farmersCount: 0
+                             ),
         
                       //const SizedBox(height: 5),
         

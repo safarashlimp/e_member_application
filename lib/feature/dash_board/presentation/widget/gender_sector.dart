@@ -2,7 +2,21 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:flutter/material.dart';
 
 class GenderSection extends StatefulWidget {
-  const GenderSection({super.key});
+  final int maleCount;
+  final int femaleCount;
+  final int  childrenCount;
+  final int elderlyCount;
+  final int disabledCount;
+  final int farmersCount;
+  const GenderSection({super.key,
+  required this.maleCount,
+  required this.femaleCount,
+  required this.childrenCount,
+  required  this.elderlyCount,
+  required this.disabledCount,
+  required this.farmersCount
+
+  });
 
   @override
   State<GenderSection> createState() => _GenderSectionState();
@@ -34,10 +48,10 @@ class _GenderSectionState extends State<GenderSection> {
                 
 
       
-              children: const [
-                _GenderCard('assets/images/avatar-design 1.png', 'പുരുഷൻ', '540', AppColor.blue, 12),
-                _GenderCard('assets/images/businesswoman 1.png', 'സ്ത്രീ', '540', AppColor.pink, 12),
-                _GenderCard('assets/images/people 1.png', 'കുട്ടികൾ', '540', AppColor.naviBlue, 12),
+              children: [
+                _GenderCard('assets/images/avatar-design 1.png', 'പുരുഷൻ', widget.maleCount , AppColor.blue, 12),
+                _GenderCard('assets/images/businesswoman 1.png', 'സ്ത്രീ', widget.femaleCount, AppColor.pink, 12),
+                _GenderCard('assets/images/people 1.png', 'കുട്ടികൾ', widget.childrenCount, AppColor.naviBlue, 12),
               ],
             ),
 
@@ -48,10 +62,10 @@ class _GenderSectionState extends State<GenderSection> {
                 
 
         
-              children: const [
-                _GenderCard('assets/images/avatar 1.png', 'വയോജനങ്ങൾ', '540', AppColor.orange1, 10),
-                _GenderCard('assets/images/disabled-person 1.png', 'ഭിന്നശേഷിക്കാർ', '540', AppColor.violet,10),
-                _GenderCard('assets/images/farmer 1.png', 'കർഷകർ', '540', AppColor.darkGreen,12),
+              children:  [
+                _GenderCard('assets/images/avatar 1.png', 'വയോജനങ്ങൾ', widget.elderlyCount, AppColor.orange1, 10),
+                _GenderCard('assets/images/disabled-person 1.png', 'ഭിന്നശേഷിക്കാർ', widget.disabledCount, AppColor.violet,10),
+                _GenderCard('assets/images/farmer 1.png', 'കർഷകർ', widget.farmersCount, AppColor.darkGreen,12),
               ],
             ),
           ],
@@ -63,7 +77,7 @@ class _GenderSectionState extends State<GenderSection> {
 class _GenderCard extends StatelessWidget {
   final String icon;
   final String label;
-  final String value;
+  final int value;
   final Color color;
   final double fontSizes  ;
 
@@ -97,7 +111,7 @@ class _GenderCard extends StatelessWidget {
                 overflow: TextOverflow.visible,
                    style: TextStyle(color: AppColor.white,fontSize: fontSizes,fontWeight: FontWeight.w500)),
                 //const SizedBox(height: 2),
-                Text(value,
+                Text(value.toString(),
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,

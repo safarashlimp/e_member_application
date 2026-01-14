@@ -64,6 +64,7 @@ class _AddServyItemsState extends State<AddServyItems> {
   final TextEditingController anualIncome = TextEditingController();
   final TextEditingController cardNumber = TextEditingController();
   final TextEditingController surveyornamecontroller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   String? selectedRationCardLabel;
   String? selectedRationCardId;
@@ -112,7 +113,7 @@ class _AddServyItemsState extends State<AddServyItems> {
       casteCert = widget.headerData!.kudumbashreeMember;
       disability = widget.headerData!.govtBeneficiary;
       widow = widget.headerData!.extremePoor;
-      surveyornamecontroller.text = widget.headerData?.surveyor?? '';
+      surveyornamecontroller.text = widget.headerData?.surveyor ?? '';
     }
   }
 
@@ -151,411 +152,440 @@ class _AddServyItemsState extends State<AddServyItems> {
                     },
                   ),
                   Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.all(13),
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        SurveySection(
-                          title: 'കുടുംബത്തിന്റെ അടിസ്ഥാന വിവരങ്ങൾ',
-                          iconAsset: 'assets/images/family servy.png',
-                          child: Column(
-                            children: [
-                              AppTextField(
-                                controller: gardienName,
-                                label: "* കുടുംബനാഥൻ്റെ പേര്",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                validator: Validator.validateName,
-                                textColor: AppColor.primary,
-                                width: double.infinity,
-                                height: 40,
-                              ),
-                              SizedBox(height: 18),
-                              AppTextField(
-                                controller: houseName, //hintText: "വീട്ടുപേര്",
-                                label: "* വീട്ടുപേര്",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateHouseName,
-                                width: double.infinity,
-                                height: 40,
-                              ),
-                              SizedBox(height: 18),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: AppTextField(
-                                      controller: houseNumber,
-                                      label: "* വീട്ടുനമ്പർ",
-                                      labelColor: AppColor.hintText2,
-                                      borderColor: AppColor.borderColor,
-                                      focusedBorderColor: AppColor.primary,
-                                      labelfontSizes: 12,
-                                      textColor: AppColor.primary,
-                                      validator: Validator.houseNumberValidator,
-                                      width: double.infinity,
-                                      type: "house_number",
-                                      height: 40,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Expanded(
-                                    child: AppTextField(
-                                      controller: anualIncome,
-                                      // hintText: "റേഷൻ കാർഡ് നമ്പര്",
-                                      label: "വാർഷിക വരുമാനം",
-                                      labelColor: AppColor.hintText2,
-                                      borderColor: AppColor.borderColor,
-                                      focusedBorderColor: AppColor.primary,
-                                      labelfontSizes: 12,
-                                      validator: Validator.validateIncome,
-                                      type: "income",
-                                      textColor: AppColor.primary,
-                                      width: double.infinity,
-                                      height: 40,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 18),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: AppTextField(
-                                      controller: cardNumber,
-                                      label: "* റേഷൻ കാർഡ് നമ്പർ",
-                                      type: "card_number",
-                                      validator: Validator.cardNumberValidator,
-                                      labelColor: AppColor.hintText2,
-                                      borderColor: AppColor.borderColor,
-                                      focusedBorderColor: AppColor.primary,
-                                      labelfontSizes: 12,
-                                      textColor: AppColor.primary,
-                                      width: double.infinity,
-                                      height: 40,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Flexible(
-                                    child: BlocBuilder<RationCardBloc,
-                                        RationCardState>(
-                                      builder: (context, state) {
-                                        if (state is RationCardLoading) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-
-                                        if (state is RationCardLoaded) {
-                                          if (selectedRationCardId != null &&
-                                              selectedRationCardLabel == null) {
-                                            final match =
-                                                state.items.firstWhere(
-                                              (e) =>
-                                                  e.id == selectedRationCardId,
-                                              orElse: () => state.items.first,
-                                            );
-
-                                            selectedRationCardLabel =
-                                                match.name;
-                                          }
-                                          return AppDropdownField<String>(
-                                            label: '* റേഷൻ കാർഡ് തരം',
-                                            selectedValue:
-                                                selectedRationCardLabel,
-                                            borderColor: AppColor.borderColor,
-                                            selectedTextColor: AppColor.primary,
-                                            dropdownTextColor:
-                                                AppColor.hintText2,
-                                            labelColor: AppColor.hintText2,
-                                            iconColor: AppColor.black,
-                                            dropdownBgColor: AppColor.white,
-                                            items: state.items
-                                                .map((e) => e.name)
-                                                .toList(),
-                                            validator:
-                                                Validator.validateSelection,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                selectedRationCardLabel = value;
-                                                selectedRationCardId = state
-                                                    .items
-                                                    .firstWhere(
-                                                        (e) => e.name == value)
-                                                    .id;
-                                              });
-                                            },
-                                          );
-                                        }
-
-                                        if (state is RationCardError) {
-                                          return Text(
-                                            state.message,
-                                            style: const TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          );
-                                        }
-
-                                        return const SizedBox();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 18),
-                              AppRadioField(
-                                label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
-                                value: rationCard,
-                                onChanged: (v) =>
-                                    setState(() => rationCard = v),
-                              ),
-                              const SizedBox(height: 18),
-                              AppRadioField(
-                                label: "കുടുംബശ്രീ അംഗമാണോ?",
-                                value: casteCert,
-                                onChanged: (v) => setState(() => casteCert = v),
-                              ),
-                              const SizedBox(height: 18),
-                              AppRadioField(
-                                label: "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
-                                value: disability,
-                                onChanged: (v) =>
-                                    setState(() => disability = v),
-                              ),
-                              const SizedBox(height: 18),
-                              AppRadioField(
-                                label: "അതിദരിദ്ര കുടുംബമാണോ?",
-                                value: widow,
-                                onChanged: (v) => setState(() => widow = v),
-                              ),
-                              if (isEdit || isView) ...[
-                                SizedBox(
-                                  height: 18,
-                                ),
+                    child: Form(
+                      key: _formKey,
+                      child: ListView(
+                        padding: EdgeInsets.all(13),
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          SurveySection(
+                            title: 'കുടുംബത്തിന്റെ അടിസ്ഥാന വിവരങ്ങൾ',
+                            iconAsset: 'assets/images/family servy.png',
+                            child: Column(
+                              children: [
                                 AppTextField(
-                                  controller: surveyornamecontroller,
-                                  label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                  controller: gardienName,
+                                  label: "* കുടുംബനാഥൻ്റെ പേര്",
+                                  labelColor: AppColor.hintText2,
+                                  borderColor: AppColor.borderColor,
+                                  focusedBorderColor: AppColor.primary,
+                                  labelfontSizes: 12,
+                                  validator: Validator.validateName,
+                                  textColor: AppColor.primary,
+                                  width: double.infinity,
+                                  height: 40,
+                                ),
+                                SizedBox(height: 18),
+                                AppTextField(
+                                  controller:
+                                      houseName, //hintText: "വീട്ടുപേര്",
+                                  label: "* വീട്ടുപേര്",
                                   labelColor: AppColor.hintText2,
                                   borderColor: AppColor.borderColor,
                                   focusedBorderColor: AppColor.primary,
                                   labelfontSizes: 12,
                                   textColor: AppColor.primary,
-                                  validator: Validator.validateName,
+                                  validator: Validator.validateHouseName,
                                   width: double.infinity,
+                                  height: 40,
                                 ),
-                              ]
-                            ],
+                                SizedBox(height: 18),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppTextField(
+                                        controller: houseNumber,
+                                        label: "* വീട്ടുനമ്പർ",
+                                        labelColor: AppColor.hintText2,
+                                        borderColor: AppColor.borderColor,
+                                        focusedBorderColor: AppColor.primary,
+                                        labelfontSizes: 12,
+                                        textColor: AppColor.primary,
+                                        validator:
+                                            Validator.houseNumberValidator,
+                                        width: double.infinity,
+                                        type: "house_number",
+                                        height: 40,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      child: AppTextField(
+                                        controller: anualIncome,
+                                        // hintText: "റേഷൻ കാർഡ് നമ്പര്",
+                                        label: "വാർഷിക വരുമാനം",
+                                        labelColor: AppColor.hintText2,
+                                        borderColor: AppColor.borderColor,
+                                        focusedBorderColor: AppColor.primary,
+                                        labelfontSizes: 12,
+                                        validator: Validator.validateIncome,
+                                        type: "income",
+                                        textColor: AppColor.primary,
+                                        width: double.infinity,
+                                        height: 40,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 18),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppTextField(
+                                        controller: cardNumber,
+                                        label: "* റേഷൻ കാർഡ് നമ്പർ",
+                                        type: "card_number",
+                                        validator:
+                                            Validator.cardNumberValidator,
+                                        labelColor: AppColor.hintText2,
+                                        borderColor: AppColor.borderColor,
+                                        focusedBorderColor: AppColor.primary,
+                                        labelfontSizes: 12,
+                                        textColor: AppColor.primary,
+                                        width: double.infinity,
+                                        height: 40,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Flexible(
+                                      child: BlocBuilder<RationCardBloc,
+                                          RationCardState>(
+                                        builder: (context, state) {
+                                          if (state is RationCardLoading) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
+
+                                          if (state is RationCardLoaded) {
+                                            if (selectedRationCardId != null &&
+                                                selectedRationCardLabel ==
+                                                    null) {
+                                              final match =
+                                                  state.items.firstWhere(
+                                                (e) =>
+                                                    e.id ==
+                                                    selectedRationCardId,
+                                                orElse: () => state.items.first,
+                                              );
+
+                                              selectedRationCardLabel =
+                                                  match.name;
+                                            }
+                                            return AppDropdownField<String>(
+                                              label: '* റേഷൻ കാർഡ് തരം',
+                                              selectedValue:
+                                                  selectedRationCardLabel,
+                                              borderColor: AppColor.borderColor,
+                                              selectedTextColor:
+                                                  AppColor.primary,
+                                              dropdownTextColor:
+                                                  AppColor.hintText2,
+                                              labelColor: AppColor.hintText2,
+                                              iconColor: AppColor.black,
+
+                                              dropdownBgColor: AppColor.white,
+                                              items: state.items
+                                                  .map((e) => e.name)
+                                                  .toList(),
+                                              // validator:
+                                              //     Validator.validateSelection,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'റേഷൻ കാർഡ് തരം തിരഞ്ഞെടുക്കുക';
+                                                }
+                                                return null;
+                                              },
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedRationCardLabel =
+                                                      value;
+                                                  selectedRationCardId = state
+                                                      .items
+                                                      .firstWhere((e) =>
+                                                          e.name == value)
+                                                      .id;
+                                                });
+                                              },
+                                            );
+                                          }
+
+                                          if (state is RationCardError) {
+                                            return Text(
+                                              state.message,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            );
+                                          }
+
+                                          return const SizedBox();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 18),
+                                AppRadioField(
+                                  label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
+                                  value: rationCard,
+                                  onChanged: (v) =>
+                                      setState(() => rationCard = v),
+                                ),
+                                const SizedBox(height: 18),
+                                AppRadioField(
+                                  label: "കുടുംബശ്രീ അംഗമാണോ?",
+                                  value: casteCert,
+                                  onChanged: (v) =>
+                                      setState(() => casteCert = v),
+                                ),
+                                const SizedBox(height: 18),
+                                AppRadioField(
+                                  label:
+                                      "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
+                                  value: disability,
+                                  onChanged: (v) =>
+                                      setState(() => disability = v),
+                                ),
+                                const SizedBox(height: 18),
+                                AppRadioField(
+                                  label: "അതിദരിദ്ര കുടുംബമാണോ?",
+                                  value: widow,
+                                  onChanged: (v) => setState(() => widow = v),
+                                ),
+                                if (isEdit || isView) ...[
+                                  SizedBox(
+                                    height: 18,
+                                  ),
+                                  AppTextField(
+                                    controller: surveyornamecontroller,
+                                    label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateName,
+                                    width: double.infinity,
+                                  ),
+                                ]
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        if (isAdd) ...[
-                          Row(
-                            children: [
-                              const Spacer(), // 👈 pushes button to right half
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width *
-                                    0.45, // half screen
+                          const SizedBox(height: 24),
+                          if (isAdd) ...[
+                            Row(
+                              children: [
+                                const Spacer(), // 👈 pushes button to right half
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.45, // half screen
 
-                                child: AppActionButton(
-                                  label: "അടുത്തത്",
-                                  onPressed: () {
-
-                                                             if (gardienName.text.trim().isEmpty ||
-    houseNumber.text.trim().isEmpty ||
-    houseName.text.trim().isEmpty ||
-    cardNumber.text.trim().isEmpty ||
-    selectedRationCardId == null) {
-  
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
-    ),
-  );
-  return;
-}
-                                    final headerData = SurveyHeaderModel(
-                                      houseChief: gardienName.text,
-                                      houseNumber: houseNumber.text,
-                                      houseName: houseName.text,
-                                      rationCardNumber: cardNumber.text,
-                                      rationCardTypeId:
-                                          selectedRationCardId.toString(),
-                                      annualIncome: anualIncome.text,
-                                      hasJobCard: rationCard,
-                                      kudumbashreeMember: casteCert,
-                                      govtBeneficiary: disability,
-                                      extremePoor: widow,
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider(
-                                              create: (_) => HouseTypeBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchHouseTypes()),
-                                            ),
-                                            BlocProvider(
-                                              create: (_) => LandTypeBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchLandTypes()),
-                                            ),
-                                            BlocProvider(
-                                              create: (_) => WaterFacilityBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchWaterFacilities()),
-                                            ),
-                                            BlocProvider(
-                                              create: (_) =>
-                                                  RequiredBenefitBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchRequiredBenefits()),
-                                            ),
-                                            BlocProvider(
-                                              create: (_) => OtherBenefitBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchOtherBenefits()),
-                                            ),
-                                            BlocProvider(
-                                              create: (_) =>
-                                                  WardGeneralNeedBloc(
-                                                FamilyDropRepositoryImpl(),
-                                              )..add(FetchWardGeneralNeeds()),
-                                            ),
-                                          ],
-                                          child: AddItemBasicDetails(
-                                              headerData: headerData,
-                                              mode: PageMode.add),
+                                  child: AppActionButton(
+                                    label: "അടുത്തത്",
+                                    onPressed: () {
+                                      // if (gardienName.text.trim().isEmpty ||
+                                      //     houseNumber.text.trim().isEmpty || 
+                                      //     houseName.text.trim().isEmpty ||
+                                      //     cardNumber.text.trim().isEmpty ||
+                                      //     selectedRationCardId == null) {
+                                      //   ScaffoldMessenger.of(context)
+                                      //       .showSnackBar(
+                                      //     const SnackBar(
+                                      //       content: Text(
+                                      //           'അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
+                                      //     ),
+                                      //   );
+                                      //   return;
+                                      // }
+                                      if(_formKey.currentState!.validate()){
+                                        return; 
+                                      }
+                                      
+                                      final headerData = SurveyHeaderModel(
+                                        houseChief: gardienName.text,
+                                        houseNumber: houseNumber.text,
+                                        houseName: houseName.text,
+                                        rationCardNumber: cardNumber.text,
+                                        rationCardTypeId:
+                                            selectedRationCardId.toString(),
+                                        annualIncome: anualIncome.text,
+                                        hasJobCard: rationCard,
+                                        kudumbashreeMember: casteCert,
+                                        govtBeneficiary: disability,
+                                        extremePoor: widow,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider(
+                                                create: (_) => HouseTypeBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchHouseTypes()),
+                                              ),
+                                              BlocProvider(
+                                                create: (_) => LandTypeBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchLandTypes()),
+                                              ),
+                                              BlocProvider(
+                                                create: (_) =>
+                                                    WaterFacilityBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchWaterFacilities()),
+                                              ),
+                                              BlocProvider(
+                                                create: (_) =>
+                                                    RequiredBenefitBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchRequiredBenefits()),
+                                              ),
+                                              BlocProvider(
+                                                create: (_) => OtherBenefitBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchOtherBenefits()),
+                                              ),
+                                              BlocProvider(
+                                                create: (_) =>
+                                                    WardGeneralNeedBloc(
+                                                  FamilyDropRepositoryImpl(),
+                                                )..add(FetchWardGeneralNeeds()),
+                                              ),
+                                            ],
+                                            child: AddItemBasicDetails(
+                                                headerData: headerData,
+                                                mode: PageMode.add),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    labelStyle: const TextStyle(
+                                      color: AppColor.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    height: 44,
+                                    icon: Icons.arrow_forward,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                          if (isEdit) ...[
+                            BlocConsumer<HouseholdSubmitBloc,
+                                HouseholdSubmitState>(
+                              listener: (context, state) {
+                                //  print('Edit ID: ${widget.editId?? 0}');
+                                if (state is HouseholdSubmitSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Submitted successfully')),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BlocProvider(
+                                        create: (_) => HeaderListBloc(
+                                          GetHeaderListUsecase(
+                                            HeaderListRepositoryImpl(
+                                                http.Client()),
+                                          ),
+                                        )..add(FetchHeaderList('1')),
+                                        child: const ListSurveyReport(
+                                          sectionType: FamilySurveySectionType
+                                              .familyBasicDetails,
+                                          postion: '1',
                                         ),
                                       ),
-                                    );
+                                    ),
+                                  );
+                                }
+
+                                if (state is HouseholdSubmitFailure) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is HouseholdSubmitting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                print(
+                                    'EDIT ID TYPE: ${widget.editId.runtimeType}');
+                                print('EDIT ID VALUE: ${widget.editId}');
+
+                                return AppActionButton(
+                                  label: 'സമർപ്പിക്കുക',
+                                  onPressed: () {
+                                    if (gardienName.text.trim().isEmpty ||
+                                        houseNumber.text.trim().isEmpty ||
+                                        houseName.text.trim().isEmpty ||
+                                        cardNumber.text.trim().isEmpty ||
+                                        selectedRationCardId == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    if (isEdit && widget.editId == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Edit ID missing')),
+                                      );
+                                      return;
+                                    }
+
+                                    context.read<HouseholdSubmitBloc>().add(
+                                          SubmitHouseholdEvent(
+                                              data: SurveyHeaderModel(
+                                                  houseChief: gardienName.text,
+                                                  houseNumber: houseNumber.text,
+                                                  houseName: houseName.text,
+                                                  rationCardNumber:
+                                                      cardNumber.text,
+                                                  rationCardTypeId:
+                                                      selectedRationCardId
+                                                          .toString(),
+                                                  annualIncome:
+                                                      anualIncome.text,
+                                                  hasJobCard: rationCard,
+                                                  kudumbashreeMember: casteCert,
+                                                  govtBeneficiary: disability,
+                                                  extremePoor: widow,
+                                                  surveyor:
+                                                      surveyornamecontroller
+                                                          .text),
+                                              editId: widget.editId),
+                                        );
                                   },
                                   labelStyle: const TextStyle(
                                     color: AppColor.white,
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   height: 44,
                                   icon: Icons.arrow_forward,
-                                ),
-                              ),
-                            ],
-                          ),
+                                );
+                              },
+                            )
+                          ]
                         ],
-                        if (isEdit) ...[
-                          BlocConsumer<HouseholdSubmitBloc,
-                              HouseholdSubmitState>(
-                            listener: (context, state) {
-                              //  print('Edit ID: ${widget.editId?? 0}');
-                              if (state is HouseholdSubmitSuccess) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Submitted successfully')),
-                                );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider(
-                                      create: (_) => HeaderListBloc(
-                                        GetHeaderListUsecase(
-                                          HeaderListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchHeaderList('1')),
-                                      child: const ListSurveyReport(
-                                        sectionType: FamilySurveySectionType
-                                            .familyBasicDetails,
-                                        postion: '1',
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              if (state is HouseholdSubmitFailure) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(state.message)),
-                                );
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is HouseholdSubmitting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              print(
-                                  'EDIT ID TYPE: ${widget.editId.runtimeType}');
-                              print('EDIT ID VALUE: ${widget.editId}');
-
-                              return AppActionButton(
-                                label: 'സമർപ്പിക്കുക',
-                                onPressed: () {
-
-                                 if (gardienName.text.trim().isEmpty ||
-    houseNumber.text.trim().isEmpty ||
-    houseName.text.trim().isEmpty ||
-    cardNumber.text.trim().isEmpty ||
-    selectedRationCardId == null) {
-  
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
-    ),
-  );
-  return;
-}
-
-                                  if (isEdit && widget.editId == null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('Edit ID missing')),
-                                    );
-                                    return;
-                                  }
-
-
-                                  context.read<HouseholdSubmitBloc>().add(
-                                      
-                                        SubmitHouseholdEvent(
-                                            data: SurveyHeaderModel(
-                                              houseChief: gardienName.text,
-                                              houseNumber: houseNumber.text,
-                                              houseName: houseName.text,
-                                              rationCardNumber: cardNumber.text,
-                                              rationCardTypeId:
-                                                  selectedRationCardId
-                                                      .toString(),
-                                              annualIncome: anualIncome.text,
-                                              hasJobCard: rationCard,
-                                              kudumbashreeMember: casteCert,
-                                              govtBeneficiary: disability,
-                                              extremePoor: widow,
-                                              surveyor: surveyornamecontroller.text
-                                            ),
-                                            editId: widget.editId),
-                                      );
-                                },
-                                labelStyle: const TextStyle(
-                                  color: AppColor.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                height: 44,
-                                icon: Icons.arrow_forward,
-                              );
-                            },
-                          )
-                        ]
-                      ],
+                      ),
                     ),
                   ),
                 ],
