@@ -176,10 +176,10 @@ class _EditFamilyMemberEducationdetailsState
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.education,)),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.education,)),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,

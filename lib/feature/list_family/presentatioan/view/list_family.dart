@@ -3,15 +3,20 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/widget/family_member_cart.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListFamily extends StatefulWidget {
   final SurveySectionType sectionType;
-  const ListFamily({super.key, required this.sectionType});
-
+    final String position;
+  const ListFamily({super.key, required this.sectionType,required this.position});
+ 
   @override
   State<ListFamily> createState() => _ListFamilyState();
 }
@@ -30,6 +35,11 @@ class _ListFamilyState extends State<ListFamily> {
       case SurveySectionType.welfare:
         return 'ക്ഷേമ വിവരങ്ങൾ';
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+    context.read<FamilyMemberListBloc>().add(FetchFamilyMemberList(widget.position));
   }
 
   @override
@@ -57,22 +67,41 @@ class _ListFamilyState extends State<ListFamily> {
             Expanded(
               child: Container(
                 color: AppColor.white,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return MemberCard(
-                      sectionType: widget.sectionType,
-                      name: 'ഫാത്തിമ ഷമ്മ കെ.പ്പം',
-                      houseName: 'കുന്നത്ത് വീട്',
-                      houseNumber: '5/123',
-                      phone: '+91 860662705',
-                      whatsapp: '+91 860662705',
-                      ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: മകൾ',
-                      age: 'വയസ്: 18',
-                      lastUpdated: 'അവസാനം അപ്ഡേറ്റ് 4 ദിവസം മുമ്പ്',
+                child: BlocBuilder<FamilyMemberListBloc, FamilyMemberListState>(
+                   builder: (context, state) {
+                    if (state is FamilyMemberListLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is FamilyMemberListLoaded) {
+                print(state.members[1]);
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount:  state.members.length,
+                      itemBuilder: (context, index) {
+                          final item = state.members[index];
+                        return MemberCard(
+                         position: item.position ,
+                         editId:item.editId ,
+                          sectionType: widget.sectionType,
+                          name: item.name,
+                          houseName: item.houseName,
+                          houseNumber: item.houseNumber,
+                          phone: item.mobile,
+                          whatsapp: item.whatsapp,
+                          ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: ${item.relation}',
+                          age: 'വയസ്: ${item.age}',
+                          lastUpdated: 'Updated on ${item.lastModified}',
+                        );
+                      },
                     );
-                  },
+                  }
+                  if (state   is FamilyMemberListError) {
+                      return Center(child: Text(state.message));
+                    }
+                    return const SizedBox();  
+               
+                  }
                 ),
               ),
             ),

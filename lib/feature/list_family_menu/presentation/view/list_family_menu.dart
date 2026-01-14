@@ -3,13 +3,22 @@ import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/list_family/data/repository/Family_member_repo_impl.dart';
+import 'package:e_member_app/feature/list_family/domain/repository/list_damily_repository.dart';
+import 'package:e_member_app/feature/list_family/domain/user_case/user_case.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
+import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class ListFamilyMenu extends StatefulWidget {
-  const ListFamilyMenu({super.key});
+  const ListFamilyMenu({
+    super.key,
+  });
 
   @override
   State<ListFamilyMenu> createState() => _ListFamilyMenuState();
@@ -22,21 +31,22 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
       top: false,
       child: Scaffold(
         bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
-
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
-             GradientHeader(backText: 'back',onPress: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
-            },),
+            GradientHeader(
+              backText: 'back',
+              onPress: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DashboardPage()));
+              },
+            ),
             SizedBox(height: 20),
             Container(
-              
-             // height: double.infinity,
+              // height: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
-                
                 color: AppColor.secondary,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
@@ -59,16 +69,24 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                       backgroundColor: AppColor.lightBlue,
                       iconColor: AppColor.iconColor,
                       titleColor: AppColor.iconColor,
-onIconTap: () {
-               Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ListFamily(
-          sectionType: SurveySectionType.personal,
-        ),
-      ),
-    );          
-},
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider(
+                              create: (context) => FamilyMemberListBloc(
+                                GetFamilyMemberListUsecase(
+                                  FamilyMemberListRepositoryImpl(http.Client()),
+                                ),
+                              )..add(FetchFamilyMemberList("1")),
+                              child: ListFamily(
+                                sectionType: SurveySectionType.personal,
+                                position: "1",
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 15),
                     MenuContainar(
@@ -77,66 +95,106 @@ onIconTap: () {
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightgreen,
                       iconColor: AppColor.green,
-                      titleColor: AppColor.green, 
+                      titleColor: AppColor.green,
                       onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListFamily(
-                    sectionType: SurveySectionType.education,
-                  )),
-                );           
-}, ),
-                      SizedBox(height: 15),
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                    create: (context) => FamilyMemberListBloc(
+                                      GetFamilyMemberListUsecase(
+                                        FamilyMemberListRepositoryImpl(
+                                            http.Client()),
+                                      ),
+                                    )..add(FetchFamilyMemberList("2")),
+                                    child: ListFamily(
+                                      sectionType: SurveySectionType.education,
+                                      position: "2",
+                                    ),
+                                  )),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15),
                     MenuContainar(
                       title: 'തൊഴിൽ',
                       iconAsset: 'assets/images/Mask group (18).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightOrange,
                       iconColor: AppColor.orange,
-                      titleColor: AppColor.orange, 
-                                   onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListFamily(
-                    sectionType: SurveySectionType.employment,
-                  )),
-                );           
-},
-                       ),
-                      SizedBox(height: 15),
+                      titleColor: AppColor.orange,
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                    create: (context) => FamilyMemberListBloc(
+                                      GetFamilyMemberListUsecase(
+                                        FamilyMemberListRepositoryImpl(
+                                            http.Client()),
+                                      ),
+                                    )..add(FetchFamilyMemberList("3")),
+                                    child: ListFamily(
+                                      sectionType: SurveySectionType.employment,
+                                      position: "3",
+                                    ),
+                                  )),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15),
                     MenuContainar(
                       title: 'ആരോഗ്യം',
                       iconAsset: 'assets/images/Mask group (20).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightRed,
                       iconColor: AppColor.red,
-                      titleColor: AppColor.red, 
-                                   onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListFamily(
-                    sectionType: SurveySectionType.health,
-                  )),
-                );           
-},
-                       ),
-                      SizedBox(height: 15),
+                      titleColor: AppColor.red,
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                    create: (context) => FamilyMemberListBloc(
+                                      GetFamilyMemberListUsecase(
+                                        FamilyMemberListRepositoryImpl(
+                                            http.Client()),
+                                      ),
+                                    )..add(FetchFamilyMemberList('4')),
+                                    child: ListFamily(
+                                      sectionType: SurveySectionType.health,
+                                      position: '4',
+                                    ),
+                                  )),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15),
                     MenuContainar(
                       title: 'സാമൂഹിക  /  ക്ഷേമ വിവരങ്ങൾ',
                       iconAsset: 'assets/images/Mask group (21).png',
                       icon: Icons.navigate_next,
                       backgroundColor: AppColor.lightPurple,
                       iconColor: AppColor.purple,
-                      titleColor: AppColor.purple, 
-                                   onIconTap: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => ListFamily(
-                    sectionType: SurveySectionType.welfare,
-                  )),
-                );           
-},
-                       ),
+                      titleColor: AppColor.purple,
+                      onIconTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                    create: (context) =>FamilyMemberListBloc(
+                                GetFamilyMemberListUsecase(
+                                  FamilyMemberListRepositoryImpl(http.Client()),
+                                ),
+                              )..add(FetchFamilyMemberList('5')),
+                                    child: ListFamily(
+                                      sectionType: SurveySectionType.welfare,
+                                      position: '5',
+                                    ),
+                                  )),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

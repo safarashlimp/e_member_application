@@ -9,25 +9,31 @@ import 'package:flutter/material.dart';
 
 class MemberCard extends StatefulWidget {
   final String name;
-    final String houseNumber;
+  // final String position;
+  final String houseNumber;
   final String houseName;
   final String phone;
   final String whatsapp;
   final String ward;
   final String age;
+  final String editId;
+  final String position;
   final String lastUpdated;
   final SurveySectionType sectionType;
   const MemberCard({
     super.key,
     required this.name,
-      required this.houseNumber,
+    //  required this.position,
+    required this.houseNumber,
     required this.houseName,
     required this.phone,
     required this.whatsapp,
+    required this.editId,
+    required this.position,
     required this.ward,
     required this.age,
     required this.lastUpdated,
-     required this.sectionType,
+    required this.sectionType,
   });
 
   @override
@@ -35,8 +41,8 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
-    void onViewTap(BuildContext context) {
-  late Widget page;
+  void onViewTap(BuildContext context) {
+    late Widget page;
 
     switch (widget.sectionType) {
       case SurveySectionType.personal:
@@ -61,8 +67,9 @@ class _MemberCardState extends State<MemberCard> {
       MaterialPageRoute(builder: (_) => page),
     );
   }
-    void onEditTap(BuildContext context) {
-  late Widget page;
+
+  void onEditTap(BuildContext context) {
+    late Widget page;
 
     switch (widget.sectionType) {
       case SurveySectionType.personal:
@@ -145,35 +152,33 @@ class _MemberCardState extends State<MemberCard> {
                       ),
                     ),
                     SizedBox(height: 2),
-                     Row(
-                       children: [
-                         Text(
-                           widget.houseNumber,
-                           style: const TextStyle(
-                             fontSize: 17,
-                             fontWeight: FontWeight.w400,
-                             color: AppColor.black,
-                           ),
-                         ),
-                         const SizedBox(width: 4),
-                         const Text(
-                           '|',
-                           style: TextStyle(fontSize: 13, color: AppColor.black),
-                         ),
-                     
-                         const SizedBox(width: 6),
-                         Text(
-                           widget.houseName,
-                           style: const TextStyle(
-                             fontSize: 17,
-                             fontWeight: FontWeight.w400,
-                             color: AppColor.black,
-                           ),
-                         ),
-                       ],
-                     ),
-                     const SizedBox(height: 2),
-                    
+                    Row(
+                      children: [
+                        Text(
+                          widget.houseNumber,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.black,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          '|',
+                          style: TextStyle(fontSize: 13, color: AppColor.black),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          widget.houseName,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         const Icon(
@@ -277,7 +282,6 @@ class _MemberCardState extends State<MemberCard> {
                   );
                 },
               ),
-
               const SizedBox(width: 6),
               Text(
                 widget.age,
@@ -346,9 +350,9 @@ class _MemberCardState extends State<MemberCard> {
               const SizedBox(width: 7),
               OutlinedButton.icon(
                 //add contition
-                onPressed:(){
+                onPressed: () {
                   onEditTap(context);
-                } ,
+                },
                 icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
                 label: const Text(
                   'Edit',
@@ -368,7 +372,6 @@ class _MemberCardState extends State<MemberCard> {
                   // padding: const EdgeInsets.only(top: 4,bottom: 4),
                 ),
               ),
-
               const Spacer(),
             ],
           ),

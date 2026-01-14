@@ -220,10 +220,10 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.health,), ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.health,), ),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,

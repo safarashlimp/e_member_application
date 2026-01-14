@@ -231,10 +231,10 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.employment,)),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.employment,)),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,

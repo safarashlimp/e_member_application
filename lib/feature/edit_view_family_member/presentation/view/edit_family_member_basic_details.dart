@@ -304,10 +304,10 @@ focusedBorderColor: AppColor.borderColor,
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,
