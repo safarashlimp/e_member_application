@@ -6,11 +6,15 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_second_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberEducationdetails extends StatefulWidget {
    final PageMode mode;
@@ -28,12 +32,36 @@ class _EditFamilyMemberEducationdetailsState
   final TextEditingController studyCenter = TextEditingController();
   final TextEditingController surveyorNameLabel= TextEditingController();
   String? selectedEducation;
+    String? selectedEducationId;
   String? selectedQualification;
+    String? selectedQualificationId;
 
   int student = 0 ;
   int needEducationHelp = 0;
  bool get isEdit => widget.mode == PageMode.edit;
    bool get isView => widget.mode == PageMode.view;
+
+
+void _populateFields(EducationModel value) {
+  // Text fields
+    courseStudy.text = value.courseOther ?? '';
+    studyCenter.text = value.institution ?? '';
+    surveyorNameLabel.text = value.surveyor ?? '';
+
+    // Dropdown labels (names)
+    selectedEducationId = value.courseId;
+    selectedQualificationId = value.qualificationId;
+
+    // Radio / toggle values
+    student = int.tryParse(value.currentlyStudying) ?? 0 ;
+    needEducationHelp = int.tryParse(value.needEducationSupport) ?? 0 ;
+}
+
+ @override
+void initState() {
+  super.initState();
+  _populateFields(widget.data.data.first);
+}
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,29 +84,61 @@ class _EditFamilyMemberEducationdetailsState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppDropdownField<String>(
-                          label: 'വിദ്യാഭ്യാസ യോഗ്യത',
-                          selectedValue: selectedQualification,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedQualification = value;
-                            });
-                          },
-                        ),
+                        BlocBuilder<QualificationBloc, QualificationState>(
+                              builder: (context, state) {
+                                if (state is QualificationLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is QualificationLoaded) {
+                                   // 🔥 ADD THIS (same as ration card logic)
+  if ( selectedQualificationId != null && selectedQualification == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id ==  selectedQualificationId,
+      orElse: () => state.items.first,
+    );
+
+    selectedQualification= match.name;
+  }
+                                  return AppDropdownField<String>(
+                                    label: 'വിദ്യാഭ്യാസ യോഗ്യത',
+                                    selectedValue: selectedQualification,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedQualification = value;
+
+                                        selectedQualificationId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is QualificationError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
                         SizedBox(height: 20),
                         AppRadioField(
                           label: " ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ?",
@@ -96,29 +156,62 @@ class _EditFamilyMemberEducationdetailsState
                         if (student == 1) ...[
                           const SizedBox(height: 20),
 
-                          AppDropdownField<String>(
-                            label: ' പഠനം',
-                            selectedValue: selectedEducation,
-                            borderColor: AppColor.borderColor,
-                            labelColor: AppColor.hintText2,
-                            selectedTextColor: AppColor.primary,
-                            iconColor: AppColor.black,
-                            dropdownBgColor: AppColor.white,
-                            dropdownTextColor: AppColor.hintText,
-                            validator: Validator.validateSelection,
-                            items: const [
-                              'പക്കാ വീട്',
-                              'സെമി പക്കാ വീട്',
-                              'കച്ച വീട്',
-                              'വാടക വീട്',
-                              'വീട് ഇല്ല',
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                selectedEducation = value;
-                              });
-                            },
-                          ),
+                          BlocBuilder<EducationBloc, EducationState>(
+                                builder: (context, state) {
+                                  if (state is EducationLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  if (state is EducationLoaded) {
+                                    if (selectedEducationId != null && selectedEducation == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedEducationId,
+      orElse: () => state.items.first,
+    );
+
+    selectedEducation= match.name;
+  }
+                                    return AppDropdownField<String>(
+                                      label: ' പഠനം',
+                                      selectedValue: selectedEducation,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedEducation = value;
+
+                                          selectedEducationId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
+
+                                  if (state is EducationError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
+                              ),
                           SizedBox(height: 20),
                           AppTextField(
                             controller: courseStudy,
