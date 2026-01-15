@@ -32,17 +32,17 @@ class DetailMapper {
     }
 
      final Map<String, dynamic> data = list.first;
-        return PersonalDetailsModel(
+        return  PersonalDetailsModel(
               id: data['id'] ?? '',
               householdId: data['household_id'] ?? '',
               name: data['name'] ?? '',
               mobile:data['mobile'] ?? '',
               whatsapp: data['whatsapp'] ?? '',
-              bloodgroup: data['bloodgroup'] ?? '',
-              relationId:data['relation_id'] ?? '',
-              genderId: data['gender_id'] ?? '',
+              bloodgroup: data['bloodgroup'] ?.toString() ?? '',
+              relationId:data['relation_id'] ?.toString() ?? '',
+              genderId: data['gender_id'] ?.toString() ?? '',
               dob:data['dob'] ?? '',
-              maritalStatusId: data['marital_status_id'] ?? '',
+              maritalStatusId: data['marital_status_id'] ?.toString() ?? '',
               religionId: data['religion_id'] ?? '',
               casteId: data['caste_id'] ?? '',
               surveyor:data['surveyor'] ?? '',

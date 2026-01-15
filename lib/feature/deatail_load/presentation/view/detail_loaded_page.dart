@@ -34,6 +34,7 @@ class DetailLoadGate extends StatelessWidget {
         }
 
         if (state is FamilyMemberDetailLoadLoaded) {
+          print(position);
           switch (position) {
             case '1':
               final screen1 =

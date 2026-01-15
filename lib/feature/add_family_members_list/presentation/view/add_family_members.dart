@@ -1446,6 +1446,9 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             final userId =
                                 int.parse(prefs.getString(PrefKeys.userId)!);
 
+  final whatsappValue = whatsupNumber.text.isNotEmpty
+        ? whatsupNumber.text
+        : mobileNumber.text;
                             await FamilyMemberSaveRepository().saveFamilyMember(
                               // 🔹 REQUIRED
                               householdId: widget.editId, // 👈 editId from list
@@ -1454,7 +1457,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               // 🔹 BASIC DETAILS
                               name: familyMemberName.text.trim(),
                               mobile: mobileNumber.text,
-                              whatsapp: whatsupNumber.text,
+                              whatsapp: whatsappValue,
 
                               bloodGroupId:
                                   int.parse(selectedBloodGroupId ?? '0'),

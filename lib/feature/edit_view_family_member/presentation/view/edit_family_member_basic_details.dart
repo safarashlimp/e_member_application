@@ -17,6 +17,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_one_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:flutter/material.dart';
@@ -49,18 +51,53 @@ class _EditFamilyMemberBasicDetailsState
     String? selectedRelationId;
   String ?selectedGender ;
     String? selectedGenderId;
-  String? selectedRlgn = 'hindu';
+  String? selectedRlgn ;
   String? selectedMaritalStatus;
     String? selectedMaritalStatusId;
   String? selectedCaste;
     String? selectedCasteId;
+      String? selectedReligion;
+  String? selectedReligionId;
 
 bool get isEdit => widget.mode == PageMode.edit;
    bool get isView => widget.mode == PageMode.view;
 
+
+void _populateFields(PersonalDetailsModel value) {
+  // Text fields
+  familyMemberName.text = value.name??'' ;
+  mobileNumber.text = value.mobile ;
+  whatsupNumber.text = value.whatsapp ;
+  selectedDate.text = value.dob ;
+  surveyorNameLabel.text = value.surveyor;
+
+
+ selectedGenderId = value.genderId;
+
+
+  selectedBloodGroupId = value.bloodgroup;
+
+
+  selectedRelationId = value.relationId;
+ 
+
+  selectedMaritalStatusId = value.maritalStatusId;
+
+
+  selectedReligionId = value.religionId;
+
+
+  selectedCasteId = value.casteId;
+
+}
+
     @override
 void initState() {
   super.initState();
+  _populateFields(widget.data);
+
+
+
 
   mobileNumber.addListener(() {
     // copy text only if whatsapp field is empty OR same
@@ -149,33 +186,39 @@ void initState() {
                                   );
                                 }
 
-                                if (state is BloodGroupLoaded) {
-                                  return AppDropdownField<String>(
-                                    label: 'രക്തഗ്രൂപ്പ്',
-                                    selectedValue: selectedBloodGroup,
-                                    borderColor: AppColor.borderColor,
-                                    labelColor: AppColor.hintText2,
-                                    selectedTextColor: AppColor.primary,
-                                    iconColor: AppColor.black,
-                                    dropdownBgColor: AppColor.white,
-                                    dropdownTextColor: AppColor.hintText,
-                                    validator: Validator.validateSelection,
+if (state is BloodGroupLoaded) {
 
-                                    // ✅ API DATA
-                                    items:
-                                        state.items.map((e) => e.name).toList(),
+  // 🔥 ADD THIS (same as ration card logic)
+  if (selectedBloodGroupId != null && selectedBloodGroup == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedBloodGroupId,
+      orElse: () => state.items.first,
+    );
 
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedBloodGroup = value;
+    selectedBloodGroup = match.name;
+  }
 
-                                        selectedBloodGroupId = state.items
-                                            .firstWhere((e) => e.name == value)
-                                            .id;
-                                      });
-                                    },
-                                  );
-                                }
+  return AppDropdownField<String>(
+    label: 'രക്തഗ്രൂപ്പ്',
+    selectedValue: selectedBloodGroup,
+    borderColor: AppColor.borderColor,
+    labelColor: AppColor.hintText2,
+    selectedTextColor: AppColor.primary,
+    iconColor: AppColor.black,
+    dropdownBgColor: AppColor.white,
+    dropdownTextColor: AppColor.hintText,
+    validator: Validator.validateSelection,
+    items: state.items.map((e) => e.name).toList(),
+    onChanged: (value) {
+      setState(() {
+        selectedBloodGroup = value;
+        selectedBloodGroupId =
+            state.items.firstWhere((e) => e.name == value).id;
+      });
+    },
+  );
+}
+
 
                                 if (state is BloodGroupError) {
                                   return Text(
@@ -197,6 +240,16 @@ void initState() {
                                 }
 
                                 if (state is RelationDropLoaded) {
+                                   // 🔥 ADD THIS (same as ration card logic)
+  if (selectedRelationId  != null && selectedReletion== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedRelationId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedReletion= match.name;
+  }
+
                                   return AppDropdownField<String>(
                                     label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
                                     selectedValue: selectedReletion,
@@ -244,6 +297,14 @@ void initState() {
                                 }
 
                                 if (state is GenderLoaded) {
+                                    if (selectedGenderId  != null && selectedGender== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedGenderId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedGender= match.name;
+  }
                                   return AppDropdownField<String>(
                                     label: 'ലിംഗം',
                                     selectedValue: selectedGender,
@@ -308,6 +369,15 @@ focusedBorderColor: AppColor.borderColor,
                                       }
 
                                       if (state is MaritalStatusLoaded) {
+                                                                 
+                                    if (selectedMaritalStatusId  != null && selectedMaritalStatus== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedMaritalStatusId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedMaritalStatus= match.name;
+  }
                                         return AppDropdownField<String>(
                                           label: 'വിവാഹസ്ഥിതി',
                                           selectedValue: selectedMaritalStatus,
@@ -355,29 +425,60 @@ focusedBorderColor: AppColor.borderColor,
                           ],
                         ),
                         SizedBox(height: 20),
-                        AppRadioButtonField(
-                          label: "മതം",
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 7,
-                          ),
+                        BlocBuilder<ReligionBloc, ReligionState>(
+                              builder: (context, state) {
+                                if (state is ReligionLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-                          value: selectedRlgn,
-                          options: const [
-                            {'label': 'ഹിന്ദു', 'value': 'hindu'},
-                            {'label': 'മുസ്ലിം', 'value': 'muslim'},
-                            {'label': 'ക്രിസ്ത്യൻ', 'value': 'cris'},
-                            {'label': 'സിഖ്', 'value': 'sikh'},
-                            {'label': 'ബുദ്ധ', 'value': 'budha'},
-                            {'label': 'ജൈന', 'value': 'jaina'},
-                            {'label': 'മറ്റ്', 'value': 'other'},
-                          ],
-                          onChanged: (v) {
-                            setState(() {
-                              selectedRlgn = v;
-                            });
-                          },
-                        ),
+                                if (state is ReligionLoaded) {
+                                                                      if (selectedReligionId != null && selectedReligion== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedReligionId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedReligion= match.name;
+  }
+                                  return AppDropdownField<String>(
+                                    label: 'മതം',
+                                    selectedValue: selectedReligion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReligion = value;
+
+                                        selectedReligionId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is ReligionError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
                         SizedBox(height: 20),
                      BlocBuilder<CasteBloc, CasteState>(
                               builder: (context, state) {
@@ -388,6 +489,14 @@ focusedBorderColor: AppColor.borderColor,
                                 }
 
                                 if (state is CasteLoaded) {
+                                                                                                        if ( selectedCasteId  != null && selectedCaste== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id ==  selectedCasteId  ,
+      orElse: () => state.items.first,
+    );
+
+   selectedCaste= match.name;
+  }
                                   return AppDropdownField<String>(
                                     label: 'ജാതി',
                                     selectedValue: selectedCaste,

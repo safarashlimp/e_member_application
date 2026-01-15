@@ -81,7 +81,8 @@ class _ListFamilyState extends State<ListFamily> {
                       itemBuilder: (context, index) {
                           final item = state.members[index];
                         return MemberCard(
-                         position: item.position ,
+                        //  position: item.position ,
+                        position: widget.position,
                          editId:item.editId ,
                           sectionType: widget.sectionType,
                           name: item.name,
