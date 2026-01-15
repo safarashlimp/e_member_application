@@ -71,7 +71,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
 
   // kudumbanadhanum aayula badham
   String? selectedReletion;
-  String? selectedRelationId;
+    String? selectedRelationId;
   //  marital status
   String? selectedMaritalStatus;
   String? selectedMaritalStatusId;

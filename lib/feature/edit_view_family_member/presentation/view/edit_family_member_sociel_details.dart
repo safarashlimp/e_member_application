@@ -6,6 +6,7 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
@@ -13,7 +14,8 @@ import 'package:flutter/material.dart';
 
 class EditFamilyMemberSocielDetails extends StatefulWidget {
   final PageMode mode;
-  const EditFamilyMemberSocielDetails({super.key, required this.mode});
+  final WelfareResponse  data;
+  const EditFamilyMemberSocielDetails({super.key, required this.mode, required this.data});
 
   @override
   State<EditFamilyMemberSocielDetails> createState() =>
@@ -26,7 +28,8 @@ class _EditFamilyMemberSocielDetailsState
   int isIncludedInRationCard = 0;
   int isPensionReceiving = 0;
   String? selectedPensionType;
- bool get isEdit => widget.mode == PageMode.edit;
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
   String? isPensionRequired; 
   String? selectedProvertyPrgm;// yes / no
   

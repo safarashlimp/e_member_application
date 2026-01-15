@@ -7,14 +7,17 @@ import 'package:e_member_app/core/widget/text_field/app_drop_dowm_multiple_selec
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_third_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
-import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
+
 import 'package:flutter/material.dart';
 
 class EditFamilyJobDetails extends StatefulWidget {
   final PageMode mode;
-  const EditFamilyJobDetails({super.key, required this.mode});
+  final EmploymentResponse data;
+
+  const EditFamilyJobDetails({super.key, required this.mode, required this.data});
 
   @override
   State<EditFamilyJobDetails> createState() => _EditFamilyJobDetailsState();
@@ -28,7 +31,8 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   String? employmentStatus;
   String? jobStatus;
   int norkaRegisteredLabel = 0;
-  bool get isEdit => widget.mode == PageMode.edit;
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
   List<String> selectedSkills = [];
   String? farmingType;
   final List<String> skills = [

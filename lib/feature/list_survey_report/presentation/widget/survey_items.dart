@@ -164,7 +164,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                 ),
               ),
           ),
-BlocProvider(
+BlocProvider( 
                           create: (_) =>
                               ReligionBloc(MemberDropRepositoryImpl())
                                 ..add(FetchReligion()),

@@ -6,6 +6,7 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_second_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
@@ -13,7 +14,8 @@ import 'package:flutter/material.dart';
 
 class EditFamilyMemberEducationdetails extends StatefulWidget {
    final PageMode mode;
-  const EditFamilyMemberEducationdetails({super.key, required this.mode});
+   final EducationResponse data;
+  const EditFamilyMemberEducationdetails({super.key, required this.mode,required this.data});
  bool get isEdit => mode == PageMode.edit;
   @override
   State<EditFamilyMemberEducationdetails> createState() => 
@@ -30,7 +32,8 @@ class _EditFamilyMemberEducationdetailsState
 
   int student = 0 ;
   int needEducationHelp = 0;
-  bool get isEdit => widget.mode == PageMode.edit;
+ bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
