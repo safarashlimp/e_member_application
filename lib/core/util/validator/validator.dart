@@ -145,14 +145,36 @@ static String? validateDecimal(String? value) {
     return null;
   }
 
+  // static String? validateIncome(String? value)   {
+  //   if (value == null || value.trim().isEmpty) {
+  //     return 'Income is required';
+  //   }
+  //   final income = int.tryParse(value.trim());
+  //   if (income == null ) {
+  //     return 'Enter a valid income amount';
+  //   }
+  //   return null;
+  // }
+
   static String? validateIncome(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Income is required';
-    }
-    final income = int.tryParse(value.trim());
-    if (income == null || income < 0) {
-      return 'Enter a valid income amount';
-    }
-    return null;
+  if (value == null || value.trim().isEmpty) {
+    return 'Income is required';
   }
+
+  final trimmed = value.trim();
+
+  // Allow decimal numbers like 56, 56.00, 56.0000
+  final income = double.tryParse(trimmed);
+
+  if (income == null) {
+    return 'Enter a valid income amount';
+  }
+
+  if (income < 0) {
+    return 'Income cannot be negative';
+  }
+
+  return null;
+}
+
 }
