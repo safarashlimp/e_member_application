@@ -340,10 +340,21 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                 child: BlocBuilder<HeaderListBloc, HeaderListState>(
                   builder: (context, state) {
                     if (state is HeaderListLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator(
+                        color:AppColor.iconColor ,
+                      ));
                     }
 
                     if (state is HeaderListLoaded) {
+                      if (state.items.isEmpty) {
+        return const Center(
+          child: Text(
+            'വിവരങ്ങൾ ലഭ്യമല്ല',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        );
+      }
                       return ListView.builder(
                         itemCount: state.items.length,
 

@@ -1,3 +1,8 @@
+import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
+import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
+import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
@@ -26,12 +31,25 @@ class LoginView extends StatelessWidget {
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
-              if (state is LoginSuccess) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => DashboardPage()),
-                );
-              } else if (state is LoginFailure) {
+            if (state is LoginSuccess) {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (_) {
+        final datasource = DashboardRemoteDatasource();
+        final repository = DashboardRepositoryImpl(datasource);
+        final useCase = GetDashboardUseCase(repository);
+
+        return BlocProvider(
+          create: (_) =>
+              DashboardBloc(useCase)..add(LoadDashboardEvent()),
+          child: const DashboardPage(),
+        );
+      },
+    ),
+  );
+}
+else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),
                 );
@@ -72,7 +90,9 @@ class LoginView extends StatelessWidget {
                       ),
                       SizedBox(height: 40),
                       state is LoginLoading
-                          ? CircularProgressIndicator()
+                          ? CircularProgressIndicator(
+                            color: AppColor.blue,
+                          )
                           : AppActionButton(
                               label: "ലോഗിൻ",
                               onPressed: () {

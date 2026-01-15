@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TopStats extends StatefulWidget {
-  const TopStats({super.key});
+  final int housecount;
+  final  int  familiesCount;
+  final int   memeberscount;
+  const TopStats({super.key,required this.housecount,required this.familiesCount, required this.memeberscount });
 
   @override
   State<TopStats> createState() => _TopStatsState();
@@ -11,23 +14,23 @@ class _TopStatsState extends State<TopStats> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children:  [
         _StatCard(
           icon: 'assets/images/home.png',
           label: 'വീടുകൾ',
-          value: '350',
+          value : widget.housecount,
         ),
         SizedBox(width: 12),
         _StatCard(
           icon: 'assets/images/Mask group (25).png',
           label: 'കുടുംബങ്ങൾ',
-          value: '350',
+          value: widget.familiesCount,
         ),
         SizedBox(width: 12),
         _StatCard(
           icon: 'assets/images/Mask group (26).png',
           label: 'ജനസംഖ്യ',
-          value: '1500',
+          value: widget.memeberscount,
         ),
       ],
     );
@@ -37,7 +40,7 @@ class _TopStatsState extends State<TopStats> {
 class _StatCard extends StatelessWidget {
   final String icon;
   final String label;
-  final String value;
+  final int  value;
 
   const _StatCard({
     required this.icon,
@@ -75,7 +78,8 @@ class _StatCard extends StatelessWidget {
                 ),
               ),
             
-              Text(value, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+              Text(value.toString(),
+               style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
             ],
           ),
         ],
