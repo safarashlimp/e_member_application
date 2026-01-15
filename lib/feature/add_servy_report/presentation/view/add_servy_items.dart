@@ -137,7 +137,15 @@ class _AddServyItemsState extends State<AddServyItems> {
           body: BlocBuilder<RationCardBloc, RationCardState>(
             builder: (context, state) {
               if (state is RationCardLoading) {
-                return const Center(child: CircularProgressIndicator());
+              return Container(
+                
+                height: double.infinity,
+                width:  double.infinity,
+                color: AppColor.blue,
+                child: Center(child: CircularProgressIndicator(
+              color: AppColor.white,
+
+                )));
               }
               if (state is RationCardError) {
                 return Center(child: Text(state.message));
@@ -223,6 +231,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         textColor: AppColor.primary,
                                         width: double.infinity,
                                         height: 40,
+                                    
                                       ),
                                     ),
                                   ],
@@ -401,8 +410,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                       //   return;
                                       // }
                                       if(_formKey.currentState!.validate()){
-                                        return; 
-                                      }
+                                       
                                       
                                       final headerData = SurveyHeaderModel(
                                         houseChief: gardienName.text,
@@ -417,6 +425,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         govtBeneficiary: disability,
                                         extremePoor: widow,
                                       );
+                                      
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -462,6 +471,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                           ),
                                         ),
                                       );
+                                    }
                                     },
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
@@ -476,13 +486,16 @@ class _AddServyItemsState extends State<AddServyItems> {
                             ),
                           ],
                           if (isEdit) ...[
+
+                            
                             BlocConsumer<HouseholdSubmitBloc,
                                 HouseholdSubmitState>(
                               listener: (context, state) {
                                 //  print('Edit ID: ${widget.editId?? 0}');
                                 if (state is HouseholdSubmitSuccess) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                     SnackBar(
+                                       backgroundColor: AppColor.blue,
                                         content:
                                             Text('Submitted successfully')),
                                   );
@@ -526,20 +539,10 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 return AppActionButton(
                                   label: 'സമർപ്പിക്കുക',
                                   onPressed: () {
-                                    if (gardienName.text.trim().isEmpty ||
-                                        houseNumber.text.trim().isEmpty ||
-                                        houseName.text.trim().isEmpty ||
-                                        cardNumber.text.trim().isEmpty ||
-                                        selectedRationCardId == null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                              'അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
-                                        ),
-                                      );
-                                      return;
-                                    }
+                                   if (!_formKey.currentState!.validate()) {
+    return;
+  }
+
 
                                     if (isEdit && widget.editId == null) {
                                       ScaffoldMessenger.of(context)

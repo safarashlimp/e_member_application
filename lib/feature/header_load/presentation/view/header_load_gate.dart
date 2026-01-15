@@ -14,7 +14,6 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/family_dro
   import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
   import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
-// import 'package:e_member_app/feature/edit_survey_report/data/repository/edit_survay_report_imp.dart';
 import 'package:e_member_app/feature/edit_survey_report/data/repository/house_details_repository.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_bloc.dart';
   import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
@@ -26,8 +25,7 @@ import 'package:e_member_app/feature/edit_survey_report/presentation/house_detai
   import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-  // Enum to determine whether the screen is in view or edit mode
-  // enum PageMode { view, edit }
+
 
   class HeaderLoadGate extends StatelessWidget {
     final String position;
@@ -45,9 +43,10 @@ import 'package:e_member_app/feature/edit_survey_report/presentation/house_detai
       return BlocBuilder<HeaderLoadBloc, HeaderLoadState>(
         builder: (context, state) {
           if (state is HeaderLoadLoading) {
-            return const Scaffold(
+            return  Scaffold(
+              backgroundColor: AppColor.blue,
               body: Center(child: CircularProgressIndicator(
-            color:     AppColor.iconColor,
+            color:     AppColor.white,
               )),
             );
           }
@@ -65,11 +64,10 @@ if (list != null && list.isNotEmpty) {
 
             
               final screen1Data = HeaderMapper.fromApiToScreen1(state.data);
-              // final String editId = state.data['editId']?.toString() ?? ''; 
-              // print('Loaded Edit ID: $editId');
+ 
               return AddServyItems(
                 
-                mode: mode, // ✅ Pass the enum directly
+                mode: mode,
                 headerData: screen1Data,
                 editId:  editId
               );
@@ -113,7 +111,7 @@ if (list != null && list.isNotEmpty) {
       ),
                 ],
                 child: AddItemBasicDetails(
-                  mode: mode, // ✅ Pass the enum directly
+                  mode: mode, 
                 screen2HeaderData: screen2Data,  
                 ),
               );

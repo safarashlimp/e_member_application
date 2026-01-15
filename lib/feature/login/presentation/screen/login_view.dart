@@ -90,7 +90,9 @@ else if (state is LoginFailure) {
                       ),
                       SizedBox(height: 40),
                       state is LoginLoading
-                          ? CircularProgressIndicator()
+                          ? CircularProgressIndicator(
+                            color: AppColor.blue,
+                          )
                           : AppActionButton(
                               label: "ലോഗിൻ",
                               onPressed: () {

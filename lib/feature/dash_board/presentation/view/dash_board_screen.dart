@@ -41,7 +41,9 @@ class _DashboardPageState extends State<DashboardPage> {
             builder: (context, state) {
       
             if (state is DashboardLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return  Center(child: CircularProgressIndicator(
+        color: AppColor.blue,
+      ));
     }
       if(state is DashboardLoaded){
 
