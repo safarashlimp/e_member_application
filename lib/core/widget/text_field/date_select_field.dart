@@ -13,7 +13,7 @@ class AppDateField extends StatelessWidget {
   final Color borderColor;
   final Color focusedBorderColor;
   final Color iconColor;
-
+ final Function(DateTime)? onDateSelected;
   final Widget? suffixIcon;
 
   final String? Function(String?)? validator;
@@ -31,6 +31,7 @@ class AppDateField extends StatelessWidget {
     this.iconColor = AppColor.white,
     this.suffixIcon,
     this.validator,
+     this.onDateSelected,
   });
 
   @override
@@ -81,9 +82,10 @@ class AppDateField extends StatelessWidget {
 
           if (pickedDate != null) {
             controller.text =
-                "${pickedDate.day.toString().padLeft(2, '0')}-"
-                "${pickedDate.month.toString().padLeft(2, '0')}-"
-                "${pickedDate.year}";
+               "${pickedDate.year.toString().padLeft(4, '0')}-"
+"${pickedDate.month.toString().padLeft(2, '0')}-"
+"${pickedDate.day.toString().padLeft(2, '0')}";
+ onDateSelected?.call(pickedDate); 
           }
         },
       ),

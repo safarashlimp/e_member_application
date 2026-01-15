@@ -6,14 +6,21 @@ import 'package:e_member_app/core/widget/common/servey_section.dart';
 import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_state.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberSocielDetails extends StatefulWidget {
   final PageMode mode;
-  const EditFamilyMemberSocielDetails({super.key, required this.mode});
+  final WelfareResponse  data;
+  const EditFamilyMemberSocielDetails({super.key, required this.mode, required this.data});
 
   @override
   State<EditFamilyMemberSocielDetails> createState() =>
@@ -26,10 +33,51 @@ class _EditFamilyMemberSocielDetailsState
   int isIncludedInRationCard = 0;
   int isPensionReceiving = 0;
   String? selectedPensionType;
- bool get isEdit => widget.mode == PageMode.edit;
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
   String? isPensionRequired; 
-  String? selectedProvertyPrgm;// yes / no
+  String? selectedProvertyPrgm;
+    String? selectedPensionTypeId;
+      final Map<String, int> povertyProgramMap = {
+    'അല്ല': 0,
+    'തൊഴിലുറപ്പ്': 1,
+    'കുടുംബശ്രീ': 2,
+    'ഹരിത കർമ്മസേന': 3,
+  };
+
+  // pansion required
+
+  String? isPensionRequiredId;
+ void _populateFields(WelfareModel value) {
+  // Text fields
   
+     isIncludedInRationCard = int.tryParse(value.includedInRation) ?? 0;
+    isPensionReceiving = int.tryParse(value.receivingPension) ?? 0;
+
+    // 🔹 Dropdown / selection IDs
+    selectedPensionTypeId = value.pensionTypeId;
+    isPensionRequiredId = value.needPensionTypeId;
+    surveyorNameLabel.text = value.surveyor ?? '';
+    // 🔹 Poverty program (radio / dropdown)
+  selectedProvertyPrgm = povertyProgramMap.entries
+        .firstWhere(
+          (e) => e.value.toString() == value.povertyPgm.toString(),
+          orElse: () => const MapEntry('അല്ല', 0),
+        )
+        .key;
+  }
+
+    // 🔹 Text fields
+  
+    // 🔹 Text fields
+
+   // wardMemberLabel.text = value.wardMember ?? '';
+
+  @override
+  void initState() {
+  super.initState();
+  _populateFields(widget.data.data.first);
+}
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -81,54 +129,122 @@ class _EditFamilyMemberSocielDetailsState
                         ),
                         if (isPensionReceiving == 1) ...[
                           const SizedBox(height: 20),
-                          AppDropdownField<String>(
-                            label: 'പെൻഷൻ തരം',
-                            selectedValue: selectedPensionType,
-                            borderColor: AppColor.borderColor,
-                            labelColor: AppColor.hintText2,
-                            selectedTextColor: AppColor.primary,
-                            iconColor: AppColor.black,
-                            dropdownBgColor: AppColor.white,
-                            dropdownTextColor: AppColor.hintText,
-                            validator: Validator.validateSelection,
-                            items: const [
-                              'പക്കാ വീട്',
-                              'സെമി പക്കാ വീട്',
-                              'കച്ച വീട്',
-                              'വാടക വീട്',
-                              'വീട് ഇല്ല',
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                selectedPensionType = value;
-                              });
-                            },
-                          ),
+                           BlocBuilder<PensionTypeBloc, PensionTypeState>(
+                                builder: (context, state) {
+                                  if (state is PensionTypeLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  if (state is PensionTypeLoaded) {
+                                                      if (selectedPensionTypeId != null &&
+                               selectedPensionType == null) {
+                                final match = state.items.firstWhere(
+                                  (e) => e.id == selectedPensionTypeId,
+                                  orElse: () => state.items.first,
+                                );
+
+                           selectedPensionType = match.name;
+                              }
+                                    return AppDropdownField<String>(
+                                      label: 'പെൻഷൻ തരം',
+                                      selectedValue: selectedPensionType,
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      selectedTextColor: AppColor.primary,
+                                      iconColor: AppColor.black,
+                                      dropdownBgColor: AppColor.white,
+                                      dropdownTextColor: AppColor.hintText,
+                                      validator: Validator.validateSelection,
+
+                                      // ✅ API DATA
+                                      items: state.items
+                                          .map((e) => e.name)
+                                          .toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedPensionType = value;
+
+                                          selectedPensionTypeId = state.items
+                                              .firstWhere(
+                                                  (e) => e.name == value)
+                                              .id;
+                                        });
+                                      },
+                                    );
+                                  }
+
+                                  if (state is PensionTypeError) {
+                                    return Text(
+                                      state.message,
+                                      style: const TextStyle(color: Colors.red),
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
+                              ),
                         ],
                         SizedBox(height: 20),
-                        AppDropdownField<String>(
-                          label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
-                          selectedValue: isPensionRequired,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              isPensionRequired = value;
-                            });
-                          },
-                        ),
+                             BlocBuilder<PensionRequiredBloc,
+                                PensionRequiredState>(
+                              builder: (context, state) {
+                                if (state is PensionRequiredLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is PensionRequiredLoaded) {
+                                                         if ( isPensionRequiredId != null &&
+                                isPensionRequired == null) {
+                                final match = state.items.firstWhere(
+                                  (e) => e.id ==  isPensionRequiredId,
+                                  orElse: () => state.items.first,
+                                );
+
+                            isPensionRequired = match.name;
+                              }
+                                
+                                  return AppDropdownField<String>(
+                                    label: 'പെൻഷൻ ആവശ്യമുണ്ടോ?',
+                                    selectedValue: isPensionRequired,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isPensionRequired = value;
+
+                                        isPensionRequiredId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is PensionRequiredError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
                         SizedBox(height: 20,),
                         AppDropdownField<String>(
                                 label: 'താങ്കൾ ദരിദ്ര നിർമാർജ്ജന പദ്ധതികളിൽ അംഗമാണോ?',
@@ -141,7 +257,7 @@ class _EditFamilyMemberSocielDetailsState
                                 dropdownTextColor: AppColor.hintText,
                                 validator: Validator.validateSelection,
                                 items: const [
-                                  ' അല്ല',
+                                  'അല്ല',
                                   'തൊഴിലുറപ്പ്',
                                   'കുടുംബശ്രീ',
                                   'ഹരിത കർമ്മസേന',
@@ -150,6 +266,8 @@ class _EditFamilyMemberSocielDetailsState
                                 onChanged: (value) {
                                   setState(() {
                                     selectedProvertyPrgm = value;
+                                     isPensionRequiredId =
+          povertyProgramMap[value]!.toString();
                                   });
                                 },
                               ),
@@ -175,10 +293,10 @@ class _EditFamilyMemberSocielDetailsState
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.welfare,)),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.welfare,)),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,

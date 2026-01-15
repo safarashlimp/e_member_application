@@ -1,33 +1,77 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
+import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/education/education_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_event.dart' show FetchEmploymentStatus;
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health_insurance/health_insurance_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/jobs/job_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_event.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_event.dart';
+import 'package:e_member_app/feature/deatail_load/data/repository/detail_repository.dart';
+import 'package:e_member_app/feature/deatail_load/data/repository/detail_repository_impl.dart';
+import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_bloc.dart';
+import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_event.dart';
+import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_state.dart';
+import 'package:e_member_app/feature/deatail_load/presentation/view/detail_loaded_page.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_basic_details.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_educationdetails.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_health_details.dart';
-import 'package:e_member_app/feature/edit_view_family_member/presentation/view/edit_family_member_sociel_details.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class MemberCard extends StatefulWidget {
   final String name;
-    final String houseNumber;
+  // final String position;
+  final String houseNumber;
   final String houseName;
   final String phone;
   final String whatsapp;
   final String ward;
   final String age;
+  final String editId;
+  final String position;
   final String lastUpdated;
   final SurveySectionType sectionType;
   const MemberCard({
     super.key,
     required this.name,
-      required this.houseNumber,
+    //  required this.position,
+    required this.houseNumber,
     required this.houseName,
     required this.phone,
     required this.whatsapp,
+    required this.editId,
+    required this.position,
     required this.ward,
     required this.age,
     required this.lastUpdated,
-     required this.sectionType,
+    required this.sectionType,
   });
 
   @override
@@ -35,58 +79,135 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
-    void onViewTap(BuildContext context) {
-  late Widget page;
 
-    switch (widget.sectionType) {
-      case SurveySectionType.personal:
-        page = const EditFamilyMemberBasicDetails(mode: PageMode.view);
-        break;
-      case SurveySectionType.education:
-        page = const EditFamilyMemberEducationdetails(mode: PageMode.view);
-        break;
-      case SurveySectionType.employment:
-        page = const EditFamilyHealthDetails(mode: PageMode.view);
-        break;
-      case SurveySectionType.health:
-        page = const EditFamilyHealthDetails(mode: PageMode.view);
-        break;
-      case SurveySectionType.welfare:
-        page = const EditFamilyMemberSocielDetails(mode: PageMode.view);
-        break;
-    }
+  void onViewTap(BuildContext context,PageMode mode) {
+   // late Widget page;
+   final repo = MemberDropRepositoryImpl(); 
+   
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => page),
-    );
-  }
-    void onEditTap(BuildContext context) {
-  late Widget page;
+      MaterialPageRoute(builder: (_) => MultiBlocProvider(
+          providers: [
+              BlocProvider(
+              create: (context) => FamilyMemberDetailLoadBloc(
+              FamilyMemberDetailsLoadRepositoryImpl(http.Client()),
+            )..add(
+                FetchDetailLoad(
+                  editId: widget.editId,
+                  position: widget.position,
+                ),
+              ),
+      
+            ),
+                      BlocProvider(
+                          create: (_) =>
+                              RelationDropBloc(MemberDropRepositoryImpl())
+                                ..add(FetchRelations()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              MaritalStatusBloc(MemberDropRepositoryImpl())
+                                ..add(FetchMaritalStatus()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              CasteBloc(MemberDropRepositoryImpl())
+                                ..add(FetchCastes()),
+                        ),
+                        BlocProvider(
+                  create: (_) => QualificationBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchQualifications()),
+                
+                ),
+                BlocProvider(
+                  create: (_) => EducationBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEducation()),
+                ),
+                BlocProvider(
+                  create: (_) => EmploymentStatusBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEmploymentStatus()),
+                ),
+                BlocProvider(
+                  create: (_) => JobBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchJobs()),
+                ),
+                BlocProvider(
+                  create: (_) => EmploymentSupportBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchEmploymentSupports()),
+                ),
+                
+                BlocProvider(
+                  create: (_) => FarmingTypeBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchFarmingTypes()),
+                ),
+                BlocProvider(
+                  create: (_) => HealthIssueBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchHealthIssues()),
+                ),
+                BlocProvider(
+                  create: (_) => HealthInsuranceBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchHealthInsurance()),
+                ),
+                BlocProvider(
+                  create: (_) => RequiredHealthSupportBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchRequiredHealthSupports()),
+                ),
+                
+                BlocProvider(
+                  create: (_) => PensionTypeBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchPensionTypes()),
+                ),
+                BlocProvider(
+                  create: (_) => PensionRequiredBloc(
+                    MemberDropRepositoryImpl(),
+                  )..add(FetchPensionRequirement()),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
+                ),
+           BlocProvider(
+                          create: (_) =>
+                              ReligionBloc(MemberDropRepositoryImpl())
+                                ..add(FetchReligion()),
+                        ),
+                        BlocProvider(
+                          create: (_) =>
+                              GenderBloc(MemberDropRepositoryImpl())
+                                ..add(FetchGender()),
+                        ),
+              // BlocProvider(
+              //     create: (context) => SubjectBloc(),
+              // ),
+          ],
+                  child: DetailLoadGate(
+          mode: mode,
+          position: widget.position,
+        ),
+      ),
+      ));}
+      
+       
+  
+    
+  
 
-    switch (widget.sectionType) {
-      case SurveySectionType.personal:
-        page = const EditFamilyMemberBasicDetails(mode: PageMode.edit);
-        break;
-      case SurveySectionType.education:
-        page = const EditFamilyMemberEducationdetails(mode: PageMode.edit);
-        break;
-      case SurveySectionType.employment:
-        page = const EditFamilyHealthDetails(mode: PageMode.edit);
-        break;
-      case SurveySectionType.health:
-        page = const EditFamilyHealthDetails(mode: PageMode.edit);
-        break;
-      case SurveySectionType.welfare:
-        page = const EditFamilyMemberSocielDetails(mode: PageMode.edit);
-        break;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => page),
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -145,35 +266,33 @@ class _MemberCardState extends State<MemberCard> {
                       ),
                     ),
                     SizedBox(height: 2),
-                     Row(
-                       children: [
-                         Text(
-                           widget.houseNumber,
-                           style: const TextStyle(
-                             fontSize: 17,
-                             fontWeight: FontWeight.w400,
-                             color: AppColor.black,
-                           ),
-                         ),
-                         const SizedBox(width: 4),
-                         const Text(
-                           '|',
-                           style: TextStyle(fontSize: 13, color: AppColor.black),
-                         ),
-                     
-                         const SizedBox(width: 6),
-                         Text(
-                           widget.houseName,
-                           style: const TextStyle(
-                             fontSize: 17,
-                             fontWeight: FontWeight.w400,
-                             color: AppColor.black,
-                           ),
-                         ),
-                       ],
-                     ),
-                     const SizedBox(height: 2),
-                    
+                    Row(
+                      children: [
+                        Text(
+                          widget.houseNumber,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.black,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          '|',
+                          style: TextStyle(fontSize: 13, color: AppColor.black),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          widget.houseName,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         const Icon(
@@ -277,7 +396,6 @@ class _MemberCardState extends State<MemberCard> {
                   );
                 },
               ),
-
               const SizedBox(width: 6),
               Text(
                 widget.age,
@@ -312,7 +430,7 @@ class _MemberCardState extends State<MemberCard> {
             mainAxisSize: MainAxisSize.min,
             children: [
               OutlinedButton.icon(
-                onPressed: () => onViewTap(context),
+                onPressed: () => onViewTap(context,PageMode.view),
                 // onPressed: () {
                 //   //add contition
                 //   Navigator.push(
@@ -346,9 +464,9 @@ class _MemberCardState extends State<MemberCard> {
               const SizedBox(width: 7),
               OutlinedButton.icon(
                 //add contition
-                onPressed:(){
-                  onEditTap(context);
-                } ,
+                onPressed: () {
+                   onViewTap(context,PageMode.edit);
+                },
                 icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
                 label: const Text(
                   'Edit',
@@ -368,7 +486,6 @@ class _MemberCardState extends State<MemberCard> {
                   // padding: const EdgeInsets.only(top: 4,bottom: 4),
                 ),
               ),
-
               const Spacer(),
             ],
           ),
@@ -376,4 +493,5 @@ class _MemberCardState extends State<MemberCard> {
       ),
     );
   }
+
 }

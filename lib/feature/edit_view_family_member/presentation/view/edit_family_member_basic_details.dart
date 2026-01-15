@@ -7,15 +7,29 @@ import 'package:e_member_app/core/widget/text_field/app_drop_down.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/core/widget/text_field/radio_field.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_state.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_state.dart';
+import 'package:e_member_app/feature/deatail_load/domain/models/screen_one_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
-import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberBasicDetails extends StatefulWidget {
     final PageMode mode;
+    final PersonalDetailsModel data;
   const EditFamilyMemberBasicDetails({super.key,
    required this.mode,
+   required this.data
   });
 
   @override
@@ -32,17 +46,58 @@ class _EditFamilyMemberBasicDetailsState
   final TextEditingController whatsupNumber = TextEditingController();
   final TextEditingController surveyorNameLabel = TextEditingController();
   String? selectedBloodGroup;
+    String? selectedBloodGroupId;
   String? selectedReletion;
-  String selectedGender = 'male';
-  String? selectedRlgn = 'hindu';
+    String? selectedRelationId;
+  String ?selectedGender ;
+    String? selectedGenderId;
+  String? selectedRlgn ;
   String? selectedMaritalStatus;
+    String? selectedMaritalStatusId;
   String? selectedCaste;
+    String? selectedCasteId;
+      String? selectedReligion;
+  String? selectedReligionId;
 
-  bool get isEdit => widget.mode == PageMode.edit;
+bool get isEdit => widget.mode == PageMode.edit;
+   bool get isView => widget.mode == PageMode.view;
+
+
+void _populateFields(PersonalDetailsModel value) {
+  // Text fields
+  familyMemberName.text = value.name??'' ;
+  mobileNumber.text = value.mobile ;
+  whatsupNumber.text = value.whatsapp ;
+  selectedDate.text = value.dob ;
+  surveyorNameLabel.text = value.surveyor;
+
+
+ selectedGenderId = value.genderId;
+
+
+  selectedBloodGroupId = value.bloodgroup;
+
+
+  selectedRelationId = value.relationId;
+ 
+
+  selectedMaritalStatusId = value.maritalStatusId;
+
+
+  selectedReligionId = value.religionId;
+
+
+  selectedCasteId = value.casteId;
+
+}
 
     @override
 void initState() {
   super.initState();
+  _populateFields(widget.data);
+
+
+
 
   mobileNumber.addListener(() {
     // copy text only if whatsapp field is empty OR same
@@ -123,73 +178,169 @@ void initState() {
                           ],
                         ),
                         const SizedBox(height: 20),
-                          AppDropdownField<String>(
-                          label: 'രക്തഗ്രൂപ്പ്',
-                          selectedValue: selectedBloodGroup,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedReletion = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        AppDropdownField<String>(
-                          label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
-                          selectedValue: selectedReletion,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedReletion = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        AppRadioButtonField(
-                          label: "ലിംഗം",
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 7,
-                          ),
+                           BlocBuilder<BloodGroupBloc, BloodGroupState>(
+                              builder: (context, state) {
+                                if (state is BloodGroupLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-                          value: selectedGender,
-                          options: const [
-                            {'label': 'പുരുഷൻ', 'value': 'male'},
-                            {'label': 'സ്ത്രീ', 'value': 'female'},
-                            {'label': 'മറ്റ്', 'value': 'other'},
-                          ],
-                          onChanged: (v) {
-                            setState(() {
-                              selectedGender = v;
-                            });
-                          },
-                        ),
+if (state is BloodGroupLoaded) {
+
+  // 🔥 ADD THIS (same as ration card logic)
+  if (selectedBloodGroupId != null && selectedBloodGroup == null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedBloodGroupId,
+      orElse: () => state.items.first,
+    );
+
+    selectedBloodGroup = match.name;
+  }
+
+  return AppDropdownField<String>(
+    label: 'രക്തഗ്രൂപ്പ്',
+    selectedValue: selectedBloodGroup,
+    borderColor: AppColor.borderColor,
+    labelColor: AppColor.hintText2,
+    selectedTextColor: AppColor.primary,
+    iconColor: AppColor.black,
+    dropdownBgColor: AppColor.white,
+    dropdownTextColor: AppColor.hintText,
+    validator: Validator.validateSelection,
+    items: state.items.map((e) => e.name).toList(),
+    onChanged: (value) {
+      setState(() {
+        selectedBloodGroup = value;
+        selectedBloodGroupId =
+            state.items.firstWhere((e) => e.name == value).id;
+      });
+    },
+  );
+}
+
+
+                                if (state is BloodGroupError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                        SizedBox(height: 20),
+                     BlocBuilder<RelationDropBloc, RelationDropState>(
+                              builder: (context, state) {
+                                if (state is RelationDropLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is RelationDropLoaded) {
+                                   // 🔥 ADD THIS (same as ration card logic)
+  if (selectedRelationId  != null && selectedReletion== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedRelationId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedReletion= match.name;
+  }
+
+                                  return AppDropdownField<String>(
+                                    label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
+                                    selectedValue: selectedReletion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA HERE
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReletion = value;
+
+                                        selectedRelationId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is RelationDropError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                        SizedBox(height: 20),
+                     BlocBuilder<GenderBloc, GenderState>(
+                              builder: (context, state) {
+                                if (state is GenderLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is GenderLoaded) {
+                                    if (selectedGenderId  != null && selectedGender== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedGenderId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedGender= match.name;
+  }
+                                  return AppDropdownField<String>(
+                                    label: 'ലിംഗം',
+                                    selectedValue: selectedGender,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedGender = value;
+                                        selectedGenderId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is GenderError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
                         SizedBox(height: 20),
                         Row(
                           children: [
@@ -207,81 +358,182 @@ focusedBorderColor: AppColor.borderColor,
                               ),
                             ),
                             SizedBox(width: 20),
-                            Flexible(
-                              child: AppDropdownField<String>(
-                                label: 'വിവാഹസ്ഥിതി',
-                                selectedValue: selectedMaritalStatus,
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                selectedTextColor: AppColor.primary,
-                                iconColor: AppColor.black,
-                                dropdownBgColor: AppColor.white,
-                                dropdownTextColor: AppColor.hintText,
-                                validator: Validator.validateSelection,
-                                items: const [
-                                  'പക്കാ വീട്',
-                                  'സെമി പക്കാ വീട്',
-                                  'കച്ച വീട്',
-                                  'വാടക വീട്',
-                                  'വീട് ഇല്ല',
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedMaritalStatus = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        AppRadioButtonField(
-                          label: "മതം",
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 7,
-                          ),
+                              Flexible(
+                                  child: BlocBuilder<MaritalStatusBloc,
+                                      MaritalStatusState>(
+                                    builder: (context, state) {
+                                      if (state is MaritalStatusLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
 
-                          value: selectedRlgn,
-                          options: const [
-                            {'label': 'ഹിന്ദു', 'value': 'hindu'},
-                            {'label': 'മുസ്ലിം', 'value': 'muslim'},
-                            {'label': 'ക്രിസ്ത്യൻ', 'value': 'cris'},
-                            {'label': 'സിഖ്', 'value': 'sikh'},
-                            {'label': 'ബുദ്ധ', 'value': 'budha'},
-                            {'label': 'ജൈന', 'value': 'jaina'},
-                            {'label': 'മറ്റ്', 'value': 'other'},
+                                      if (state is MaritalStatusLoaded) {
+                                                                 
+                                    if (selectedMaritalStatusId  != null && selectedMaritalStatus== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedMaritalStatusId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedMaritalStatus= match.name;
+  }
+                                        return AppDropdownField<String>(
+                                          label: 'വിവാഹസ്ഥിതി',
+                                          selectedValue: selectedMaritalStatus,
+                                          borderColor: AppColor.borderColor,
+                                          labelColor: AppColor.hintText2,
+                                          selectedTextColor: AppColor.primary,
+                                          iconColor: AppColor.black,
+                                          dropdownBgColor: AppColor.white,
+                                          dropdownTextColor: AppColor.hintText,
+                                          validator:
+                                              Validator.validateSelection,
+
+                                          // ✅ API DATA
+                                          items: state.items
+                                              .map((e) => e.name)
+                                              .toList(),
+
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedMaritalStatus = value;
+
+                                              selectedMaritalStatusId = state
+                                                  .items
+                                                  .firstWhere(
+                                                      (e) => e.name == value)
+                                                  .id;
+                                            });
+                                          },
+                                        );
+                                      }
+
+                                      if (state is MaritalStatusError) {
+                                        return Text(
+                                          state.message,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        );
+                                      }
+
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                ),
                           ],
-                          onChanged: (v) {
-                            setState(() {
-                              selectedRlgn = v;
-                            });
-                          },
                         ),
                         SizedBox(height: 20),
-                        AppDropdownField<String>(
-                          label: 'ജാതി',
-                          selectedValue: selectedCaste,
-                          borderColor: AppColor.borderColor,
-                          labelColor: AppColor.hintText2,
-                          selectedTextColor: AppColor.primary,
-                          iconColor: AppColor.black,
-                          dropdownBgColor: AppColor.white,
-                          dropdownTextColor: AppColor.hintText,
-                          validator: Validator.validateSelection,
-                          items: const [
-                            'പക്കാ വീട്',
-                            'സെമി പക്കാ വീട്',
-                            'കച്ച വീട്',
-                            'വാടക വീട്',
-                            'വീട് ഇല്ല',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCaste = value;
-                            });
-                          },
-                        ),
+                        BlocBuilder<ReligionBloc, ReligionState>(
+                              builder: (context, state) {
+                                if (state is ReligionLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is ReligionLoaded) {
+                                                                      if (selectedReligionId != null && selectedReligion== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id == selectedReligionId ,
+      orElse: () => state.items.first,
+    );
+
+   selectedReligion= match.name;
+  }
+                                  return AppDropdownField<String>(
+                                    label: 'മതം',
+                                    selectedValue: selectedReligion,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedReligion = value;
+
+                                        selectedReligionId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is ReligionError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
+                        SizedBox(height: 20),
+                     BlocBuilder<CasteBloc, CasteState>(
+                              builder: (context, state) {
+                                if (state is CasteLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (state is CasteLoaded) {
+                                                                                                        if ( selectedCasteId  != null && selectedCaste== null) {
+    final match = state.items.firstWhere(
+      (e) => e.id ==  selectedCasteId  ,
+      orElse: () => state.items.first,
+    );
+
+   selectedCaste= match.name;
+  }
+                                  return AppDropdownField<String>(
+                                    label: 'ജാതി',
+                                    selectedValue: selectedCaste,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+
+                                    // ✅ API DATA
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCaste = value;
+
+                                        selectedCasteId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
+
+                                if (state is CasteError) {
+                                  return Text(
+                                    state.message,
+                                    style: const TextStyle(color: Colors.red),
+                                  );
+                                }
+
+                                return const SizedBox();
+                              },
+                            ),
                          SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,
@@ -304,10 +556,10 @@ focusedBorderColor: AppColor.borderColor,
                   AppActionButton(
                     label: "സമർപ്പിക്കുക",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType. personal, )),
+                      // );
                     },
                     labelStyle: const TextStyle(
                       color: AppColor.white,
