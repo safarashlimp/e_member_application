@@ -18,6 +18,9 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_third_model.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 
 import 'package:flutter/material.dart';
@@ -340,7 +343,7 @@ bool get isEdit => widget.mode == PageMode.edit;
                             onChanged: (v) {
                               setState(() {
                                 norkaRegisteredLabel = v;
-                                if (v == 'no') {
+                                if (v == 0) {
                                   // student = null; // reset dropdown
                                 }
                               });

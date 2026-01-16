@@ -11,15 +11,16 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
-import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberSocielDetails extends StatefulWidget {
   final PageMode mode;
   final WelfareResponse  data;
+   
   const EditFamilyMemberSocielDetails({super.key, required this.mode, required this.data});
 
   @override
@@ -80,15 +81,17 @@ bool get isEdit => widget.mode == PageMode.edit;
 }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-          GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
-              Navigator.pop(context);
-            },),
+    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+      builder: (context, state) {
+        return SafeArea(
+          top: false,
+          child: Scaffold(
+            backgroundColor: AppColor.secondary,
+            body: Column(
+              children: [
+              GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വെ',onPress: (){
+                Navigator.pop(context);
+              },),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(13),
@@ -290,28 +293,47 @@ bool get isEdit => widget.mode == PageMode.edit;
                   ),
                   SizedBox(height: 50),
                   if(isEdit)
-                  AppActionButton(
-                    label: "സമർപ്പിക്കുക",
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.welfare,)),
-                      // );
+                  BlocListener<EditFamilyMemberBloc, EditFamilyMemberState>(
+                    listener: (context, state) {
+                      if (state is EditFamilyMemberSubmitSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${state.screenName} updated successfully!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } else if (state is EditFamilyMemberSubmitFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error: ${state.message}'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
-                    labelStyle: const TextStyle(
-                      color: AppColor.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    child: AppActionButton(
+                      label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുന്നു..." : "സമർപ്പിക്കുക",
+                      onPressed: () {
+                        
+                      },
+
+                      labelStyle: const TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      height: 44,
+                      icon: Icons.arrow_forward,
                     ),
-                    height: 44,
-                    icon: Icons.arrow_forward,
                   ),
                 ],
               ),
             ),
           ],
         ),
-      ),
+        ));
+      },
     );
   }
 }

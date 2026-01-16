@@ -44,14 +44,6 @@ if (!status) {
 print('Submission success, data: ${decoded['data']}');
 
 
-    // final decoded = jsonDecode(response.body);
-
-    // if (decoded['Status'] != true) {
-    //   print('Submission failed: ${response.body}');
-    //   print('issue is here not in other place ');
-    //   throw Exception(
-    //     decoded['data']?[0]?['error'] ?? 'Submission failed',
-    //   );
-    // }
+  
   }
 }

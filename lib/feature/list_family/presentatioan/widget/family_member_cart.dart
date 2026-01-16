@@ -39,6 +39,12 @@ import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_bloc.
 import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_event.dart';
 import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_state.dart';
 import 'package:e_member_app/feature/deatail_load/presentation/view/detail_loaded_page.dart';
+import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_detail_3rdpage_repository.dart';
+import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_detail_4thpage_repository.dart';
+import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_detail_5thpage_repository.dart';
+import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_details_secondpage_repository.dart';
+import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_firstpage_details_repository.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
 import 'package:flutter/material.dart';
@@ -100,10 +106,21 @@ class _MemberCardState extends State<MemberCard> {
               ),
       
             ),
+BlocProvider(
+  create: (_) => EditFamilyMemberBloc(
+    widget.position, // ✅ positional argument
+    familyMemberRepository: FamilyMemberRepository(),
+    educationRepository: EducationDetailsRepository(),
+    employmentRepository: EmploymentDetailsRepository (),
+    healthRepository: HealthDetailsRepository(),
+    pensionRepository: PensionDetailsRepository(),
+  ),
+),
+
                       BlocProvider(
                           create: (_) =>
                               RelationDropBloc(MemberDropRepositoryImpl())
-                                ..add(FetchRelations()),
+                                ..add(FetchRelations()), 
                         ),
                         BlocProvider(
                           create: (_) =>

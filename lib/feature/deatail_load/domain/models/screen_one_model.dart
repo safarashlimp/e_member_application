@@ -15,8 +15,8 @@
 // }
 
 class PersonalDetailsModel {
-  final String id;
-  final String householdId;
+  final String ?id;
+  final String ?householdId;
   final String name;
   final String mobile;
   final String whatsapp;
@@ -28,11 +28,11 @@ class PersonalDetailsModel {
   final String religionId;
   final String casteId;
   final String surveyor;
-  final String wardMember;
+   final String ?wardMember;
 
   PersonalDetailsModel({
-    required this.id,
-    required this.householdId,
+    this.id,
+    this.householdId,
     required this.name,
     required this.mobile,
     required this.whatsapp,
@@ -44,7 +44,7 @@ class PersonalDetailsModel {
     required this.religionId,
     required this.casteId,
     required this.surveyor,
-    required this.wardMember,
+     this.wardMember,
   });
 
   // factory PersonalDetailsModel.fromJson(Map<String, dynamic> json) {

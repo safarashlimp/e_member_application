@@ -12,6 +12,9 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
@@ -77,13 +80,15 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-            GradientHeader(
-              title: 'സമ്പൂർണ്ണ സർവ്വേ',
+    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: AppColor.secondary,
+            body: Column(
+              children: [
+                GradientHeader(
+                  title: 'സമ്പൂർണ്ണ സർവ്വേ',
               onPress: () {
                 Navigator.pop(context);
               },
@@ -358,28 +363,64 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                   ),
                   SizedBox(height: 50),
                   if (isEdit)
-                    AppActionButton(
-                      label: "സമർപ്പിക്കുക",
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.health,), ),
-                        // );
+                    BlocListener<EditFamilyMemberBloc, EditFamilyMemberState>(
+                      listener: (context, state) {
+                        if (state is EditFamilyMemberSubmitSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${state.screenName} updated successfully!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          Navigator.pop(context);
+                        } else if (state is EditFamilyMemberSubmitFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error: ${state.message}'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
-                      labelStyle: const TextStyle(
-                        color: AppColor.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      child: AppActionButton(
+                        label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുന്നു..." : "സമർപ്പിക്കുക",
+                        onPressed: () {
+                          // final healthModel = HealthModel(
+                          //   isPatient: patient.toString(),
+                          //   diseases: hasHealthIssuesId,
+                          //   treatmentPlace: treatmentPlaceLabel.text,
+                          //   disabled: hasDisability.toString(),
+                          //   disabilityBenefit: disabilityBenefit.toString(),
+                          //   insuranceCard: healthInsuranceCard.toString(),
+                          //   insuranceTypeId: healthInsuranceId,
+                          //   healthHelp: requiredHealthSupportsId,
+                          //   surveyor: surveyorNameLabel.text,
+                          // );
+
+                          // context.read<EditFamilyMemberBloc>().add(
+                          //   SubmitHealthDetailsEvent(
+                          //     data: healthModel,
+                          //     clientId: '1', // Replace with actual clientId
+                          //     editId: widget.data.id,
+                          //   ),
+                          // );
+                        },
+                        labelStyle: const TextStyle(
+                          color: AppColor.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        height: 44,
+                        icon: Icons.arrow_forward,
                       ),
-                      height: 44,
-                      icon: Icons.arrow_forward,
                     ),
                 ],
               ),
             ),
           ],
         ),
-      ),
+           )   );
+      },
     );
   }
 }
