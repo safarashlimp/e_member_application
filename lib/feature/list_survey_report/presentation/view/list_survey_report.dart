@@ -197,6 +197,8 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
+import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_Servay_filter.dart';
 
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
@@ -299,9 +301,16 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   //=============exp=============
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return SafeArea(
+    
       top: false,
       child: Scaffold(
+        key: _scaffoldKey,
+
+        drawer:  drawerchosing(),
+        // drawer: AddSurveyFilterPage() ,
+        // drawer: AddBasicDetailsFilter(),
         //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
         //         floatingActionButton: FloatingActionButton(
         //           onPressed: () {
@@ -332,7 +341,11 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
             GradientHeader(title: 'സമർപ്പിച്ച വിവരങ്ങൾ'),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+              child: SearchFieldBar(
+                onFilterTap: (){
+                   _scaffoldKey.currentState!.openDrawer();
+                },
+                hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
             ),
             Expanded(
               child: Container(
@@ -342,6 +355,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                     if (state is HeaderListLoading) {
                       return const Center(child: CircularProgressIndicator(
                         color:AppColor.iconColor ,
+
                       ));
                     }
 
@@ -387,5 +401,18 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
         ),
       ),
     );
+  }
+
+
+  drawerchosing(){
+
+    if(widget.postion=="1"){
+
+      return  AddSurveyFilterPage();
+    }
+    else{
+return AddBasicDetailsFilter();
+
+    }
   }
 }
