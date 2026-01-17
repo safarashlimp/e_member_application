@@ -51,6 +51,8 @@ class AddBasicFilter extends Bloc<AddFilterSubmitEvent, FilterStateAddBasic> {
 
   void _onSubmitFilter(SubmitAddFilterSubmitEvent event, Emitter<FilterStateAddBasic> emit) {
     emit(state.copyWith(isSubmitting: true));
+
+    print("this is submition");
     // Add your submit logic here
     print('Selections: ${state.selections}');
     emit(state.copyWith(isSubmitting: false));
