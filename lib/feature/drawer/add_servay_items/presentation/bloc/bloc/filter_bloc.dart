@@ -77,6 +77,8 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     
     try {
       await submitFilters(state.selections);
+       print("submiton is sucess");
+      print(state.selections);
       emit(state.copyWith(status: FilterStatus.submitted));
     } catch (e) {
       emit(state.copyWith(
