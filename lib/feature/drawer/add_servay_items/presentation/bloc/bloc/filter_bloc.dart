@@ -83,8 +83,11 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     emit(state.copyWith(status: FilterStatus.submitting));
     
     try {
-      await submitFilters(state.selections, state.filterOptions);
-      emit(state.copyWith(status: FilterStatus.submitted));
+      final payload = await submitFilters(state.selections, state.filterOptions);
+      emit(state.copyWith(
+        status: FilterStatus.submitted,
+        filterPayload: payload,
+      ));
     } catch (e) {
       emit(state.copyWith(
         status: FilterStatus.error,

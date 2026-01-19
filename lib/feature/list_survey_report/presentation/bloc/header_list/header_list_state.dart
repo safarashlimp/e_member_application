@@ -8,8 +8,11 @@ class HeaderListLoading extends HeaderListState {}
 
 class HeaderListLoaded extends HeaderListState {
   final List<HeaderItem> items;
+  final Map<String, dynamic>? appliedFilters;
 
-  HeaderListLoaded(this.items);
+  HeaderListLoaded(this.items, {this.appliedFilters});
+
+  bool get hasFilters => appliedFilters != null && appliedFilters!.isNotEmpty;
 }
 
 class HeaderListError extends HeaderListState {

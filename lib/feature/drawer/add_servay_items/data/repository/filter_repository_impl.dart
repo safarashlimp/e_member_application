@@ -22,7 +22,7 @@ class FilterRepositoryImpl implements FilterRepository {
     try {
       // Fetch ration card types from API
       final rationCards = await _familyDropRepo.rationCardType();
-
+      
       // Convert API response to filter options
       final rationCardOptions = rationCards.map((card) => card.name).toList();
 
@@ -32,7 +32,9 @@ class FilterRepositoryImpl implements FilterRepository {
           label: "റേഷൻ കാർഡ്",
           options: rationCardOptions,
           // Store API IDs for later conversion
-          metadata: {for (var card in rationCards) card.name: card.id},
+          metadata: {
+            for (var card in rationCards) card.name: card.id
+          },
         ),
         const FilterOption(
           id: "തൊഴിലുറപ്പ് കാർഡ",
@@ -68,7 +70,7 @@ class FilterRepositoryImpl implements FilterRepository {
         id: "റേഷൻ കാർഡ്",
         label: "റേഷൻ കാർഡ്",
         options: [
-          "(AAY)",
+          "മഞ്ഞ (AAY)",
           "പിങ്ക് (PHH)",
           "നീല (NPHH)",
           "വെള്ള (NPNS)",
@@ -110,11 +112,11 @@ class FilterRepositoryImpl implements FilterRepository {
   }
 
   @override
-  Future<void> submitFilters(
+  Future<Map<String, dynamic>> submitFilters(
     FilterSelection selection,
     List<FilterOption> filterOptions,
   ) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
 
     final Map<String, dynamic> apiPayload = {};
 
@@ -133,7 +135,6 @@ class FilterRepositoryImpl implements FilterRepository {
           apiPayload[apiKey] = cardId;
         }
       }
-
       /// Yes / No → send 1 or 0
       else {
         apiPayload[apiKey] = _mapYesNo(selectedValue);
@@ -141,9 +142,8 @@ class FilterRepositoryImpl implements FilterRepository {
     }
 
     /// FINAL API REQUEST DATA
-    print("API Payload: $apiPayload");
-
-    // TODO: Make actual API call here
-    // await _apiClient.submitFilters(apiPayload);
+    print("🎯 Filter API Payload: $apiPayload");
+    
+    return apiPayload;
   }
 }

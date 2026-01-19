@@ -9,6 +9,7 @@ class FilterState {
   final FilterSelection selections;
   final int currentStep;
   final String? errorMessage;
+  final Map<String, dynamic>? filterPayload;
 
   const FilterState({
     required this.status,
@@ -16,6 +17,7 @@ class FilterState {
     required this.selections,
     required this.currentStep,
     this.errorMessage,
+    this.filterPayload,
   });
 
   // Factory constructor for initial state
@@ -26,6 +28,7 @@ class FilterState {
       selections: FilterSelection(selections: {}),
       currentStep: 0,
       errorMessage: null,
+      filterPayload: null,
     );
   }
 
@@ -35,6 +38,7 @@ class FilterState {
     FilterSelection? selections,
     int? currentStep,
     String? errorMessage,
+    Map<String, dynamic>? filterPayload,
   }) {
     return FilterState(
       status: status ?? this.status,
@@ -42,6 +46,7 @@ class FilterState {
       selections: selections ?? this.selections,
       currentStep: currentStep ?? this.currentStep,
       errorMessage: errorMessage ?? this.errorMessage,
+      filterPayload: filterPayload ?? this.filterPayload,
     );
   }
 

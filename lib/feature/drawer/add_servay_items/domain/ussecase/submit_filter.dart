@@ -7,7 +7,7 @@ class SubmitFilters {
 
   SubmitFilters(this.repository);
 
-  Future<void> call(
+  Future<Map<String, dynamic>> call(
     FilterSelection selection,
     List<FilterOption> filterOptions,
   ) async {

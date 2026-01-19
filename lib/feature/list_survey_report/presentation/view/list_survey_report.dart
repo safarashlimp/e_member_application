@@ -1,11 +1,9 @@
 
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_Servay_filter.dart';
-
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -17,13 +15,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ListSurveyReport extends StatefulWidget {
   final FamilySurveySectionType sectionType;
   final String postion;
-  const ListSurveyReport({super.key, required this.sectionType, required this.postion});
+  const ListSurveyReport({
+    super.key,
+    required this.sectionType,
+    required this.postion,
+  });
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
 }
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String get pageTitle {
     switch (widget.sectionType) {
       case FamilySurveySectionType.familyBasicDetails:
@@ -33,114 +37,54 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     }
   }
 
-  // -------------------- update------------------------
   @override
   void initState() {
     super.initState();
     context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
   }
 
-  // }
+  // Open filter drawer and wait for result
+  Future<void> _openFilterDrawer() async {
+    final result = await showGeneralDialog<Map<String, dynamic>>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Filter',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: _drawerChosing(),
+        );
+      },
+    );
 
-  // Future<void> _checkForUpdates() async {
-  //   // Simulate checking for updates
-  //   await Future.delayed(const Duration(milliseconds: 500));
-
-  //   // Check if update is available
-  //   bool isUpdateAvailable = await _isUpdateAvailable();
-
-  //   if (isUpdateAvailable && mounted) {
-  //     showAppUpdateDialog(context);
-  //   }
-  // }
-
-  // // This function checks if an update is available
-  // // You can replace this with actual API call or version check
-  // Future<bool> _isUpdateAvailable() async {
-  //   // Example: Compare current version with server version
-  //   // const String currentVersion = "1.0.0";
-  //   // String serverVersion = await fetchServerVersion();
-  //   // return serverVersion != currentVersion;
-
-  //   // For demo purposes, return true to always show dialog
-  //   return true; // Change to false to hide dialog
-  // }
-
-  // void showAppUpdateDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (BuildContext context) {
-  //       return const AppUpdateDialog();
-  //     },
-  //   );
-  // }
-
-  //--------------------------update----------------------
-  //===================exp==========
-  Future<void> _checkAppStatus() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    bool expired = await isAppExpired();
-
-    if (expired && mounted) {
-      showAppExpiredDialog(context);
+    // If filters were submitted, apply them
+    if (result != null) {
+      _applyFilters(result);
     }
   }
 
-  // }
-  // Optional: Function to check if app is expired
-  Future<bool> isAppExpired() async {
-    // Example 1: Check with server
-    // final response = await http.get(Uri.parse('https://your-api.com/app-status'));
-    // final data = json.decode(response.body);
-    // return data['is_expired'] ?? false;
-
-    // Example 2: Check expiry date
-    // final expiryDate = DateTime(2024, 12, 31);
-    // return DateTime.now().isAfter(expiryDate);
-
-    // For demo purposes
-    return false; // Change to true to test the dialog
+  void _applyFilters(Map<String, dynamic> filters) {
+    print('🎯 Applying filters to list: $filters');
+    context.read<HeaderListBloc>().add(
+          ApplyFilters(widget.postion, filters),
+        );
   }
 
-  //=============exp=============
+  void _clearFilters() {
+    context.read<HeaderListBloc>().add(ClearFilters(widget.postion));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return SafeArea(
-    
       top: false,
       child: Scaffold(
         key: _scaffoldKey,
-
-        drawer:  drawerchosing(),
-        // drawer: AddSurveyFilterPage() ,
-        // drawer: AddBasicDetailsFilter(),
-        //  bottomNavigationBar: MainBottomBar(currentIndex: 0),
-        //         floatingActionButton: FloatingActionButton(
-        //           onPressed: () {
-        //         Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => BlocProvider(
-        //       create: (_) => RationCardBloc(
-        //         RationCardRepository(),
-        //       )..add(FetchRationCards()),
-        //       child:
-        //        const AddServyItems(mode: PageMode.add),
-        //     ),
-        //   ),
-        // );
-
-        //           },
-        //           backgroundColor: AppColor.iconColor, // 💚 changes color
-        //           foregroundColor: AppColor.white,
-        //           // optional - icon color
-        //           shape: const CircleBorder(), // ensures circular shape
-
-        //           child: const Icon(Icons.add, size: 24),
-        //         ),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
@@ -148,36 +92,98 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchFieldBar(
-                onFilterTap: (){
-                   _scaffoldKey.currentState!.openDrawer();
-                },
-                hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+                onFilterTap: _openFilterDrawer,
+                hintText: 'വീട് നമ്പർ / പേര് തിരയുക',
+              ),
             ),
+
+            // Filter indicator chip
+            BlocBuilder<HeaderListBloc, HeaderListState>(
+              builder: (context, state) {
+                if (state is HeaderListLoaded && state.hasFilters) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      children: [
+                        Chip(
+                          avatar: const Icon(
+                            Icons.filter_alt,
+                            size: 16,
+                            color: Color(0xFF0284C7),
+                          ),
+                          label: const Text(
+                            'ഫിൽട്ടർ പ്രയോഗിച്ചു',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          deleteIcon: const Icon(Icons.close, size: 16),
+                          onDeleted: _clearFilters,
+                          backgroundColor: const Color(0xFFE0F2FE),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+
             Expanded(
               child: Container(
                 color: AppColor.white,
                 child: BlocBuilder<HeaderListBloc, HeaderListState>(
                   builder: (context, state) {
                     if (state is HeaderListLoading) {
-                      return const Center(child: CircularProgressIndicator(
-                        color:AppColor.iconColor ,
-
-                      ));
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.iconColor,
+                        ),
+                      );
                     }
 
                     if (state is HeaderListLoaded) {
                       if (state.items.isEmpty) {
-        return const Center(
-          child: Text(
-            'വിവരങ്ങൾ ലഭ്യമല്ല',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
-        );
-      }
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 64,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                state.hasFilters
+                                    ? 'ഫിൽട്ടറുകൾക്ക് യോജിക്കുന്ന വിവരങ്ങൾ ഇല്ല'
+                                    : 'വിവരങ്ങൾ ലഭ്യമല്ല',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              if (state.hasFilters) ...[
+                                const SizedBox(height: 16),
+                                ElevatedButton.icon(
+                                  onPressed: _clearFilters,
+                                  icon: const Icon(Icons.clear),
+                                  label: const Text('ഫിൽട്ടറുകൾ മായ്ക്കുക'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.iconColor,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        );
+                      }
+
                       return ListView.builder(
                         itemCount: state.items.length,
-
                         itemBuilder: (context, index) {
                           final item = state.items[index];
                           return PropertyCard(
@@ -209,16 +215,11 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     );
   }
 
-
-  drawerchosing(){
-
-    if(widget.postion=="1"){
-
-      return  AddSurveyFilterPage();
-    }
-    else{
-return AddBasicDetailsFilter();
-
+  Widget _drawerChosing() {
+    if (widget.postion == "1") {
+      return const AddSurveyFilterPage();
+    } else {
+      return const AddBasicDetailsFilter();
     }
   }
 }

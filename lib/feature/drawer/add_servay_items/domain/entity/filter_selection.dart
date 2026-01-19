@@ -22,7 +22,6 @@
 //   }
 // }
 
-
 class FilterSelection {
   final Map<String, String?> selections;
 
