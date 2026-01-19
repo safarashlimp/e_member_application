@@ -18,12 +18,14 @@ class FilterState {
     this.errorMessage,
   });
 
+  // Factory constructor for initial state
   factory FilterState.initial() {
     return const FilterState(
       status: FilterStatus.initial,
       filterOptions: [],
       selections: FilterSelection(selections: {}),
       currentStep: 0,
+      errorMessage: null,
     );
   }
 
@@ -43,8 +45,29 @@ class FilterState {
     );
   }
 
-  FilterOption get currentFilter => filterOptions[currentStep];
-  String? get currentSelection => selections.selections[currentFilter.id];
-  bool get isLastStep => currentStep == filterOptions.length - 1;
+  // Safe getters with fallback
+  FilterOption? get currentFilterOrNull => 
+      filterOptions.isNotEmpty && currentStep < filterOptions.length
+          ? filterOptions[currentStep]
+          : null;
+
+  FilterOption get currentFilter {
+    if (filterOptions.isEmpty) {
+      throw StateError('No filter options available');
+    }
+    if (currentStep >= filterOptions.length) {
+      throw StateError('Current step index out of bounds');
+    }
+    return filterOptions[currentStep];
+  }
+
+  String? get currentSelection {
+    final filter = currentFilterOrNull;
+    return filter != null ? selections.selections[filter.id] : null;
+  }
+
+  bool get isLastStep => 
+      filterOptions.isNotEmpty && currentStep == filterOptions.length - 1;
+  
   bool get isFirstStep => currentStep == 0;
 }

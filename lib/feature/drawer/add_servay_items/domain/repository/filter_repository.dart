@@ -2,9 +2,12 @@ import 'package:e_member_app/feature/drawer/add_servay_items/domain/entity/filte
 import 'package:e_member_app/feature/drawer/add_servay_items/domain/entity/filter_selection.dart';
 
 abstract class FilterRepository {
-  List<FilterOption> getFilterOptions();
+  Future<List<FilterOption>> getFilterOptions();
   FilterSelection getInitialSelections();
-  Future<void> submitFilters(FilterSelection selection);
+  Future<void> submitFilters(
+    FilterSelection selection,
+    List<FilterOption> filterOptions,
+  );
 }
 
 // domain/usecases/get_filter_options.dart
@@ -13,7 +16,7 @@ class GetFilterOptions {
 
   GetFilterOptions(this.repository);
 
-  List<FilterOption> call() {
-    return repository.getFilterOptions();
+  Future<List<FilterOption>> call() async {
+    return await repository.getFilterOptions();
   }
 }
