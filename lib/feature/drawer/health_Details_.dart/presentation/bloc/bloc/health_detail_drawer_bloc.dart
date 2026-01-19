@@ -1,10 +1,16 @@
+// lib/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_bloc.dart
+
 import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_drawer_filter.dart';
+import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/repo/health_drawer_repo.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_event.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
-  HealthDrawerBloc() : super(const HealthDrawerState()) {
+  final HealthDrawerRepository _repository;
+
+  HealthDrawerBloc(this._repository) : super(const HealthDrawerState()) {
+    on<HealthDrawerInitialize>(_onInitialize);
     on<HealthDrawerStepChanged>(_onStepChanged);
     on<HealthDrawerOptionSelected>(_onOptionSelected);
     on<HealthDrawerNextStep>(_onNextStep);
@@ -13,11 +19,31 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     on<HealthDrawerSubmit>(_onSubmit);
   }
 
+  Future<void> _onInitialize(
+    HealthDrawerInitialize event,
+    Emitter<HealthDrawerState> emit,
+  ) async {
+    emit(state.copyWith(status: HealthDrawerStatus.loading));
+    
+    try {
+      final steps = await _repository.getAllHealthSteps();
+      emit(state.copyWith(
+        status: HealthDrawerStatus.loaded,
+        steps: steps,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: HealthDrawerStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
   void _onStepChanged(
     HealthDrawerStepChanged event,
     Emitter<HealthDrawerState> emit,
   ) {
-    if (event.step >= 0 && event.step < 5) {
+    if (event.step >= 0 && event.step < state.steps.length) {
       emit(state.copyWith(currentStep: event.step));
     }
   }
@@ -28,21 +54,21 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
   ) {
     HealthDrawerFilter updatedFilter;
     
-    switch (event.filterKey) {
-      case 'രോഗിയാണോ':
-        updatedFilter = state.filter.copyWith(isPatient: event.option);
+    switch (event.stepIndex) {
+      case 0: // രോഗിയാണോ
+        updatedFilter = state.filter.copyWith(isPatient: event.optionId);
         break;
-      case 'ഭിന്നശേഷിയുണ്ടോ':
-        updatedFilter = state.filter.copyWith(hasDisability: event.option);
+      case 1: // ഭിന്നശേഷിയുണ്ടോ
+        updatedFilter = state.filter.copyWith(hasDisability: event.optionId);
         break;
-      case 'സർക്കാർ ആനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ':
-        updatedFilter = state.filter.copyWith(receivesGovernmentBenefits: event.option);
+      case 2: // സർക്കാർ ആനുകൂല്യങ്ങൾ
+        updatedFilter = state.filter.copyWith(receivesGovernmentBenefits: event.optionId);
         break;
-      case 'ഹെൽത്ത് ഇൻഷൂറൻസ് കാർഡ് ഉണ്ടോ':
-        updatedFilter = state.filter.copyWith(hasHealthInsurance: event.option);
+      case 3: // ഹെൽത്ത് ഇൻഷൂറൻസ്
+        updatedFilter = state.filter.copyWith(hasHealthInsurance: event.optionId);
         break;
-      case 'ആവശ്യമായ ആരോഗ്യ സഹായങ്ങൾ':
-        updatedFilter = state.filter.copyWith(requiredHealthAssistance: event.option);
+      case 4: // ആരോഗ്യ സഹായങ്ങൾ
+        updatedFilter = state.filter.copyWith(requiredHealthAssistance: event.optionId);
         break;
       default:
         return;
@@ -73,7 +99,10 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     HealthDrawerReset event,
     Emitter<HealthDrawerState> emit,
   ) {
-    emit(const HealthDrawerState());
+    emit(state.copyWith(
+      filter: const HealthDrawerFilter(),
+      currentStep: 0,
+    ));
   }
 
   void _onSubmit(
@@ -83,9 +112,16 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     emit(state.copyWith(status: HealthDrawerStatus.loading));
     
     try {
-      // Here you can add your submission logic
-      // For example, save to repository, send to API, etc.
-      print('Health Drawer Filter: ${state.filter.toMap()}');
+      final filterMap = state.filter.toMap();
+      print('Health Filter Submitted: $filterMap');
+      // Example output:
+      // {
+      //   'is_patient': '1',
+      //   'has_disability': '0',
+      //   'receives_government_benefits': '1',
+      //   'has_health_insurance': '0',
+      //   'required_health_assistance_id': '7'
+      // }
       
       emit(state.copyWith(status: HealthDrawerStatus.success));
     } catch (e) {

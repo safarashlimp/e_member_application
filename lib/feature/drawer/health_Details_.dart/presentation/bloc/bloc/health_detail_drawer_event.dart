@@ -1,4 +1,8 @@
+// lib/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_event.dart
+
 abstract class HealthDrawerEvent {}
+
+class HealthDrawerInitialize extends HealthDrawerEvent {}
 
 class HealthDrawerStepChanged extends HealthDrawerEvent {
   final int step;
@@ -6,9 +10,10 @@ class HealthDrawerStepChanged extends HealthDrawerEvent {
 }
 
 class HealthDrawerOptionSelected extends HealthDrawerEvent {
-  final String filterKey;
-  final String option;
-  HealthDrawerOptionSelected(this.filterKey, this.option);
+  final int stepIndex;
+  final String optionId; // This will be "1"/"0" for yes/no or actual ID for dropdown
+  
+  HealthDrawerOptionSelected(this.stepIndex, this.optionId);
 }
 
 class HealthDrawerNextStep extends HealthDrawerEvent {}

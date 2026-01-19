@@ -1,38 +1,31 @@
+// lib/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_state.dart
+
+import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_FilterStep.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_drawer_filter.dart';
 
-enum HealthDrawerStatus { initial, loading, success, error }
+enum HealthDrawerStatus { initial, loading, loaded, success, error }
 
 class HealthDrawerState {
+  final HealthDrawerStatus status;
   final int currentStep;
   final HealthDrawerFilter filter;
-  final HealthDrawerStatus status;
+  final List<HealthFilterStep> steps;
   final String? errorMessage;
 
   const HealthDrawerState({
+    this.status = HealthDrawerStatus.initial,
     this.currentStep = 0,
     this.filter = const HealthDrawerFilter(),
-    this.status = HealthDrawerStatus.initial,
+    this.steps = const [],
     this.errorMessage,
   });
 
-  HealthDrawerState copyWith({
-    int? currentStep,
-    HealthDrawerFilter? filter,
-    HealthDrawerStatus? status,
-    String? errorMessage,
-  }) {
-    return HealthDrawerState(
-      currentStep: currentStep ?? this.currentStep,
-      filter: filter ?? this.filter,
-      status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
-
-  bool get canGoNext => currentStep < 4; // 5 steps (0, 1, 2, 3, 4)
+  bool get canGoNext => currentStep < steps.length - 1;
   bool get canGoPrevious => currentStep > 0;
-  
+
   String? getCurrentSelection() {
+    if (steps.isEmpty || currentStep >= steps.length) return null;
+    
     switch (currentStep) {
       case 0:
         return filter.isPatient;
@@ -47,5 +40,21 @@ class HealthDrawerState {
       default:
         return null;
     }
+  }
+
+  HealthDrawerState copyWith({
+    HealthDrawerStatus? status,
+    int? currentStep,
+    HealthDrawerFilter? filter,
+    List<HealthFilterStep>? steps,
+    String? errorMessage,
+  }) {
+    return HealthDrawerState(
+      status: status ?? this.status,
+      currentStep: currentStep ?? this.currentStep,
+      filter: filter ?? this.filter,
+      steps: steps ?? this.steps,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 }

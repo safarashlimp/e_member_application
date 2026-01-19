@@ -1,9 +1,11 @@
+// lib/feature/drawer/health_Details_.dart/domain/entity/health_drawer_filter.dart
+
 class HealthDrawerFilter {
-  final String? isPatient;
-  final String? hasDisability;
-  final String? receivesGovernmentBenefits;
-  final String? hasHealthInsurance;
-  final String? requiredHealthAssistance;
+  final String? isPatient; // Will store "1" or "0"
+  final String? hasDisability; // Will store "1" or "0"
+  final String? receivesGovernmentBenefits; // Will store "1" or "0"
+  final String? hasHealthInsurance; // Will store "1" or "0"
+  final String? requiredHealthAssistance; // Will store health support ID
 
   const HealthDrawerFilter({
     this.isPatient,
@@ -29,21 +31,13 @@ class HealthDrawerFilter {
     );
   }
 
-  bool get isComplete {
-    return isPatient != null &&
-        hasDisability != null &&
-        receivesGovernmentBenefits != null &&
-        hasHealthInsurance != null &&
-        requiredHealthAssistance != null;
-  }
-
-  Map<String, String?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'isPatient': isPatient,
-      'hasDisability': hasDisability,
-      'receivesGovernmentBenefits': receivesGovernmentBenefits,
-      'hasHealthInsurance': hasHealthInsurance,
-      'requiredHealthAssistance': requiredHealthAssistance,
+      if (isPatient != null) 'is_patient': isPatient,
+      if (hasDisability != null) 'has_disability': hasDisability,
+      if (receivesGovernmentBenefits != null) 'receives_government_benefits': receivesGovernmentBenefits,
+      if (hasHealthInsurance != null) 'has_health_insurance': hasHealthInsurance,
+      if (requiredHealthAssistance != null) 'required_health_assistance_id': requiredHealthAssistance,
     };
   }
 }

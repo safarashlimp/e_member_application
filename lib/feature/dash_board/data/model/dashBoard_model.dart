@@ -1,5 +1,4 @@
 import 'package:e_member_app/feature/dash_board/domain/entity/dashboard_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class DashboardModel  extends DashboardEntity{
 
