@@ -1,58 +1,57 @@
+// lib/feature/drawer/add_basic_details/data/model/filter_add_basic.dart
 import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 
 class FilterData {
   static const List<FilterStep> basicDetailsSteps = [
     FilterStep(
       name: "വീടിന്റെ തരം",
-      options: ["ഓട് / ഷീറ്റ്", "കോൺക്രീറ്റ്", "ഭൂരഹിതൻ", "താൽക്കാലികം"],
+      options: [], // Will be filled from API position 2
+      position: 2,
     ),
     FilterStep(
       name: "ഭൂമിയുടെ തരം",
-      options: ["പട്ടയം", "പുറമ്പോക്ക്"],
+      options: [], // Will be filled from API position 3
+      position: 3,
     ),
     FilterStep(
       name: "ശൗചാലയം",
-      options: ["ഉണ്ട്", "ഇല്ല"],
+      options: ["ഉണ്ട്", "ഇല്ല"], // Static
+      position: -1,
     ),
     FilterStep(
       name: "വൈദ്യുതി കണക്ഷൻ",
-      options: ["ഉണ്ട്", "ഇല്ല"],
+      options: ["ഉണ്ട്", "ഇല്ല"], // Static
+      position: -1,
     ),
     FilterStep(
       name: "കുടിവെളള സൗകര്യം",
-      options: ["ട്യൂബ് കിണർ", "പൊതു പൈപ്പ്", "മറ്റു മാർഗങ്ങൾ", "സ്വന്തം കിണർ"],
+      options: [], // Will be filled from API position 4
+      position: 4,
     ),
     FilterStep(
       name: "നിലവിൽ വീടിന് ആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ",
-      options: ["ഉണ്ട്", "ഇല്ല"],
+      options: ["ഉണ്ട്", "ഇല്ല"], // Static
+      position: -1,
     ),
     FilterStep(
       name: "ലഭിച്ച ആനുകൂല്യം",
-      options: ["പി.എം.എ.വൈ", "മറ്റുള്ളവ", "ലൈഫ് മിഷൻ", "വീട് അറ്റകുറ്റപ്പണി", "സ്ഥലം"],
+      options: [], // Will be filled from API position 5
+      position: 5,
     ),
     FilterStep(
       name: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ",
-      options: ["ഉണ്ട്", "ഇല്ല"],
+      options: ["ഉണ്ട്", "ഇല്ല"], // Static
+      position: -1,
     ),
     FilterStep(
       name: "ആവശ്യമുള്ള ആനുകൂല്യം",
-      options: [
-        "ആട്",
-        "കുടിവെള്ളം",
-        "കോഴി",
-        "തൊഴുത്ത്",
-        "പതറൾ",
-        "മറ്റുള്ളവ",
-        "വീട്",
-        "വീട് അറ്റകുറ്റപ്പണി",
-        "വൈദ്യുതി കണക്ഷൻ",
-        "ശൗചാലയം",
-        "സ്ഥലം"
-      ],
+      options: [], // Will be filled from API position 6
+      position: 6,
     ),
     FilterStep(
       name: "വാർഡില പൊതുവായ ആവശ്യങ്ങൾ",
-      options: ["ഡ്രൈനേജ്", "പ്ലേറ്റ്", "മറ്റുള്ളവ", "റോഡ്"],
+      options: [], // Will be filled from API position 7
+      position: 7,
     ),
   ];
 }
