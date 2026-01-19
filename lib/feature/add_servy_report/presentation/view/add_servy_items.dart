@@ -137,15 +137,14 @@ class _AddServyItemsState extends State<AddServyItems> {
           body: BlocBuilder<RationCardBloc, RationCardState>(
             builder: (context, state) {
               if (state is RationCardLoading) {
-              return Container(
-                
-                height: double.infinity,
-                width:  double.infinity,
-                color: AppColor.blue,
-                child: Center(child: CircularProgressIndicator(
-              color: AppColor.white,
-
-                )));
+                return Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: AppColor.blue,
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: AppColor.white,
+                    )));
               }
               if (state is RationCardError) {
                 return Center(child: Text(state.message));
@@ -231,7 +230,6 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         textColor: AppColor.primary,
                                         width: double.infinity,
                                         height: 40,
-                                    
                                       ),
                                     ),
                                   ],
@@ -395,83 +393,68 @@ class _AddServyItemsState extends State<AddServyItems> {
                                   child: AppActionButton(
                                     label: "അടുത്തത്",
                                     onPressed: () {
-                                      // if (gardienName.text.trim().isEmpty ||
-                                      //     houseNumber.text.trim().isEmpty || 
-                                      //     houseName.text.trim().isEmpty ||
-                                      //     cardNumber.text.trim().isEmpty ||
-                                      //     selectedRationCardId == null) {
-                                      //   ScaffoldMessenger.of(context)
-                                      //       .showSnackBar(
-                                      //     const SnackBar(
-                                      //       content: Text(
-                                      //           'അവശ്യമായ എല്ലാ വിവരങ്ങളും നൽകുക'),
-                                      //     ),
-                                      //   );
-                                      //   return;
-                                      // }
-                                      if(_formKey.currentState!.validate()){
-                                       
-                                      
-                                      final headerData = SurveyHeaderModel(
-                                        houseChief: gardienName.text,
-                                        houseNumber: houseNumber.text,
-                                        houseName: houseName.text,
-                                        rationCardNumber: cardNumber.text,
-                                        rationCardTypeId:
-                                            selectedRationCardId.toString(),
-                                        annualIncome: anualIncome.text,
-                                        hasJobCard: rationCard,
-                                        kudumbashreeMember: casteCert,
-                                        govtBeneficiary: disability,
-                                        extremePoor: widow,
-                                      );
-                                      
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => MultiBlocProvider(
-                                            providers: [
-                                              BlocProvider(
-                                                create: (_) => HouseTypeBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchHouseTypes()),
-                                              ),
-                                              BlocProvider(
-                                                create: (_) => LandTypeBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchLandTypes()),
-                                              ),
-                                              BlocProvider(
-                                                create: (_) =>
-                                                    WaterFacilityBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchWaterFacilities()),
-                                              ),
-                                              BlocProvider(
-                                                create: (_) =>
-                                                    RequiredBenefitBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchRequiredBenefits()),
-                                              ),
-                                              BlocProvider(
-                                                create: (_) => OtherBenefitBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchOtherBenefits()),
-                                              ),
-                                              BlocProvider(
-                                                create: (_) =>
-                                                    WardGeneralNeedBloc(
-                                                  FamilyDropRepositoryImpl(),
-                                                )..add(FetchWardGeneralNeeds()),
-                                              ),
-                                            ],
-                                            child: AddItemBasicDetails(
-                                                headerData: headerData,
-                                                mode: PageMode.add),
+                                      if (_formKey.currentState!.validate()) {
+                                        final headerData = SurveyHeaderModel(
+                                          houseChief: gardienName.text,
+                                          houseNumber: houseNumber.text,
+                                          houseName: houseName.text,
+                                          rationCardNumber: cardNumber.text,
+                                          rationCardTypeId:
+                                              selectedRationCardId.toString(),
+                                          annualIncome: anualIncome.text,
+                                          hasJobCard: rationCard,
+                                          kudumbashreeMember: casteCert,
+                                          govtBeneficiary: disability,
+                                          extremePoor: widow,
+                                        );
+
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider(
+                                                  create: (_) => HouseTypeBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchHouseTypes()),
+                                                ),
+                                                BlocProvider(
+                                                  create: (_) => LandTypeBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchLandTypes()),
+                                                ),
+                                                BlocProvider(
+                                                  create: (_) =>
+                                                      WaterFacilityBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchWaterFacilities()),
+                                                ),
+                                                BlocProvider(
+                                                  create: (_) =>
+                                                      RequiredBenefitBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchRequiredBenefits()),
+                                                ),
+                                                BlocProvider(
+                                                  create: (_) =>
+                                                      OtherBenefitBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchOtherBenefits()),
+                                                ),
+                                                BlocProvider(
+                                                  create: (_) =>
+                                                      WardGeneralNeedBloc(
+                                                    FamilyDropRepositoryImpl(),
+                                                  )..add(FetchWardGeneralNeeds()),
+                                                ),
+                                              ],
+                                              child: AddItemBasicDetails(
+                                                  headerData: headerData,
+                                                  mode: PageMode.add),
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }
+                                        );
+                                      }
                                     },
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
@@ -486,16 +469,14 @@ class _AddServyItemsState extends State<AddServyItems> {
                             ),
                           ],
                           if (isEdit) ...[
-
-                            
                             BlocConsumer<HouseholdSubmitBloc,
                                 HouseholdSubmitState>(
                               listener: (context, state) {
                                 //  print('Edit ID: ${widget.editId?? 0}');
                                 if (state is HouseholdSubmitSuccess) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                       backgroundColor: AppColor.blue,
+                                    SnackBar(
+                                        backgroundColor: AppColor.blue,
                                         content:
                                             Text('Submitted successfully')),
                                   );
@@ -539,10 +520,9 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 return AppActionButton(
                                   label: 'സമർപ്പിക്കുക',
                                   onPressed: () {
-                                   if (!_formKey.currentState!.validate()) {
-    return;
-  }
-
+                                    if (!_formKey.currentState!.validate()) {
+                                      return;
+                                    }
 
                                     if (isEdit && widget.editId == null) {
                                       ScaffoldMessenger.of(context)

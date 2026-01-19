@@ -8,65 +8,66 @@ abstract class EditFamilyMemberEvent {}
 
 // Screen 1 - Family Member Personal Details
 class SubmitPersonalDetailsEvent extends EditFamilyMemberEvent {
+  // final String clientId;
+  final String editId;
   final PersonalDetailsModel data;
-  final int? editId;
-  final String clientId;
-
   SubmitPersonalDetailsEvent({
+  //  required this.clientId,
+    required this.editId,
     required this.data,
-    required this.clientId,
-    this.editId,
   });
 }
 
 // Screen 2 - Education Details
 class SubmitEducationDetailsEvent extends EditFamilyMemberEvent {
-  final EducationModel data;
-  final int? editId;
-  final String clientId;
 
+
+  // final String clientId;
+    final String editId;
+  final EducationModel data;
   SubmitEducationDetailsEvent({
     required this.data,
-    required this.clientId,
-    this.editId,
+    // required this.clientId,
+    required this.editId,
   });
 }
 
 // Screen 3 - Employment Details
 class SubmitEmploymentDetailsEvent extends EditFamilyMemberEvent {
   final EmploymentModel data;
-  final int? editId;
-  final String clientId;
-
+ 
+  // final String clientId;
+  final String editId;
   SubmitEmploymentDetailsEvent({
     required this.data,
-    required this.clientId,
-    this.editId,
+    // required this.clientId,
+   required this.editId,
   });
 }
 
 // Screen 4 - Health Details
 class SubmitHealthDetailsEvent extends EditFamilyMemberEvent {
   final HealthModel data;
-  final int? editId;
-  final String clientId;
+ 
+  // final String clientId;
+    final String editId;
 
   SubmitHealthDetailsEvent({
     required this.data,
-    required this.clientId,
-    this.editId,
+    // required this.clientId,
+  required  this.editId,
   });
 }
 
 // Screen 5 - Pension/Welfare Details
 class SubmitPensionDetailsEvent extends EditFamilyMemberEvent {
   final WelfareModel data;
-  final int? editId;
-  final String clientId;
 
+  // final String clientId;
+  final String editId;
   SubmitPensionDetailsEvent({
     required this.data,
-    required this.clientId,
-    this.editId,  
+    // required this.clientId,
+   required this.editId,
   });
 }

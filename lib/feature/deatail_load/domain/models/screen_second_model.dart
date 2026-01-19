@@ -23,8 +23,8 @@ class EducationResponse {
 }
 
   class EducationModel {
-    final String id;
-    final String memberId;
+    final String ?id;
+    final String ?memberId;
     final String qualificationId;
     final String currentlyStudying;
     final String courseId;
@@ -32,11 +32,11 @@ class EducationResponse {
     final String institution;
     final String needEducationSupport;
     final String surveyor;
-    final String wardMember;
+    final String ?wardMember;
 
       EducationModel({
-      required this.id,
-      required this.memberId,
+      this.id,
+       this.memberId,
       required this.qualificationId,
       required this.currentlyStudying,
       required this.courseId,
@@ -44,7 +44,7 @@ class EducationResponse {
       required this.institution,
       required this.needEducationSupport,
       required this.surveyor,
-      required this.wardMember,
+       this.wardMember,
     });
 
     factory EducationModel.fromJson(Map<String, dynamic> json) {

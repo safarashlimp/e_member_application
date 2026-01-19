@@ -28,11 +28,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberBasicDetails extends StatefulWidget {
-    final PageMode mode;
-    final PersonalDetailsModel data;
-  const EditFamilyMemberBasicDetails({super.key,
-   required this.mode,
-   required this.data
+  final PageMode mode;
+  final PersonalDetailsModel data;
+  final String? editId;
+  final String position;
+  const EditFamilyMemberBasicDetails({
+    super.key,
+    required this.mode,
+    required this.data,
+    this.editId,
+    required this.position,
   });
 
   @override
@@ -49,71 +54,61 @@ class _EditFamilyMemberBasicDetailsState
   final TextEditingController whatsupNumber = TextEditingController();
   final TextEditingController surveyorNameLabel = TextEditingController();
   String? selectedBloodGroup;
-    String? selectedBloodGroupId;
+  String? selectedBloodGroupId;
   String? selectedReletion;
-    String? selectedRelationId;
-  String ?selectedGender ;
-    String? selectedGenderId;
-  String? selectedRlgn ;
+  String? selectedRelationId;
+  String? selectedGender;
+  String? selectedGenderId;
+  String? selectedRlgn;
   String? selectedMaritalStatus;
-    String? selectedMaritalStatusId;
+  String? selectedMaritalStatusId;
   String? selectedCaste;
-    String? selectedCasteId;
-      String? selectedReligion;
+  String? selectedCasteId;
+  String? selectedReligion;
   String? selectedReligionId;
 
-bool get isEdit => widget.mode == PageMode.edit;
-   bool get isView => widget.mode == PageMode.view;
+  bool get isEdit => widget.mode == PageMode.edit;
+  bool get isView => widget.mode == PageMode.view;
 
+  void _populateFields(PersonalDetailsModel value) {
+    // Text fields
+    familyMemberName.text = value.name ?? '';
+    mobileNumber.text = value.mobile;
+    whatsupNumber.text = value.whatsapp;
+    selectedDate.text = value.dob;
+    surveyorNameLabel.text = value.surveyor;
 
-void _populateFields(PersonalDetailsModel value) {
-  // Text fields
-  familyMemberName.text = value.name??'' ;
-  mobileNumber.text = value.mobile ;
-  whatsupNumber.text = value.whatsapp ;
-  selectedDate.text = value.dob ;
-  surveyorNameLabel.text = value.surveyor;
+    selectedGenderId = value.genderId;
 
+    selectedBloodGroupId = value.bloodgroup;
 
- selectedGenderId = value.genderId;
+    selectedRelationId = value.relationId;
 
+    selectedMaritalStatusId = value.maritalStatusId;
 
-  selectedBloodGroupId = value.bloodgroup;
+    selectedReligionId = value.religionId;
 
+    selectedCasteId = value.casteId;
+  }
 
-  selectedRelationId = value.relationId;
- 
+  @override
+  void initState() {
+    super.initState();
+    _populateFields(widget.data);
 
-  selectedMaritalStatusId = value.maritalStatusId;
+    mobileNumber.addListener(() {
+      // copy text only if whatsapp field is empty OR same
+      if (whatsupNumber.text != mobileNumber.text) {
+        whatsupNumber.text = mobileNumber.text;
 
+        // keep cursor at end
+        whatsupNumber.selection = TextSelection.fromPosition(
+          TextPosition(offset: whatsupNumber.text.length),
+        );
+      }
+    });
+  }
 
-  selectedReligionId = value.religionId;
-
-
-  selectedCasteId = value.casteId;
-
-}
-
-    @override
-void initState() {
-  super.initState();
-  _populateFields(widget.data);
-
-
-
-
-  mobileNumber.addListener(() {
-    // copy text only if whatsapp field is empty OR same
-    if (whatsupNumber.text != mobileNumber.text) {
-      whatsupNumber.text = mobileNumber.text;
-
-      // keep cursor at end
-      whatsupNumber.selection = TextSelection.fromPosition(
-        TextPosition(offset: whatsupNumber.text.length),
-      );
-    }
-  });
-}
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
@@ -123,67 +118,70 @@ void initState() {
           child: Scaffold(
             backgroundColor: AppColor.secondary,
             body: Column(
-          children: [
-            GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: (){
-              Navigator.pop(context);
-            },),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(13),
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  SurveySection(
-                    title: "കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരങ്ങൾ",
-                    iconAsset: "assets/images/house.png",
-                    child: Column(
-                      children: [
-                        AppTextField(
-                          controller: familyMemberName,
-                          label: "കുടുംബാംഗത്തിന്റെ പേര്",
-                          labelColor: AppColor.hintText2,
-                          borderColor: AppColor.borderColor,
-                          focusedBorderColor: AppColor.primary,
-                          labelfontSizes: 12,
-                          textColor: AppColor.primary,
-                          validator: Validator.validateName,
-                          width: double.infinity,
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
+              children: [
+                GradientHeader(
+                  title: 'സമ്പൂർണ്ണ സർവ്വേ',
+                  onPress: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.all(13),
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      SurveySection(
+                        title: "കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരങ്ങൾ",
+                        iconAsset: "assets/images/house.png",
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: AppTextField(
-                                controller: mobileNumber,
-                                label: "മൊബൈൽ നമ്പർ",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateMobile,
-                                type: "mobile",
-                                width: double.infinity,
-                              ),
+                            AppTextField(
+                              controller: familyMemberName,
+                              label: "കുടുംബാംഗത്തിന്റെ പേര്",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
                             ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              child: AppTextField(
-                                controller: whatsupNumber,
-                                label: "വാട്സ്ആപ്പ് നമ്പർ",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateMobile,
-                                type: "mobile",
-                                width: double.infinity,
-                              ),
+                            const SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppTextField(
+                                    controller: mobileNumber,
+                                    label: "മൊബൈൽ നമ്പർ",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateMobile,
+                                    type: "mobile",
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: AppTextField(
+                                    controller: whatsupNumber,
+                                    label: "വാട്സ്ആപ്പ് നമ്പർ",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateMobile,
+                                    type: "mobile",
+                                    width: double.infinity,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                           BlocBuilder<BloodGroupBloc, BloodGroupState>(
+                            const SizedBox(height: 20),
+                            BlocBuilder<BloodGroupBloc, BloodGroupState>(
                               builder: (context, state) {
                                 if (state is BloodGroupLoading) {
                                   return const Center(
@@ -191,39 +189,40 @@ void initState() {
                                   );
                                 }
 
-if (state is BloodGroupLoaded) {
+                                if (state is BloodGroupLoaded) {
+                                  // 🔥 ADD THIS (same as ration card logic)
+                                  if (selectedBloodGroupId != null &&
+                                      selectedBloodGroup == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == selectedBloodGroupId,
+                                      orElse: () => state.items.first,
+                                    );
 
-  // 🔥 ADD THIS (same as ration card logic)
-  if (selectedBloodGroupId != null && selectedBloodGroup == null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedBloodGroupId,
-      orElse: () => state.items.first,
-    );
+                                    selectedBloodGroup = match.name;
+                                  }
 
-    selectedBloodGroup = match.name;
-  }
-
-  return AppDropdownField<String>(
-    label: 'രക്തഗ്രൂപ്പ്',
-    selectedValue: selectedBloodGroup,
-    borderColor: AppColor.borderColor,
-    labelColor: AppColor.hintText2,
-    selectedTextColor: AppColor.primary,
-    iconColor: AppColor.black,
-    dropdownBgColor: AppColor.white,
-    dropdownTextColor: AppColor.hintText,
-    validator: Validator.validateSelection,
-    items: state.items.map((e) => e.name).toList(),
-    onChanged: (value) {
-      setState(() {
-        selectedBloodGroup = value;
-        selectedBloodGroupId =
-            state.items.firstWhere((e) => e.name == value).id;
-      });
-    },
-  );
-}
-
+                                  return AppDropdownField<String>(
+                                    label: 'രക്തഗ്രൂപ്പ്',
+                                    selectedValue: selectedBloodGroup,
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    selectedTextColor: AppColor.primary,
+                                    iconColor: AppColor.black,
+                                    dropdownBgColor: AppColor.white,
+                                    dropdownTextColor: AppColor.hintText,
+                                    validator: Validator.validateSelection,
+                                    items:
+                                        state.items.map((e) => e.name).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedBloodGroup = value;
+                                        selectedBloodGroupId = state.items
+                                            .firstWhere((e) => e.name == value)
+                                            .id;
+                                      });
+                                    },
+                                  );
+                                }
 
                                 if (state is BloodGroupError) {
                                   return Text(
@@ -235,8 +234,8 @@ if (state is BloodGroupLoaded) {
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                     BlocBuilder<RelationDropBloc, RelationDropState>(
+                            SizedBox(height: 20),
+                            BlocBuilder<RelationDropBloc, RelationDropState>(
                               builder: (context, state) {
                                 if (state is RelationDropLoading) {
                                   return const Center(
@@ -245,15 +244,16 @@ if (state is BloodGroupLoaded) {
                                 }
 
                                 if (state is RelationDropLoaded) {
-                                   // 🔥 ADD THIS (same as ration card logic)
-  if (selectedRelationId  != null && selectedReletion== null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedRelationId ,
-      orElse: () => state.items.first,
-    );
+                                  // 🔥 ADD THIS (same as ration card logic)
+                                  if (selectedRelationId != null &&
+                                      selectedReletion == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == selectedRelationId,
+                                      orElse: () => state.items.first,
+                                    );
 
-   selectedReletion= match.name;
-  }
+                                    selectedReletion = match.name;
+                                  }
 
                                   return AppDropdownField<String>(
                                     label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
@@ -292,8 +292,8 @@ if (state is BloodGroupLoaded) {
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                     BlocBuilder<GenderBloc, GenderState>(
+                            SizedBox(height: 20),
+                            BlocBuilder<GenderBloc, GenderState>(
                               builder: (context, state) {
                                 if (state is GenderLoading) {
                                   return const Center(
@@ -302,14 +302,15 @@ if (state is BloodGroupLoaded) {
                                 }
 
                                 if (state is GenderLoaded) {
-                                    if (selectedGenderId  != null && selectedGender== null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedGenderId ,
-      orElse: () => state.items.first,
-    );
+                                  if (selectedGenderId != null &&
+                                      selectedGender == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == selectedGenderId,
+                                      orElse: () => state.items.first,
+                                    );
 
-   selectedGender= match.name;
-  }
+                                    selectedGender = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'ലിംഗം',
                                     selectedValue: selectedGender,
@@ -346,24 +347,24 @@ if (state is BloodGroupLoaded) {
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AppDateField(
-                                context: context,
-                                label: 'ജനനത്തീയതി',
-                                borderColor: AppColor.borderColor,
-                                labelColor: AppColor.hintText2,
-                                iconColor: AppColor.hintText2,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateDate,
-                                controller:selectedDate,
-focusedBorderColor: AppColor.borderColor,
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                              Flexible(
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppDateField(
+                                    context: context,
+                                    label: 'ജനനത്തീയതി',
+                                    borderColor: AppColor.borderColor,
+                                    labelColor: AppColor.hintText2,
+                                    iconColor: AppColor.hintText2,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateDate,
+                                    controller: selectedDate,
+                                    focusedBorderColor: AppColor.borderColor,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Flexible(
                                   child: BlocBuilder<MaritalStatusBloc,
                                       MaritalStatusState>(
                                     builder: (context, state) {
@@ -374,15 +375,16 @@ focusedBorderColor: AppColor.borderColor,
                                       }
 
                                       if (state is MaritalStatusLoaded) {
-                                                                 
-                                    if (selectedMaritalStatusId  != null && selectedMaritalStatus== null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedMaritalStatusId ,
-      orElse: () => state.items.first,
-    );
+                                        if (selectedMaritalStatusId != null &&
+                                            selectedMaritalStatus == null) {
+                                          final match = state.items.firstWhere(
+                                            (e) =>
+                                                e.id == selectedMaritalStatusId,
+                                            orElse: () => state.items.first,
+                                          );
 
-   selectedMaritalStatus= match.name;
-  }
+                                          selectedMaritalStatus = match.name;
+                                        }
                                         return AppDropdownField<String>(
                                           label: 'വിവാഹസ്ഥിതി',
                                           selectedValue: selectedMaritalStatus,
@@ -427,10 +429,10 @@ focusedBorderColor: AppColor.borderColor,
                                     },
                                   ),
                                 ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        BlocBuilder<ReligionBloc, ReligionState>(
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<ReligionBloc, ReligionState>(
                               builder: (context, state) {
                                 if (state is ReligionLoading) {
                                   return const Center(
@@ -439,14 +441,15 @@ focusedBorderColor: AppColor.borderColor,
                                 }
 
                                 if (state is ReligionLoaded) {
-                                                                      if (selectedReligionId != null && selectedReligion== null) {
-    final match = state.items.firstWhere(
-      (e) => e.id == selectedReligionId ,
-      orElse: () => state.items.first,
-    );
+                                  if (selectedReligionId != null &&
+                                      selectedReligion == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == selectedReligionId,
+                                      orElse: () => state.items.first,
+                                    );
 
-   selectedReligion= match.name;
-  }
+                                    selectedReligion = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'മതം',
                                     selectedValue: selectedReligion,
@@ -484,8 +487,8 @@ focusedBorderColor: AppColor.borderColor,
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                     BlocBuilder<CasteBloc, CasteState>(
+                            SizedBox(height: 20),
+                            BlocBuilder<CasteBloc, CasteState>(
                               builder: (context, state) {
                                 if (state is CasteLoading) {
                                   return const Center(
@@ -494,14 +497,15 @@ focusedBorderColor: AppColor.borderColor,
                                 }
 
                                 if (state is CasteLoaded) {
-                                                                                                        if ( selectedCasteId  != null && selectedCaste== null) {
-    final match = state.items.firstWhere(
-      (e) => e.id ==  selectedCasteId  ,
-      orElse: () => state.items.first,
-    );
+                                  if (selectedCasteId != null &&
+                                      selectedCaste == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == selectedCasteId,
+                                      orElse: () => state.items.first,
+                                    );
 
-   selectedCaste= match.name;
-  }
+                                    selectedCaste = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'ജാതി',
                                     selectedValue: selectedCaste,
@@ -539,7 +543,7 @@ focusedBorderColor: AppColor.borderColor,
                                 return const SizedBox();
                               },
                             ),
-                         SizedBox(height: 20),
+                            SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,
                               label: "സർവേ നടത്തിയ ആളുടെ പേര്",
@@ -551,74 +555,94 @@ focusedBorderColor: AppColor.borderColor,
                               validator: Validator.validateName,
                               width: double.infinity,
                             ),
-                      ],
-                    ),
-                    
-                  ),
-                 
-                  SizedBox(height: 50),
-                  if(isEdit)
-                  BlocListener<EditFamilyMemberBloc, EditFamilyMemberState>(
-                    listener: (context, state) {
-                      if (state is EditFamilyMemberSubmitSuccess) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${state.screenName} updated successfully!'),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                        Navigator.pop(context);
-                      } else if (state is EditFamilyMemberSubmitFailure) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error: ${state.message}'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    },
-                    child: AppActionButton(
-                      label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുകയാണ്..." : "സമർപ്പിക്കുക",
-                      onPressed: () {
-                        final personalDetailsModel = PersonalDetailsModel(
-                          name: familyMemberName.text,
-                          mobile: mobileNumber.text,
-                          whatsapp: whatsupNumber.text,
-                          bloodgroup: selectedBloodGroupId.toString(),
-                          relationId: selectedRelationId.toString(),
-                          genderId: selectedGenderId.toString(),
-                          dob: selectedDate.text,
-                          maritalStatusId: selectedMaritalStatusId.toString(),
-                          religionId: selectedReligionId.toString(),
-                          casteId: selectedCasteId.toString(),
-                          surveyor: surveyorNameLabel.text,  
-
-                        );
-
-                        context.read<EditFamilyMemberBloc>().add(
-                          SubmitPersonalDetailsEvent(
-                            data: personalDetailsModel,
-                            clientId: '1', // Replace with actual clientId from your app
-                            editId: int.parse(widget.data. id ?? '') // Or get from your data model
-                          ),
-                        );
-                      },
-                      labelStyle: const TextStyle(
-                        color: AppColor.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                          ],
+                        ),
                       ),
-                      height: 44,
-                      icon: Icons.arrow_forward,
-                    ),
+                      SizedBox(height: 50),
+                      if (isEdit)
+                        BlocListener<EditFamilyMemberBloc,
+                            EditFamilyMemberState>(
+                          listener: (context, state) {
+                            if (state is EditFamilyMemberSubmitSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      '${state.screenName} updated successfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              Navigator.pop(context);
+                            } else if (state is EditFamilyMemberSubmitFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: ${state.message}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                          child: AppActionButton(
+                            label: state is EditFamilyMemberSubmitting
+                                ? "സമർപ്പിക്കുകയാണ്..."
+                                : "സമർപ്പിക്കുക",
+                            onPressed: () {
+                              // ✅ Validate editId before submitting
+                              final finalEditId = widget.editId ?? widget.data.id ?? '';
+                              
+                              if (finalEditId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('❌ Error: Member ID is missing. Cannot update without ID.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                print('⚠️  WARNING: editId is empty! widget.editId=${widget.editId}, widget.data.id=${widget.data.id}');
+                                return; // Don't proceed
+                              }
+                              
+
+                              
+                              final personalDetailsModel = PersonalDetailsModel(
+                                id: finalEditId,
+                                name: familyMemberName.text,
+                                mobile: mobileNumber.text,
+                                whatsapp: whatsupNumber.text,
+                                bloodgroup: selectedBloodGroupId.toString(),
+                                relationId: selectedRelationId.toString(),
+                                genderId: selectedGenderId.toString(),
+                                dob: selectedDate.text,
+                                maritalStatusId:
+                                    selectedMaritalStatusId.toString(),
+                                religionId: selectedReligionId.toString(),
+                                casteId: selectedCasteId.toString(),
+                                surveyor: surveyorNameLabel.text,
+                              );
+
+                              context.read<EditFamilyMemberBloc>().add(
+                                    SubmitPersonalDetailsEvent(
+                                        data: personalDetailsModel,
+                                        // Replace with actual clientId from your app
+                                        editId: finalEditId
+                                        ),
+                                  );
+                            },
+                            labelStyle: const TextStyle(
+                              color: AppColor.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            height: 44,
+                            icon: Icons.arrow_forward,
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
       },
     );
   }

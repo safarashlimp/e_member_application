@@ -23,7 +23,7 @@ class WelfareResponse {
 }
 
 class WelfareModel {
-   final String id;
+   final String ?id;
    final String ?memberId;
   final String includedInRation;
   final String receivingPension;
@@ -34,7 +34,7 @@ class WelfareModel {
    final String? wardMember;
 
   WelfareModel({
-    required this.id,
+     this.id,
     this.memberId,
     required this.includedInRation,
     required this.receivingPension,

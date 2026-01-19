@@ -12,13 +12,13 @@ class EditFamilyMemberBloc
   final FamilyMemberRepository familyMemberRepository;
   final EducationDetailsRepository educationRepository;
   final EmploymentDetailsRepository employmentRepository;
-  final HealthDetailsRepository healthRepository;
-  final PensionDetailsRepository pensionRepository;
+  final HealthDetailsRepository healthRepository;                                                             
+  final PensionDetailsRepository pensionRepository;           
 
   EditFamilyMemberBloc(employmentDetailsRepository, {
     required this.familyMemberRepository,
     required this.educationRepository,
-    required this.employmentRepository,
+    required this.employmentRepository,                                                 
     required this.healthRepository,
     required this.pensionRepository,
   }) : super(EditFamilyMemberInitial()) {
@@ -30,30 +30,31 @@ class EditFamilyMemberBloc
   }
 
   // Screen 1 - Personal Details
-  Future<void> _onSubmitPersonalDetails(
-    SubmitPersonalDetailsEvent event,
-    Emitter<EditFamilyMemberState> emit,
-  ) async {
-    emit(EditFamilyMemberSubmitting('Personal Details'));
+ Future<void> _onSubmitPersonalDetails(
+  SubmitPersonalDetailsEvent event,
+  Emitter<EditFamilyMemberState> emit,
+) async {
+  emit(EditFamilyMemberSubmitting('Personal Details'));
 
-    try {
-      await familyMemberRepository.submitFamilyMember(
-        clientId: event.clientId,
-        editId: event.editId,
-        data: event.data,
-      );
+  try {
+    await familyMemberRepository.submitFamilyMember(
+     
+      editId: event.editId,
+      data: event.data,
+    );
 
-      emit(EditFamilyMemberSubmitSuccess(
-        screenName: 'Personal Details',
-        responseId: event.editId?.toString() ?? 'new',
-      ));
-    } catch (e) {
-      emit(EditFamilyMemberSubmitFailure(
-        screenName: 'Personal Details',
-        message: e.toString(),
-      ));
-    }
+    emit(EditFamilyMemberSubmitSuccess(
+      screenName: 'Personal Details',
+      responseId: event.editId,
+      updatedData: event.data, // ✅ Pass the updated data
+    ));
+  } catch (e) {
+    emit(EditFamilyMemberSubmitFailure(
+      screenName: 'Personal Details',
+      message: e.toString(),
+    ));
   }
+}
 
   // Screen 2 - Education Details
   Future<void> _onSubmitEducationDetails(
@@ -64,14 +65,14 @@ class EditFamilyMemberBloc
 
     try {
       await educationRepository.submitEducationDetails(
-        clientId: event.clientId,
+   
         editId: event.editId,
         data: event.data,
       );
 
       emit(EditFamilyMemberSubmitSuccess(
         screenName: 'Education Details',
-        responseId: event.editId?.toString() ?? 'new',
+        responseId: event.editId,
       ));
     } catch (e) {
       emit(EditFamilyMemberSubmitFailure(
@@ -90,14 +91,14 @@ class EditFamilyMemberBloc
 
     try {
       await employmentRepository.submitEmploymentDetails(
-        clientId: event.clientId,
+      
         editId: event.editId,
         data: event.data,
       );
 
       emit(EditFamilyMemberSubmitSuccess(
         screenName: 'Employment Details',
-        responseId: event.editId?.toString() ?? 'new',
+        responseId: event.editId,
       ));
     } catch (e) {
       emit(EditFamilyMemberSubmitFailure(
@@ -116,14 +117,14 @@ class EditFamilyMemberBloc
 
     try {
       await healthRepository.submitHealthDetails(
-        clientId: event.clientId,
+        //clientId: event.clientId,
         editId: event.editId,
         data: event.data,
       );
 
       emit(EditFamilyMemberSubmitSuccess(
         screenName: 'Health Details',
-        responseId: event.editId?.toString() ?? 'new',
+        responseId: event.editId,
       ));
     } catch (e) {
       emit(EditFamilyMemberSubmitFailure(
@@ -142,14 +143,14 @@ class EditFamilyMemberBloc
 
     try {
       await pensionRepository.submitPensionDetails(
-        clientId: event.clientId,
+      
         editId: event.editId,
         data: event.data,
       );
 
       emit(EditFamilyMemberSubmitSuccess(
         screenName: 'Pension Details',
-        responseId: event.editId?.toString() ?? 'new',
+        responseId: event.editId,
       ));
     } catch (e) {
       emit(EditFamilyMemberSubmitFailure(

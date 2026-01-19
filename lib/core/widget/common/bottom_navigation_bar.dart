@@ -117,12 +117,16 @@ import 'package:e_member_app/feature/add_servy_report/data/repository/family_dro
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_servy_items.dart';
+import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
+import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
+import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/view/list_family_menu.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
-import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
+// import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
 import 'package:flutter/material.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,7 +148,17 @@ class AppBottomNav extends StatelessWidget {
 
     switch (index) {
       case 0:
-        page = const DashboardPage();
+  final datasource = DashboardRemoteDatasource();
+  final repository = DashboardRepositoryImpl(datasource);
+  final useCase = GetDashboardUseCase(repository);
+
+  page = BlocProvider(
+    create: (_) =>
+        DashboardBloc(useCase)..add(LoadDashboardEvent()),
+    child: const DashboardPage(),
+  );
+  
+
         break;
       case 1:
         page = const ListServeyReportMenu();

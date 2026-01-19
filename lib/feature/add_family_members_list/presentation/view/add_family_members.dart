@@ -10,7 +10,6 @@ import 'package:e_member_app/core/widget/text_field/app_radio_field.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/widget/text_field/date_select_field.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/detail_save_repo/detail_save_repo.dart';
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
@@ -71,11 +70,11 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
 
   // kudumbanadhanum aayula badham
   String? selectedReletion;
-    String? selectedRelationId;
+  String? selectedRelationId;
   //  marital status
   String? selectedMaritalStatus;
   String? selectedMaritalStatusId;
-
+bool isWhatsAppManuallyEdited = false; 
   // gender
   String? selectedGender;
   String? selectedGenderId;
@@ -132,8 +131,8 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   String? isPensionRequiredId;
 
   // skill
-  List<String> selectedSkills = [];
-  List<String> selectedSkillIds = [];
+    List<String> selectedSkills = [];
+    List<String> selectedSkillIds = [];
 
   String? selectedRlgn = 'hindu';
 
@@ -162,18 +161,29 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   void initState() {
     super.initState();
 
-    mobileNumber.addListener(() {
-      // copy text only if whatsapp field is empty OR same
-      if (whatsupNumber.text != mobileNumber.text) {
-        whatsupNumber.text = mobileNumber.text;
+   
+   mobileNumber.addListener(() {
+    if (!isWhatsAppManuallyEdited) {
+      whatsupNumber.text = mobileNumber.text;
+      whatsupNumber.selection = TextSelection.fromPosition(
+        TextPosition(offset: whatsupNumber.text.length),
+      );
+    }
+  });
 
-        // keep cursor at end
-        whatsupNumber.selection = TextSelection.fromPosition(
-          TextPosition(offset: whatsupNumber.text.length),
-        );
-      }
-    });
-  }
+  // Track when user manually edits WhatsApp field
+  whatsupNumber.addListener(() {
+    // If user types in WhatsApp field directly, mark it as manually edited
+    if (whatsupNumber.text != mobileNumber.text && whatsupNumber.text.isNotEmpty) {
+      isWhatsAppManuallyEdited = true;
+    }
+    // If user clears WhatsApp, allow auto-fill again
+    if (whatsupNumber.text.isEmpty) {
+      isWhatsAppManuallyEdited = false;
+    }
+  });
+}
+   
 
   @override
   Widget build(BuildContext context) {
@@ -405,21 +415,22 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               children: [
                                 Expanded(
                                   child: AppDateField(
-                                    context: context,
-                                    label: 'ജനനത്തീയതി',
-                                    borderColor: AppColor.borderColor,
-                                    labelColor: AppColor.hintText2,
-                                    iconColor: AppColor.hintText2,
-                                    textColor: AppColor.primary,
-                                    focusedBorderColor: AppColor.borderColor,
-                                    validator: Validator.validateDate,
-                                    controller: selectedDate,
+                                      context: context,
+                                      label: 'ജനനത്തീയതി',
+                                      borderColor: AppColor.borderColor,
+                                      labelColor: AppColor.hintText2,
+                                      iconColor: AppColor.hintText2,
+                                      textColor: AppColor.primary,
+                                      focusedBorderColor: AppColor.borderColor,
+                                      validator: Validator.validateDate,
+                                      controller: selectedDate,
                                       onDateSelected: (DateTime date) {
-    setState(() {
-      selectedDob = date;
-    });}  
-                                   //  selectedDob = date;
-                                  ),
+                                        setState(() {
+                                          selectedDob = date;
+                                        });
+                                      }
+                                      //  selectedDob = date;
+                                      ),
                                 ),
                                 SizedBox(width: 20),
                                 Flexible(
@@ -1415,7 +1426,6 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                       SizedBox(height: 50),
                       AppActionButton(
                         label: "സമർപ്പിക്കുക",
-
                         onPressed: () async {
                           // 🔹 BASIC VALIDATION
                           if (familyMemberName.text.trim().isEmpty) {
@@ -1437,8 +1447,8 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             );
                             return;
                           }
-                           final dobApi =
-                    "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
+                          final dobApi =
+                              "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
 
                           try {
                             // 🔹 GET USER ID (ward_member + surveyor)
@@ -1446,18 +1456,22 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             final userId =
                                 int.parse(prefs.getString(PrefKeys.userId)!);
 
-  final whatsappValue = whatsupNumber.text.isNotEmpty
-        ? whatsupNumber.text
-        : mobileNumber.text;
+                           final whatsappValue = whatsupNumber.text.isNotEmpty
+    ?  whatsupNumber.text // ✅ Uses WhatsApp if not empty
+    : mobileNumber.text;   // ✅ Falls back to mobile if empty
+print("🔍 Mobile: ${mobileNumber.text}");
+print("🔍 WhatsApp: $whatsappValue");
+print("🔍 WhatsApp Controller: ${whatsupNumber.text}");
                             await FamilyMemberSaveRepository().saveFamilyMember(
                               // 🔹 REQUIRED
-                              householdId: widget.editId, // 👈 editId from list
-                              surveyor: userId,
+                              householdId: widget.editId,
+                              // 👈 editId from list
 
+                              surveyor: surveyorNameLabel.text,
                               // 🔹 BASIC DETAILS
                               name: familyMemberName.text.trim(),
-                              mobile: mobileNumber.text,
-                              whatsapp: whatsappValue,
+                               mobile: mobileNumber.text,
+  whatsapp: whatsappValue,
 
                               bloodGroupId:
                                   int.parse(selectedBloodGroupId ?? '0'),
@@ -1494,9 +1508,12 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               isPatient: patient,
 
                               // 🔹 HEALTH
-                            diseases: (hasHealthIssuesId == '1' 
-             ? int.tryParse(requiredHealthSupports ?? '0') ?? 0 
-             : 0).toString(),
+                              diseases: (hasHealthIssuesId == '1'
+                                      ? int.tryParse(
+                                              requiredHealthSupports ?? '0') ??
+                                          0
+                                      : 0)
+                                  .toString(),
                               treatmentPlace: treatmentPlaceLabel.text,
                               disabled: hasDisability,
                               disabilityBenefit: disabilityBenefit,
@@ -1525,25 +1542,6 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             );
                           }
                         },
-
-                        // ✅ CORRECTED: Only dispatch the event
-
-                        //                      context.read<AddFamilyMemberBloc>().add(
-                        //   AddFamilyMemberEvent.addFamilyMember(
-                        //     params: viewModel.addFamilyMemberViewModel(),
-                        //   ),
-                        // );
-                        //                     Navigator.push(
-                        //                       context,
-                        //                       MaterialPageRoute(
-                        //                         builder: (context) => ListSurveyReport(
-                        //                           sectionType:
-                        //                               FamilySurveySectionType.familyBasicDetails,
-                        //                           postion: '1',
-                        //                         ),
-                        //                       ),
-                        //                     );
-
                         labelStyle: const TextStyle(
                           color: AppColor.white,
                           fontSize: 14,

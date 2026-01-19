@@ -87,64 +87,7 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-//      void onViewTap(BuildContext context) {
-//  late Widget page;
 
-//   switch (widget.sectionType) {
-//     case FamilySurveySectionType.familyBasicDetails:
-//       page = const AddServyItems(mode: PageMode.view);
-//       break;
-//     case FamilySurveySectionType.basicFacilities:
-//       page = AddItemBasicDetails(mode: PageMode.view,   );
-//       break;
- 
-//   }
-
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(builder: (_) => page),
-//   );
-// }
-//   void onEditTap(BuildContext context) {
-//  late Widget page;
-
-//   switch (widget.sectionType) {
-//     case FamilySurveySectionType.familyBasicDetails:
-//       page = const AddServyItems(mode: PageMode.edit);
-//       break;
-//     case FamilySurveySectionType.basicFacilities:
-//       page = AddItemBasicDetails(mode: PageMode.edit,);
-//       break;
-//   }
-
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(builder: (_) => page),
-//   );
-// }
-
-// void openWithLoad(BuildContext context, PageMode mode) {
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//       builder: (_) => BlocProvider(
-//         create: (_) => HeaderLoadBloc(
-//           HeaderLoadRepositoryImpl(http.Client()),
-//         )..add(
-//             FetchHeaderLoad(
-//               editId: widget.editId,
-//               position: widget.position,
-//             ),
-//           ),
-//         child: HeaderLoadGate(
-          
-//           mode: mode,
-//           position: widget.position,
-//         ),
-//       ),
-//     ),
-//   );
-// }
 
 void openWithLoad(BuildContext context, PageMode mode) {
   final repo = FamilyDropRepositoryImpl();

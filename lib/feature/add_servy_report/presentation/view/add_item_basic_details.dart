@@ -118,14 +118,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
           builder: (context, state) {
             if (state is HouseTypeLoading) {
               return Container(
-                
-                height: double.infinity,
-                width:  double.infinity,
-                color: AppColor.blue,
-                child: Center(child: CircularProgressIndicator(
-              color: AppColor.white,
-
-                )));
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: AppColor.blue,
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: AppColor.white,
+                  )));
             } else if (state is HouseTypeError) {
               return Center(child: Text('Error: ${state.message}'));
             }
@@ -396,34 +395,6 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                       );
                                     }
 
-                                    // if (state is RequiredBenefitLoaded) {
-                                    //   return AppDropdownField<String>(
-                                    //     label: 'ലഭിച്ച ആനുകൂല്യം ',
-                                    //     selectedValue: selectedRequiredBenefit,
-                                    //     borderColor: AppColor.borderColor,
-                                    //     labelColor: AppColor.hintText2,
-                                    //     selectedTextColor: AppColor.primary,
-                                    //     iconColor: AppColor.black,
-                                    //     dropdownBgColor: AppColor.white,
-                                    //     dropdownTextColor: AppColor.hintText,
-                                    //     validator: Validator.validateSelection,
-                                    //     items: state.items
-                                    //         .map((e) => e.name)
-                                    //         .toList(),
-                                    //     onChanged: (value) {
-                                    //       setState(() {
-                                    //         selectedRequiredBenefit = value;
-                                    //         selectedRequiredBenefitId = state
-                                    //             .items
-                                    //             .firstWhere(
-                                    //               (e) => e.name == value,
-                                    //             )
-                                    //             .id;
-                                    //       });
-                                    //     },
-                                    //   );
-                                    // }
-
                                     if (state is RequiredBenefitLoaded) {
                                       if (selectedRequiredBenefitId != null &&
                                           selectedRequiredBenefit == null) {
@@ -604,134 +575,6 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                           ),
                         ),
                         SizedBox(height: 30),
-                        // if ( isAdd) ...[
-
-                        //                          AppActionButton(
-
-                        //                           label: "സമർപ്പിക്കുക",
-                        //                           onPressed: () async {
-                        //                             final header  = widget.headerData;
-
-                        // if (header == null ||
-                        //     header.houseChief.isEmpty ||
-                        //     header.houseNumber.isEmpty ||
-                        //     header.houseName.isEmpty ||
-                        //     header.rationCardNumber.isEmpty ||
-                        //     header.rationCardTypeId.isEmpty) {
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(
-                        //       content: Text("അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക"),
-                        //     ),
-                        //   );
-                        //   return;
-                        // }
-
-                        //                             if (selectedHouseTypeId == null) {
-                        //                               ScaffoldMessenger.of(context).showSnackBar(
-                        //                                 const SnackBar(
-                        //                                   content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
-                        //                                 ),
-                        //                               );
-                        //                               return;
-                        //                             }
-
-                        //                             try {
-                        //                               if (selectedLandAreaController.text.isNotEmpty &&
-                        //                                   double.tryParse(
-                        //                                         selectedLandAreaController.text,
-                        //                                       ) ==
-                        //                                       null) {
-                        //                                 ScaffoldMessenger.of(context).showSnackBar(
-                        //                                   const SnackBar(
-                        //                                     content: Text(
-                        //                                       'ഭൂമിയുടെ വിസ്തീർണ്ണം ശരിയായ സംഖ്യ നൽകുക',
-                        //                                     ),
-                        //                                   ),
-                        //                                 );
-                        //                                 return;
-                        //                               }
-
-                        //                               //await
-                        //                                HeaderSaveRepository().saveSurveyHeader(
-
-                        //                                 surveyor: surveyornamecontroller.text,
-                        //   houseChief: widget.headerData?.houseChief,
-                        //   houseNumber: widget.headerData?.houseNumber ?? '',
-                        //   houseName: widget.headerData?.houseName ?? '',
-                        //   rationCardNumber: widget.headerData?.rationCardNumber ?? '',
-                        //   rationCardTypeId: widget.headerData?.rationCardTypeId ?? '',
-                        //   annualIncome: widget.headerData?.annualIncome,
-
-                        //   hasJobCard: widget.headerData?.hasJobCard ?? 0,
-                        //   kudumbashreeMember: widget.headerData?.kudumbashreeMember ?? 0,
-                        //   govtBeneficiary: widget.headerData?.govtBeneficiary ?? 0,
-                        //   extremePoor: widget.headerData?.extremePoor ?? 0,
-
-                        //                                 houseTypeId: selectedHouseTypeId!,
-                        //                                 landTypeId: (selectedLandTypeId != null &&
-                        //         selectedLandTypeId!.isNotEmpty)
-                        //     ? int.tryParse(selectedLandTypeId!)
-                        //     : null,
-
-                        //                                 landAreaCents: selectedLandAreaController.text,
-                        //                                 hasToilet: toilet,
-                        //                                 hasElectricity: electricityConnection,
-                        //                                 drinkingWaterSourceId: selectedWaterFacilityId?? '0',
-                        //                                 receivedHousingBenefit: benefitsReceived,
-                        //                                 receivedBenefits: benefitsReceived == 1
-                        //                                     ? selectedRequiredBenefitId
-                        //                                     : '0',
-                        //                                 needHousingBenefit: benefitsWanted,
-                        //                                 benefitsRequired: benefitsWanted == 1
-                        //                                     ? selectedOtherBenefitId
-                        //                                     : '0',
-                        //                                 wardNeeds: selectedGeneralNeedId,
-                        //                               );
-
-                        //                               // ✅ NAVIGATION WILL WORK NOW
-                        //        Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (_) => BlocProvider(
-                        //       create: (_) => HeaderListBloc(
-                        //         GetHeaderListUsecase(
-                        //           HeaderListRepositoryImpl(http.Client()),
-                        //         ),
-                        //       )..add(FetchHeaderList('1')),
-                        //       child: const ListSurveyReport(
-                        //         sectionType: FamilySurveySectionType.familyBasicDetails,
-                        //         postion: '1',
-                        //       ),
-                        //     ),
-                        //   ),
-                        // );
-
-                        //                             } catch (e) {
-                        //                               if (selectedHouseTypeId == null) {
-                        //                                 ScaffoldMessenger.of(context).showSnackBar(
-                        //                                   SnackBar(
-                        //                                     content: Text(
-                        //                                       "വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക",
-                        //                                     ),
-                        //                                   ),
-                        //                                 );
-                        //                               }
-
-                        //                               ScaffoldMessenger.of(context).showSnackBar(
-                        //                                 SnackBar(content: Text(e.toString())),
-                        //                               );
-                        //                             }
-                        //                           },
-
-                        //                           labelStyle: const TextStyle(
-                        //                             color: AppColor.white,
-                        //                             fontSize: 16,
-                        //                             fontWeight: FontWeight.w600,
-                        //                           ),
-                        //                           height: 44,
-                        //                         ),
-                        // ]
-
                         if (isAdd) ...[
                           _isSaving
                               ? const Center(
@@ -755,8 +598,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                             listener: (context, state) {
                               if (state is HouseDetailsSuccess) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                   SnackBar(
-                                    backgroundColor: AppColor.blue,
+                                  SnackBar(
+                                      backgroundColor: AppColor.blue,
                                       content: Text('Updated successfully')),
                                 );
                                 Navigator.pushReplacement(
@@ -859,10 +702,9 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
     final header = widget.headerData;
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        
-         SnackBar(
-          backgroundColor: AppColor.red,
-          content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക")),
+        SnackBar(
+            backgroundColor: AppColor.red,
+            content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക")),
       );
       return;
     }
@@ -880,7 +722,6 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
 
     if (selectedHouseTypeId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        
         const SnackBar(content: Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക")),
       );
       return;
@@ -917,7 +758,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
         wardNeeds: selectedGeneralNeedId,
       );
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -932,14 +773,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
             ),
           ),
         ),
+        (route) => false, // ✅ THIS LINE IS REQUIRED
       );
 
-           ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-          backgroundColor: AppColor.blue,
-          content: Text("added sucess ")),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: AppColor.blue, content: Text("added sucess ")),
       );
-
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));

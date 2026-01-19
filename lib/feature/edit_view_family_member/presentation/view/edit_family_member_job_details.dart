@@ -29,8 +29,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EditFamilyJobDetails extends StatefulWidget {
   final PageMode mode;
   final EmploymentResponse data;
+  final String? editId;
+  final String position;
 
-  const EditFamilyJobDetails({super.key, required this.mode, required this.data});
+  const EditFamilyJobDetails(
+      {super.key,
+      required this.mode,
+      required this.data,
+      this.editId,
+      required this.position});
 
   @override
   State<EditFamilyJobDetails> createState() => _EditFamilyJobDetailsState();
@@ -38,70 +45,85 @@ class EditFamilyJobDetails extends StatefulWidget {
 
 class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   final TextEditingController specifySkillLabel = TextEditingController();
-    final TextEditingController surveyorNameLabel = TextEditingController();
+  final TextEditingController surveyorNameLabel = TextEditingController();
   String? skillsLabel;
-    String? employmentStatusId;
+  String? employmentStatusId;
   String? employmentSupportLabel;
   String? employmentStatus;
-    String? employmentSupportId;
+  String? employmentSupportId;
   String? jobStatus;
-    String? jobStatusId;
-      String? farmingTypeId;
+  String? jobStatusId;
+  String? farmingTypeId;
   int norkaRegisteredLabel = 0;
-bool get isEdit => widget.mode == PageMode.edit;
-   bool get isView => widget.mode == PageMode.view;
+  bool get isEdit => widget.mode == PageMode.edit;
+  bool get isView => widget.mode == PageMode.view;
   List<String> selectedSkills = [];
   String? farmingType;
-   List<String> selectedSkillIds = [];
+  List<String> selectedSkillIds = [];
 
-
- void _populateFields(EmploymentModel value) {
-  // Text fields
-      employmentStatusId = value.employmentStatusId;
-   jobStatusId = value.occupationId;
-   employmentSupportId = value.needJobSupportId;
-    farmingTypeId=value.agricultureType;
-
+  void _populateFields(EmploymentModel value) {
+    // Text fields
+    employmentStatusId = value.employmentStatusId;
+    jobStatusId = value.occupationId;
+    employmentSupportId = value.needJobSupportId;
+    farmingTypeId = value.agricultureType;
+specifySkillLabel.text = value.skillDetails;
     // 🔹 Multi-select skills
-    selectedSkillIds = (value.skills ?? '').split(',');
-    skillsLabel = value.skillDetails;
+    selectedSkillIds = (value.skills ?? '')
+        .split(',')
+        .where((e) => e.trim().isNotEmpty)
+        .toList();
 
     // 🔹 Radio / checkbox values
-    norkaRegisteredLabel = int.tryParse(value.norkaRegistered)??0;
+    norkaRegisteredLabel = int.tryParse(value.norkaRegistered) ?? 0;
 
     // 🔹 Text fields
-    surveyorNameLabel.text = value.surveyor ?? '';
-   // wardMemberLabel.text = value.wardMember ?? '';
-}
-@override
+    surveyorNameLabel.text = value.surveyor ;
+    // wardMemberLabel.text = value.wardMember ?? '';
+    
+  }
+
+ @override
+  void dispose() {
+    specifySkillLabel.dispose();
+    surveyorNameLabel.dispose();
+    super.dispose();
+  }
+  @override
   void initState() {
-  super.initState();
-  _populateFields(widget.data.data.first);
-}
+    super.initState();
+    _populateFields(widget.data.data.first);
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-             GradientHeader(title: 'സമ്പൂർണ്ണ സർവ്വേ',onPress: () {
-              Navigator.pop(context);
-            },),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(13),
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  SurveySection(
-                    title: "തൊഴിൽ വിവരം",
-                    iconAsset: "assets/images/job.png",
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                       BlocBuilder<EmploymentStatusBloc,
+    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+      builder: (context, state) {
+        return SafeArea(
+          top: false,
+          child: Scaffold(
+            backgroundColor: AppColor.secondary,
+            body: Column(
+              children: [
+                GradientHeader(
+                  title: 'സമ്പൂർണ്ണ സർവ്വേ',
+                  onPress: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.all(13),
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      SurveySection(
+                        title: "തൊഴിൽ വിവരം",
+                        iconAsset: "assets/images/job.png",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BlocBuilder<EmploymentStatusBloc,
                                 EmploymentStatusState>(
                               builder: (context, state) {
                                 if (state is EmploymentStatusLoading) {
@@ -111,15 +133,15 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 }
 
                                 if (state is EmploymentStatusLoaded) {
-                                   if (employmentStatusId != null &&
-                                 employmentStatus == null) {
-                                final match = state.items.firstWhere(
-                                  (e) => e.id == employmentStatusId,
-                                  orElse: () => state.items.first,
-                                );
+                                  if (employmentStatusId != null &&
+                                      employmentStatus == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == employmentStatusId,
+                                      orElse: () => state.items.first,
+                                    );
 
-                                employmentStatus = match.name;
-                              }
+                                    employmentStatus = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'തൊഴിൽ നില',
                                     selectedValue: employmentStatus,
@@ -157,8 +179,8 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                        BlocBuilder<JobBloc, JobState>(
+                            SizedBox(height: 20),
+                            BlocBuilder<JobBloc, JobState>(
                               builder: (context, state) {
                                 if (state is JobLoading) {
                                   return const Center(
@@ -167,15 +189,15 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 }
 
                                 if (state is JobLoaded) {
-                                     if (jobStatusId != null &&
-                                 jobStatus == null) {
-                                final match = state.items.firstWhere(
-                                  (e) => e.id == jobStatusId,
-                                  orElse: () => state.items.first,
-                                );
+                                  if (jobStatusId != null &&
+                                      jobStatus == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == jobStatusId,
+                                      orElse: () => state.items.first,
+                                    );
 
-                                jobStatus = match.name;
-                              }
+                                    jobStatus = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'തൊഴിൽ',
                                     selectedValue: jobStatus,
@@ -213,8 +235,8 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                      BlocBuilder<SkillsBloc, SkillsState>(
+                            SizedBox(height: 20),
+                            BlocBuilder<SkillsBloc, SkillsState>(
                               builder: (context, state) {
                                 if (state is SkillsLoading) {
                                   return const Center(
@@ -223,35 +245,31 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 }
 
                                 if (state is SkillsLoaded) {
-                                      if (selectedSkillIds.isNotEmpty && selectedSkills.isEmpty) {
-    selectedSkills = state.items
-        .where((e) => selectedSkillIds.contains(e.id))
-        .map((e) => e.name)
-        .toList();
-  }
-                              
-                                  return AppMultiSelectDropdown<String>(
+                                  if (selectedSkillIds.isNotEmpty &&
+                                      selectedSkills.isEmpty) {
+                                    selectedSkills = state.items
+                                        .where((e) =>
+                                            selectedSkillIds.contains(e.id))
+                                        .map((e) => e.name)
+                                        .toList();
+                                  }
+
+               return AppMultiSelectDropdown<String>(
                                     label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
-
-                                    // ✅ API DATA
-                                    items:
-                                        state.items.map((e) => e.name).toList(),
-
+                                    items: state.items.map((e) => e.name).toList(),
                                     selectedValues: selectedSkills,
-
                                     onChanged: (values) {
                                       setState(() {
                                         selectedSkills = values;
-
-                                        // store selected IDs also
+                                        // Store selected IDs
                                         selectedSkillIds = state.items
-                                            .where(
-                                              (e) => values.contains(e.name),
-                                            )
+                                            .where((e) => values.contains(e.name))
                                             .map((e) => e.id)
                                             .toList();
                                       });
                                     },
+                                  
+                                
                                   );
                                 }
 
@@ -265,20 +283,20 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 return const SizedBox();
                               },
                             ),
-                        SizedBox(height: 20),
-                        AppTextField(
-                          controller: specifySkillLabel,
-                          label: "കഴിവ് വ്യക്തമാക്കുക",
-                          labelColor: AppColor.hintText2,
-                          borderColor: AppColor.borderColor,
-                          focusedBorderColor: AppColor.primary,
-                          labelfontSizes: 12,
-                          textColor: AppColor.primary,
-                          validator: Validator.validateName,
-                          width: double.infinity,
-                        ),
-                        SizedBox(height: 20),
-                          BlocBuilder<EmploymentSupportBloc,
+                            SizedBox(height: 20),
+                            AppTextField(
+                              controller: specifySkillLabel,
+                              label: "കഴിവ് വ്യക്തമാക്കുക",
+                              labelColor: AppColor.hintText2,
+                              borderColor: AppColor.borderColor,
+                              focusedBorderColor: AppColor.primary,
+                              labelfontSizes: 12,
+                              textColor: AppColor.primary,
+                              validator: Validator.validateName,
+                              width: double.infinity,
+                            ),
+                            SizedBox(height: 20),
+                            BlocBuilder<EmploymentSupportBloc,
                                 EmploymentSupportState>(
                               builder: (context, state) {
                                 if (state is EmploymentSupportLoading) {
@@ -288,15 +306,15 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 }
 
                                 if (state is EmploymentSupportLoaded) {
-                                        if (employmentSupportId != null &&
-                                employmentSupportLabel == null) {
-                                final match = state.items.firstWhere(
-                                  (e) => e.id == employmentSupportId,
-                                  orElse: () => state.items.first,
-                                );
+                                  if (employmentSupportId != null &&
+                                      employmentSupportLabel == null) {
+                                    final match = state.items.firstWhere(
+                                      (e) => e.id == employmentSupportId,
+                                      orElse: () => state.items.first,
+                                    );
 
-                               employmentSupportLabel = match.name;
-                              }
+                                    employmentSupportLabel = match.name;
+                                  }
                                   return AppDropdownField<String>(
                                     label: 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ?',
                                     selectedValue: employmentSupportLabel,
@@ -334,26 +352,25 @@ bool get isEdit => widget.mode == PageMode.edit;
                                 return const SizedBox();
                               },
                             ),
-
-                        if (employmentStatus == "വിദേശത്ത്") ...[
-                          const SizedBox(height: 20),
-                          AppRadioField(
-                            label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
-                            value: norkaRegisteredLabel,
-                            onChanged: (v) {
-                              setState(() {
-                                norkaRegisteredLabel = v;
-                                if (v == 0) {
-                                  // student = null; // reset dropdown
-                                }
-                              });
-                            },
-                            // onChanged: (v) => setState(() => student = v),
-                          ),
-                        ],
-                        if (jobStatus == "കർഷകൻ") ...[
-                          const SizedBox(height: 20),
-                             BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
+                            if (employmentStatus == "വിദേശത്ത്") ...[
+                              const SizedBox(height: 20),
+                              AppRadioField(
+                                label: "  നോർക്കയിൽ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടോ?",
+                                value: norkaRegisteredLabel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    norkaRegisteredLabel = v;
+                                    if (v == 0) {
+                                      // student = null; // reset dropdown
+                                    }
+                                  });
+                                },
+                                // onChanged: (v) => setState(() => student = v),
+                              ),
+                            ],
+                            if (jobStatus == "കർഷകൻ") ...[
+                              const SizedBox(height: 20),
+                              BlocBuilder<FarmingTypeBloc, FarmingTypeState>(
                                 builder: (context, state) {
                                   if (state is FarmingTypeLoading) {
                                     return const Center(
@@ -362,15 +379,15 @@ bool get isEdit => widget.mode == PageMode.edit;
                                   }
 
                                   if (state is FarmingTypeLoaded) {
-                                               if (farmingTypeId != null &&
-                                farmingType == null) {
-                                final match = state.items.firstWhere(
-                                  (e) => e.id == farmingTypeId,
-                                  orElse: () => state.items.first,
-                                );
+                                    if (farmingTypeId != null &&
+                                        farmingType == null) {
+                                      final match = state.items.firstWhere(
+                                        (e) => e.id == farmingTypeId,
+                                        orElse: () => state.items.first,
+                                      );
 
-                           farmingType = match.name;
-                              }
+                                      farmingType = match.name;
+                                    }
                                     return AppDropdownField<String>(
                                       label: 'ഏത് തരം കൃഷി ചെയ്യുന്നത് ?',
                                       selectedValue: farmingType,
@@ -409,48 +426,101 @@ bool get isEdit => widget.mode == PageMode.edit;
 
                                   return const SizedBox();
                                 },
+                              ),],
+                              SizedBox(height: 20),
+                              AppTextField(
+                                controller: surveyorNameLabel,
+                                label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                labelColor: AppColor.hintText2,
+                                borderColor: AppColor.borderColor,
+                                focusedBorderColor: AppColor.primary,
+                                labelfontSizes: 12,
+                                textColor: AppColor.primary,
+                                validator: Validator.validateName,
+                                width: double.infinity,
                               ),
-                           SizedBox(height: 20),
-                            AppTextField(
-                              controller: surveyorNameLabel,
-                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
-                              labelColor: AppColor.hintText2,
-                              borderColor: AppColor.borderColor,
-                              focusedBorderColor: AppColor.primary,
-                              labelfontSizes: 12,
-                              textColor: AppColor.primary,
-                              validator: Validator.validateName,
-                              width: double.infinity,
-                            ),
-                        ],
-                      ],
-                    ),
-                  ),
+                         
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                      if (isEdit)
+                        BlocListener<EditFamilyMemberBloc,
+                            EditFamilyMemberState>(
+                          listener: (context, state) {
+                            if (state is EditFamilyMemberSubmitSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      '${state.screenName} updated successfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              Navigator.pop(context);
+                            } else if (state is EditFamilyMemberSubmitFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: ${state.message}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                          child: AppActionButton(
+                            label: state is EditFamilyMemberSubmitting
+                                ? "സമർപ്പിക്കുന്നു..."
+                                : "സമർപ്പിക്കുക",
+                            onPressed: () {
+                              final finalEditId = widget.editId ?? '';
 
-                  SizedBox(height: 50),
-                  if(isEdit)
-                  AppActionButton(
-                    label: "സമർപ്പിക്കുക",
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ListFamily(sectionType: SurveySectionType.employment,)),
-                      // );
-                    },
-                    labelStyle: const TextStyle(
-                      color: AppColor.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    height: 44,
-                    icon: Icons.arrow_forward,
+                              if (finalEditId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        '❌ Error: Member ID is missing. Cannot update without ID.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                // print('⚠️  WARNING: editId is empty! widget.editId=${widget.editId}, widget.data.id=${widget.data.id}');
+                                return; // Don't proceed
+                              }
+                              final employmentModel = EmploymentModel(
+    employmentStatusId: employmentStatusId ?? '',
+    occupationId: jobStatusId ?? '',
+    skills: selectedSkillIds.join(','), // ✅ NOW HAS DATA
+    skillDetails: specifySkillLabel.text,
+    needJobSupportId: employmentSupportId ?? '',
+    norkaRegistered: norkaRegisteredLabel.toString(),
+    agricultureType: farmingTypeId ?? '',
+    surveyor: surveyorNameLabel.text,
+  );
+
+                              context.read<EditFamilyMemberBloc>().add(
+                                    SubmitEmploymentDetailsEvent(
+                                      data: employmentModel,
+                                      //clientId: '1', // Replace with actual clientId
+                                      editId: finalEditId,
+                                    ),
+                                  );
+                            },
+                            labelStyle: const TextStyle(
+                              color: AppColor.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            height: 44,
+                            icon: Icons.arrow_forward,
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

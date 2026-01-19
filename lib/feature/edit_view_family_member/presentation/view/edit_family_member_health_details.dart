@@ -24,9 +24,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EditFamilyHealthDetails extends StatefulWidget {
   final PageMode mode;
   final HealthResponse data;
+    final String? editId;
+      final String position;
 
   const EditFamilyHealthDetails(
-      {super.key, required this.mode, required this.data});
+      {super.key, required this.mode, required this.data, this.editId , required this.position});
 
   @override
   State<EditFamilyHealthDetails> createState() =>
@@ -57,8 +59,9 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
     healthInsuranceCard = int.tryParse(value.insuranceCard) ?? 0;
 
     // 🔹 Dropdown / selection IDs
-    hasHealthIssuesId = value.insuranceTypeId;
+   healthInsuranceId= value.insuranceTypeId;
     requiredHealthSupportsId = value.healthHelp;
+
 
     // 🔹 Text fields
     treatmentPlaceLabel.text = value.treatmentPlace ?? '';
@@ -385,25 +388,38 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                       child: AppActionButton(
                         label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുന്നു..." : "സമർപ്പിക്കുക",
                         onPressed: () {
-                          // final healthModel = HealthModel(
-                          //   isPatient: patient.toString(),
-                          //   diseases: hasHealthIssuesId,
-                          //   treatmentPlace: treatmentPlaceLabel.text,
-                          //   disabled: hasDisability.toString(),
-                          //   disabilityBenefit: disabilityBenefit.toString(),
-                          //   insuranceCard: healthInsuranceCard.toString(),
-                          //   insuranceTypeId: healthInsuranceId,
-                          //   healthHelp: requiredHealthSupportsId,
-                          //   surveyor: surveyorNameLabel.text,
-                          // );
+                           final finalEditId = widget.editId ??'';
+                              
+                              if (finalEditId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('❌ Error: Member ID is missing. Cannot update without ID.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                               // print('⚠️  WARNING: editId is empty! widget.editId=${widget.editId}, widget.data.id=${widget.data.id}');
+                                return; // Don't proceed
+                              }
+                          final healthModel = HealthModel(
+                            isPatient: patient.toString(),
+                            diseases: hasHealthIssuesId.toString(),
+                            treatmentPlace: treatmentPlaceLabel.text,
+                            disabled: hasDisability.toString(),
+                            disabilityBenefit: disabilityBenefit.toString(),
+                            insuranceCard: healthInsuranceCard.toString(),
+                            insuranceTypeId: healthInsuranceId.toString(),
+                            healthHelp: requiredHealthSupportsId.toString(),
+                            surveyor: surveyorNameLabel.text,
+                          );
 
-                          // context.read<EditFamilyMemberBloc>().add(
-                          //   SubmitHealthDetailsEvent(
-                          //     data: healthModel,
-                          //     clientId: '1', // Replace with actual clientId
-                          //     editId: widget.data.id,
-                          //   ),
-                          // );
+                          context.read<EditFamilyMemberBloc>().add(
+                            SubmitHealthDetailsEvent(
+                              data: healthModel,
+                              //clientId: '1', // Replace with actual clientId
+                              editId: finalEditId,
+                            ),
+                          );
                         },
                         labelStyle: const TextStyle(
                           color: AppColor.white,

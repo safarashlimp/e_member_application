@@ -19,7 +19,7 @@ class FamilyMemberSaveRepository {
     required int religionId,
     required int casteId,
 
-    required int surveyor,
+    required String surveyor,
 
     required int qualificationId,
     required int currentlyStudying,
@@ -80,8 +80,8 @@ class FamilyMemberSaveRepository {
         'ward_member': userId,
 
         'name': name,
-        'mobile': mobile ?? '',
-        'WhatsApp': whatsapp ?? '',
+        'mobile': mobile ,
+        'whatsapp': whatsapp ,
 
         'bloodgroup': bloodGroupId.toString(),
         'relation_id': relationId.toString(),
@@ -91,7 +91,7 @@ class FamilyMemberSaveRepository {
         'religion_id': religionId.toString(),
         'caste_id': casteId.toString(),
 
-        'surveyor': surveyor.toString(),
+        'surveyor': surveyor,
 
         'qualification_id': qualificationId.toString(),
        'currently_studying': (currentlyStudying ?? 0).toString(),

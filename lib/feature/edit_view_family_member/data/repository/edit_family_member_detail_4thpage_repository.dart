@@ -1,43 +1,59 @@
 import 'dart:convert';
 
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HealthDetailsRepository {
   Future<void> submitHealthDetails({
-    required String clientId,
-    int? editId,
+    required String editId,
     required HealthModel data,
   }) async {
+    // ✅ Get clientId from SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString(PrefKeys.clientId);
+
+    if (clientId == null || clientId.isEmpty) {
+      throw Exception('Client ID not found in preferences');
+    }
+
+    final body = {
+      'clientid': clientId,
+      'editid': editId,
+      'is_patient': data.isPatient.toString(),
+      'diseases': data.diseases.toString(),
+      'treatment_place': data.treatmentPlace.toString(),
+      'disabled': data.disabled.toString(),
+      'disability_benefit': data.disabilityBenefit.toString(),
+      'insurance_card': data.insuranceCard.toString(),
+      'insurance_type_id': data.insuranceTypeId.toString(),
+      'health_help': data.healthHelp.toString(),
+      'surveyor': data.surveyor.toString(),
+    };
+
+    print('📤 Sending request');
+    print('URL: https://emember.org/API/health_details_6.php');
+    print('Body: $body');
+
     final response = await http.post(
       Uri.parse('https://emember.org/API/health_details_6.php'),
-      body: {
-        'clientid': clientId,
-        if (editId != null) 'editid': editId.toString(),
-        'is_patient': data.isPatient,
-        'diseases': data.diseases,
-        'treatment_place': data.treatmentPlace,
-        'disabled': data.disabled,
-        'disability_benefit': data.disabilityBenefit,
-        'insurance_card': data.insuranceCard,
-        'insurance_type_id': data.insuranceTypeId,
-        'health_help': data.healthHelp,
-        'surveyor': data.surveyor,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
+      body: body,
     );
 
-    final decoded = jsonDecode(response.body);
+    print('📥 Status: ${response.statusCode}');
+    print('📥 Body: ${response.body}');
 
+    final decoded = jsonDecode(response.body);
     final status = decoded['Status'].toString().toLowerCase() == 'true';
 
     if (!status) {
-      throw Exception(
-        decoded['data'] ?? 'Health details submission failed',
-      );
+      throw Exception(decoded['data'] ?? 'Health details submission failed');
     }
 
-    // Optional success log
-    print('Health details submitted successfully: ${decoded['data']}');
+    print('✅ Health details submitted successfully: ${decoded['data']}');
   }
 }

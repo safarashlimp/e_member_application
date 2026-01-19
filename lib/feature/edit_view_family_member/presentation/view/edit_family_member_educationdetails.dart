@@ -21,8 +21,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditFamilyMemberEducationdetails extends StatefulWidget {
    final PageMode mode;
-   final EducationResponse data;
-  const EditFamilyMemberEducationdetails({super.key, required this.mode,required this.data});
+      final EducationResponse data;
+    final String? editId;
+      final String position;
+
+  const EditFamilyMemberEducationdetails({super.key, required this.mode,required this.data,  this.editId,required this.position});
  bool get isEdit => mode == PageMode.edit;
   @override
   State<EditFamilyMemberEducationdetails> createState() => 
@@ -295,24 +298,38 @@ void initState() {
                     },
                     child: AppActionButton(
                       label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുകയാണ്..." : "സമർപ്പിക്കുക",
-                      onPressed: () {
-                        // final educationModel = EducationModel(
-                        //   qualificationId: selectedQualificationId,
-                        //   currentlyStudying: student.toString(),
-                        //   courseId: selectedEducationId,
-                        //   courseOther: courseStudy.text,
-                        //   institution: studyCenter.text,
-                        //   needEducationSupport: needEducationHelp.toString(),
-                        //   surveyor: surveyorNameLabel.text,
-                        // );
 
-                        // context.read<EditFamilyMemberBloc>().add(
-                        //   SubmitEducationDetailsEvent(
-                        //     data: educationModel,
-                        //     clientId: '1', // Replace with actual clientId
-                        //     editId: widget.data.id,
-                        //   ),
-                        // );
+                      onPressed: () {
+                       final finalEditId = widget.editId ??'';
+                              
+                              if (finalEditId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('❌ Error: Member ID is missing. Cannot update without ID.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                               // print('⚠️  WARNING: editId is empty! widget.editId=${widget.editId}, widget.data.id=${widget.data.id}');
+                                return; // Don't proceed
+                              }
+                        final educationModel = EducationModel(
+                          qualificationId: selectedQualificationId.toString(),
+                          currentlyStudying: student.toString(),
+                          courseId: selectedEducationId.toString(),
+                          courseOther: courseStudy.text,
+                          institution: studyCenter.text,
+                          needEducationSupport: needEducationHelp.toString(),
+                          surveyor: surveyorNameLabel.text, 
+                        );
+
+                        context.read<EditFamilyMemberBloc>().add(
+                          SubmitEducationDetailsEvent(
+                            data: educationModel,
+                         // Replace with actual clientId
+                            editId: finalEditId,
+                          ),
+                        );
                       },
                       labelStyle: const TextStyle(
                         color: AppColor.white,

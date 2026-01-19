@@ -215,6 +215,7 @@ BlocProvider(
                   child: DetailLoadGate(
           mode: mode,
           position: widget.position,
+           editId: widget.editId, 
         ),
       ),
       ));}
@@ -256,11 +257,6 @@ BlocProvider(
                   color: AppColor.lightBlue,
                   shape: BoxShape.circle,
                 ),
-                // child: const Icon(
-                //   Icons.person,
-                //   color: AppColor.primary,
-                //   size: 28,
-                // ),
                 child: Image.asset(
                   'assets/images/contact.png',
                   height: 24,
@@ -299,12 +295,14 @@ BlocProvider(
                           style: TextStyle(fontSize: 13, color: AppColor.black),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          widget.houseName,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.black,
+                        Expanded(
+                          child: Text(
+                            widget.houseName,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w400,
+                              color: AppColor.black,
+                            ),
                           ),
                         ),
                       ],

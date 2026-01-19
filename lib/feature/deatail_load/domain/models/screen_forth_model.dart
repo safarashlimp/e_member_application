@@ -24,8 +24,8 @@ class HealthResponse  {
 }
 
 class HealthModel {
-  final String id;
-  final String memberId;
+  final String ?id;
+  final String ?memberId;
   final String isPatient;
   final String diseases;
   final String treatmentPlace;
@@ -35,11 +35,11 @@ class HealthModel {
   final String insuranceTypeId;
   final String healthHelp;
   final String surveyor;
-  final String wardMember;
+  final String ?wardMember;
 
   HealthModel({
-    required this.id,
-    required this.memberId,
+   this.id,
+    this.memberId,
     required this.isPatient,
     required this.diseases,
     required this.treatmentPlace,
@@ -49,7 +49,7 @@ class HealthModel {
     required this.insuranceTypeId,
     required this.healthHelp,
     required this.surveyor,
-    required this.wardMember,
+   this.wardMember,
   });
 
   factory HealthModel.fromJson(Map<String, dynamic> json) {

@@ -12,6 +12,7 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
+import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EditFamilyMemberSocielDetails extends StatefulWidget {
   final PageMode mode;
   final WelfareResponse  data;
+    final String? editId;
+      final String position;
    
-  const EditFamilyMemberSocielDetails({super.key, required this.mode, required this.data});
+  const EditFamilyMemberSocielDetails({super.key, required this.mode, required this.data, this.editId, required this.position});
 
   @override
   State<EditFamilyMemberSocielDetails> createState() =>
@@ -315,7 +318,35 @@ bool get isEdit => widget.mode == PageMode.edit;
                     child: AppActionButton(
                       label: state is EditFamilyMemberSubmitting ? "സമർപ്പിക്കുന്നു..." : "സമർപ്പിക്കുക",
                       onPressed: () {
-                        
+                        final finalEditId = widget.editId ??'';
+                              
+                              if (finalEditId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('❌ Error: Member ID is missing. Cannot update without ID.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                               // print('⚠️  WARNING: editId is empty! widget.editId=${widget.editId}, widget.data.id=${widget.data.id}');
+                                return; // Don't proceed
+                              }
+final welfareModel = WelfareModel(
+  includedInRation: isIncludedInRationCard.toString(),
+  receivingPension: isPensionReceiving.toString(),
+  pensionTypeId: selectedPensionTypeId ?? '0',
+  needPensionTypeId: isPensionRequiredId ?? '0',
+  povertyPgm: povertyProgramMap[selectedProvertyPrgm]?.toString() ?? '0',
+  surveyor: surveyorNameLabel.text, 
+);
+
+    context.read<EditFamilyMemberBloc>().add(
+                            SubmitPensionDetailsEvent(
+                              data:welfareModel,
+                              //clientId: '1', // Replace with actual clientId
+                              editId: finalEditId,
+                            ),
+                          );
                       },
 
                       labelStyle: const TextStyle(

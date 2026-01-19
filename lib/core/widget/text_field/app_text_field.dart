@@ -89,6 +89,7 @@ class AppTextField extends StatelessWidget {
           hintColor: hintColor,
           fillColor: AppColor.white,
         ),
+        
         validator: validator,
       ),
     );

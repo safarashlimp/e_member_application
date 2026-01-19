@@ -24,8 +24,8 @@ class EmploymentResponse  {
 }
 
 class EmploymentModel {
-  final String id;
-  final String memberId;
+  final String ?id;
+  final String ?memberId;
   final String employmentStatusId;
   final String occupationId;
   final String skills;
@@ -34,11 +34,11 @@ class EmploymentModel {
   final String norkaRegistered;
   final String agricultureType;
   final String surveyor;
-  final String wardMember;
+  final String ?wardMember;
 
   EmploymentModel({
-    required this.id,
-    required this.memberId,
+     this.id,
+    this.memberId,
     required this.employmentStatusId,
     required this.occupationId,
     required this.skills,
@@ -47,7 +47,7 @@ class EmploymentModel {
     required this.norkaRegistered,
     required this.agricultureType,
     required this.surveyor,
-    required this.wardMember,
+    this.wardMember,
   });
 
   factory EmploymentModel.fromJson(Map<String, dynamic> json) {
