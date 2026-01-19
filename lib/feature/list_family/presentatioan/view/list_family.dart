@@ -7,6 +7,7 @@ import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/v
 import 'package:e_member_app/feature/drawer/health_Details_.dart/presentation/view/health_details.dart';
 import 'package:e_member_app/feature/drawer/job_details/presentation/view/job_details_drawer.dart';
 import 'package:e_member_app/feature/drawer/members_details/presentation/view/members_details_drwer.dart';
+import 'package:e_member_app/feature/drawer/social_details/presentation/view/social_details.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_state.dart';
@@ -138,6 +139,7 @@ class _ListFamilyState extends State<ListFamily> {
     }else if (widget.position=="4"){
       return HealthDetailsDrawer();
     }else if (widget.position=="5"){
+      return SocialDetailDrawer();
 
     }
   }
