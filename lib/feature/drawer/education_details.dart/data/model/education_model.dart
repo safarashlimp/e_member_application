@@ -11,15 +11,15 @@ class EducationModel {
 
   factory EducationModel.fromEntity(EducationFilter entity) {
     return EducationModel(
-      educationalQualification: entity.educationalQualification,
-      currentlyStudying: entity.currentlyStudying,
+      educationalQualification: entity.educationalQualificationId,
+      currentlyStudying: entity.currentlyStudyingId,
     );
   }
 
   EducationFilter toEntity() {
     return EducationFilter(
-      educationalQualification: educationalQualification,
-      currentlyStudying: currentlyStudying,
+      educationalQualificationId: educationalQualification,
+      currentlyStudyingId: currentlyStudying,
     );
   }
 

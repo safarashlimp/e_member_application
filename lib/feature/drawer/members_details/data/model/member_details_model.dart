@@ -17,21 +17,21 @@ class MemberDetailsModel {
 
   factory MemberDetailsModel.fromEntity(MemberDetailsFilter entity) {
     return MemberDetailsModel(
-      bloodGroup: entity.bloodGroup,
-      gender: entity.gender,
-      maritalStatus: entity.maritalStatus,
-      religion: entity.religion,
-      caste: entity.caste,
+      bloodGroup: entity.bloodGroupId,
+      gender: entity.genderId,
+      maritalStatus: entity.maritalStatusId,
+      religion: entity.religionId,
+      caste: entity.casteId,
     );
   }
 
   MemberDetailsFilter toEntity() {
     return MemberDetailsFilter(
-      bloodGroup: bloodGroup,
-      gender: gender,
-      maritalStatus: maritalStatus,
-      religion: religion,
-      caste: caste,
+      bloodGroupId: bloodGroup,
+      genderId: gender,
+      maritalStatusId: maritalStatus,
+      religionId: religion,
+      casteId: caste,
     );
   }
 

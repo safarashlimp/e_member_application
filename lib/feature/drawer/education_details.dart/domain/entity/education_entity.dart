@@ -1,31 +1,32 @@
-
+// lib/feature/drawer/education_details.dart/domain/entity/education_entity.dart
 class EducationFilter {
-  final String? educationalQualification;
-  final String? currentlyStudying;
+  final String? educationalQualificationId;
+  final String? currentlyStudyingId; // 1 for Yes, 0 for No
 
   const EducationFilter({
-    this.educationalQualification,
-    this.currentlyStudying,
+    this.educationalQualificationId,
+    this.currentlyStudyingId,
   });
 
   EducationFilter copyWith({
-    String? educationalQualification,
-    String? currentlyStudying,
+    String? educationalQualificationId,
+    String? currentlyStudyingId,
   }) {
     return EducationFilter(
-      educationalQualification: educationalQualification ?? this.educationalQualification,
-      currentlyStudying: currentlyStudying ?? this.currentlyStudying,
+      educationalQualificationId: educationalQualificationId ?? this.educationalQualificationId,
+      currentlyStudyingId: currentlyStudyingId ?? this.currentlyStudyingId,
     );
   }
 
-  bool get isComplete {
-    return educationalQualification != null && currentlyStudying != null;
+  Map<String, dynamic> toMap() {
+    return {
+      'educational_qualification_id': educationalQualificationId,
+      'currently_studying': currentlyStudyingId, // Will be "1" or "0"
+    };
   }
 
-  Map<String, String?> toMap() {
-    return {
-      'educationalQualification': educationalQualification,
-      'currentlyStudying': currentlyStudying,
-    };
+  @override
+  String toString() {
+    return 'EducationFilter(educationalQualificationId: $educationalQualificationId, currentlyStudyingId: $currentlyStudyingId)';
   }
 }

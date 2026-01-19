@@ -1,49 +1,47 @@
+// lib/feature/drawer/members_details/domain/entity/member_details_filter.dart
 class MemberDetailsFilter {
-  final String? bloodGroup;
-  final String? gender;
-  final String? maritalStatus;
-  final String? religion;
-  final String? caste;
+  final String? bloodGroupId;
+  final String? genderId;
+  final String? maritalStatusId;
+  final String? religionId;
+  final String? casteId;
 
   const MemberDetailsFilter({
-    this.bloodGroup,
-    this.gender,
-    this.maritalStatus,
-    this.religion,
-    this.caste,
+    this.bloodGroupId,
+    this.genderId,
+    this.maritalStatusId,
+    this.religionId,
+    this.casteId,
   });
 
   MemberDetailsFilter copyWith({
-    String? bloodGroup,
-    String? gender,
-    String? maritalStatus,
-    String? religion,
-    String? caste,
+    String? bloodGroupId,
+    String? genderId,
+    String? maritalStatusId,
+    String? religionId,
+    String? casteId,
   }) {
     return MemberDetailsFilter(
-      bloodGroup: bloodGroup ?? this.bloodGroup,
-      gender: gender ?? this.gender,
-      maritalStatus: maritalStatus ?? this.maritalStatus,
-      religion: religion ?? this.religion,
-      caste: caste ?? this.caste,
+      bloodGroupId: bloodGroupId ?? this.bloodGroupId,
+      genderId: genderId ?? this.genderId,
+      maritalStatusId: maritalStatusId ?? this.maritalStatusId,
+      religionId: religionId ?? this.religionId,
+      casteId: casteId ?? this.casteId,
     );
   }
 
-  bool get isComplete {
-    return bloodGroup != null &&
-        gender != null &&
-        maritalStatus != null &&
-        religion != null &&
-        caste != null;
+  Map<String, dynamic> toMap() {
+    return {
+      'blood_group_id': bloodGroupId,
+      'gender_id': genderId,
+      'marital_status_id': maritalStatusId,
+      'religion_id': religionId,
+      'caste_id': casteId,
+    };
   }
 
-  Map<String, String?> toMap() {
-    return {
-      'bloodGroup': bloodGroup,
-      'gender': gender,
-      'maritalStatus': maritalStatus,
-      'religion': religion,
-      'caste': caste,
-    };
+  @override
+  String toString() {
+    return 'MemberDetailsFilter(bloodGroupId: $bloodGroupId, genderId: $genderId, maritalStatusId: $maritalStatusId, religionId: $religionId, casteId: $casteId)';
   }
 }

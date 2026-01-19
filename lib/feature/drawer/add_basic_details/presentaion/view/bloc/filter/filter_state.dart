@@ -1,47 +1,10 @@
-// import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
-
-// class FilterStateAddBasic {
-//   final int currentStep;
-//   final Map<String, String?> selections;
-//   final List<FilterStep> steps;
-//   final bool isSubmitting;
-
-//   FilterStateAddBasic({
-//     required this.currentStep,
-//     required this.selections,
-//     required this.steps,
-//     this.isSubmitting = false,
-//   });
-
-//   FilterStateAddBasic copyWith({
-//     int? currentStep,
-//     Map<String, String?>? selections,
-//     List<FilterStep>? steps,
-//     bool? isSubmitting,
-//   }) {
-//     return FilterStateAddBasic(
-//       currentStep: currentStep ?? this.currentStep,
-//       selections: selections ?? Map.from(this.selections),
-//       steps: steps ?? this.steps,
-//       isSubmitting: isSubmitting ?? this.isSubmitting,
-//     );
-//   }
-
-//   String get currentStepName => steps[currentStep].name;
-//   List<String> get currentOptions => steps[currentStep].options;
-//   String? get currentSelection => selections[currentStepName];
-//   bool get hasSelection => currentSelection != null;
-//   bool get isFirstStep => currentStep == 0;
-//   bool get isLastStep => currentStep == steps.length - 1;
-// }
-
 // lib/feature/drawer/add_basic_details/presentaion/view/bloc/filter/filter_state.dart
 import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 
 class FilterStateAddBasic {
   final List<FilterStep> steps;
   final int currentStep;
-  final Map<String, String> selections;
+  final Map<String, String> selections; // Stores stepName → selectedID
   final bool isLoading;
   final String? error;
 
@@ -54,8 +17,23 @@ class FilterStateAddBasic {
   });
 
   String get currentStepName => steps[currentStep].name;
-  List<String> get currentOptions => steps[currentStep].options;
-  String? get currentSelection => selections[currentStepName];
+  List<FilterOption> get currentOptions => steps[currentStep].options;
+  
+  // Get selected ID
+  String? get currentSelectionId => selections[currentStepName];
+  
+  // Get selected option name for display
+  String? get currentSelectionName {
+    final id = selections[currentStepName];
+    if (id == null) return null;
+    
+    try {
+      return currentOptions.firstWhere((opt) => opt.id == id).name;
+    } catch (e) {
+      return null;
+    }
+  }
+  
   bool get hasSelection => selections.isNotEmpty;
   bool get isLastStep => currentStep == steps.length - 1;
 

@@ -187,8 +187,10 @@ class _FilterDrawerContent extends StatelessWidget {
               itemCount: state.steps.length,
               itemBuilder: (context, index) {
                 final isSelected = state.currentStep == index;
-                final stepName = state.steps[index].name;
-                final hasSelection = state.selections[stepName] != null;
+                final step = state.steps[index];
+final stepName = step.name; // Malayalam for UI
+final hasSelection = state.selections.containsKey(step.key); // English key
+
 
                 return InkWell(
                   onTap: () {
@@ -249,94 +251,99 @@ class _FilterDrawerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildRightSection(BuildContext context, FilterStateAddBasic state) {
-    return Expanded(
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Section Title
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'നിർദ്ദേശിച്ച ഫിൽട്ടറുകൾ',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF64748B),
-                      fontWeight: FontWeight.w500,
-                    ),
+  // Update _buildRightSection in add_basic_details_filter.dart
+
+Widget _buildRightSection(BuildContext context, FilterStateAddBasic state) {
+  return Expanded(
+    child: Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section Title
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'നിർദ്ദേശിച്ച ഫിൽട്ടറുകൾ',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF64748B),
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    state.currentStepName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF0F172A),
-                      fontWeight: FontWeight.w600,
-                    ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  state.currentStepName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF0F172A),
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Divider(height: 1),
-            // Options
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 10,
-                  children: state.currentOptions.map((option) {
-                    final isSelected = state.currentSelection == option;
-                    return InkWell(
-                      borderRadius: BorderRadius.circular(999),
-                      onTap: () {
-                        context.read<AddBasicFilter>().add(
-                              SelectOptionEvent(state.currentStepName, option),
-                            );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
+          ),
+          const Divider(height: 1),
+          // Options
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 10,
+                children: state.currentOptions.map((option) {
+  final stepKey = state.steps[state.currentStep].key;
+  final isSelected = state.selections[stepKey] == option.id;
+
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () {
+                      // Send the ID, not the name
+                      context.read<AddBasicFilter>().add(
+                            SelectOptionEvent(state.currentStep, option.id),
+                          );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? const Color(0xFFDEEBFF)
+                            : const Color(0xFFF7FAFC),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          width: 1.5,
                           color: isSelected
-                              ? const Color(0xFFDEEBFF)
-                              : const Color(0xFFF7FAFC),
-                          borderRadius: BorderRadius.circular(999),
-                          border: Border.all(
-                            width: 1.5,
-                            color: isSelected
-                                ? const Color(0xFF0284C7)
-                                : const Color(0xFFCBD5E1),
-                          ),
-                        ),
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected
-                                ? const Color(0xFF0C4A6E)
-                                : const Color(0xFF334155),
-                          ),
+                              ? const Color(0xFF0284C7)
+                              : const Color(0xFFCBD5E1),
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                      child: Text(
+                        option.name, // Display name
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: isSelected
+                              ? const Color(0xFF0C4A6E)
+                              : const Color(0xFF334155),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildBottomButtons(BuildContext context, FilterStateAddBasic state) {
     return Container(

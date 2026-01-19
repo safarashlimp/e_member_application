@@ -1,9 +1,10 @@
-
+// lib/feature/drawer/members_details/presentation/view/add_member_details_drawer.dart
+import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 import 'package:e_member_app/feature/drawer/members_details/domain/entity/member_details_filter.dart';
 import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_bloc.dart';
 import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_event.dart';
 import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_state.dart';
-import 'package:e_member_app/feature/drawer/members_details/presentation/constats/member_details_constat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,9 @@ class AddMemberDetailsDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MemberDetailsBloc(),
+      create: (context) => MemberDetailsBloc(
+        repository: MemberDropRepositoryImpl(),
+      ),
       child: const _AddMemberDetailsDrawerContent(),
     );
   }
@@ -35,9 +38,26 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final currentStepName = MemberDetailsConstants.steps[state.currentStep];
-        final currentOptions = MemberDetailsConstants.optionsMap[currentStepName]!;
-        final currentSelection = state.getCurrentSelection();
+        // Show loading while fetching API data
+        if (state.isLoadingData && state.steps.first.options.isEmpty) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final currentStepName = state.currentStepName;
+        final currentOptions = state.currentOptions.cast<FilterOption>();
+        final currentSelectionId = state.getCurrentSelection();
 
         return Drawer(
           backgroundColor: Colors.white,
@@ -45,29 +65,21 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                // Header
                 _buildHeader(context),
-                
-                // Body
                 Expanded(
                   child: Row(
                     children: [
-                      // Left Section (Steps)
                       _buildStepsSection(context, state),
-                      
-                      // Right Section (Options)
                       _buildOptionsSection(
                         context,
                         currentStepName,
                         currentOptions,
-                        currentSelection,
+                        currentSelectionId,
                       ),
                     ],
                   ),
                 ),
-                
-                // Bottom Buttons
-                _buildBottomButtons(context, state, currentSelection),
+                _buildBottomButtons(context, state, currentSelectionId),
               ],
             ),
           ),
@@ -156,10 +168,10 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: MemberDetailsConstants.steps.length,
+              itemCount: state.steps.length,
               itemBuilder: (context, index) {
                 final isSelected = state.currentStep == index;
-                final stepName = MemberDetailsConstants.steps[index];
+                final stepName = state.steps[index].name;
                 final hasSelection = _hasSelectionForStep(state.filter, index);
 
                 return InkWell(
@@ -226,15 +238,15 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
   bool _hasSelectionForStep(MemberDetailsFilter filter, int step) {
     switch (step) {
       case 0:
-        return filter.bloodGroup != null;
+        return filter.bloodGroupId != null;
       case 1:
-        return filter.gender != null;
+        return filter.genderId != null;
       case 2:
-        return filter.maritalStatus != null;
+        return filter.maritalStatusId != null;
       case 3:
-        return filter.religion != null;
+        return filter.religionId != null;
       case 4:
-        return filter.caste != null;
+        return filter.casteId != null;
       default:
         return false;
     }
@@ -243,8 +255,8 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
   Widget _buildOptionsSection(
     BuildContext context,
     String currentStepName,
-    List<String> currentOptions,
-    String? currentSelection,
+    List<FilterOption> currentOptions,
+    String? currentSelectionId,
   ) {
     return Expanded(
       child: Container(
@@ -285,14 +297,15 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 10,
                   children: currentOptions.map((option) {
-                    final isSelected = currentSelection == option;
+                    final isSelected = currentSelectionId == option.id;
                     return InkWell(
                       borderRadius: BorderRadius.circular(999),
                       onTap: () {
+                        // Send ID instead of name
                         context.read<MemberDetailsBloc>().add(
                               MemberDetailsOptionSelected(
                                 currentStepName,
-                                option,
+                                option.id, // Passing ID
                               ),
                             );
                       },
@@ -314,7 +327,7 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          option,
+                          option.name, // Display name
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -338,7 +351,7 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
   Widget _buildBottomButtons(
     BuildContext context,
     MemberDetailsState state,
-    String? currentSelection,
+    String? currentSelectionId,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -357,7 +370,7 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           Expanded(
             child: OutlinedButton(
               onPressed: () {
-                context.read<MemberDetailsBloc>().add(MemberDetailsReset());
+                context.read<MemberDetailsBloc>().add(const MemberDetailsReset());
               },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -379,15 +392,15 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: currentSelection != null
+              onPressed: currentSelectionId != null
                   ? () {
                       if (state.canGoNext) {
                         context.read<MemberDetailsBloc>().add(
-                              MemberDetailsNextStep(),
+                              const MemberDetailsNextStep(),
                             );
                       } else {
                         context.read<MemberDetailsBloc>().add(
-                              MemberDetailsSubmit(),
+                              const MemberDetailsSubmit(),
                             );
                       }
                     }

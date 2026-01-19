@@ -1,23 +1,104 @@
-import 'package:e_member_app/feature/drawer/members_details/domain/entity/member_details_filter.dart';
-import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_event.dart';
-import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_state.dart';
+// lib/feature/drawer/members_details/presentation/bloc/bloc/member_detail_bloc.dart
+import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
+import 'package:e_member_app/feature/drawer/members_details/domain/entity/member_filter_step.dart';
+import 'package:e_member_app/feature/drawer/members_details/presentation/constats/member_details_constat.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_member_app/feature/add_family_members_list/domain/repository/dropdownrepo/member_drop_repo.dart';
+import 'package:e_member_app/feature/drawer/members_details/domain/entity/member_details_filter.dart';
+
+import 'member_detail_event.dart';
+import 'member_detail_state.dart';
 
 class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
-  MemberDetailsBloc() : super(const MemberDetailsState()) {
+  final MemberDropRepository repository;
+
+  MemberDetailsBloc({required this.repository})
+      : super(MemberDetailsState(steps: MemberDetailsConstants.steps)) {
+    on<LoadMemberFilterData>(_onLoadFilterData);
     on<MemberDetailsStepChanged>(_onStepChanged);
     on<MemberDetailsOptionSelected>(_onOptionSelected);
     on<MemberDetailsNextStep>(_onNextStep);
     on<MemberDetailsPreviousStep>(_onPreviousStep);
     on<MemberDetailsReset>(_onReset);
     on<MemberDetailsSubmit>(_onSubmit);
+
+    // Auto-load data on creation
+    add(const LoadMemberFilterData());
+  }
+
+  Future<void> _onLoadFilterData(
+    LoadMemberFilterData event,
+    Emitter<MemberDetailsState> emit,
+  ) async {
+    emit(state.copyWith(isLoadingData: true));
+
+    try {
+      final updatedSteps = <MemberFilterStep>[];
+
+      for (final step in state.steps) {
+        List<FilterOption> apiOptions = [];
+
+        try {
+          switch (step.position) {
+            case 100: // Blood Group (special API)
+              final items = await repository.getBloodGroups();
+              apiOptions = items
+                  .map((e) => FilterOption(id: e.id, name: e.name))
+                  .toList();
+              break;
+            case 2: // Gender
+              final items = await repository.getGender();
+              apiOptions = items
+                  .map((e) => FilterOption(id: e.id, name: e.name))
+                  .toList();
+              break;
+            case 3: // Marital Status
+              final items = await repository.getMaritalStatus();
+              apiOptions = items
+                  .map((e) => FilterOption(id: e.id, name: e.name))
+                  .toList();
+              break;
+            case 4: // Religion
+              final items = await repository.getReligion();
+              apiOptions = items
+                  .map((e) => FilterOption(id: e.id, name: e.name))
+                  .toList();
+              break;
+            case 5: // Caste
+              final items = await repository.getCastes();
+              apiOptions = items
+                  .map((e) => FilterOption(id: e.id, name: e.name))
+                  .toList();
+              break;
+            default:
+              apiOptions = step.options.cast<FilterOption>();
+          }
+
+          updatedSteps.add(step.copyWith(options: apiOptions));
+        } catch (e) {
+          print('Failed to load data for ${step.name}: $e');
+          updatedSteps.add(step);
+        }
+      }
+
+      emit(state.copyWith(
+        steps: updatedSteps,
+        isLoadingData: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoadingData: false,
+        status: MemberDetailsStatus.error,
+        errorMessage: 'Failed to load filter data: ${e.toString()}',
+      ));
+    }
   }
 
   void _onStepChanged(
     MemberDetailsStepChanged event,
     Emitter<MemberDetailsState> emit,
   ) {
-    if (event.step >= 0 && event.step < 5) {
+    if (event.step >= 0 && event.step < state.steps.length) {
       emit(state.copyWith(currentStep: event.step));
     }
   }
@@ -27,27 +108,28 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     Emitter<MemberDetailsState> emit,
   ) {
     MemberDetailsFilter updatedFilter;
-    
+
+    // Store ID instead of name
     switch (event.filterKey) {
       case 'രക്തഗ്രൂപ്പ്':
-        updatedFilter = state.filter.copyWith(bloodGroup: event.option);
+        updatedFilter = state.filter.copyWith(bloodGroupId: event.optionId);
         break;
       case 'ലിംഗം':
-        updatedFilter = state.filter.copyWith(gender: event.option);
+        updatedFilter = state.filter.copyWith(genderId: event.optionId);
         break;
       case 'വിവാഹസ്ഥിതി':
-        updatedFilter = state.filter.copyWith(maritalStatus: event.option);
+        updatedFilter = state.filter.copyWith(maritalStatusId: event.optionId);
         break;
       case 'മതം':
-        updatedFilter = state.filter.copyWith(religion: event.option);
+        updatedFilter = state.filter.copyWith(religionId: event.optionId);
         break;
       case 'ജാതി':
-        updatedFilter = state.filter.copyWith(caste: event.option);
+        updatedFilter = state.filter.copyWith(casteId: event.optionId);
         break;
       default:
         return;
     }
-    
+
     emit(state.copyWith(filter: updatedFilter));
   }
 
@@ -73,7 +155,7 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     MemberDetailsReset event,
     Emitter<MemberDetailsState> emit,
   ) {
-    emit(const MemberDetailsState());
+    emit(MemberDetailsState(steps: state.steps));
   }
 
   void _onSubmit(
@@ -81,11 +163,10 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     Emitter<MemberDetailsState> emit,
   ) {
     emit(state.copyWith(status: MemberDetailsStatus.loading));
-    
+
     try {
-      // Here you can add your submission logic
-      // For example, save to repository, send to API, etc.
-      print('Member Details Filter: ${state.filter.toMap()}');
+      // Print IDs that will be sent to backend
+      print('Member Details Filter IDs: ${state.filter.toMap()}');
       
       emit(state.copyWith(status: MemberDetailsStatus.success));
     } catch (e) {

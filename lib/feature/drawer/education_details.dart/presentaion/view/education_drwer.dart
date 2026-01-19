@@ -387,11 +387,13 @@
 // }
 
 
+// lib/feature/drawer/education_details.dart/presentaion/view/education_drawer.dart
+import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
+import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 import 'package:e_member_app/feature/drawer/education_details.dart/domain/entity/education_entity.dart';
 import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/bloc/bloc/education_drawer_bloc.dart';
 import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/bloc/bloc/education_drawer_event.dart';
 import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/bloc/bloc/education_drawer_state.dart';
-import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/constant/education_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -401,7 +403,9 @@ class EducationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EducationDrawerBloc(),
+      create: (context) => EducationDrawerBloc(
+        repository: MemberDropRepositoryImpl(),
+      ),
       child: const _EducationDrawerContent(),
     );
   }
@@ -423,9 +427,26 @@ class _EducationDrawerContent extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final currentStepName = EducationConstants.steps[state.currentStep];
-        final currentOptions = EducationConstants.optionsMap[currentStepName]!;
-        final currentSelection = state.getCurrentSelection();
+        // Show loading while fetching API data
+        if (state.isLoadingData && state.steps.first.options.isEmpty) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final currentStepName = state.currentStepName;
+        final currentOptions = state.currentOptions.cast<FilterOption>();
+        final currentSelectionId = state.getCurrentSelection();
 
         return Drawer(
           backgroundColor: Colors.white,
@@ -433,29 +454,21 @@ class _EducationDrawerContent extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                // Header
                 _buildHeader(context),
-                
-                // Body
                 Expanded(
                   child: Row(
                     children: [
-                      // Left Section (Steps)
                       _buildStepsSection(context, state),
-                      
-                      // Right Section (Options)
                       _buildOptionsSection(
                         context,
                         currentStepName,
                         currentOptions,
-                        currentSelection,
+                        currentSelectionId,
                       ),
                     ],
                   ),
                 ),
-                
-                // Bottom Buttons
-                _buildBottomButtons(context, state, currentSelection),
+                _buildBottomButtons(context, state, currentSelectionId),
               ],
             ),
           ),
@@ -544,10 +557,10 @@ class _EducationDrawerContent extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: EducationConstants.steps.length,
+              itemCount: state.steps.length,
               itemBuilder: (context, index) {
                 final isSelected = state.currentStep == index;
-                final stepName = EducationConstants.steps[index];
+                final stepName = state.steps[index].name;
                 final hasSelection = _hasSelectionForStep(state.filter, index);
 
                 return InkWell(
@@ -614,9 +627,9 @@ class _EducationDrawerContent extends StatelessWidget {
   bool _hasSelectionForStep(EducationFilter filter, int step) {
     switch (step) {
       case 0:
-        return filter.educationalQualification != null;
+        return filter.educationalQualificationId != null;
       case 1:
-        return filter.currentlyStudying != null;
+        return filter.currentlyStudyingId != null;
       default:
         return false;
     }
@@ -625,8 +638,8 @@ class _EducationDrawerContent extends StatelessWidget {
   Widget _buildOptionsSection(
     BuildContext context,
     String currentStepName,
-    List<String> currentOptions,
-    String? currentSelection,
+    List<FilterOption> currentOptions,
+    String? currentSelectionId,
   ) {
     return Expanded(
       child: Container(
@@ -667,14 +680,15 @@ class _EducationDrawerContent extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 10,
                   children: currentOptions.map((option) {
-                    final isSelected = currentSelection == option;
+                    final isSelected = currentSelectionId == option.id;
                     return InkWell(
                       borderRadius: BorderRadius.circular(999),
                       onTap: () {
+                        // Send ID instead of name
                         context.read<EducationDrawerBloc>().add(
                               EducationDrawerOptionSelected(
                                 currentStepName,
-                                option,
+                                option.id, // Passing ID
                               ),
                             );
                       },
@@ -696,7 +710,7 @@ class _EducationDrawerContent extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          option,
+                          option.name, // Display name
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -720,7 +734,7 @@ class _EducationDrawerContent extends StatelessWidget {
   Widget _buildBottomButtons(
     BuildContext context,
     EducationDrawerState state,
-    String? currentSelection,
+    String? currentSelectionId,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -739,7 +753,7 @@ class _EducationDrawerContent extends StatelessWidget {
           Expanded(
             child: OutlinedButton(
               onPressed: () {
-                context.read<EducationDrawerBloc>().add(EducationDrawerReset());
+                context.read<EducationDrawerBloc>().add(const EducationDrawerReset());
               },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -761,15 +775,15 @@ class _EducationDrawerContent extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: currentSelection != null
+              onPressed: currentSelectionId != null
                   ? () {
                       if (state.canGoNext) {
                         context.read<EducationDrawerBloc>().add(
-                              EducationDrawerNextStep(),
+                              const EducationDrawerNextStep(),
                             );
                       } else {
                         context.read<EducationDrawerBloc>().add(
-                              EducationDrawerSubmit(),
+                              const EducationDrawerSubmit(),
                             );
                       }
                     }

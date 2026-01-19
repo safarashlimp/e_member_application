@@ -1,21 +1,25 @@
-class EducationConstants {
-  static const List<String> steps = [
-    "വിദ്യാഭ്യാസ യോഗ്യത",
-    "ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ",
-  ];
+// lib/feature/drawer/education_details.dart/presentaion/constant/education_constants.dart
+import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
+import 'package:e_member_app/feature/drawer/education_details.dart/domain/entity/education_filter_step.dart';
 
-  static const Map<String, List<String>> optionsMap = {
-    "വിദ്യാഭ്യാസ യോഗ്യത": [
-      "അക്ഷരജ്ഞാനം ഇല്ല",
-      "ഔപചാരിക വിദ്യാഭ്യാസമില്ലാത്ത അക്ഷരജ്ഞാനം ",
-      "പ്രാഥമികം",
-      "യു.പി (Upper Primary)",
-      "സെക്കൻഡറി",
-      "ഹയർ സെക്കൻഡറി",
-      "ബിരുദം",
-      "ബിരുദാനന്തര ബിരുദം",
-      "ഡിപ്ലോമ"
-    ],
-    "ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ": ["ഉണ്ട്", "ഇല്ല"],
-  };
+class EducationConstants {
+  // API Position mapping:
+  // Educational Qualification - position 6
+  // Currently Studying - static (Yes=1, No=0)
+  
+  static const List<EducationFilterStep> steps = [
+    EducationFilterStep(
+      name: "വിദ്യാഭ്യാസ യോഗ്യത",
+      options: [], // Will be filled from member_drops.php?position=6
+      position: 6,
+    ),
+    EducationFilterStep(
+      name: "ഇപ്പോൾ പഠിക്കുന്നുണ്ടോ",
+      options: [
+        FilterOption(id: "1", name: "ഉണ്ട്"),
+        FilterOption(id: "0", name: "ഇല്ല"),
+      ],
+      position: -1, // Static data
+    ),
+  ];
 }
