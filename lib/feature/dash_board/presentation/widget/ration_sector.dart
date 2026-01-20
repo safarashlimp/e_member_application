@@ -258,6 +258,15 @@ class RationSection extends StatefulWidget {
 class _RationSectionState extends State<RationSection> {
   @override
   Widget build(BuildContext context) {
+   final  int total  =     widget.aayCount +
+    widget.phhCount +
+    widget.nphhCount +
+    widget.npnsCount;
+double percent(int value) {
+  if (total == 0) return 0;
+  return (value / total) * 100;
+}
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: LayoutBuilder(
@@ -287,22 +296,22 @@ class _RationSectionState extends State<RationSection> {
                           centerSpaceRadius: 0,
                           sections: [
                             PieChartSectionData(
-                              value: 152,
+                              value: widget.aayCount.toDouble(),
                               color: Colors.amber,
                               showTitle: false,
                             ),
                             PieChartSectionData(
-                              value: 100,
+                              value: widget.phhCount.toDouble(),
                               color: Colors.pink,
                               showTitle: false,
                             ),
                             PieChartSectionData(
-                              value: 180,
+                              value: widget.nphhCount.toDouble(),
                               color: Colors.blue,
                               showTitle: false,
                             ),
                             PieChartSectionData(
-                              value: 80,
+                              value: widget.npnsCount.toDouble(),
                               color: Colors.grey,
                               showTitle: false,
                             ),
@@ -313,19 +322,19 @@ class _RationSectionState extends State<RationSection> {
                     const SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        _LegendItem(color: Colors.amber, label: '80%'),
+                      children:  [
+                        _LegendItem(color: Colors.amber, label: ' ${percent(widget.aayCount).toStringAsFixed(1)}'),
                         SizedBox(width: 6),
-                        _LegendItem(color: Colors.pink, label: '80%'),
+                        _LegendItem(color: Colors.pink, label:  '${percent(widget.phhCount).toStringAsFixed(1)}%'),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        _LegendItem(color: Colors.blue, label: '80%'),
+                      children:  [
+                        _LegendItem(color: Colors.blue, label:  '${percent(widget.nphhCount).toStringAsFixed(1)}%' ),
                         SizedBox(width: 6),
-                        _LegendItem(color: Colors.grey, label: '80%'),
+                        _LegendItem(color: Colors.grey, label:   '${percent(widget.npnsCount).toStringAsFixed(1)}%'),
                       ],
                     ),
                   ],

@@ -3,4 +3,6 @@ class PrefKeys {
   static const userId = 'userId';
   static const userName = 'userName';
   static const mobile = 'mobile';
+  static const ward = 'ward';        
+  static const photo = 'photo';      
 }

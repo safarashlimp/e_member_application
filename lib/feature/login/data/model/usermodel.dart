@@ -25,14 +25,18 @@ class Datum {
     String name;
     String mobile;
     String clientid;
+    String photo;
+    String ward ;
 
-    Datum({required this.id, required this.name, required this.mobile, required this.clientid});
+    Datum({required this.id, required this.name, required this.mobile, required this.clientid , required this.photo,required this.ward});
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         name: json["name"],
         mobile: json["mobile"],
         clientid: json["Clientid"],
+        photo:  json["photo"],
+        ward: json["ward"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -40,5 +44,7 @@ class Datum {
         "name": name,
         "mobile": mobile,
         "Clientid": clientid,
+        "photo": photo,
+        "ward" :ward
     };
 }

@@ -41,6 +41,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             PrefKeys.userName, user.data.first.name);
         await prefs.setString(
             PrefKeys.mobile, user.data.first.mobile);
+
+ await prefs.setString(
+  PrefKeys.ward,
+  user.data.first.ward,
+);
+
+await prefs.setString(
+  PrefKeys.photo,
+  user.data.first.photo ,
+);
+
+
+            
         // print("Saved clientid: ${user.data.first.clientid}");
         // print("Saved userid: ${user.data.first.id}");
         // print("Saved username: ${user.data.first.name}"); 
