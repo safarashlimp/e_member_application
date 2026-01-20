@@ -1,38 +1,31 @@
-import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_details_filter.dart';
+// lib/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_state.dart
 
-enum JobDetailsDrawerStatus { initial, loading, success, error }
+import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_details_filter.dart';
+import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_fitlre_step.dart';
+
+enum JobDetailsDrawerStatus { initial, loading, loaded, success, error }
 
 class JobDetailsDrawerState {
+  final JobDetailsDrawerStatus status;
   final int currentStep;
   final JobDetailsFilter filter;
-  final JobDetailsDrawerStatus status;
+  final List<JobFilterStep> steps;
   final String? errorMessage;
 
   const JobDetailsDrawerState({
+    this.status = JobDetailsDrawerStatus.initial,
     this.currentStep = 0,
     this.filter = const JobDetailsFilter(),
-    this.status = JobDetailsDrawerStatus.initial,
+    this.steps = const [],
     this.errorMessage,
   });
 
-  JobDetailsDrawerState copyWith({
-    int? currentStep,
-    JobDetailsFilter? filter,
-    JobDetailsDrawerStatus? status,
-    String? errorMessage,
-  }) {
-    return JobDetailsDrawerState(
-      currentStep: currentStep ?? this.currentStep,
-      filter: filter ?? this.filter,
-      status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
-
-  bool get canGoNext => currentStep < 2; // 3 steps (0, 1, 2)
+  bool get canGoNext => currentStep < steps.length - 1;
   bool get canGoPrevious => currentStep > 0;
-  
+
   String? getCurrentSelection() {
+    if (steps.isEmpty || currentStep >= steps.length) return null;
+    
     switch (currentStep) {
       case 0:
         return filter.employmentStatus;
@@ -43,5 +36,21 @@ class JobDetailsDrawerState {
       default:
         return null;
     }
+  }
+
+  JobDetailsDrawerState copyWith({
+    JobDetailsDrawerStatus? status,
+    int? currentStep,
+    JobDetailsFilter? filter,
+    List<JobFilterStep>? steps,
+    String? errorMessage,
+  }) {
+    return JobDetailsDrawerState(
+      status: status ?? this.status,
+      currentStep: currentStep ?? this.currentStep,
+      filter: filter ?? this.filter,
+      steps: steps ?? this.steps,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 }

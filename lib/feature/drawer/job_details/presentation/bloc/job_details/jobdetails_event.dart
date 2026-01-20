@@ -1,4 +1,8 @@
+// lib/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_event.dart
+
 abstract class JobDetailsDrawerEvent {}
+
+class JobDetailsDrawerInitialize extends JobDetailsDrawerEvent {}
 
 class JobDetailsDrawerStepChanged extends JobDetailsDrawerEvent {
   final int step;
@@ -6,9 +10,10 @@ class JobDetailsDrawerStepChanged extends JobDetailsDrawerEvent {
 }
 
 class JobDetailsDrawerOptionSelected extends JobDetailsDrawerEvent {
-  final String filterKey;
-  final String option;
-  JobDetailsDrawerOptionSelected(this.filterKey, this.option);
+  final int stepIndex;
+  final String optionId; // This will be the actual ID from API
+  
+  JobDetailsDrawerOptionSelected(this.stepIndex, this.optionId);
 }
 
 class JobDetailsDrawerNextStep extends JobDetailsDrawerEvent {}

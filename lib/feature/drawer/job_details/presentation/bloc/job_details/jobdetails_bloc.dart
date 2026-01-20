@@ -1,10 +1,16 @@
+// lib/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_bloc.dart
+
 import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_details_filter.dart';
+import 'package:e_member_app/feature/drawer/job_details/domain/repo/job_repo_model.dart';
 import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_event.dart';
 import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerState> {
-  JobDetailsDrawerBloc() : super(const JobDetailsDrawerState()) {
+  final JobDrawerRepository _repository;
+
+  JobDetailsDrawerBloc(this._repository) : super(const JobDetailsDrawerState()) {
+    on<JobDetailsDrawerInitialize>(_onInitialize);
     on<JobDetailsDrawerStepChanged>(_onStepChanged);
     on<JobDetailsDrawerOptionSelected>(_onOptionSelected);
     on<JobDetailsDrawerNextStep>(_onNextStep);
@@ -13,11 +19,31 @@ class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerS
     on<JobDetailsDrawerSubmit>(_onSubmit);
   }
 
+  Future<void> _onInitialize(
+    JobDetailsDrawerInitialize event,
+    Emitter<JobDetailsDrawerState> emit,
+  ) async {
+    emit(state.copyWith(status: JobDetailsDrawerStatus.loading));
+    
+    try {
+      final steps = await _repository.getAllJobSteps();
+      emit(state.copyWith(
+        status: JobDetailsDrawerStatus.loaded,
+        steps: steps,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: JobDetailsDrawerStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
   void _onStepChanged(
     JobDetailsDrawerStepChanged event,
     Emitter<JobDetailsDrawerState> emit,
   ) {
-    if (event.step >= 0 && event.step < 3) {
+    if (event.step >= 0 && event.step < state.steps.length) {
       emit(state.copyWith(currentStep: event.step));
     }
   }
@@ -28,15 +54,15 @@ class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerS
   ) {
     JobDetailsFilter updatedFilter;
     
-    switch (event.filterKey) {
-      case 'തൊഴിൽ നില':
-        updatedFilter = state.filter.copyWith(employmentStatus: event.option);
+    switch (event.stepIndex) {
+      case 0: // തൊഴിൽ നില
+        updatedFilter = state.filter.copyWith(employmentStatus: event.optionId);
         break;
-      case 'തൊഴിൽ':
-        updatedFilter = state.filter.copyWith(occupation: event.option);
+      case 1: // തൊഴിൽ
+        updatedFilter = state.filter.copyWith(occupation: event.optionId);
         break;
-      case 'തൊഴിൽ മേഖലയിൽ സഹായം ആവശ്യമുണ്ടോ':
-        updatedFilter = state.filter.copyWith(needEmploymentHelp: event.option);
+      case 2: // തൊഴിൽ മേഖലയിൽ സഹായം
+        updatedFilter = state.filter.copyWith(needEmploymentHelp: event.optionId);
         break;
       default:
         return;
@@ -67,7 +93,10 @@ class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerS
     JobDetailsDrawerReset event,
     Emitter<JobDetailsDrawerState> emit,
   ) {
-    emit(const JobDetailsDrawerState());
+    emit(state.copyWith(
+      filter: const JobDetailsFilter(),
+      currentStep: 0,
+    ));
   }
 
   void _onSubmit(
@@ -77,9 +106,14 @@ class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerS
     emit(state.copyWith(status: JobDetailsDrawerStatus.loading));
     
     try {
-      // Here you can add your submission logic
-      // For example, save to repository, send to API, etc.
-      print('Job Details Filter: ${state.filter.toMap()}');
+      final filterMap = state.filter.toMap();
+      print('Job Details Filter Submitted: $filterMap');
+      // Example output:
+      // {
+      //   'employment_status_id': '3',
+      //   'occupation_id': '15',
+      //   'employment_support_id': '2'
+      // }
       
       emit(state.copyWith(status: JobDetailsDrawerStatus.success));
     } catch (e) {

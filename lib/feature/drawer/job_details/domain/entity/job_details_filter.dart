@@ -1,7 +1,9 @@
+// lib/feature/drawer/job_details/domain/entity/job_details_filter.dart
+
 class JobDetailsFilter {
-  final String? employmentStatus;
-  final String? occupation;
-  final String? needEmploymentHelp;
+  final String? employmentStatus; // Will store employment status ID
+  final String? occupation; // Will store job/occupation ID
+  final String? needEmploymentHelp; // Will store employment support ID
 
   const JobDetailsFilter({
     this.employmentStatus,
@@ -21,17 +23,11 @@ class JobDetailsFilter {
     );
   }
 
-  bool get isComplete {
-    return employmentStatus != null &&
-        occupation != null &&
-        needEmploymentHelp != null;
-  }
-
-  Map<String, String?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'employmentStatus': employmentStatus,
-      'occupation': occupation,
-      'needEmploymentHelp': needEmploymentHelp,
+      if (employmentStatus != null) 'employment_status_id': employmentStatus,
+      if (occupation != null) 'occupation_id': occupation,
+      if (needEmploymentHelp != null) 'employment_support_id': needEmploymentHelp,
     };
   }
 }
