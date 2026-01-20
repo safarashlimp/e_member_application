@@ -1,38 +1,31 @@
-import 'package:e_member_app/feature/drawer/social_details/domain/entity/social_entity.dart';
+// lib/feature/drawer/social_details/presentation/bloc/social_filter/social_filter_state.dart
 
-enum SocialDrawerStatus { initial, loading, success, error }
+import 'package:e_member_app/feature/drawer/social_details/domain/entity/social_entity.dart';
+import 'package:e_member_app/feature/drawer/social_details/domain/entity/socila_drawer_filterStep.dart';
+
+enum SocialDrawerStatus { initial, loading, loaded, success, error }
 
 class SocialDrawerState {
+  final SocialDrawerStatus status;
   final int currentStep;
   final SocialDrawerFilter filter;
-  final SocialDrawerStatus status;
+  final List<SocialFilterStep> steps;
   final String? errorMessage;
 
   const SocialDrawerState({
+    this.status = SocialDrawerStatus.initial,
     this.currentStep = 0,
     this.filter = const SocialDrawerFilter(),
-    this.status = SocialDrawerStatus.initial,
+    this.steps = const [],
     this.errorMessage,
   });
 
-  SocialDrawerState copyWith({
-    int? currentStep,
-    SocialDrawerFilter? filter,
-    SocialDrawerStatus? status,
-    String? errorMessage,
-  }) {
-    return SocialDrawerState(
-      currentStep: currentStep ?? this.currentStep,
-      filter: filter ?? this.filter,
-      status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
-
-  bool get canGoNext => currentStep < 4; // 5 steps (0, 1, 2, 3, 4)
+  bool get canGoNext => currentStep < steps.length - 1;
   bool get canGoPrevious => currentStep > 0;
-  
+
   String? getCurrentSelection() {
+    if (steps.isEmpty || currentStep >= steps.length) return null;
+    
     switch (currentStep) {
       case 0:
         return filter.includedInRationCard;
@@ -47,5 +40,21 @@ class SocialDrawerState {
       default:
         return null;
     }
+  }
+
+  SocialDrawerState copyWith({
+    SocialDrawerStatus? status,
+    int? currentStep,
+    SocialDrawerFilter? filter,
+    List<SocialFilterStep>? steps,
+    String? errorMessage,
+  }) {
+    return SocialDrawerState(
+      status: status ?? this.status,
+      currentStep: currentStep ?? this.currentStep,
+      filter: filter ?? this.filter,
+      steps: steps ?? this.steps,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 }

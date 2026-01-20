@@ -1,9 +1,11 @@
+// lib/feature/drawer/social_details/domain/entity/social_entity.dart
+
 class SocialDrawerFilter {
-  final String? includedInRationCard;
-  final String? receivingPension;
-  final String? pensionType;
-  final String? needPension;
-  final String? povertyAlleviationMember;
+  final String? includedInRationCard; // Will store "1" or "0"
+  final String? receivingPension; // Will store "1" or "0"
+  final String? pensionType; // Will store pension type ID (only if receiving pension)
+  final String? needPension; // Will store pension requirement ID
+  final String? povertyAlleviationMember; // For poverty alleviation programs (hardcoded options)
 
   const SocialDrawerFilter({
     this.includedInRationCard,
@@ -37,13 +39,13 @@ class SocialDrawerFilter {
         povertyAlleviationMember != null;
   }
 
-  Map<String, String?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'includedInRationCard': includedInRationCard,
-      'receivingPension': receivingPension,
-      'pensionType': pensionType,
-      'needPension': needPension,
-      'povertyAlleviationMember': povertyAlleviationMember,
+      if (includedInRationCard != null) 'included_in_ration_card': includedInRationCard,
+      if (receivingPension != null) 'receiving_pension': receivingPension,
+      if (pensionType != null) 'pension_type_id': pensionType,
+      if (needPension != null) 'pension_requirement_id': needPension,
+      if (povertyAlleviationMember != null) 'poverty_alleviation_program': povertyAlleviationMember,
     };
   }
 }
