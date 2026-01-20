@@ -323,7 +323,7 @@ double percent(int value) {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:  [
-                        _LegendItem(color: Colors.amber, label: ' ${percent(widget.aayCount).toStringAsFixed(1)}'),
+                        _LegendItem(color: Colors.amber, label: ' ${percent(widget.aayCount).toStringAsFixed(1)}%'),
                         SizedBox(width: 6),
                         _LegendItem(color: Colors.pink, label:  '${percent(widget.phhCount).toStringAsFixed(1)}%'),
                       ],
