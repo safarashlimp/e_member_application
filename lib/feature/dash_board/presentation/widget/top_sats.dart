@@ -199,6 +199,7 @@
 //     );
 //   }
 // }
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:flutter/material.dart';
 
 class TopStats extends StatefulWidget {
@@ -234,7 +235,7 @@ class _TopStatsState extends State<TopStats> {
             Expanded(
               child: _StatCard(
                 icon: 'assets/images/Mask group (25).png',
-                label: 'കുടുംബങ്ങൾ',
+                label: 'കുടുംബം',
                 value: widget.familiesCount,
               ),
             ),
@@ -301,7 +302,7 @@ class _StatCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: labelFontSize,
                         fontWeight: FontWeight.w500,
-                        color: Colors.blue,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -312,6 +313,8 @@ class _StatCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: valueFontSize,
                         fontWeight: FontWeight.bold,
+color: AppColor.primary
+                        
                       ),
                     ),
                   ],

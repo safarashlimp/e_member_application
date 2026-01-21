@@ -43,9 +43,9 @@ class LoginRepository {
       throw Exception("Empty response from server");
     }
 
-    if (!response.body.trim().startsWith('{')) {
-      throw Exception("യൂസർനെയിമും പാസ്‌വേഡും ശരിയായി നൽകുക");
-    }
+    // if (!response.body.trim().startsWith('{')) {
+    //   throw Exception("യൂസർനെയിമും പാസ്‌വേഡും ശരിയായി നൽകുക");
+    // }
 
     if (response.statusCode == 200) {
       return userModelFromJson(response.body);

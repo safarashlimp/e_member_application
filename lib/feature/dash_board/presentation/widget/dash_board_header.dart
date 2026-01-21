@@ -187,7 +187,21 @@ String photoUrl = '';
               ),
             ),
           ),
-
+   Positioned(
+            top: widget.height - 10,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 30,
+              decoration: BoxDecoration(
+                color: AppColor.secondary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
+            ),
+          ),
           /// 🔹 WHITE OVERLAP
          Positioned(
   top: widget.height * 0.30,

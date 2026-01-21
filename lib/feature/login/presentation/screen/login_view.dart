@@ -143,19 +143,18 @@ class _LoginViewState extends State<LoginView> {
                                   showGraySnackBar(
                                       context, "യൂസർനെയിമും പാസ്‌വേഡും നൽകുക");
                                   return;
+                                } else if (state is LoginFailure) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text(
+                                        "യൂസർനെയിമോ പാസ്‌വേഡോ തെറ്റാണ്",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      backgroundColor: Colors.grey.shade800,
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
                                 }
-//   else if (state is LoginFailure) {
-//   ScaffoldMessenger.of(context).showSnackBar(
-//     SnackBar(
-//       content: const Text(
-//         "യൂസർനെയിമോ പാസ്‌വേഡോ തെറ്റാണ്",
-//         style: TextStyle(color: Colors.white),
-//       ),
-//       backgroundColor: Colors.grey.shade800,
-//       behavior: SnackBarBehavior.floating,
-//     ),
-//   );
-// }
                                 context.read<LoginBloc>().add(
                                       LoginButtonPressed(
                                         email: email,

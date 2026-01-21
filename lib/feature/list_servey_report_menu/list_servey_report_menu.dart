@@ -56,10 +56,11 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                 );
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Container(
-              height: 400,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              width: double.infinity,
+            // height: double.infinity,
+              margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
                 color: AppColor.secondary,
