@@ -4,23 +4,41 @@ import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_use
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
-import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
 import 'package:e_member_app/feature/login/presentation/bloc/loginBloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
+  void showGraySnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.grey.shade800, // gray color
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +49,24 @@ class LoginView extends StatelessWidget {
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
-            if (state is LoginSuccess) {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (_) {
-        final datasource = DashboardRemoteDatasource();
-        final repository = DashboardRepositoryImpl(datasource);
-        final useCase = GetDashboardUseCase(repository);
+              if (state is LoginSuccess) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      final datasource = DashboardRemoteDatasource();
+                      final repository = DashboardRepositoryImpl(datasource);
+                      final useCase = GetDashboardUseCase(repository);
 
-        return BlocProvider(
-          create: (_) =>
-              DashboardBloc(useCase)..add(LoadDashboardEvent()),
-          child: const DashboardPage(),
-        );
-      },
-    ),
-  );
-}
-else if (state is LoginFailure) {
+                      return BlocProvider(
+                        create: (_) =>
+                            DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                        child: const DashboardPage(),
+                      );
+                    },
+                  ),
+                );
+              } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),
                 );
@@ -91,13 +108,54 @@ else if (state is LoginFailure) {
                       SizedBox(height: 40),
                       state is LoginLoading
                           ? CircularProgressIndicator(
-                            color: AppColor.blue,
-                          )
+                              color: AppColor.blue,
+                            )
                           : AppActionButton(
                               label: "ലോഗിൻ",
                               onPressed: () {
                                 final email = emailController.text;
                                 final password = passwordController.text;
+
+                                if (email.isEmpty || password.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text(
+                                        "യൂസർനെയിമും പാസ്‌വേഡും ശരിയായി നൽകുക",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      backgroundColor: Colors.grey.shade800,
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                if (email.isEmpty) {
+                                  showGraySnackBar(context, "യൂസർനെയിം നൽകുക");
+                                  return;
+                                }
+
+                                if (password.isEmpty) {
+                                  showGraySnackBar(context, "പാസ്‌വേഡ് നൽകുക");
+                                  return;
+                                }
+                                if (email.isEmpty && password.isEmpty) {
+                                  showGraySnackBar(
+                                      context, "യൂസർനെയിമും പാസ്‌വേഡും നൽകുക");
+                                  return;
+                                }
+//   else if (state is LoginFailure) {
+//   ScaffoldMessenger.of(context).showSnackBar(
+//     SnackBar(
+//       content: const Text(
+//         "യൂസർനെയിമോ പാസ്‌വേഡോ തെറ്റാണ്",
+//         style: TextStyle(color: Colors.white),
+//       ),
+//       backgroundColor: Colors.grey.shade800,
+//       behavior: SnackBarBehavior.floating,
+//     ),
+//   );
+// }
                                 context.read<LoginBloc>().add(
                                       LoginButtonPressed(
                                         email: email,
