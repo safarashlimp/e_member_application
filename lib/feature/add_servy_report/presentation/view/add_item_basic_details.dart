@@ -47,6 +47,15 @@ class AddItemBasicDetails extends StatefulWidget {
 }
 
 class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
+  
+bool _isAnyBlocLoading(BuildContext context) {
+  return context.watch<HouseTypeBloc>().state is HouseTypeLoading ||
+      context.watch<LandTypeBloc>().state is LandTypeLoading ||
+      context.watch<WaterFacilityBloc>().state is WaterFacilityLoading ||
+      context.watch<RequiredBenefitBloc>().state is RequiredBenefitLoading ||
+      context.watch<OtherBenefitBloc>().state is OtherBenefitLoading ||
+      context.watch<WardGeneralNeedBloc>().state is WardGeneralNeedLoading;
+}
   bool _isSaving = false;
 
   void _populateFieldsFromScreen2(Datum datum) {
@@ -114,88 +123,316 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
       top: false,
       child: Scaffold(
         backgroundColor: AppColor.secondary,
-        body: BlocBuilder<HouseTypeBloc, HouseTypeState>(
-          builder: (context, state) {
-            if (state is HouseTypeLoading) {
-              return Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: AppColor.blue,
-                  child: Center(
-                      child: CircularProgressIndicator(
-                    color: AppColor.white,
-                  )));
-            } else if (state is HouseTypeError) {
-              return Center(child: Text('Error: ${state.message}'));
-            }
-            return Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  GradientHeader(
-                    backText: 'back',
-                    onPress: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.all(13),
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        SurveySection(
-                          title: 'വീടും അടിസ്ഥാന സൗകരയങ്ങളും',
-                          iconAsset: 'assets/images/house.png',
-                          child: Column(
-                            children: [
-                              Row(
+        body: Stack(
+          children: [
+            BlocBuilder<HouseTypeBloc, HouseTypeState>(
+              builder: (context, state) {
+                if (state is HouseTypeLoading) {
+                  return Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: AppColor.blue,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: AppColor.white,
+                      )));
+                } else if (state is HouseTypeError) {
+                  return Center(child: Text('Error: ${state.message}'));
+                }
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      GradientHeader(
+                        backText: 'back',
+                        onPress: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Expanded(
+                        child: ListView(
+                          padding: EdgeInsets.all(13),
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            SurveySection(
+                              title: 'വീടും അടിസ്ഥാന സൗകരയങ്ങളും',
+                              iconAsset: 'assets/images/house.png',
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: BlocBuilder<HouseTypeBloc,
-                                        HouseTypeState>(
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: BlocBuilder<HouseTypeBloc,
+                                            HouseTypeState>(
+                                          builder: (context, state) {
+                                            if (state is HouseTypeLoading) {
+                                              return const Center(
+                                                child: CircularProgressIndicator(),
+                                              );
+                                            }
+            
+                                            if (state is HouseTypeLoaded) {
+                                              if (selectedHouseTypeId != null &&
+                                                  selectedHouseType == null) {
+                                                final match =
+                                                    state.items.firstWhere(
+                                                  (e) =>
+                                                      e.id == selectedHouseTypeId,
+                                                  orElse: () => state.items.first,
+                                                );
+                                                selectedHouseType =
+                                                    match.name; // ✅ ID → NAME
+                                              }
+                                              return AppDropdownField<String>(
+                                                label: '* വീടിന്റെ തരം',
+                                                borderColor: AppColor.borderColor,
+                                                selectedTextColor: AppColor.primary,
+                                                dropdownTextColor:
+                                                    AppColor.hintText2,
+                                                dropdownBgColor: AppColor.white,
+                                                labelColor: AppColor.hintText2,
+                                                iconColor: AppColor.black,
+                                                selectedValue: selectedHouseType,
+                                                validator: (value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return 'വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക';
+                                                  }
+                                                  return null;
+                                                },
+                                                items: state.items
+                                                    .map((e) => e.name)
+                                                    .toList(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedHouseType = value;
+                                                    selectedHouseTypeId = state
+                                                        .items
+                                                        .firstWhere(
+                                                            (e) => e.name == value)
+                                                        .id;
+                                                  });
+                                                },
+                                              );
+                                            }
+            
+                                            if (state is HouseTypeError) {
+                                              return Text(
+                                                'Failed to load',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              );
+                                            }
+            
+                                            return const SizedBox();
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 20),
+                                      Expanded(
+                                        child: BlocBuilder<LandTypeBloc,
+                                            LandTypeState>(
+                                          builder: (context, state) {
+                                            if (state is LandTypeLoading) {
+                                              return const Center(
+                                                child: CircularProgressIndicator(),
+                                              );
+                                            }
+            
+                                            if (state is LandTypeLoaded) {
+                                              if (selectedLandTypeId != null &&
+                                                  selectedLandType == null) {
+                                                final match =
+                                                    state.items.firstWhere(
+                                                  (e) => e.id == selectedLandTypeId,
+                                                  orElse: () => state.items.first,
+                                                );
+                                                selectedLandType = match.name;
+                                              }
+            
+                                              return AppDropdownField<String>(
+                                                label: 'ഭൂമിയുടെ തരം',
+                                                borderColor: AppColor.borderColor,
+                                                selectedTextColor: AppColor.primary,
+                                                dropdownTextColor:
+                                                    AppColor.hintText2,
+                                                dropdownBgColor: AppColor.white,
+                                                labelColor: AppColor.hintText2,
+                                                iconColor: AppColor.black,
+                                                selectedValue: selectedLandType,
+                                                // validator:
+                                                // Validator.validateSelection,
+                                                items: state.items
+                                                    .map((e) => e.name)
+                                                    .toList(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedLandType = value;
+                                                    selectedLandTypeId = state.items
+                                                        .firstWhere(
+                                                            (e) => e.name == value)
+                                                        .id;
+                                                  });
+                                                },
+                                              );
+                                            }
+            
+                                            if (state is LandTypeError) {
+                                              return const Text(
+                                                'Failed to load',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              );
+                                            }
+            
+                                            return const SizedBox();
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 18),
+                                  AppTextField(
+                                    controller: selectedLandAreaController,
+                                    label: 'ഭൂമിയുടെ വിസ്തീർണ്ണം (സെന്റ്)',
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    validator: Validator.validateDecimal,
+                                    textColor: AppColor.primary,
+                                    width: double.infinity,
+                                    height: 40,
+                                  ),
+                                  SizedBox(height: 18),
+                                  AppRadioField(
+                                    label: "ശൗചാലയം",
+                                    value: toilet,
+                                    onChanged: (v) => setState(() => toilet = v),
+                                  ),
+                                  SizedBox(height: 18),
+                                  AppRadioField(
+                                    label: "വൈദ്യുതി കണക്ഷൻ",
+                                    value: electricityConnection,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        electricityConnection = v;
+                                        if (v == 0) {
+                                          selectedWaterFacilityId = null;
+                                          selectedwaterFacilityAvailable = null;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: 18),
+                                  BlocBuilder<WaterFacilityBloc,
+                                      WaterFacilityState>(
+                                    builder: (context, state) {
+                                      if (state is WaterFacilityLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+            
+                                      if (state is WaterFacilityLoaded) {
+                                        if (selectedWaterFacilityId != null &&
+                                            selectedwaterFacilityAvailable ==
+                                                null) {
+                                          final match = state.items.firstWhere(
+                                            (e) => e.id == selectedWaterFacilityId,
+                                            orElse: () => state.items.first,
+                                          );
+                                          selectedwaterFacilityAvailable =
+                                              match.name;
+                                        }
+                                        return AppDropdownField<String>(
+                                          label: 'കുടിവെള്ള സൗകര്യം',
+                                          selectedValue:
+                                              selectedwaterFacilityAvailable,
+                                          borderColor: AppColor.borderColor,
+                                          labelColor: AppColor.hintText2,
+                                          selectedTextColor: AppColor.primary,
+                                          iconColor: AppColor.black,
+                                          dropdownBgColor: AppColor.white,
+                                          dropdownTextColor: AppColor.hintText,
+                                          // validator: Validator.validateSelection,
+                                          items: state.items
+                                              .map((e) => e.name)
+                                              .toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedwaterFacilityAvailable =
+                                                  value;
+                                              selectedWaterFacilityId = state.items
+                                                  .firstWhere(
+                                                      (e) => e.name == value)
+                                                  .id;
+                                            });
+                                          },
+                                        );
+                                      }
+            
+                                      if (state is WaterFacilityError) {
+                                        return Text(
+                                          'Error: ${state.message}',
+                                          style: const TextStyle(color: Colors.red),
+                                        );
+                                      }
+            
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                  SizedBox(height: 18),
+                                  AppRadioField(
+                                    label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
+                                    value: benefitsReceived,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        benefitsReceived = v;
+                                        if (v == 0) {}
+                                      });
+                                    },
+                                  ),
+                                  if (benefitsReceived == 1) ...[
+                                    const SizedBox(height: 18),
+                                    BlocBuilder<RequiredBenefitBloc,
+                                        RequiredBenefitState>(
                                       builder: (context, state) {
-                                        if (state is HouseTypeLoading) {
+                                        if (state is RequiredBenefitLoading) {
                                           return const Center(
                                             child: CircularProgressIndicator(),
                                           );
                                         }
-
-                                        if (state is HouseTypeLoaded) {
-                                          if (selectedHouseTypeId != null &&
-                                              selectedHouseType == null) {
-                                            final match =
-                                                state.items.firstWhere(
+            
+                                        if (state is RequiredBenefitLoaded) {
+                                          if (selectedRequiredBenefitId != null &&
+                                              selectedRequiredBenefit == null) {
+                                            final match = state.items.firstWhere(
                                               (e) =>
-                                                  e.id == selectedHouseTypeId,
+                                                  e.id == selectedRequiredBenefitId,
                                               orElse: () => state.items.first,
                                             );
-                                            selectedHouseType =
-                                                match.name; // ✅ ID → NAME
+                                            selectedRequiredBenefit = match.name;
                                           }
                                           return AppDropdownField<String>(
-                                            label: '* വീടിന്റെ തരം',
+                                            label: 'ലഭിച്ച ആനുകൂല്യം ',
+                                            selectedValue: selectedRequiredBenefit,
                                             borderColor: AppColor.borderColor,
-                                            selectedTextColor: AppColor.primary,
-                                            dropdownTextColor:
-                                                AppColor.hintText2,
-                                            dropdownBgColor: AppColor.white,
                                             labelColor: AppColor.hintText2,
+                                            selectedTextColor: AppColor.primary,
                                             iconColor: AppColor.black,
-                                            selectedValue: selectedHouseType,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക';
-                                              }
-                                              return null;
-                                            },
+                                            dropdownBgColor: AppColor.white,
+                                            dropdownTextColor: AppColor.hintText,
+                                            // validator: Validator.validateSelection,
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                selectedHouseType = value;
-                                                selectedHouseTypeId = state
+                                                selectedRequiredBenefit = value;
+                                                selectedRequiredBenefitId = state
                                                     .items
                                                     .firstWhere(
                                                         (e) => e.name == value)
@@ -204,61 +441,67 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                             },
                                           );
                                         }
-
-                                        if (state is HouseTypeError) {
+            
+                                        if (state is RequiredBenefitError) {
                                           return Text(
-                                            'Failed to load',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                            ),
+                                            'Error: ${state.message}',
+                                            style:
+                                                const TextStyle(color: Colors.red),
                                           );
                                         }
-
+            
                                         return const SizedBox();
                                       },
                                     ),
+                                  ],
+                                  const SizedBox(height: 18),
+                                  AppRadioField(
+                                    label: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ?",
+                                    value: benefitsWanted,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        benefitsWanted = v;
+                                        if (v == 0) {}
+                                      });
+                                    },
                                   ),
-                                  SizedBox(width: 20),
-                                  Expanded(
-                                    child: BlocBuilder<LandTypeBloc,
-                                        LandTypeState>(
+                                  if (benefitsWanted == 1) ...[
+                                    const SizedBox(height: 18),
+                                    BlocBuilder<OtherBenefitBloc,
+                                        OtherBenefitState>(
                                       builder: (context, state) {
-                                        if (state is LandTypeLoading) {
+                                        if (state is OtherBenefitLoading) {
                                           return const Center(
                                             child: CircularProgressIndicator(),
                                           );
                                         }
-
-                                        if (state is LandTypeLoaded) {
-                                          if (selectedLandTypeId != null &&
-                                              selectedLandType == null) {
-                                            final match =
-                                                state.items.firstWhere(
-                                              (e) => e.id == selectedLandTypeId,
+            
+                                        if (state is OtherBenefitLoaded) {
+                                          if (selectedOtherBenefitId != null &&
+                                              selectedOtherBenefit == null) {
+                                            final match = state.items.firstWhere(
+                                              (e) => e.id == selectedOtherBenefitId,
                                               orElse: () => state.items.first,
                                             );
-                                            selectedLandType = match.name;
+                                            selectedOtherBenefit = match.name;
                                           }
-
                                           return AppDropdownField<String>(
-                                            label: 'ഭൂമിയുടെ തരം',
+                                            label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
+                                            selectedValue: selectedOtherBenefit,
                                             borderColor: AppColor.borderColor,
-                                            selectedTextColor: AppColor.primary,
-                                            dropdownTextColor:
-                                                AppColor.hintText2,
-                                            dropdownBgColor: AppColor.white,
                                             labelColor: AppColor.hintText2,
+                                            selectedTextColor: AppColor.primary,
                                             iconColor: AppColor.black,
-                                            selectedValue: selectedLandType,
-                                            // validator:
-                                            // Validator.validateSelection,
+                                            dropdownBgColor: AppColor.white,
+                                            dropdownTextColor: AppColor.hintText,
+                                            validator: Validator.validateSelection,
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                selectedLandType = value;
-                                                selectedLandTypeId = state.items
+                                                selectedOtherBenefit = value;
+                                                selectedOtherBenefitId = state.items
                                                     .firstWhere(
                                                         (e) => e.name == value)
                                                     .id;
@@ -266,433 +509,212 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                             },
                                           );
                                         }
-
-                                        if (state is LandTypeError) {
-                                          return const Text(
-                                            'Failed to load',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          );
-                                        }
-
+            
                                         return const SizedBox();
                                       },
                                     ),
+                                  ],
+                                  const SizedBox(height: 18),
+                                  BlocBuilder<WardGeneralNeedBloc,
+                                      WardGeneralNeedState>(
+                                    builder: (context, state) {
+                                      if (state is WardGeneralNeedLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+            
+                                      if (state is WardGeneralNeedLoaded) {
+                                        if (selectedGeneralNeedId != null &&
+                                            selectedGeneralNeed == null) {
+                                          final match = state.items.firstWhere(
+                                            (e) => e.id == selectedGeneralNeedId,
+                                            orElse: () => state.items.first,
+                                          );
+                                          selectedGeneralNeed = match.name;
+                                        }
+                                        return AppDropdownField<String>(
+                                          label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
+                                          selectedValue: selectedGeneralNeed,
+                                          borderColor: AppColor.borderColor,
+                                          labelColor: AppColor.hintText2,
+                                          selectedTextColor: AppColor.primary,
+                                          iconColor: AppColor.black,
+                                          dropdownBgColor: AppColor.white,
+                                          dropdownTextColor: AppColor.hintText,
+                                          validator: Validator.validateSelection,
+                                          items: state.items
+                                              .map((e) => e.name)
+                                              .toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedGeneralNeed = value;
+                                              selectedGeneralNeedId = state.items
+                                                  .firstWhere(
+                                                      (e) => e.name == value)
+                                                  .id;
+                                            });
+                                          },
+                                        );
+                                      }
+            
+                                      if (state is WardGeneralNeedError) {
+                                        return Text(
+                                          'Error: ${state.message}',
+                                          style: const TextStyle(color: Colors.red),
+                                        );
+                                      }
+            
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  AppTextField(
+                                    controller: surveyornamecontroller,
+                                    label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                    labelColor: AppColor.hintText2,
+                                    borderColor: AppColor.borderColor,
+                                    focusedBorderColor: AppColor.primary,
+                                    labelfontSizes: 12,
+                                    textColor: AppColor.primary,
+                                    validator: Validator.validateName,
+                                    width: double.infinity,
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 18),
-                              AppTextField(
-                                controller: selectedLandAreaController,
-                                label: 'ഭൂമിയുടെ വിസ്തീർണ്ണം (സെന്റ്)',
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                validator: Validator.validateDecimal,
-                                textColor: AppColor.primary,
-                                width: double.infinity,
-                                height: 40,
-                              ),
-                              SizedBox(height: 18),
-                              AppRadioField(
-                                label: "ശൗചാലയം",
-                                value: toilet,
-                                onChanged: (v) => setState(() => toilet = v),
-                              ),
-                              SizedBox(height: 18),
-                              AppRadioField(
-                                label: "വൈദ്യുതി കണക്ഷൻ",
-                                value: electricityConnection,
-                                onChanged: (v) {
-                                  setState(() {
-                                    electricityConnection = v;
-                                    if (v == 0) {
-                                      selectedWaterFacilityId = null;
-                                      selectedwaterFacilityAvailable = null;
-                                    }
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 18),
-                              BlocBuilder<WaterFacilityBloc,
-                                  WaterFacilityState>(
-                                builder: (context, state) {
-                                  if (state is WaterFacilityLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-
-                                  if (state is WaterFacilityLoaded) {
-                                    if (selectedWaterFacilityId != null &&
-                                        selectedwaterFacilityAvailable ==
-                                            null) {
-                                      final match = state.items.firstWhere(
-                                        (e) => e.id == selectedWaterFacilityId,
-                                        orElse: () => state.items.first,
-                                      );
-                                      selectedwaterFacilityAvailable =
-                                          match.name;
-                                    }
-                                    return AppDropdownField<String>(
-                                      label: 'കുടിവെള്ള സൗകര്യം',
-                                      selectedValue:
-                                          selectedwaterFacilityAvailable,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      // validator: Validator.validateSelection,
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedwaterFacilityAvailable =
-                                              value;
-                                          selectedWaterFacilityId = state.items
-                                              .firstWhere(
-                                                  (e) => e.name == value)
-                                              .id;
-                                        });
-                                      },
-                                    );
-                                  }
-
-                                  if (state is WaterFacilityError) {
-                                    return Text(
-                                      'Error: ${state.message}',
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-
-                                  return const SizedBox();
-                                },
-                              ),
-                              SizedBox(height: 18),
-                              AppRadioField(
-                                label: "നിലവിൽആനുകൂല്യങ്ങൾ ലഭിച്ചിട്ടുണ്ടോ?",
-                                value: benefitsReceived,
-                                onChanged: (v) {
-                                  setState(() {
-                                    benefitsReceived = v;
-                                    if (v == 0) {}
-                                  });
-                                },
-                              ),
-                              if (benefitsReceived == 1) ...[
-                                const SizedBox(height: 18),
-                                BlocBuilder<RequiredBenefitBloc,
-                                    RequiredBenefitState>(
-                                  builder: (context, state) {
-                                    if (state is RequiredBenefitLoading) {
-                                      return const Center(
+                            ),
+                            SizedBox(height: 30),
+                            if (isAdd) ...[
+                              _isSaving
+                                  ? const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 12),
                                         child: CircularProgressIndicator(),
-                                      );
-                                    }
-
-                                    if (state is RequiredBenefitLoaded) {
-                                      if (selectedRequiredBenefitId != null &&
-                                          selectedRequiredBenefit == null) {
-                                        final match = state.items.firstWhere(
-                                          (e) =>
-                                              e.id == selectedRequiredBenefitId,
-                                          orElse: () => state.items.first,
-                                        );
-                                        selectedRequiredBenefit = match.name;
-                                      }
-                                      return AppDropdownField<String>(
-                                        label: 'ലഭിച്ച ആനുകൂല്യം ',
-                                        selectedValue: selectedRequiredBenefit,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        // validator: Validator.validateSelection,
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedRequiredBenefit = value;
-                                            selectedRequiredBenefitId = state
-                                                .items
-                                                .firstWhere(
-                                                    (e) => e.name == value)
-                                                .id;
-                                          });
-                                        },
-                                      );
-                                    }
-
-                                    if (state is RequiredBenefitError) {
-                                      return Text(
-                                        'Error: ${state.message}',
-                                        style:
-                                            const TextStyle(color: Colors.red),
-                                      );
-                                    }
-
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
-                              const SizedBox(height: 18),
-                              AppRadioField(
-                                label: "ആനുകൂല്യങ്ങൾ ആവശ്യമുണ്ടോ?",
-                                value: benefitsWanted,
-                                onChanged: (v) {
-                                  setState(() {
-                                    benefitsWanted = v;
-                                    if (v == 0) {}
-                                  });
-                                },
-                              ),
-                              if (benefitsWanted == 1) ...[
-                                const SizedBox(height: 18),
-                                BlocBuilder<OtherBenefitBloc,
-                                    OtherBenefitState>(
-                                  builder: (context, state) {
-                                    if (state is OtherBenefitLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-
-                                    if (state is OtherBenefitLoaded) {
-                                      if (selectedOtherBenefitId != null &&
-                                          selectedOtherBenefit == null) {
-                                        final match = state.items.firstWhere(
-                                          (e) => e.id == selectedOtherBenefitId,
-                                          orElse: () => state.items.first,
-                                        );
-                                        selectedOtherBenefit = match.name;
-                                      }
-                                      return AppDropdownField<String>(
-                                        label: 'ആവശ്യമുള്ള ആനുകൂല്യം',
-                                        selectedValue: selectedOtherBenefit,
-                                        borderColor: AppColor.borderColor,
-                                        labelColor: AppColor.hintText2,
-                                        selectedTextColor: AppColor.primary,
-                                        iconColor: AppColor.black,
-                                        dropdownBgColor: AppColor.white,
-                                        dropdownTextColor: AppColor.hintText,
-                                        validator: Validator.validateSelection,
-                                        items: state.items
-                                            .map((e) => e.name)
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedOtherBenefit = value;
-                                            selectedOtherBenefitId = state.items
-                                                .firstWhere(
-                                                    (e) => e.name == value)
-                                                .id;
-                                          });
-                                        },
-                                      );
-                                    }
-
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
-                              const SizedBox(height: 18),
-                              BlocBuilder<WardGeneralNeedBloc,
-                                  WardGeneralNeedState>(
-                                builder: (context, state) {
-                                  if (state is WardGeneralNeedLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-
-                                  if (state is WardGeneralNeedLoaded) {
-                                    if (selectedGeneralNeedId != null &&
-                                        selectedGeneralNeed == null) {
-                                      final match = state.items.firstWhere(
-                                        (e) => e.id == selectedGeneralNeedId,
-                                        orElse: () => state.items.first,
-                                      );
-                                      selectedGeneralNeed = match.name;
-                                    }
-                                    return AppDropdownField<String>(
-                                      label: 'വാർഡിലെ പൊതുവായ ആവശ്യങ്ങൾ',
-                                      selectedValue: selectedGeneralNeed,
-                                      borderColor: AppColor.borderColor,
-                                      labelColor: AppColor.hintText2,
-                                      selectedTextColor: AppColor.primary,
-                                      iconColor: AppColor.black,
-                                      dropdownBgColor: AppColor.white,
-                                      dropdownTextColor: AppColor.hintText,
-                                      validator: Validator.validateSelection,
-                                      items: state.items
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedGeneralNeed = value;
-                                          selectedGeneralNeedId = state.items
-                                              .firstWhere(
-                                                  (e) => e.name == value)
-                                              .id;
-                                        });
-                                      },
-                                    );
-                                  }
-
-                                  if (state is WardGeneralNeedError) {
-                                    return Text(
-                                      'Error: ${state.message}',
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  }
-
-                                  return const SizedBox();
-                                },
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              AppTextField(
-                                controller: surveyornamecontroller,
-                                label: "സർവേ നടത്തിയ ആളുടെ പേര്",
-                                labelColor: AppColor.hintText2,
-                                borderColor: AppColor.borderColor,
-                                focusedBorderColor: AppColor.primary,
-                                labelfontSizes: 12,
-                                textColor: AppColor.primary,
-                                validator: Validator.validateName,
-                                width: double.infinity,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        if (isAdd) ...[
-                          _isSaving
-                              ? const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 12),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : AppActionButton(
-                                  label: "സമർപ്പിക്കുക",
-                                  height: 44,
-                                  onPressed: _onAddSubmit,
-                                  labelStyle: const TextStyle(
-                                    color: AppColor.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                        ] else if (isEdit) ...[
-                          BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
-                            listener: (context, state) {
-                              if (state is HouseDetailsSuccess) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      backgroundColor: AppColor.blue,
-                                      content: Text('Updated successfully')),
-                                );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider(
-                                      create: (_) => HeaderListBloc(
-                                        GetHeaderListUsecase(
-                                          HeaderListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchHeaderList('1')),
-                                      child: const ListSurveyReport(
-                                        sectionType: FamilySurveySectionType
-                                            .familyBasicDetails,
-                                        postion: '2',
+                                      ),
+                                    )
+                                  : AppActionButton(
+                                      label: "സമർപ്പിക്കുക",
+                                      height: 44,
+                                      onPressed: _onAddSubmit,
+                                      labelStyle: const TextStyle(
+                                        color: AppColor.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                );
-                              }
-
-                              if (state is HouseDetailsError) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(state.message)),
-                                );
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is HouseDetailsLoading) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-
-                              return AppActionButton(
-                                label: "അപ്ഡേറ്റ് ചെയ്യുക",
-                                onPressed: () {
-                                  final screen2 = widget.screen2HeaderData!;
-
-                                  final int editId = int.parse(
-                                      screen2.data.first.id); // ✅ SCREEN-2 ID
-
-                                  final int householdId = int.parse(
-                                      screen2.data.first.householdId); // ✅ FK
-
-                                  context.read<HouseDetailsBloc>().add(
-                                        SubmitHouseDetails(
-                                          editId: editId,
-                                          householdId: householdId,
-                                          houseTypeId:
-                                              int.parse(selectedHouseTypeId!),
-                                          landTypeId: selectedLandTypeId != null
-                                              ? int.parse(selectedLandTypeId!)
-                                              : null,
-                                          landAreaCents:
-                                              selectedLandAreaController.text,
-                                          hasToilet: toilet,
-                                          hasElectricity: electricityConnection,
-                                          drinkingWaterSourceId:
-                                              selectedWaterFacilityId ?? '0',
-                                          receivedHousingBenefit:
-                                              benefitsReceived,
-                                          receivedBenefits:
-                                              selectedRequiredBenefitId,
-                                          needHousingBenefit: benefitsWanted,
-                                          benefitsRequired:
-                                              selectedOtherBenefitId,
-                                          wardNeeds: selectedGeneralNeedId,
-                                          surveyor: surveyornamecontroller.text,
+                            ] else if (isEdit) ...[
+                              BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
+                                listener: (context, state) {
+                                  if (state is HouseDetailsSuccess) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          backgroundColor: AppColor.blue,
+                                          content: Text('Updated successfully')),
+                                    );
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider(
+                                          create: (_) => HeaderListBloc(
+                                            GetHeaderListUsecase(
+                                              HeaderListRepositoryImpl(
+                                                  http.Client()),
+                                            ),
+                                          )..add(FetchHeaderList('1')),
+                                          child: const ListSurveyReport(
+                                            sectionType: FamilySurveySectionType
+                                                .familyBasicDetails,
+                                            postion: '2',
+                                          ),
                                         ),
-                                      );
+                                      ),
+                                    );
+                                  }
+            
+                                  if (state is HouseDetailsError) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(state.message)),
+                                    );
+                                  }
                                 },
-                                labelStyle: const TextStyle(
-                                  color: AppColor.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                height: 44,
-                              );
-                            },
-                          ),
-                        ] else if (isView) ...[
-                          SizedBox(
-                            height: 20,
-                          )
-                        ]
-                      ],
-                    ),
+                                builder: (context, state) {
+                                  if (state is HouseDetailsLoading) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
+            
+                                  return AppActionButton(
+                                    label: "അപ്ഡേറ്റ് ചെയ്യുക",
+                                    onPressed: () {
+                                      final screen2 = widget.screen2HeaderData!;
+            
+                                      final int editId = int.parse(
+                                          screen2.data.first.id); // ✅ SCREEN-2 ID
+            
+                                      final int householdId = int.parse(
+                                          screen2.data.first.householdId); // ✅ FK
+            
+                                      context.read<HouseDetailsBloc>().add(
+                                            SubmitHouseDetails(
+                                              editId: editId,
+                                              householdId: householdId,
+                                              houseTypeId:
+                                                  int.parse(selectedHouseTypeId!),
+                                              landTypeId: selectedLandTypeId != null
+                                                  ? int.parse(selectedLandTypeId!)
+                                                  : null,
+                                              landAreaCents:
+                                                  selectedLandAreaController.text,
+                                              hasToilet: toilet,
+                                              hasElectricity: electricityConnection,
+                                              drinkingWaterSourceId:
+                                                  selectedWaterFacilityId ?? '0',
+                                              receivedHousingBenefit:
+                                                  benefitsReceived,
+                                              receivedBenefits:
+                                                  selectedRequiredBenefitId,
+                                              needHousingBenefit: benefitsWanted,
+                                              benefitsRequired:
+                                                  selectedOtherBenefitId,
+                                              wardNeeds: selectedGeneralNeedId,
+                                              surveyor: surveyornamecontroller.text,
+                                            ),
+                                          );
+                                    },
+                                    labelStyle: const TextStyle(
+                                      color: AppColor.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    height: 44,
+                                  );
+                                },
+                              ),
+                            ] else if (isView) ...[
+                              SizedBox(
+                                height: 20,
+                              )
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
+                );
+              },
+            ),
+             if (_isAnyBlocLoading(context))
+      Container(
+        color: Colors.black.withOpacity(0.3),
+        child:  Center(
+          child: CircularProgressIndicator(
+            color: AppColor.blue,
+          ),
+        ),
+      ),
+          ],
         ),
       ),
     );
