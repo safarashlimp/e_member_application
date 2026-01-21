@@ -68,6 +68,48 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController studyCenter = TextEditingController();
   final TextEditingController selectedDate = TextEditingController();
 
+    bool _isAnyBlocLoading(BuildContext context) {
+    final relationState = context.watch<RelationDropBloc>().state;
+    final bloodGroupState = context.watch<BloodGroupBloc>().state;
+    final genderState = context.watch<GenderBloc>().state;
+    final maritalState = context.watch<MaritalStatusBloc>().state;
+    final religionState = context.watch<ReligionBloc>().state;
+    final casteState = context.watch<CasteBloc>().state;
+    final qualificationState = context.watch<QualificationBloc>().state;
+    final educationState = context.watch<EducationBloc>().state;
+    final employmentState = context.watch<EmploymentStatusBloc>().state;
+    final jobState = context.watch<JobBloc>().state;
+    final skillsState = context.watch<SkillsBloc>().state;
+    final empSupportState = context.watch<EmploymentSupportBloc>().state;
+    final farmingState = context.watch<FarmingTypeBloc>().state;
+    final healthIssueState = context.watch<HealthIssueBloc>().state;
+    final healthInsState = context.watch<HealthInsuranceBloc>().state;
+    final reqHealthState = context.watch<RequiredHealthSupportBloc>().state;
+    final pensionTypeState = context.watch<PensionTypeBloc>().state;
+    final pensionReqState = context.watch<PensionRequiredBloc>().state;
+
+    return relationState is RelationDropLoading ||
+        relationState is RelationDropInitial ||
+        bloodGroupState is BloodGroupLoading ||
+        genderState is GenderLoading ||
+        maritalState is MaritalStatusLoading ||
+        religionState is ReligionLoading ||
+        casteState is CasteLoading ||
+        qualificationState is QualificationLoading ||
+        educationState is EducationLoading ||
+        employmentState is EmploymentStatusLoading ||
+        jobState is JobLoading ||
+        skillsState is SkillsLoading ||
+        empSupportState is EmploymentSupportLoading ||
+        farmingState is FarmingTypeLoading ||
+        healthIssueState is HealthIssueLoading ||
+        healthInsState is HealthInsuranceLoading ||
+        reqHealthState is RequiredHealthSupportLoading ||
+        pensionTypeState is PensionTypeLoading ||
+        pensionReqState is PensionRequiredLoading;
+  }
+
+
   // kudumbanadhanum aayula badham
   String? selectedReletion;
   String? selectedRelationId;
@@ -182,20 +224,32 @@ bool isWhatsAppManuallyEdited = false;
       isWhatsAppManuallyEdited = false;
     }
   });
+
+  
 }
-   
+
+ 
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = _isAnyBlocLoading(context);
+
     return SafeArea(
+      
       top: false,
       child: Scaffold(
         backgroundColor: AppColor.secondary,
-        body: BlocBuilder<RelationDropBloc, RelationDropState>(
+        body:  isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+:
+        
+        
+        
+        BlocBuilder<RelationDropBloc, RelationDropState>(
           builder: (context, state) {
-            if (state is RelationDropLoading || state is RelationDropInitial) {
-              return const Center(child: CircularProgressIndicator());
-            }
+            
 
             if (state is RelationDropError) {
               return Center(
@@ -275,7 +329,9 @@ bool isWhatsAppManuallyEdited = false;
                               builder: (context, state) {
                                 if (state is BloodGroupLoading) {
                                   return const Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(
+                                      
+                                    ),
                                   );
                                 }
 
