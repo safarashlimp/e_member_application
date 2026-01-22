@@ -1,6 +1,12 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
+import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
+import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
+import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
+import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
@@ -40,70 +46,113 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: Scaffold(
-        backgroundColor: AppColor.secondary,
-        body: Column(
-          children: [
-            GradientHeader(
-              title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
-              onPress: () {
-                Navigator.pop(context);
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
-            ),
-            Expanded(
-              child: Container(
-                color: AppColor.white,
-                child: BlocBuilder<HeaderListBloc, HeaderListState>(
-                  builder: (context, state) {
-                    if (state is HeaderListLoading) {
-                      return const Center(
-                          child: CircularProgressIndicator(
-                        color: AppColor.iconColor,
-                      ));
-                    }
+      child: PopScope(
+     canPop: false, // ⛔ block default back
+    onPopInvoked: (didPop) {
+      if (didPop) return;
 
-                    if (state is HeaderListLoaded) {
-                      if (state.items.isEmpty) {
+    Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(
+    builder: (_) {
+      final datasource = DashboardRemoteDatasource();
+      final repository = DashboardRepositoryImpl(datasource);
+      final useCase = GetDashboardUseCase(repository);
+
+      return BlocProvider(
+        create: (_) =>
+            DashboardBloc(useCase)..add(LoadDashboardEvent()),
+        child: const DashboardPage(),
+      );
+    },
+  ),
+  (route) => false, // ✅ removes all previous routes
+);
+
+    },
+        child: Scaffold(
+          backgroundColor: AppColor.secondary,
+          body: Column(
+            children: [
+           GradientHeader(
+  title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
+  onPress: () {
+    Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(
+    builder: (_) {
+      final datasource = DashboardRemoteDatasource();
+      final repository = DashboardRepositoryImpl(datasource);
+      final useCase = GetDashboardUseCase(repository);
+
+      return BlocProvider(
+        create: (_) =>
+            DashboardBloc(useCase)..add(LoadDashboardEvent()),
+        child: const DashboardPage(),
+      );
+    },
+  ),
+  (route) => false, // ✅ removes all previous routes
+);
+
+  },
+),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+              ),
+              Expanded(
+                child: Container(
+                  color: AppColor.white,
+                  child: BlocBuilder<HeaderListBloc, HeaderListState>(
+                    builder: (context, state) {
+                      if (state is HeaderListLoading) {
                         return const Center(
-                          child: Text(
-                            'വിവരങ്ങൾ ലഭ്യമല്ല',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
+                            child: CircularProgressIndicator(
+                          color: AppColor.iconColor,
+                        ));
+                      }
+        
+                      if (state is HeaderListLoaded) {
+                        if (state.items.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'വിവരങ്ങൾ ലഭ്യമല്ല',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          itemCount: state.items.length,
+                          itemBuilder: (context, index) {
+                            final item = state.items[index];
+                            return PropertyCard(
+                              editId: item.editId,
+                              position: item.position,
+                              sectionType: widget.sectionType,
+                              houseNumber: item.houseNumber,
+                              houseName: item.houseName,
+                              subtitle: item.houseChief,
+                              memberCount: item.memberCount,
+                              lastUpdated: 'Updated on ${item.lastModified}',
+                            );
+                          },
                         );
                       }
-                      return ListView.builder(
-                        itemCount: state.items.length,
-                        itemBuilder: (context, index) {
-                          final item = state.items[index];
-                          return PropertyCard(
-                            editId: item.editId,
-                            position: item.position,
-                            sectionType: widget.sectionType,
-                            houseNumber: item.houseNumber,
-                            houseName: item.houseName,
-                            subtitle: item.houseChief,
-                            memberCount: item.memberCount,
-                            lastUpdated: 'Updated on ${item.lastModified}',
-                          );
-                        },
-                      );
-                    }
-
-                    if (state is HeaderListError) {
-                      return Center(child: Text(state.message));
-                    }
-
-                    return const SizedBox();
-                  },
+        
+                      if (state is HeaderListError) {
+                        return Center(child: Text(state.message));
+                      }
+        
+                      return const SizedBox();
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

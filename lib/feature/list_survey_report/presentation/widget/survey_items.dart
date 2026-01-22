@@ -268,87 +268,147 @@ BlocProvider(
           const SizedBox(height: 13),
           // Action Buttons
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            
             children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                   // add contition
-                   openWithLoad(context, PageMode.view);
-                  },
-                  icon: const Icon(
-                    Icons.visibility,
-                    size: 14,
-                    color: AppColor.button,
-                  ),
-                  label: const Text(
-                    'View',
-                    style: TextStyle(
-                      color: AppColor.iconColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColor.iconColor,
-                    side: const BorderSide(color: AppColor.iconColor),
-                    minimumSize: const Size(144, 23),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.only(
-                      top: 4,
-                      left: 4,
-                      right: 4,
-                      bottom: 4,
-                    ),
-                  ),
-                ),
-              ),
+                  SizedBox(
+      width: 57,
+      height: 23,
+      child: OutlinedButton.icon(
+        onPressed: () => openWithLoad(context, PageMode.view),
+        icon: const Icon(
+          Icons.visibility,
+          size: 14,
+          color: AppColor.button,
+        ),
+        label: const Text(
+          'View',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColor.iconColor,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          side: const BorderSide(color: AppColor.iconColor),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    ),
+              // Expanded(
+              //   child: OutlinedButton.icon(
+              //      //  fixedSize: const Size(57, 23),
+              //     onPressed: () {
+              //      // add contition
+              //      openWithLoad(context, PageMode.view);
+              //     },
+              //     icon: const Icon(
+              //       Icons.visibility,
+              //       size: 14,
+              //       color: AppColor.button,
+              //     ),
+              //     label: const Text(
+              //       'View',
+              //       style: TextStyle(
+              //         color: AppColor.iconColor,
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.w600,
+              //       ),
+              //     ),
+              //     style: OutlinedButton.styleFrom(
+              //        // fixedSize: const Size(57, 23), 
+              //       foregroundColor: AppColor.iconColor,
+              //       side: const BorderSide(color: AppColor.iconColor),
+              //       minimumSize: const Size(57, 23),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8),
+              //       ),
+              //       // padding: const EdgeInsets.only(
+              //       //   top: 4,
+              //       //   left: 4,
+              //       //   right: 4,
+              //       //   bottom: 4,
+              //       // ),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(width: 7),
-              Expanded(
-                child: OutlinedButton.icon(
-                  //add contition
-                  onPressed: () {
-                    openWithLoad(context, PageMode.edit);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => AddServyItems()),
-                    // );
-                  },
-                  icon: const Icon(
-                    Icons.edit,
-                    size: 14,
-                    color: AppColor.button,
-                  ),
-                  label: const Text(
-                    'Edit',
-                    style: TextStyle(
-                      color: AppColor.iconColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColor.iconColor,
-                    side: const BorderSide(color: AppColor.iconColor),
-                    minimumSize: const Size(144, 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.only(
-                      top: 4,
-                      left: 4,
-                      right: 4,
-                      bottom: 4,
-                    ),
-                  ),
-                ),
-              ),
+                SizedBox(
+      width: 57,
+      height: 23,
+      child: OutlinedButton.icon(
+        onPressed: () => openWithLoad(context, PageMode.edit),
+        icon: const Icon(
+          Icons.edit,
+          size: 14,
+          color: AppColor.button,
+        ),
+        label: const Text(
+          'Edit',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColor.iconColor,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          side: const BorderSide(color: AppColor.iconColor),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    ),
+              //Expanded(
+              //   child: OutlinedButton.icon(
+              //     //add contition
+              //     onPressed: () {
+              //       openWithLoad(context, PageMode.edit);
+              //       // Navigator.push(
+              //       //   context,
+              //       //   MaterialPageRoute(builder: (context) => AddServyItems()),
+              //       // );
+              //     },
+              //     icon: const Icon(
+              //       Icons.edit,
+              //       size: 14,
+              //       color: AppColor.button,
+              //     ),
+              //     label: const Text(
+              //       'Edit',
+              //       style: TextStyle(
+              //         color: AppColor.iconColor,
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.w600,
+              //       ),
+              //     ),
+              //     style: OutlinedButton.styleFrom(
+              //         //fixedSize: const Size(57, 23), 
+              //       foregroundColor: AppColor.iconColor,
+              //       side: const BorderSide(color: AppColor.iconColor),
+              //       minimumSize: const Size(30, 23),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8),
+              //       ),
+              //       padding: const EdgeInsets.only(
+              //         top: 4,
+              //         left: 4,
+              //         right: 4,
+              //         bottom: 4,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(width: 7),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.40,
-                height: 24,
+    height: 24,
+               
                 child: ElevatedButton.icon(
                  onPressed: () {
                   Navigator.push(
@@ -454,42 +514,35 @@ BlocProvider(
                 );
                 
                 },
-                
-                  icon: const Icon(
-                    Icons.add,
-                    size: 12,
-                    color: AppColor.white,
-                  ),
-                  label: const Text(
-                    'അംഗം ചേർക്കുക',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.button,
-                    foregroundColor: Colors.white,
-                
-                    elevation: 0,
-                    // minimumSize: const Size(144, 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                        color: AppColor.iconColor, // 👈 border color
-                        width: 1, // 👈 border thickness
-                      ),
-                    ),
-                
-                    padding: const EdgeInsets.only(
-                      top: 4,
-                      left: 4,
-                      right: 4,
-                      bottom: 3,
-                    ),
-                  ),
-                ),
-              ),
+              icon: const Icon(
+          Icons.add,
+          size: 14,
+          color: AppColor.white,
+        ),
+        label: const Text(
+          'അംഗം ചേർക്കുക',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+
+          padding: EdgeInsets.all(4),
+          backgroundColor: AppColor.button,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(
+              color: AppColor.iconColor,
+              width: 1,
+            ),
+          ),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    ),
+        const SizedBox(width: 63),
             ],
           ),
         ],

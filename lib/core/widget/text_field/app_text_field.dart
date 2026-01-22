@@ -66,6 +66,16 @@ class AppTextField extends StatelessWidget {
         keyboardType = TextInputType.text;
         maxLength = 12;
         break;
+      case 'decimal':
+  keyboardType = const TextInputType.numberWithOptions(decimal: true);
+  formatters = [
+    FilteringTextInputFormatter.allow(
+      RegExp(r'^\d*\.?\d*$'),
+    ),
+  ];
+  maxLength = 10; // adjust if needed
+  break;
+
     }
     final field = SizedBox(
       width: width,

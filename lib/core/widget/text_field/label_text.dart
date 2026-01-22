@@ -23,6 +23,8 @@ class AppLabeledField extends StatelessWidget {
       children: [
         Text(
           label,
+           maxLines: 1, // ✅ ONE LINE ONLY
+            overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: labelfontSizes,
             color: labelColor,

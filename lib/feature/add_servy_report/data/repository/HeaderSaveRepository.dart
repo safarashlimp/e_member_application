@@ -100,7 +100,7 @@ final userId   = prefs.getString(PrefKeys.userId);
                 ? benefitsRequired
                 : '0',
 
-        'ward_needs': wardNeeds ?? '',
+        'ward_needs': (wardNeeds ??0).toString(),
       },
     );
 

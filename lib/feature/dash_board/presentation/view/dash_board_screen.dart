@@ -20,15 +20,37 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+    DateTime? _lastBackPressed;
+
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+
+    if (_lastBackPressed == null ||
+        now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
+      _lastBackPressed = now;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Press back again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false; // ⛔ Don't exit yet
+    }
+    return true; // ✅ Exit app
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: PopScope(
+        child:  PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
+        onPopInvoked: (didPop) async {
           if (didPop) return;
-          SystemNavigator.pop();
+          final shouldExit = await _onWillPop();
+          if (shouldExit && mounted) {
+            SystemNavigator.pop();
+          }
         },
         child: Scaffold(
           bottomNavigationBar: const AppBottomNav(selectedIndex: 0),
@@ -38,7 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
               if (state is DashboardLoading) {
                 return Center(
                   child: CircularProgressIndicator(
-                    color: AppColor.blue,
+                    color: AppColor.primary,
                   ),
                 );
               }
@@ -48,13 +70,13 @@ class _DashboardPageState extends State<DashboardPage> {
                   builder: (context, constraints) {
                     // Calculate available height
                     final headerHeight = 100.0;
-
+        
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// FIXED HEADER
                         DashBoardHeader(height: headerHeight),
-
+        
                         /// FLEXIBLE CONTENT
                         Expanded(
                           child: LayoutBuilder(
@@ -62,12 +84,12 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Calculate dynamic spacing
                               final spacing =
                                   contentConstraints.maxHeight * 0.01;
-
+        
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(height: spacing),
-
+        
                                   // Top Stats - 10% of content height
                                   Flexible(
                                     flex: 10,
@@ -81,9 +103,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                     ),
                                   ),
-
+        
                                   SizedBox(height: spacing),
-
+        
                                   // Gender Section - 18% of content height
                                   Flexible(
                                     flex: 18,
@@ -96,9 +118,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                       farmersCount: d.farmers,
                                     ),
                                   ),
-
+        
                                   SizedBox(height: spacing),
-
+        
                                   // Ration Header
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -112,7 +134,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                     ),
                                   ),
-
+        
                                   // Ration Section - 25% of content height
                                   Flexible(
                                     flex: 25,
@@ -123,9 +145,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                       npnsCount: d.rationNpns,
                                     ),
                                   ),
-
+        
                                   SizedBox(height: spacing),
-
+        
                                   // Bottom Cards Header
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -139,7 +161,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                     ),
                                   ),
-
+        
                                   // Bottom Cards - 22% of content height
                                   Flexible(
                                     flex: 22,
@@ -149,7 +171,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       harithakarmasenaCount: d.harithakarmasena,
                                     ),
                                   ),
-
+        
                                   SizedBox(height: spacing),
                                 ],
                               );
@@ -161,7 +183,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   },
                 );
               }
-
+        
               return SizedBox();
             },
           ),
