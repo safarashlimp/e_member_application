@@ -126,9 +126,7 @@ static String? validateDecimal(String? value) {
       return "House number is required";
     }
 
-    if (value.length > 5) {
-      return "Maximum 5 characters allowed";
-    }
+  
 
     return null;
   }

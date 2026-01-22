@@ -64,7 +64,6 @@ class AppTextField extends StatelessWidget {
         break;
       case "card_number":
         keyboardType = TextInputType.text;
-        formatters = [FilteringTextInputFormatter.digitsOnly];
         maxLength = 12;
         break;
     }

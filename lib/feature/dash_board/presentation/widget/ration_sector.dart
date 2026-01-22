@@ -274,7 +274,7 @@ double percent(int value) {
           final chartSize = constraints.maxHeight * 0.65;
           
           return Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -369,7 +369,7 @@ double percent(int value) {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height:2),
                       Expanded(
                         child: Row(
                           children: [

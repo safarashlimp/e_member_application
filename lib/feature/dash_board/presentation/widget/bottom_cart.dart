@@ -25,7 +25,7 @@ class BottomCards extends StatelessWidget {
   children: [
     Expanded(
       child: SizedBox(
-        height: 60, // 👈 same height for all
+        height: 64, // 👈 same height for all
         child: BottomSummaryCard(
           label: "തൊഴിലുറപ്പ്",
           value: thozhilurapCount,
@@ -37,7 +37,7 @@ class BottomCards extends StatelessWidget {
     const SizedBox(width: 10),
     Expanded(
       child: SizedBox(
-        height: 60,
+        height: 64,
         child: BottomSummaryCard(
           label: "കുടുംബശ്രീ",
           value: kudumbasreeCount,
@@ -49,7 +49,7 @@ class BottomCards extends StatelessWidget {
     const SizedBox(width: 10),
     Expanded(
       child: SizedBox(
-        height: 60,
+        height: 64,
         child: BottomSummaryCard(
           label: "ഹരിതകർമ്മസേന",
           value: harithakarmasenaCount,
@@ -61,37 +61,7 @@ class BottomCards extends StatelessWidget {
   ],
 ),
 
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: BottomSummaryCard(
-          //         label: "തൊഴിലുറപ്പ്",
-          //         value: thozhilurapCount,
-          //         backgroundColor: AppColor.orange1,
-          //         icon: "assets/dashboard/icons/avatar-design 1.png",
-          //       ),
-          //     ),
-          //     const SizedBox(width: 10),
-          //     Expanded(
-          //       child: BottomSummaryCard(
-          //         label: "കുടുംബശ്രീ",
-          //         value: kudumbasreeCount,
-          //         backgroundColor: AppColor.violet,
-          //         icon: "assets/dashboard/icons/businesswoman 1.png",
-          //       ),
-          //     ),
-          //     const SizedBox(width: 10),
-          //     Expanded(
-          //       child: BottomSummaryCard(
-          //         label: "ഹരിതകർമ്മസേന",
-          //         value: harithakarmasenaCount,
-          //         backgroundColor: AppColor.green,
-          //         icon: "assets/dashboard/icons/harithakarmasena.png",
-          //       ),
-          //     ),
-          //   ],
-          // ),
-
+    
       SizedBox(height: 6,),
 
           /// ================= MINI ACTION CARDS =================
