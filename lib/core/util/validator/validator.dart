@@ -65,7 +65,7 @@ static String? validateDecimal(String? value) {
 
   static String? validateName(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Name is required';
+      return '';
     }
     if (!RegExp(r'^[A-Za-z ]+$').hasMatch(value.trim())) {
       return 'Name can only contain letters and spaces';
@@ -76,7 +76,7 @@ static String? validateDecimal(String? value) {
   /// validate house name
   static String? validateHouseName(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'House name is required';
+      return '';
     }
     return null;
   }
@@ -123,7 +123,7 @@ static String? validateDecimal(String? value) {
   /// Validates House Number
   static String? houseNumberValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return "House number is required";
+      return "";
     }
 
   
@@ -133,7 +133,7 @@ static String? validateDecimal(String? value) {
 
   static String? cardNumberValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return "Card number is required";
+      return "";
     }
 
     if (value.length != 12) {
@@ -156,7 +156,7 @@ static String? validateDecimal(String? value) {
 
   static String? validateIncome(String? value) {
   if (value == null || value.trim().isEmpty) {
-    return 'Income is required';
+    return '';
   }
 
   final trimmed = value.trim();

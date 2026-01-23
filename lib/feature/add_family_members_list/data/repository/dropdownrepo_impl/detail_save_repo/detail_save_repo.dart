@@ -103,7 +103,7 @@ class FamilyMemberSaveRepository {
 
         'employment_status_id': employmentStatusId.toString(),
         'occupation_id': (occupationId ?? 0).toString(),
-        'skills': skills ?? '',
+         'skills': skills ?? '[]',
         'skill_details': skillDetails ?? '',
         'need_job_support_id':
             (needJobSupportId ?? 0).toString(),

@@ -12,7 +12,7 @@ class AppDropdownField<T> extends StatelessWidget {
   final String? hintText;
   final double width;
   final double height;
-  final String? errorText;
+  //final String? errorText;
   // Colors
   final Color labelColor;
   final Color borderColor;
@@ -29,7 +29,7 @@ class AppDropdownField<T> extends StatelessWidget {
     required this.onChanged,
     this.validator,
     this.hintText,
-      this.errorText, 
+     // this.errorText, 
     this.width = double.infinity,
     this.height = 40,
     this.labelColor = AppColor.primary,
@@ -65,7 +65,7 @@ class AppDropdownField<T> extends StatelessWidget {
         borderColor: borderColor,
         hintText: hintText,
         focusedBorderColor: AppColor.borderColor,
-          errorText: errorText,
+        //  errorText: errorText,
       ),
       validator: validator ,
       dropdownColor: dropdownBgColor,

@@ -5,8 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HeaderSaveRepository {
   Future<int> saveSurveyHeader({
-    
-    //required String clientId, 
+    //required String clientId,
     String? houseChief,
     required String houseNumber,
     required String houseName,
@@ -19,7 +18,6 @@ class HeaderSaveRepository {
     required int kudumbashreeMember,
     required int govtBeneficiary,
     required int extremePoor,
-
     required String houseTypeId,
     int? landTypeId,
     String? landAreaCents,
@@ -31,24 +29,24 @@ class HeaderSaveRepository {
     int? needHousingBenefit,
     String? benefitsRequired,
     String? wardNeeds,
-    String?surveyor,
+    String? surveyor,
   }) async {
-final prefs = await SharedPreferences.getInstance();
-final clientId = prefs.getString(PrefKeys.clientId);
-final userId   = prefs.getString(PrefKeys.userId);
+    final prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString(PrefKeys.clientId);
+    final userId = prefs.getString(PrefKeys.userId);
 
     // DEBUG
-    print('CLIENTID FROM PREF: $clientId' );
+    print('CLIENTID FROM PREF: $clientId');
     print('USERID FROM PREF: $userId');
 
     if (clientId == null || clientId.isEmpty) {
       throw Exception('Client ID not found. Please login again.');
-    // final prefs = await SharedPreferences.getInstance();
-    // final clientId = prefs.getString('clientid');
-    // final userid = prefs.getString('userid');
+      // final prefs = await SharedPreferences.getInstance();
+      // final clientId = prefs.getString('clientid');
+      // final userid = prefs.getString('userid');
 
-    // if (clientId == null || clientId.isEmpty) {
-    //   throw Exception('Client ID not found. Please login again.');
+      // if (clientId == null || clientId.isEmpty) {
+      //   throw Exception('Client ID not found. Please login again.');
     }
 
     final uri = Uri.parse("https://emember.org/API/header_save.php");
@@ -60,47 +58,46 @@ final userId   = prefs.getString(PrefKeys.userId);
       },
       body: {
         'clientid': clientId,
-          'userid': userId,
+        'userid': userId,
         'house_chief': houseChief ?? '',
         'house_number': houseNumber,
         'house_name': houseName,
         'ration_card_number': rationCardNumber,
         'ration_card_type_id': rationCardTypeId,
-        'annual_income': annualIncome ?? '',
+        'annual_income': (annualIncome != null && annualIncome.isNotEmpty)
+            ? annualIncome
+            : '0',
 
         // RADIO (0 / 1)
         'has_job_card': (hasJobCard).toString(),
         'kudumbashree_member': (kudumbashreeMember).toString(),
         'govt_beneficiary': (govtBeneficiary).toString(),
         'extreme_poor': (extremePoor).toString(),
-             'surveyor': surveyor ?? '',
+        'surveyor': surveyor ?? '',
         // 'surveyor': surveyorId ?? '',
         'house_type_id': houseTypeId,
         'land_type_id': (landTypeId ?? 0).toString(),
-        'land_area_cents':
-            (landAreaCents != null && landAreaCents.isNotEmpty)
-                ? landAreaCents
-                : '0',
+        'land_area_cents': (landAreaCents != null && landAreaCents.isNotEmpty)
+            ? landAreaCents
+            : '0',
 
         'has_toilet': (hasToilet ?? 0).toString(),
         'has_electricity': (hasElectricity ?? 0).toString(),
         'drinking_water_source_id': drinkingWaterSourceId ?? '',
 
-        'received_housing_benefit':
-            (receivedHousingBenefit ?? 0).toString(),
+        'received_housing_benefit': (receivedHousingBenefit ?? 0).toString(),
         'received_benefits':
             (receivedBenefits != null && receivedBenefits.isNotEmpty)
                 ? receivedBenefits
                 : '0',
 
-        'need_housing_benefit':
-            (needHousingBenefit ?? 0).toString(),
+        'need_housing_benefit': (needHousingBenefit ?? 0).toString(),
         'benefits_required':
             (benefitsRequired != null && benefitsRequired.isNotEmpty)
                 ? benefitsRequired
                 : '0',
 
-        'ward_needs': (wardNeeds ??0).toString(),
+        'ward_needs': (wardNeeds ?? 0).toString(),
       },
     );
 

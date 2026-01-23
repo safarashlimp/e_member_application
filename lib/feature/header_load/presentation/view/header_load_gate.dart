@@ -18,7 +18,6 @@ import 'package:e_member_app/feature/edit_survey_report/data/repository/house_de
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_bloc.dart';
   import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
   import 'package:e_member_app/feature/header_load/data/mapper/header_mapper.dart';
-  import 'package:e_member_app/feature/header_load/domain/scareen2model.dart';
   import 'package:e_member_app/feature/header_load/presentation/HEADER%20LOAD/header_load_bloc.dart';
   import 'package:e_member_app/feature/header_load/presentation/HEADER%20LOAD/header_load_state.dart';
   import 'package:flutter/material.dart';
@@ -27,110 +26,252 @@ import 'package:e_member_app/feature/edit_survey_report/presentation/house_detai
 
 
 
-  class HeaderLoadGate extends StatelessWidget {
-    final String position;
-    final PageMode mode;
+//   class HeaderLoadGate extends StatelessWidget {
+//     final String position;
+//     final PageMode mode;
 
-    const HeaderLoadGate({
-      super.key,
-      required this.position,
-      required this.mode,
-    });
+//     const HeaderLoadGate({
+//       super.key,
+//       required this.position,
+//       required this.mode,
+//     });
 
-    @override
-    Widget build(BuildContext context) {
+//     @override
+//     Widget build(BuildContext context) {
       
-      return BlocBuilder<HeaderLoadBloc, HeaderLoadState>(
-        builder: (context, state) {
-          if (state is HeaderLoadLoading) {
-            return  Scaffold(
-              backgroundColor: AppColor.white,
-              body: Center(child: CircularProgressIndicator(
-            color:     AppColor.primary,
-              )),
-            );
-          }
+//       return BlocBuilder<HeaderLoadBloc, HeaderLoadState>(
+//         builder: (context, state) {
+//           if (state is HeaderLoadLoading) {
+//             return  Scaffold(
+//               backgroundColor: AppColor.white,
+//               body: Center(child: CircularProgressIndicator(
+//             color:     AppColor.primary,
+//               )),
+//             );
+//           }
 
-          if (state is HeaderLoadLoaded) {
+//           if (state is HeaderLoadLoaded) {
             
-            if (position == '1') {
+//             if (position == '1') {
 
-             int? editId;
+//              int? editId;
 
-final list = state.data['data'];
-if (list != null && list.isNotEmpty) {
-  editId = int.tryParse(list[0]['id'].toString());
-}
+// final list = state.data['data'];
+// if (list != null && list.isNotEmpty) {
+//   editId = int.tryParse(list[0]['id'].toString());
+// }
 
             
-              final screen1Data = HeaderMapper.fromApiToScreen1(state.data);
+//               final screen1Data = HeaderMapper.fromApiToScreen1(state.data);
  
-              return AddServyItems(
+//               return AddServyItems(
                 
-                mode: mode,
-                headerData: screen1Data,
-                editId:  editId
-              );
-            }
+//                 mode: mode,
+//                 headerData: screen1Data,
+//                 editId:  editId
+//               );
+//             }
 
-            if (position == '2') {
-              // Screen 2 → Dropdowns +
-              final Screen2Model screen2Data = HeaderMapper.fromApiToScreen2(state.data);
+//             if (position == '2') {
+//               // Screen 2 → Dropdowns +
+//               final Screen2Model screen2Data = HeaderMapper.fromApiToScreen2(state.data);
               
-              return MultiBlocProvider(
-                providers: [
+//               return MultiBlocProvider(
+//                 providers: [
                   
 
                  
-                  BlocProvider(
-                    create: (_) => HouseTypeBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchHouseTypes()),
+//                   BlocProvider(
+//                     create: (_) => HouseTypeBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchHouseTypes()),
+//                   ),
+//                   BlocProvider(
+//                     create: (_) => LandTypeBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchLandTypes()),
+//                   ),
+//                   BlocProvider(
+//                     create: (_) => WaterFacilityBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchWaterFacilities()),
+//                   ),
+//                   BlocProvider(
+//                     create: (_) => RequiredBenefitBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchRequiredBenefits()),
+//                   ),
+//                   BlocProvider(
+//                     create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchOtherBenefits()),
+//                   ),
+//                   BlocProvider(
+//                     create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
+//                       ..add(FetchWardGeneralNeeds()),
+//                   ),
+//                      BlocProvider(
+//         create: (_) => HouseDetailsBloc(HouseDetailsRepository()),
+//       ),
+//                 ],
+//                 child: AddItemBasicDetails(
+//                   mode: mode, 
+//                 screen2HeaderData: screen2Data,  
+//                 ),
+//               );
+//             }
+
+//             return const Scaffold(
+//               body: Center(child: Text("Invalid position")),
+//             );
+//           }
+
+//           if (state is HeaderLoadError) {
+//             return Scaffold(
+//               body: Center(child: Text(state.message)),
+//             );
+//           }
+
+//           return const Scaffold(body: SizedBox.shrink());
+//         },
+//       );
+//     }
+//   }
+
+class HeaderLoadGate extends StatefulWidget {
+  final String position;
+  final PageMode mode;
+
+  const HeaderLoadGate({
+    super.key,
+    required this.position,
+    required this.mode,
+  });
+
+  @override
+  State<HeaderLoadGate> createState() => _HeaderLoadGateState();
+}
+
+class _HeaderLoadGateState extends State<HeaderLoadGate> {
+  bool _hasNavigated = false; // ✅ Prevent double navigation
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<HeaderLoadBloc, HeaderLoadState>(
+      // ✅ Use listener instead of builder for navigation
+      listener: (context, state) {
+        if (state is HeaderLoadLoaded && !_hasNavigated) {
+          _hasNavigated = true; // ✅ Mark as navigated
+          
+          // Add a small delay to ensure clean transition
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _navigateToScreen(context, state);
+          });
+        }
+      },
+      builder: (context, state) {
+        if (state is HeaderLoadLoading) {
+          return Scaffold(
+            backgroundColor: AppColor.white,
+            body: Center(
+              child: CircularProgressIndicator(
+                color: AppColor.primary,
+              ),
+            ),
+          );
+        }
+
+        if (state is HeaderLoadError) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(state.message),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Go Back'),
                   ),
-                  BlocProvider(
-                    create: (_) => LandTypeBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchLandTypes()),
-                  ),
-                  BlocProvider(
-                    create: (_) => WaterFacilityBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchWaterFacilities()),
-                  ),
-                  BlocProvider(
-                    create: (_) => RequiredBenefitBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchRequiredBenefits()),
-                  ),
-                  BlocProvider(
-                    create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchOtherBenefits()),
-                  ),
-                  BlocProvider(
-                    create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
-                      ..add(FetchWardGeneralNeeds()),
-                  ),
-                     BlocProvider(
-        create: (_) => HouseDetailsBloc(HouseDetailsRepository()),
-      ),
                 ],
-                child: AddItemBasicDetails(
-                  mode: mode, 
-                screen2HeaderData: screen2Data,  
-                ),
-              );
-            }
+              ),
+            ),
+          );
+        }
 
-            return const Scaffold(
-              body: Center(child: Text("Invalid position")),
-            );
-          }
+        // Keep showing loading while navigating
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          body: Center(
+            child: CircularProgressIndicator(
+              color: AppColor.primary,
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-          if (state is HeaderLoadError) {
-            return Scaffold(
-              body: Center(child: Text(state.message)),
-            );
-          }
+  void _navigateToScreen(BuildContext context, HeaderLoadLoaded state) {
+    if (widget.position == '1') {
+      int? editId;
+      final list = state.data['data'];
+      if (list != null && list.isNotEmpty) {
+        editId = int.tryParse(list[0]['id'].toString());
+      }
 
-          return const Scaffold(body: SizedBox.shrink());
-        },
+      final screen1Data = HeaderMapper.fromApiToScreen1(state.data);
+
+      // ✅ Replace current route instead of push
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AddServyItems(
+            mode: widget.mode,
+            headerData: screen1Data,
+            editId: editId,
+          ),
+        ),
+      );
+    } else if (widget.position == '2') {
+      final screen2Data = HeaderMapper.fromApiToScreen2(state.data);
+
+      // ✅ Only create BLoCs needed for screen 2
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => HouseTypeBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchHouseTypes()),
+              ),
+              BlocProvider(
+                create: (_) => LandTypeBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchLandTypes()),
+              ),
+              BlocProvider(
+                create: (_) => WaterFacilityBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchWaterFacilities()),
+              ),
+              BlocProvider(
+                create: (_) => RequiredBenefitBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchRequiredBenefits()),
+              ),
+              BlocProvider(
+                create: (_) => OtherBenefitBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchOtherBenefits()),
+              ),
+              BlocProvider(
+                create: (_) => WardGeneralNeedBloc(FamilyDropRepositoryImpl())
+                  ..add(FetchWardGeneralNeeds()),
+              ),
+              BlocProvider(
+                create: (_) => HouseDetailsBloc(HouseDetailsRepository()),
+              ),
+            ],
+            child: AddItemBasicDetails(
+              mode: widget.mode,
+              screen2HeaderData: screen2Data,
+            ),
+          ),
+        ),
       );
     }
   }
-  
+}

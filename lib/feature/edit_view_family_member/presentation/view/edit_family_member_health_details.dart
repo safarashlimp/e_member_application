@@ -575,12 +575,15 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
           },
         ),
       ],
-      child: _allDataLoaded ? _buildForm() : _buildLoadingIndicator(),
+      child: _allDataLoaded 
+      ? _buildForm() 
+      : _buildLoadingIndicator(),
     );
   }
 
   Widget _buildLoadingIndicator() {
     return SafeArea(
+      top: false,
       child: Scaffold(
         backgroundColor: AppColor.secondary,
         body: Column(
@@ -609,6 +612,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
     return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
+          top: false,
           child: Scaffold(
             backgroundColor: AppColor.secondary,
             body: Column(
@@ -828,7 +832,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,
-                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
                               borderColor: AppColor.borderColor,
                               focusedBorderColor: AppColor.primary,

@@ -1,6 +1,5 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
@@ -35,18 +34,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_event.dart';
 
-
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
-import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/house_drop/house_drop_event.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/land_type/land_type_event.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_event.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
-import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
+
 
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/header_load/data/repository/header_load_repository_impl.dart';
@@ -67,7 +56,7 @@ class PropertyCard extends StatefulWidget {
   final String lastUpdated;
   final String editId;
   final String position;
- final FamilySurveySectionType sectionType;
+  final FamilySurveySectionType sectionType;
   const PropertyCard({
     super.key,
     required this.editId,
@@ -86,50 +75,20 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-
-
 void openWithLoad(BuildContext context, PageMode mode) {
-  final repo = FamilyDropRepositoryImpl();
-
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => HeaderLoadBloc(
-              HeaderLoadRepositoryImpl(http.Client()),
-            )..add(
-                FetchHeaderLoad(
-                  editId: widget.editId,
-                  position: widget.position,
-                ),
-              ),
+      builder: (_) => BlocProvider(
+        // ✅ Only create HeaderLoadBloc here
+        create: (_) => HeaderLoadBloc(
+          HeaderLoadRepositoryImpl(http.Client()),
+        )..add(
+            FetchHeaderLoad(
+              editId: widget.editId,
+              position: widget.position,
+            ),
           ),
-BlocProvider( 
-                          create: (_) =>
-                              ReligionBloc(MemberDropRepositoryImpl())
-                                ..add(FetchReligion()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              GenderBloc(MemberDropRepositoryImpl())
-                                ..add(FetchGender()),
-                        ),
-          BlocProvider(
-            create: (_) => RationCardBloc(repo)..add(FetchRationCards()),
-          ),
-          BlocProvider(
-            create: (_) => HouseTypeBloc(repo)..add(FetchHouseTypes()),
-          ),
-          BlocProvider(
-            create: (_) => LandTypeBloc(repo)..add(FetchLandTypes()),
-          ),
-          BlocProvider(
-            create: (_) =>
-                WaterFacilityBloc(repo)..add(FetchWaterFacilities()),
-          ),
-        ],
         child: HeaderLoadGate(
           mode: mode,
           position: widget.position,
@@ -138,7 +97,6 @@ BlocProvider(
     ),
   );
 }
-
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +156,6 @@ BlocProvider(
                           '|',
                           style: TextStyle(fontSize: 13, color: AppColor.black),
                         ),
-
                         const SizedBox(width: 6),
                         Text(
                           widget.houseName,
@@ -268,284 +225,204 @@ BlocProvider(
           // Action Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            
             children: [
-                  SizedBox(
-      width: 57,
-      height: 23,
-      child: OutlinedButton.icon(
-        onPressed: () => openWithLoad(context, PageMode.view),
-        icon: const Icon(
-          Icons.visibility,
-          size: 14,
-          color: AppColor.button,
-        ),
-        label: const Text(
-          'View',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppColor.iconColor,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          side: const BorderSide(color: AppColor.iconColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-      ),
-    ),
-              // Expanded(
-              //   child: OutlinedButton.icon(
-              //      //  fixedSize: const Size(57, 23),
-              //     onPressed: () {
-              //      // add contition
-              //      openWithLoad(context, PageMode.view);
-              //     },
-              //     icon: const Icon(
-              //       Icons.visibility,
-              //       size: 14,
-              //       color: AppColor.button,
-              //     ),
-              //     label: const Text(
-              //       'View',
-              //       style: TextStyle(
-              //         color: AppColor.iconColor,
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.w600,
-              //       ),
-              //     ),
-              //     style: OutlinedButton.styleFrom(
-              //        // fixedSize: const Size(57, 23), 
-              //       foregroundColor: AppColor.iconColor,
-              //       side: const BorderSide(color: AppColor.iconColor),
-              //       minimumSize: const Size(57, 23),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8),
-              //       ),
-              //       // padding: const EdgeInsets.only(
-              //       //   top: 4,
-              //       //   left: 4,
-              //       //   right: 4,
-              //       //   bottom: 4,
-              //       // ),
-              //     ),
-              //   ),
-              // ),
-              const SizedBox(width: 7),
-                SizedBox(
-      width: 57,
-      height: 23,
-      child: OutlinedButton.icon(
-        onPressed: () => openWithLoad(context, PageMode.edit),
-        icon: const Icon(
-          Icons.edit,
-          size: 14,
-          color: AppColor.button,
-        ),
-        label: const Text(
-          'Edit',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppColor.iconColor,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          side: const BorderSide(color: AppColor.iconColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-      ),
-    ),
-              //Expanded(
-              //   child: OutlinedButton.icon(
-              //     //add contition
-              //     onPressed: () {
-              //       openWithLoad(context, PageMode.edit);
-              //       // Navigator.push(
-              //       //   context,
-              //       //   MaterialPageRoute(builder: (context) => AddServyItems()),
-              //       // );
-              //     },
-              //     icon: const Icon(
-              //       Icons.edit,
-              //       size: 14,
-              //       color: AppColor.button,
-              //     ),
-              //     label: const Text(
-              //       'Edit',
-              //       style: TextStyle(
-              //         color: AppColor.iconColor,
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.w600,
-              //       ),
-              //     ),
-              //     style: OutlinedButton.styleFrom(
-              //         //fixedSize: const Size(57, 23), 
-              //       foregroundColor: AppColor.iconColor,
-              //       side: const BorderSide(color: AppColor.iconColor),
-              //       minimumSize: const Size(30, 23),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8),
-              //       ),
-              //       padding: const EdgeInsets.only(
-              //         top: 4,
-              //         left: 4,
-              //         right: 4,
-              //         bottom: 4,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              const SizedBox(width: 7),
               SizedBox(
-    height: 24,
-               
-                child: ElevatedButton.icon(
-                 onPressed: () {
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (_) =>
-                              RelationDropBloc(MemberDropRepositoryImpl())
-                                ..add(FetchRelations()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              MaritalStatusBloc(MemberDropRepositoryImpl())
-                                ..add(FetchMaritalStatus()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              CasteBloc(MemberDropRepositoryImpl())
-                                ..add(FetchCastes()),
-                        ),
-                        BlocProvider(
-                  create: (_) => QualificationBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchQualifications()),
-                
-                ),
-                BlocProvider(
-                  create: (_) => EducationBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEducation()),
-                ),
-                BlocProvider(
-                  create: (_) => EmploymentStatusBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEmploymentStatus()),
-                ),
-                BlocProvider(
-                  create: (_) => JobBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchJobs()),
-                ),
-                BlocProvider(
-                  create: (_) => EmploymentSupportBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEmploymentSupports()),
-                ),
-                
-                BlocProvider(
-                  create: (_) => FarmingTypeBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchFarmingTypes()),
-                ),
-                BlocProvider(
-                  create: (_) => HealthIssueBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchHealthIssues()),
-                ),
-                BlocProvider(
-                  create: (_) => HealthInsuranceBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchHealthInsurance()),
-                ),
-                BlocProvider(
-                  create: (_) => RequiredHealthSupportBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchRequiredHealthSupports()),
-                ),
-                
-                BlocProvider(
-                  create: (_) => PensionTypeBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchPensionTypes()),
-                ),
-                BlocProvider(
-                  create: (_) => PensionRequiredBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchPensionRequirement()),
-                ),
-                BlocProvider(
-                  create: (_) =>
-                      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
-                ),
-                BlocProvider(
-                  create: (_) =>
-                      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
-                ),
-           BlocProvider(
-                          create: (_) =>
-                              ReligionBloc(MemberDropRepositoryImpl())
-                                ..add(FetchReligion()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              GenderBloc(MemberDropRepositoryImpl())
-                                ..add(FetchGender()),
-                        ),
-                      ],
-                      child: AddFamilyMembers(editId: widget.editId,),
+                width: 57,
+                height: 23,
+                child: OutlinedButton.icon(
+                  onPressed: () => openWithLoad(context, PageMode.view),
+                  icon: const Icon(
+                    Icons.visibility,
+                    size: 14,
+                    color: AppColor.button,
+                  ),
+                  label: const Text(
+                    'View',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.iconColor,
                     ),
                   ),
-                );
-                
-                },
-              icon: const Icon(
-          Icons.add,
-          size: 14,
-          color: AppColor.white,
-        ),
-        label: const Text(
-          'അംഗം ചേർക്കുക',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-
-          padding: EdgeInsets.all(4),
-          backgroundColor: AppColor.button,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(
-              color: AppColor.iconColor,
-              width: 1,
-            ),
-          ),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-      ),
-    ),
-        const SizedBox(width: 63),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    side: const BorderSide(color: AppColor.iconColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 7),
+              SizedBox(
+                width: 57,
+                height: 23,
+                child: OutlinedButton.icon(
+                  onPressed: () => openWithLoad(context, PageMode.edit),
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 14,
+                    color: AppColor.button,
+                  ),
+                  label: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.iconColor,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    side: const BorderSide(color: AppColor.iconColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 7),
+              SizedBox(
+                height: 24,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) =>
+                                  RelationDropBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchRelations()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  MaritalStatusBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchMaritalStatus()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  CasteBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchCastes()),
+                            ),
+                            BlocProvider(
+                              create: (_) => QualificationBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchQualifications()),
+                            ),
+                            BlocProvider(
+                              create: (_) => EducationBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchEducation()),
+                            ),
+                            BlocProvider(
+                              create: (_) => EmploymentStatusBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchEmploymentStatus()),
+                            ),
+                            BlocProvider(
+                              create: (_) => JobBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchJobs()),
+                            ),
+                            BlocProvider(
+                              create: (_) => EmploymentSupportBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchEmploymentSupports()),
+                            ),
+                            BlocProvider(
+                              create: (_) => FarmingTypeBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchFarmingTypes()),
+                            ),
+                            BlocProvider(
+                              create: (_) => HealthIssueBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchHealthIssues()),
+                            ),
+                            BlocProvider(
+                              create: (_) => HealthInsuranceBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchHealthInsurance()),
+                            ),
+                            BlocProvider(
+                              create: (_) => RequiredHealthSupportBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchRequiredHealthSupports()),
+                            ),
+                            BlocProvider(
+                              create: (_) => PensionTypeBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchPensionTypes()),
+                            ),
+                            BlocProvider(
+                              create: (_) => PensionRequiredBloc(
+                                MemberDropRepositoryImpl(),
+                              )..add(FetchPensionRequirement()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  SkillsBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchSkills()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  BloodGroupBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchBloodGroups()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  ReligionBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchReligion()),
+                            ),
+                            BlocProvider(
+                              create: (_) =>
+                                  GenderBloc(MemberDropRepositoryImpl())
+                                    ..add(FetchGender()),
+                            ),
+                          ],
+                          child: AddFamilyMembers(
+                            editId: widget.editId,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    size: 14,
+                    color: AppColor.white,
+                  ),
+                  label: const Text(
+                    'അംഗം ചേർക്കുക',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(4),
+                    backgroundColor: AppColor.button,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                        color: AppColor.iconColor,
+                        width: 1,
+                      ),
+                    ),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 63),
             ],
           ),
         ],
       ),
     );
   }
-} 
+}

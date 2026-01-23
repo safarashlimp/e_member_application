@@ -785,6 +785,19 @@ class _EditFamilyMemberBasicDetailsState
     selectedCasteId = value.casteId;
   }
 
+  void showSnack(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -908,7 +921,7 @@ class _EditFamilyMemberBasicDetailsState
                           children: [
                             AppTextField(
                               controller: familyMemberName,
-                              label: "കുടുംബാംഗത്തിന്റെ പേര്",
+                              label: "* കുടുംബാംഗത്തിന്റെ പേര്",
                               labelColor: AppColor.hintText2,
                               borderColor: AppColor.borderColor,
                               focusedBorderColor: AppColor.primary,
@@ -923,7 +936,7 @@ class _EditFamilyMemberBasicDetailsState
                                 Expanded(
                                   child: AppTextField(
                                     controller: mobileNumber,
-                                    label: "മൊബൈൽ നമ്പർ",
+                                    label: "* മൊബൈൽ നമ്പർ",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
                                     focusedBorderColor: AppColor.primary,
@@ -938,7 +951,7 @@ class _EditFamilyMemberBasicDetailsState
                                 Expanded(
                                   child: AppTextField(
                                     controller: whatsupNumber,
-                                    label: "വാട്സ്ആപ്പ് നമ്പർ",
+                                    label: "* വാട്സ്ആപ്പ് നമ്പർ",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
                                     focusedBorderColor: AppColor.primary,
@@ -966,7 +979,7 @@ class _EditFamilyMemberBasicDetailsState
                                   }
 
                                   return AppDropdownField<String>(
-                                    label: 'രക്തഗ്രൂപ്പ്',
+                                    label: '* രക്തഗ്രൂപ്പ്',
                                     selectedValue: selectedBloodGroup,
                                     borderColor: AppColor.borderColor,
                                     labelColor: AppColor.hintText2,
@@ -1012,7 +1025,7 @@ class _EditFamilyMemberBasicDetailsState
                                   }
 
                                   return AppDropdownField<String>(
-                                    label: 'കുടുംബനാഥനുമായുള്ള ബന്ധം',
+                                    label: '* കുടുംബനാഥനുമായുള്ള ബന്ധം',
                                     selectedValue: selectedReletion,
                                     borderColor: AppColor.borderColor,
                                     labelColor: AppColor.hintText2,
@@ -1057,7 +1070,7 @@ class _EditFamilyMemberBasicDetailsState
                                     selectedGender = match.name;
                                   }
                                   return AppDropdownField<String>(
-                                    label: 'ലിംഗം',
+                                    label: '* ലിംഗം',
                                     selectedValue: selectedGender,
                                     borderColor: AppColor.borderColor,
                                     labelColor: AppColor.hintText2,
@@ -1095,7 +1108,7 @@ class _EditFamilyMemberBasicDetailsState
                                 Expanded(
                                   child: AppDateField(
                                     context: context,
-                                    label: 'ജനനത്തീയതി',
+                                    label: '* ജനനത്തീയതി',
                                     borderColor: AppColor.borderColor,
                                     labelColor: AppColor.hintText2,
                                     iconColor: AppColor.hintText2,
@@ -1255,7 +1268,7 @@ class _EditFamilyMemberBasicDetailsState
                             SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,
-                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
                               borderColor: AppColor.borderColor,
                               focusedBorderColor: AppColor.primary,
@@ -1295,6 +1308,42 @@ class _EditFamilyMemberBasicDetailsState
                                 ? "സമർപ്പിക്കുകയാണ്..."
                                 : "സമർപ്പിക്കുക",
                             onPressed: () {
+                                 if (familyMemberName.text.trim().isEmpty) {
+                                  showSnack(
+                                      context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
+                                  return;
+                                }
+                                if (mobileNumber.text.trim().isEmpty) {
+                                  showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
+                                  return;
+                                }
+                                if (whatsupNumber.text.trim().isEmpty) {
+                                  showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
+                                  return;
+                                }
+                                if (selectedBloodGroup == null ||
+                                    selectedBloodGroup!.isEmpty) {
+                                  showSnack(
+                                      context, "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
+                                  return;
+                                }
+                                if (selectedReletion == null ||
+                                    selectedReletion!.isEmpty) {
+                                  showSnack(context,
+                                      "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
+                                  return;
+                                }
+                                if (selectedGender == null ||
+                                    selectedGender!.isEmpty) {
+                                  showSnack(context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
+                                  return;
+                                }
+                                if (selectedDate == null  ) {
+                                  showSnack(
+                                      context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
+                                  return;
+                                }
+
                               // ✅ Validate editId before submitting
                               final finalEditId =
                                   widget.editId ?? widget.data.id ?? '';

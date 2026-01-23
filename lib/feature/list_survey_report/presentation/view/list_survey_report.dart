@@ -36,11 +36,11 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
+  // }
 
   @override
   Widget build(BuildContext context) {

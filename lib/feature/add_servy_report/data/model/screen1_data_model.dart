@@ -4,7 +4,7 @@ class SurveyHeaderModel {
   final String houseName;
   final String rationCardNumber;
   final String rationCardTypeId;
-  final String annualIncome;
+  final String ? annualIncome;
   final int hasJobCard;
   final int kudumbashreeMember;
   final int govtBeneficiary;
@@ -17,7 +17,7 @@ class SurveyHeaderModel {
     required this.houseName,
     required this.rationCardNumber,
     required this.rationCardTypeId,
-    required this.annualIncome,
+     this.annualIncome,
     required this.hasJobCard,
     required this.kudumbashreeMember,
     required this.govtBeneficiary,

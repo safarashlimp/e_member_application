@@ -426,13 +426,7 @@ class _MemberCardState extends State<MemberCard> {
             children: [
               OutlinedButton.icon(
                 onPressed: () => onViewTap(context,PageMode.view),
-                // onPressed: () {
-                //   //add contition
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => AddFamilyMembers()),
-                //   );
-                // },
+               
                 icon: const Icon(
                   Icons.visibility,
                   size: 14,

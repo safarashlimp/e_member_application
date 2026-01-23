@@ -694,7 +694,7 @@ class _EditFamilyMemberSocielDetailsState
                             SizedBox(height: 20),
                             AppTextField(
                               controller: surveyorNameLabel,
-                              label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                              label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
                               borderColor: AppColor.borderColor,
                               focusedBorderColor: AppColor.primary,
