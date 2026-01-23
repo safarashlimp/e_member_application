@@ -94,6 +94,7 @@
 //     );
 //   }
 // }
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_bloc.dart';
 import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
@@ -125,7 +126,14 @@ class DetailLoadGate extends StatelessWidget {
       builder: (context, state) {
         if (state is FamilyMemberDetailLoadLoading) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: 
+            Center(
+            child: CircularProgressIndicator(
+color: AppColor.primary,
+backgroundColor: AppColor.white,
+
+            )
+            ),
           );
         }
 

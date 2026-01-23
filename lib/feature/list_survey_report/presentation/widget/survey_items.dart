@@ -1,4 +1,3 @@
-import 'package:e_member_app/core/service_locator/service_locator.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
 
@@ -549,4 +548,4 @@ BlocProvider(
       ),
     );
   }
-}
+} 

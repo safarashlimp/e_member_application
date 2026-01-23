@@ -938,7 +938,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         borderColor: AppColor.borderColor,
                                         focusedBorderColor: AppColor.primary,
                                         labelfontSizes: 12,
-                                        validator: Validator.validateIncome,
+                                      //  validator: Validator.validateIncome,
                                         type: "income",
                                         textColor: AppColor.primary,
                                         width: double.infinity,

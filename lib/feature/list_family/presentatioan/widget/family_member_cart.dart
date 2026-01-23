@@ -85,18 +85,15 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
-
-  void onViewTap(BuildContext context,PageMode mode) {
-   // late Widget page;
-   final repo = MemberDropRepositoryImpl(); 
-   
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => MultiBlocProvider(
-          providers: [
-              BlocProvider(
-              create: (context) => FamilyMemberDetailLoadBloc(
+  void onViewTap(BuildContext context, PageMode mode) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          // ✅ Main data loader
+          BlocProvider(
+            create: (context) => FamilyMemberDetailLoadBloc(
               FamilyMemberDetailsLoadRepositoryImpl(http.Client()),
             )..add(
                 FetchDetailLoad(
@@ -104,129 +101,112 @@ class _MemberCardState extends State<MemberCard> {
                   position: widget.position,
                 ),
               ),
-      
+          ),
+          
+          // ✅ Edit BLoC
+          BlocProvider(
+            create: (_) => EditFamilyMemberBloc(
+              widget.position,
+              familyMemberRepository: FamilyMemberRepository(),
+              educationRepository: EducationDetailsRepository(),
+              employmentRepository: EmploymentDetailsRepository(),
+              healthRepository: HealthDetailsRepository(),
+              pensionRepository: PensionDetailsRepository(),
             ),
-BlocProvider(
-  create: (_) => EditFamilyMemberBloc(
-    widget.position, // ✅ positional argument
-    familyMemberRepository: FamilyMemberRepository(),
-    educationRepository: EducationDetailsRepository(),
-    employmentRepository: EmploymentDetailsRepository (),
-    healthRepository: HealthDetailsRepository(),
-    pensionRepository: PensionDetailsRepository(),
-  ),
-),
+          ),
 
-                      BlocProvider(
-                          create: (_) =>
-                              RelationDropBloc(MemberDropRepositoryImpl())
-                                ..add(FetchRelations()), 
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              MaritalStatusBloc(MemberDropRepositoryImpl())
-                                ..add(FetchMaritalStatus()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              CasteBloc(MemberDropRepositoryImpl())
-                                ..add(FetchCastes()),
-                        ),
-                        BlocProvider(
-                  create: (_) => QualificationBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchQualifications()),
-                
-                ),
-                BlocProvider(
-                  create: (_) => EducationBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEducation()),
-                ),
-                BlocProvider(
-                  create: (_) => EmploymentStatusBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEmploymentStatus()),
-                ),
-                BlocProvider(
-                  create: (_) => JobBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchJobs()),
-                ),
-                BlocProvider(
-                  create: (_) => EmploymentSupportBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchEmploymentSupports()),
-                ),
-                
-                BlocProvider(
-                  create: (_) => FarmingTypeBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchFarmingTypes()),
-                ),
-                BlocProvider(
-                  create: (_) => HealthIssueBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchHealthIssues()),
-                ),
-                BlocProvider(
-                  create: (_) => HealthInsuranceBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchHealthInsurance()),
-                ),
-                BlocProvider(
-                  create: (_) => RequiredHealthSupportBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchRequiredHealthSupports()),
-                ),
-                
-                BlocProvider(
-                  create: (_) => PensionTypeBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchPensionTypes()),
-                ),
-                BlocProvider(
-                  create: (_) => PensionRequiredBloc(
-                    MemberDropRepositoryImpl(),
-                  )..add(FetchPensionRequirement()),
-                ),
-                BlocProvider(
-                  create: (_) =>
-                      SkillsBloc(MemberDropRepositoryImpl())..add(FetchSkills()),
-                ),
-                BlocProvider(
-                  create: (_) =>
-                      BloodGroupBloc(MemberDropRepositoryImpl())..add(FetchBloodGroups()),
-                ),
-           BlocProvider(
-                          create: (_) =>
-                              ReligionBloc(MemberDropRepositoryImpl())
-                                ..add(FetchReligion()),
-                        ),
-                        BlocProvider(
-                          create: (_) =>
-                              GenderBloc(MemberDropRepositoryImpl())
-                                ..add(FetchGender()),
-                        ),
-              // BlocProvider(
-              //     create: (context) => SubjectBloc(),
-              // ),
-          ],
-                  child: DetailLoadGate(
+          // ✅ ALL DROPDOWN BLOCS - These load in parallel with main data
+          // Personal Details BLoCs
+          BlocProvider(
+            create: (_) => BloodGroupBloc(MemberDropRepositoryImpl())
+              ..add(FetchBloodGroups()),
+          ),
+          BlocProvider(
+            create: (_) => RelationDropBloc(MemberDropRepositoryImpl())
+              ..add(FetchRelations()),
+          ),
+          BlocProvider(
+            create: (_) => GenderBloc(MemberDropRepositoryImpl())
+              ..add(FetchGender()),
+          ),
+          BlocProvider(
+            create: (_) => MaritalStatusBloc(MemberDropRepositoryImpl())
+              ..add(FetchMaritalStatus()),
+          ),
+          BlocProvider(
+            create: (_) => ReligionBloc(MemberDropRepositoryImpl())
+              ..add(FetchReligion()),
+          ),
+          BlocProvider(
+            create: (_) => CasteBloc(MemberDropRepositoryImpl())
+              ..add(FetchCastes()),
+          ),
+
+          // Education BLoCs
+          BlocProvider(
+            create: (_) => QualificationBloc(MemberDropRepositoryImpl())
+              ..add(FetchQualifications()),
+          ),
+          BlocProvider(
+            create: (_) => EducationBloc(MemberDropRepositoryImpl())
+              ..add(FetchEducation()),
+          ),
+
+          // Employment BLoCs
+          BlocProvider(
+            create: (_) => EmploymentStatusBloc(MemberDropRepositoryImpl())
+              ..add(FetchEmploymentStatus()),
+          ),
+          BlocProvider(
+            create: (_) => JobBloc(MemberDropRepositoryImpl())
+              ..add(FetchJobs()),
+          ),
+          BlocProvider(
+            create: (_) => SkillsBloc(MemberDropRepositoryImpl())
+              ..add(FetchSkills()),
+          ),
+          BlocProvider(
+            create: (_) => EmploymentSupportBloc(MemberDropRepositoryImpl())
+              ..add(FetchEmploymentSupports()),
+          ),
+          BlocProvider(
+            create: (_) => FarmingTypeBloc(MemberDropRepositoryImpl())
+              ..add(FetchFarmingTypes()),
+          ),
+
+          // Health BLoCs
+          BlocProvider(
+            create: (_) => HealthIssueBloc(MemberDropRepositoryImpl())
+              ..add(FetchHealthIssues()),
+          ),
+          BlocProvider(
+            create: (_) => HealthInsuranceBloc(MemberDropRepositoryImpl())
+              ..add(FetchHealthInsurance()),
+          ),
+          BlocProvider(
+            create: (_) => RequiredHealthSupportBloc(MemberDropRepositoryImpl())
+              ..add(FetchRequiredHealthSupports()),
+          ),
+
+          // Pension/Welfare BLoCs
+          BlocProvider(
+            create: (_) => PensionTypeBloc(MemberDropRepositoryImpl())
+              ..add(FetchPensionTypes()),
+          ),
+          BlocProvider(
+            create: (_) => PensionRequiredBloc(MemberDropRepositoryImpl())
+              ..add(FetchPensionRequirement()),
+          ),
+        ],
+        child: DetailLoadGate(
           mode: mode,
           position: widget.position,
-           editId: widget.editId, 
+          editId: widget.editId,
         ),
       ),
-      ));}
-      
-       
-  
-    
-  
-
- 
-
+    ),
+  );
+}
   @override
   Widget build(BuildContext context) {
     return Container(
