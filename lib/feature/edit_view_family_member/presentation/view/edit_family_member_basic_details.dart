@@ -69,6 +69,24 @@ class _EditFamilyMemberBasicDetailsState
 
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
+  bool _isAnyEditFamilyBlocLoading(BuildContext context) {
+  final bloodGroupState = context.watch<BloodGroupBloc>().state;
+  final relationState = context.watch<RelationDropBloc>().state;
+  final genderState = context.watch<GenderBloc>().state;
+  final maritalState = context.watch<MaritalStatusBloc>().state;
+  final religionState = context.watch<ReligionBloc>().state;
+  final casteState = context.watch<CasteBloc>().state;
+  final editSubmitState = context.watch<EditFamilyMemberBloc>().state;
+
+  return bloodGroupState is BloodGroupLoading ||
+      relationState is RelationDropLoading ||
+      genderState is GenderLoading ||
+      maritalState is MaritalStatusLoading ||
+      religionState is ReligionLoading ||
+      casteState is CasteLoading ||
+      editSubmitState is EditFamilyMemberSubmitting;
+}
+
 
   void _populateFields(PersonalDetailsModel value) {
     // Text fields
@@ -111,13 +129,27 @@ class _EditFamilyMemberBasicDetailsState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+    final isLoading = _isAnyEditFamilyBlocLoading(context);
+
+    return   isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.primary,
+                backgroundColor:AppColor.white,
+              ),
+            )
+:
+    
+    BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
           top: false,
           child: Scaffold(
             backgroundColor: AppColor.secondary,
-            body: Column(
+            body:
+             
+
+            Column(
               children: [
                 GradientHeader(
                   title: 'സമ്പൂർണ്ണ സർവ്വേ',

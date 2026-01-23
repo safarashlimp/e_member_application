@@ -74,6 +74,18 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
     surveyorNameLabel.text = value.surveyor ?? '';
     // wardMemberLabel.text = value.wardMember ?? '';
   }
+bool _isAnyHealthBlocLoading(BuildContext context) {
+  final editState = context.watch<EditFamilyMemberBloc>().state;
+  final healthIssueState = context.watch<HealthIssueBloc>().state;
+  final healthInsuranceState = context.watch<HealthInsuranceBloc>().state;
+  final requiredHealthState =
+      context.watch<RequiredHealthSupportBloc>().state;
+
+  return editState is EditFamilyMemberSubmitting ||
+      healthIssueState is HealthIssueLoading ||
+      healthInsuranceState is HealthInsuranceLoading ||
+      requiredHealthState is RequiredHealthSupportLoading;
+}
 
   @override
   void initState() {
@@ -83,7 +95,15 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+    final isLoading = _isAnyHealthBlocLoading(context);
+
+    return
+        isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+:
+     BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
           child: Scaffold(

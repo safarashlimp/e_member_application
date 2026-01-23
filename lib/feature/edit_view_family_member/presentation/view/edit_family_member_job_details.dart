@@ -82,6 +82,25 @@ specifySkillLabel.text = value.skillDetails;
     // wardMemberLabel.text = value.wardMember ?? '';
     
   }
+bool _isAnyJobBlocLoading(BuildContext context) {
+  final employmentStatusState =
+      context.watch<EmploymentStatusBloc>().state;
+  final jobState = context.watch<JobBloc>().state;
+  final skillsState = context.watch<SkillsBloc>().state;
+  final employmentSupportState =
+      context.watch<EmploymentSupportBloc>().state;
+  final farmingTypeState =
+      context.watch<FarmingTypeBloc>().state;
+  final editState =
+      context.watch<EditFamilyMemberBloc>().state;
+
+  return employmentStatusState is EmploymentStatusLoading ||
+      jobState is JobLoading ||
+      skillsState is SkillsLoading ||
+      employmentSupportState is EmploymentSupportLoading ||
+      farmingTypeState is FarmingTypeLoading ||
+      editState is EditFamilyMemberSubmitting;
+}
 
  @override
   void dispose() {
@@ -98,7 +117,15 @@ specifySkillLabel.text = value.skillDetails;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+    final isLoading = _isAnyJobBlocLoading(context);
+
+    return
+           isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+:
+     BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
           top: false,

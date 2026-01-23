@@ -46,6 +46,15 @@ class _EditFamilyMemberEducationdetailsState
   int needEducationHelp = 0;
  bool get isEdit => widget.mode == PageMode.edit;
    bool get isView => widget.mode == PageMode.view;
+bool _isAnyEducationBlocLoading(BuildContext context) {
+  final qualificationState = context.watch<QualificationBloc>().state;
+  final educationState = context.watch<EducationBloc>().state;
+  final editState = context.watch<EditFamilyMemberBloc>().state;
+
+  return qualificationState is QualificationLoading ||
+      educationState is EducationLoading ||
+      editState is EditFamilyMemberSubmitting;
+}
 
 
 void _populateFields(EducationModel value) {
@@ -70,7 +79,15 @@ void initState() {
 }
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+    final isLoading = _isAnyEducationBlocLoading(context);
+
+    return 
+    isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+:
+    BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
           top: false,

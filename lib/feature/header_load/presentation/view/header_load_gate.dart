@@ -44,9 +44,9 @@ import 'package:e_member_app/feature/edit_survey_report/presentation/house_detai
         builder: (context, state) {
           if (state is HeaderLoadLoading) {
             return  Scaffold(
-              backgroundColor: AppColor.blue,
+              backgroundColor: AppColor.white,
               body: Center(child: CircularProgressIndicator(
-            color:     AppColor.white,
+            color:     AppColor.primary,
               )),
             );
           }

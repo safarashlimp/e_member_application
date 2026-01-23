@@ -76,6 +76,15 @@ bool get isEdit => widget.mode == PageMode.edit;
     // 🔹 Text fields
 
    // wardMemberLabel.text = value.wardMember ?? '';
+bool _isAnySocialBlocLoading(BuildContext context) {
+  final pensionTypeState = context.watch<PensionTypeBloc>().state;
+  final pensionRequiredState = context.watch<PensionRequiredBloc>().state;
+  final editState = context.watch<EditFamilyMemberBloc>().state;
+
+  return pensionTypeState is PensionTypeLoading ||
+      pensionRequiredState is PensionRequiredLoading ||
+      editState is EditFamilyMemberSubmitting;
+}
 
   @override
   void initState() {
@@ -84,7 +93,15 @@ bool get isEdit => widget.mode == PageMode.edit;
 }
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
+    final isLoading = _isAnySocialBlocLoading(context);
+
+    return 
+               isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+:
+    BlocBuilder<EditFamilyMemberBloc, EditFamilyMemberState>(
       builder: (context, state) {
         return SafeArea(
           top: false,

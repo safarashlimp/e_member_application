@@ -1515,9 +1515,7 @@ bool isWhatsAppManuallyEdited = false;
                            final whatsappValue = whatsupNumber.text.isNotEmpty
     ?  whatsupNumber.text // ✅ Uses WhatsApp if not empty
     : mobileNumber.text;   // ✅ Falls back to mobile if empty
-print("🔍 Mobile: ${mobileNumber.text}");
-print("🔍 WhatsApp: $whatsappValue");
-print("🔍 WhatsApp Controller: ${whatsupNumber.text}");
+
                             await FamilyMemberSaveRepository().saveFamilyMember(
                               // 🔹 REQUIRED
                               householdId: widget.editId,

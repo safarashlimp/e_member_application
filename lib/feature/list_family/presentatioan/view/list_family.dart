@@ -91,7 +91,10 @@ class _ListFamilyState extends State<ListFamily> {
                 child: BlocBuilder<FamilyMemberListBloc, FamilyMemberListState>(
                     builder: (context, state) {
                   if (state is FamilyMemberListLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(
+                      backgroundColor: AppColor.white,
+                      color: AppColor.primary,
+                    ));
                   }
 
                   if (state is FamilyMemberListLoaded) {
