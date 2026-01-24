@@ -38,10 +38,13 @@ class _SplashscreenState extends State<Splashscreen> {
 
     if (!mounted) return;
 
+     
+  // checking expired screen 
     if (status == Appstatus.expired) {
       _goToExpired();
       return;
     }
+// update screen
 
     if (status == Appstatus.updateRequired) {
       _goToUpdate();
@@ -93,7 +96,7 @@ Future<Appstatus> _checkversionAndExpiry() async {
   final response = await http.get(url);
 
   if (response.statusCode != 200) {
-    return Appstatus.ok; // fail-safe
+    return Appstatus.ok; 
   }
 
   final json = jsonDecode(response.body);
@@ -105,7 +108,7 @@ if (json["Status"] != true) {
 
   final data = json["data"][0];
 
-  // 🔴 App expired
+  //  App expired
   
   if (data["expired"] == 1) {
     return Appstatus.expired;

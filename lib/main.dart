@@ -1,6 +1,5 @@
 
 
-import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
 import 'package:e_member_app/feature/splash/presentaion/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

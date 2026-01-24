@@ -1,6 +1,5 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
-import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
 import 'package:e_member_app/core/widget/update_dialoge/update_diologe_helper.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_state.dart';
