@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:e_member_app/core/AppData/appdata.dart';
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
 import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
@@ -22,37 +24,39 @@ class Splashscreen extends StatefulWidget {
   @override
   State<Splashscreen> createState() => _SplashscreenState();
 }
-
 class _SplashscreenState extends State<Splashscreen> {
 
- @override
-void initState() {
-  super.initState();
-  _checkLogin();
-}
 
-Future<void> _checkLogin() async {
-  final isValidApp = await checkAppExpiry();
-
-  if (!isValidApp) {
-    _showExpiredDiolog();
-    return;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkAppFlow();
   }
 
-  final prefs = await SharedPreferences.getInstance();
-  final clientId = prefs.getString(PrefKeys.clientId);
+ Future<void> _checkAppFlow() async {
+    final status = await _checkversionAndExpiry();
 
-  Future.delayed(const Duration(seconds: 3), () {
-    if (clientId != null && clientId.isNotEmpty) {
-      _goToDashboard();
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => LoginView()),
-      );
+    if (!mounted) return;
+
+    if (status == Appstatus.expired) {
+      _goToExpired();
+      return;
     }
-  });
-}
+
+    if (status == Appstatus.updateRequired) {
+      _goToUpdate();
+      return;
+    }
+
+    _goNext();
+  }
+
+
+
+
+
+
 
 
  @override
@@ -67,73 +71,123 @@ Widget build(BuildContext context) {
       ),
     ),
   );
+
+
+
+
+
 }
 
+ Future<String> _getAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    return info.buildNumber;
+  }
+Future<Appstatus>_checkversionAndExpiry()async{
+  
+   final prefs =  await SharedPreferences.getInstance();
+   final clintId = prefs.getString(PrefKeys.clientId) ?? "0";
+     final userId = prefs.getString(PrefKeys.userId) ?? "0";
 
-Future<String> getAppVersion() async {
-  final info = await PackageInfo.fromPlatform();
-  return info.buildNumber; 
+
+     final url = Uri.parse("https://emember.org/API/check_app.php?clientid=$clintId&userid=$userId",);
+
+     final responce = await http.get(url);
+
+     if(responce.statusCode==200){
+      return Appstatus.ok ;
+     }
+
+     final json = jsonDecode(responce.body);
+     
+
+     if(json["status"]==true){
+      Appstatus.ok;
+     }
+
+
+     final data = json["data"][0];
+
+       if (data["expired"] == 1) {
+      return Appstatus.expired;
+    }
+
+    final backendVersion= Platform.isAndroid
+        ? data["Android_version_number"]
+        : data["IOS_version_number"];
+
+
+        if(AppData.versions.contains(backendVersion)){
+          return Appstatus.ok;
+        }
+
+return Appstatus.updateRequired;
+
 }
-Future<bool> checkAppExpiry() async {
-  final prefs = await SharedPreferences.getInstance();
-  final clientId = prefs.getString(PrefKeys.clientId) ?? "0";
-  final userId = prefs.getString(PrefKeys.userId) ?? "0";
 
-  final url = Uri.parse(
-    "https://emember.org/API/check_app.php?clientid=$clientId&userid=$userId",
-  );
+void _goNext() async {
+    final prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString(PrefKeys.clientId);
 
-  final response = await http.get(url);
+    await Future.delayed(const Duration(seconds: 3));
 
-  if (response.statusCode == 200) {
-    final json = jsonDecode(response.body);
+    if (!mounted) return;
 
-    if (json["Status"] == true) {
-      final data = json["data"][0];
-
-      final expired = data["expired"];
-      if (expired == 1) {
-        return false;
-      }
-
-      final currentVersion = await getAppVersion();
-
-      if (Platform.isAndroid) {
-        print(" this is current android version $currentVersion");
-        print(" this is  from backend api gave android version  ${data["Android_version_number"]}");
-      
-        return currentVersion == data["Android_version_number"];
-      } else if (Platform.isIOS) {
-        return currentVersion == data["IOS_version_number"];
-      }
+    if (clientId != null && clientId.isNotEmpty) {
+      _goToDashboard();
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => LoginView()),
+      );
     }
   }
 
-  return false;
+ void _goToDashboard() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          final datasource = DashboardRemoteDatasource();
+          final repository = DashboardRepositoryImpl(datasource);
+          final useCase = GetDashboardUseCase(repository);
+
+          return BlocProvider(
+            create: (_) =>
+                DashboardBloc(useCase)..add(LoadDashboardEvent()),
+            child: const DashboardPage(),
+          );
+        },
+      ),
+    );
+  }
+
+   void _goToExpired() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => Expiredscreen()),
+    );
+  }
+
+  void _goToUpdate() {
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (_) => const UpdateScreen(),
+    //   ),
+    // );
+  }
+
+
+
+
 }
 
-void _goToDashboard() {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (_) {
-        final datasource = DashboardRemoteDatasource();
-        final repository = DashboardRepositoryImpl(datasource);
-        final useCase = GetDashboardUseCase(repository);
-
-        return BlocProvider(
-          create: (_) =>
-              DashboardBloc(useCase)..add(LoadDashboardEvent()),
-          child: const DashboardPage(),
-        );
-      },
-    ),
-  );
-}
 
 
-_showExpiredDiolog(){
 
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Expiredscreen()));
-}
+
+enum Appstatus{
+    ok,
+  expired,
+  updateRequired,
 }
