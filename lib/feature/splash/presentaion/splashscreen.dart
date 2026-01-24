@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:e_member_app/core/AppData/appdata.dart';
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
@@ -82,46 +81,46 @@ Widget build(BuildContext context) {
     final info = await PackageInfo.fromPlatform();
     return info.buildNumber;
   }
-Future<Appstatus>_checkversionAndExpiry()async{
+Future<Appstatus> _checkversionAndExpiry() async {
+  final prefs = await SharedPreferences.getInstance();
+  final clientId = prefs.getString(PrefKeys.clientId) ?? "0";
+  final userId = prefs.getString(PrefKeys.userId) ?? "0";
+
+  final url = Uri.parse(
+    "https://emember.org/API/check_app.php?clientid=$clientId&userid=$userId",
+  );
+
+  final response = await http.get(url);
+
+  if (response.statusCode != 200) {
+    return Appstatus.ok; // fail-safe
+  }
+
+  final json = jsonDecode(response.body);
+
+if (json["Status"] != true) {
+  return Appstatus.ok;
+}
+
+
+  final data = json["data"][0];
+
+  // 🔴 App expired
   
-   final prefs =  await SharedPreferences.getInstance();
-   final clintId = prefs.getString(PrefKeys.clientId) ?? "0";
-     final userId = prefs.getString(PrefKeys.userId) ?? "0";
+  if (data["expired"] == 1) {
+    return Appstatus.expired;
+  }
 
+  // 🔵 Version check
+  final backendVersion = Platform.isAndroid
+      ? data["Android_version_number"].toString()
+      : data["IOS_version_number"].toString();
 
-     final url = Uri.parse("https://emember.org/API/check_app.php?clientid=$clintId&userid=$userId",);
+  if (AppData.versions.contains(backendVersion)) {
+    return Appstatus.ok;
+  }
 
-     final responce = await http.get(url);
-
-     if(responce.statusCode==200){
-      return Appstatus.ok ;
-     }
-
-     final json = jsonDecode(responce.body);
-     
-
-     if(json["status"]==true){
-      Appstatus.ok;
-     }
-
-
-     final data = json["data"][0];
-
-       if (data["expired"] == 1) {
-      return Appstatus.expired;
-    }
-
-    final backendVersion= Platform.isAndroid
-        ? data["Android_version_number"]
-        : data["IOS_version_number"];
-
-
-        if(AppData.versions.contains(backendVersion)){
-          return Appstatus.ok;
-        }
-
-return Appstatus.updateRequired;
-
+  return Appstatus.updateRequired;
 }
 
 void _goNext() async {
@@ -154,7 +153,7 @@ void _goNext() async {
           return BlocProvider(
             create: (_) =>
                 DashboardBloc(useCase)..add(LoadDashboardEvent()),
-            child: const DashboardPage(),
+            child:  DashboardPage(),
           );
         },
       ),
@@ -169,12 +168,22 @@ void _goNext() async {
   }
 
   void _goToUpdate() {
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (_) => const UpdateScreen(),
-    //   ),
-    // );
+  Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          final datasource = DashboardRemoteDatasource();
+          final repository = DashboardRepositoryImpl(datasource);
+          final useCase = GetDashboardUseCase(repository);
+
+          return BlocProvider(
+            create: (_) =>
+                DashboardBloc(useCase)..add(LoadDashboardEvent()),
+            child:  DashboardPage(updateDiolog: true,),
+          );
+        },
+      ),
+    );
   }
 
 

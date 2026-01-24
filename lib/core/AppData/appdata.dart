@@ -1,4 +1,4 @@
 class AppData{
 
- static List<String> versions=["1"];
+ static List<String> versions=["7","1"];
 }

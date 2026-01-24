@@ -1,5 +1,7 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
+import 'package:e_member_app/core/widget/update_dialoge/update_dialoge.dart';
+import 'package:e_member_app/core/widget/update_dialoge/update_diologe_helper.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_state.dart';
 
@@ -13,13 +15,28 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+ final  bool ? updateDiolog;
+   const DashboardPage({super.key,this.updateDiolog});
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+
+@override
+void initState() {
+  super.initState();
+
+
+if(widget.updateDiolog==true){
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    showAppUpdateDialog(context);
+  });
+}
+}
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -169,4 +186,6 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+  
+
 }
