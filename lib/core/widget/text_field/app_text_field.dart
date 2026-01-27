@@ -3,7 +3,6 @@ import 'package:e_member_app/core/widget/text_field/app_input_decoration.dart';
 import 'package:e_member_app/core/widget/text_field/label_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 class AppTextField extends StatelessWidget {
   final String? label;
   final TextEditingController controller;
@@ -67,15 +66,14 @@ class AppTextField extends StatelessWidget {
         maxLength = 12;
         break;
       case 'decimal':
-  keyboardType = const TextInputType.numberWithOptions(decimal: true);
-  formatters = [
-    FilteringTextInputFormatter.allow(
-      RegExp(r'^\d*\.?\d*$'),
-    ),
-  ];
-  maxLength = 10; // adjust if needed
-  break;
-
+        keyboardType = const TextInputType.numberWithOptions(decimal: true);
+        formatters = [
+          FilteringTextInputFormatter.allow(
+            RegExp(r'^\d*\.?\d*$'),
+          ),
+        ];
+        maxLength = 10; // adjust if needed
+        break;
     }
     final field = SizedBox(
       width: width,
@@ -98,7 +96,6 @@ class AppTextField extends StatelessWidget {
           hintColor: hintColor,
           fillColor: AppColor.white,
         ),
-        
         validator: validator,
       ),
     );
