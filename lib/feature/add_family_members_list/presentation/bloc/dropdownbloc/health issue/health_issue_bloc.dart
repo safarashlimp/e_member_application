@@ -3,15 +3,10 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
-
-class HealthIssueBloc
-    extends Bloc<HealthIssueEvent, HealthIssueState> {
+class HealthIssueBloc extends Bloc<HealthIssueEvent, HealthIssueState> {
   final MemberDropRepository repository;
 
-  HealthIssueBloc(this.repository)
-      : super(HealthIssueInitial()) {
+  HealthIssueBloc(this.repository) : super(HealthIssueInitial()) {
     on<FetchHealthIssues>((event, emit) async {
       emit(HealthIssueLoading());
       try {

@@ -7,10 +7,8 @@ class FamilyMemberSaveRepository {
   Future<int> saveFamilyMember({
     required String householdId, // editId
     required String name,
-
     String? mobile,
     String? whatsapp,
-
     required int bloodGroupId,
     required int relationId,
     required int genderId,
@@ -18,22 +16,18 @@ class FamilyMemberSaveRepository {
     required int maritalStatusId,
     required int religionId,
     required int casteId,
-
     required String surveyor,
-
     required int qualificationId,
     required int currentlyStudying,
     int? courseId,
     String? courseOther,
     String? institution,
     int? needEducationSupport,
-
     required int employmentStatusId,
     int? occupationId,
     String? skills,
     String? skillDetails,
     int? needJobSupportId,
-
     int? norkaRegistered,
     int? agricultureType,
     int? isPatient,
@@ -54,9 +48,6 @@ class FamilyMemberSaveRepository {
     int? needPensionTypeId,
     int? povertyPgm,
   }) async {
-   
-    
-
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
     final userId = prefs.getString(PrefKeys.userId);
@@ -80,8 +71,8 @@ class FamilyMemberSaveRepository {
         'ward_member': userId,
 
         'name': name,
-        'mobile': mobile ,
-        'whatsapp': whatsapp ,
+        'mobile': mobile,
+        'whatsapp': whatsapp,
 
         'bloodgroup': bloodGroupId.toString(),
         'relation_id': relationId.toString(),
@@ -94,44 +85,34 @@ class FamilyMemberSaveRepository {
         'surveyor': surveyor,
 
         'qualification_id': qualificationId.toString(),
-       'currently_studying': (currentlyStudying ?? 0).toString(),
+        'currently_studying': (currentlyStudying ?? 0).toString(),
         'course_id': (courseId ?? 0).toString(),
         'course_other': courseOther ?? '',
         'institution': institution ?? '',
-        'need_education_support':
-            (needEducationSupport ?? 0).toString(),
-
+        'need_education_support': (needEducationSupport ?? 0).toString(),
         'employment_status_id': employmentStatusId.toString(),
         'occupation_id': (occupationId ?? 0).toString(),
-         'skills': skills ?? '[]',
+        'skills': skills ?? '[]',
         'skill_details': skillDetails ?? '',
-        'need_job_support_id':
-            (needJobSupportId ?? 0).toString(),
-
+        'need_job_support_id': (needJobSupportId ?? 0).toString(),
         'norka_registered': (norkaRegistered ?? 0).toString(),
         'agriculure_type': (agricultureType ?? 0).toString(),
         'is_patient': (isPatient ?? 0).toString(),
 
         // 🔹 HEALTH
-       'diseases': (diseases ?? 0).toString(),
+        'diseases': (diseases ?? 0).toString(),
         'treatment_place': treatmentPlace ?? '',
         'disabled': (disabled ?? 0).toString(),
-        'disability_benefit':
-            (disabilityBenefit ?? 0).toString(),
+        'disability_benefit': (disabilityBenefit ?? 0).toString(),
         'insurance_card': (insuranceCard ?? 0).toString(),
-        'insurance_type_id':
-            (insuranceTypeId ?? 0).toString(),
+        'insurance_type_id': (insuranceTypeId ?? 0).toString(),
         'health_help': (healthHelp ?? 0).toString(),
 
         // 🔹 SOCIAL SECURITY
-        'included_in_ration':
-            (includedInRation ?? 0).toString(),
-        'receiving_pension':
-            (receivingPension ?? 0).toString(),
-        'pension_type_id':
-            (pensionTypeId ?? 0).toString(),
-        'need_pension_type_id':
-            (needPensionTypeId ?? 0).toString(),
+        'included_in_ration': (includedInRation ?? 0).toString(),
+        'receiving_pension': (receivingPension ?? 0).toString(),
+        'pension_type_id': (pensionTypeId ?? 0).toString(),
+        'need_pension_type_id': (needPensionTypeId ?? 0).toString(),
         'poverty_pgm': (povertyPgm ?? 0).toString(),
       },
     );

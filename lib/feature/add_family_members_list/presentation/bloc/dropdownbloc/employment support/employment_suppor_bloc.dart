@@ -3,14 +3,11 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
 class EmploymentSupportBloc
     extends Bloc<EmploymentSupportEvent, EmploymentSupportState> {
   final MemberDropRepository repository;
 
-  EmploymentSupportBloc(this.repository)
-      : super(EmploymentSupportInitial()) {
+  EmploymentSupportBloc(this.repository) : super(EmploymentSupportInitial()) {
     on<FetchEmploymentSupports>((event, emit) async {
       emit(EmploymentSupportLoading());
       try {

@@ -3,10 +3,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
-class RequiredHealthSupportBloc extends Bloc<
-    RequiredHealthSupportEvent, RequiredHealthSupportState> {
+class RequiredHealthSupportBloc
+    extends Bloc<RequiredHealthSupportEvent, RequiredHealthSupportState> {
   final MemberDropRepository repository;
 
   RequiredHealthSupportBloc(this.repository)

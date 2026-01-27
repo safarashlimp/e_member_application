@@ -6,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ReligionBloc extends Bloc<ReligionEvent, ReligionState> {
   final MemberDropRepository repository;
 
- ReligionBloc(this.repository) : super( ReligionInitial()) {
+  ReligionBloc(this.repository) : super(ReligionInitial()) {
     on<FetchReligion>((event, emit) async {
-      emit( ReligionLoading());
+      emit(ReligionLoading());
       try {
         final items = await repository.getReligion();
-        emit( ReligionLoaded(items));
+        emit(ReligionLoaded(items));
       } catch (e) {
-        emit( ReligionError(e.toString()));
+        emit(ReligionError(e.toString()));
       }
     });
   }

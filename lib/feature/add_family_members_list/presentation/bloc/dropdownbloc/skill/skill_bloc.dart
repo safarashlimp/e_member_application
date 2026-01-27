@@ -3,9 +3,6 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
-
 class SkillsBloc extends Bloc<SkillsEvent, SkillsState> {
   final MemberDropRepository repository;
 

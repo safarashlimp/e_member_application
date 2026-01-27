@@ -3,13 +3,10 @@ import 'package:e_member_app/feature/add_family_members_list/domain/repository/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_state.dart';
 
-
-class RelationDropBloc
-    extends Bloc<RelationDropEvent, RelationDropState> {
+class RelationDropBloc extends Bloc<RelationDropEvent, RelationDropState> {
   final MemberDropRepository repository;
 
-  RelationDropBloc(this.repository)
-      : super(RelationDropInitial()) {
+  RelationDropBloc(this.repository) : super(RelationDropInitial()) {
     on<FetchRelations>((event, emit) async {
       emit(RelationDropLoading());
       try {

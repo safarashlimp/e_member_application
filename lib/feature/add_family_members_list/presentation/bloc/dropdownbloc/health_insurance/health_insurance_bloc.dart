@@ -9,8 +9,7 @@ class HealthInsuranceBloc
     extends Bloc<HealthInsuranceEvent, HealthInsuranceState> {
   final MemberDropRepository repository;
 
-  HealthInsuranceBloc(this.repository)
-      : super(HealthInsuranceInitial()) {
+  HealthInsuranceBloc(this.repository) : super(HealthInsuranceInitial()) {
     on<FetchHealthInsurance>((event, emit) async {
       emit(HealthInsuranceLoading());
       try {

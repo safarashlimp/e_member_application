@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
@@ -37,7 +36,6 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_state.dart';
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
@@ -52,7 +50,6 @@ import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_heade
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/view/list_survey_report.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -199,7 +196,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   int patient = 0;
   int needEducationHelp = 0;
   String? selectedProvertyPrgm;
-String get skillsJson => jsonEncode(selectedSkillIds);
+  String get skillsJson => jsonEncode(selectedSkillIds);
   final Map<String, int> povertyProgramMap = {
     'അല്ല': 0,
     'തൊഴിലുറപ്പ്': 1,
@@ -233,90 +230,91 @@ String get skillsJson => jsonEncode(selectedSkillIds);
       }
     });
   }
-void showSuccessDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Color(0xff0FA958),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Saved Successfully",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff0FA958),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 68,
-              height: 29,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      WidgetStatePropertyAll(AppColor.button),
-                ),
-                onPressed: () {
-                  Navigator.pop(context); // close dialog
-                  _goToListPage();        // navigate
-                },
-                child: const Text(
-                  "OK",
-                  style: TextStyle(color: AppColor.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-void _goToListPage() {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(
-      builder: (_) => BlocProvider(
-        create: (_) => HeaderListBloc(
-          GetHeaderListUsecase(
-            HeaderListRepositoryImpl(http.Client()),
+
+  void showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        )..add(FetchHeaderList('1')),
-        child: const ListSurveyReport(
-          sectionType: FamilySurveySectionType.familyBasicDetails,
-          postion: '1',
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 70,
+                height: 70,
+                decoration: const BoxDecoration(
+                  color: Color(0xff0FA958),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Saved Successfully",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0FA958),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 68,
+                height: 29,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(AppColor.button),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context); // close dialog
+                    _goToListPage(); // navigate
+                  },
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(color: AppColor.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _goToListPage() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => HeaderListBloc(
+            GetHeaderListUsecase(
+              HeaderListRepositoryImpl(http.Client()),
+            ),
+          )..add(FetchHeaderList('1')),
+          child: const ListSurveyReport(
+            sectionType: FamilySurveySectionType.familyBasicDetails,
+            postion: '1',
+          ),
         ),
       ),
-    ),
-    (route) => false,
-  );
-}
+      (route) => false,
+    );
+  }
 
   void showSnack(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -359,7 +357,6 @@ void _goToListPage() {
                   }
 
                   return Column(
-                    //mainAxisSize: .min,
                     children: [
                       GradientHeader(
                         title: 'സമ്പൂർണ്ണ സർവ്വേ',
@@ -443,12 +440,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               selectedBloodGroup = value;
@@ -495,12 +489,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA HERE
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               selectedReletion = value;
@@ -546,12 +537,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               selectedGender = value;
@@ -683,12 +671,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               selectedReligion = value;
@@ -734,12 +719,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               selectedCaste = value;
@@ -925,12 +907,9 @@ void _goToListPage() {
                                       onChanged: (v) {
                                         setState(() {
                                           needEducationHelp = v;
-                                          if (v == 0) {
-                                            // student = null; // reset dropdown
-                                          }
+                                          if (v == 0) {}
                                         });
                                       },
-                                      // onChanged: (v) => setState(() => student = v),
                                     ),
                                   ],
                                 ],
@@ -964,12 +943,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               employmentStatus = value;
@@ -1015,12 +991,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               jobStatus = value;
@@ -1054,28 +1027,26 @@ void _goToListPage() {
                                         );
                                       }
 
-                                   if (state is SkillsLoaded) {
-  return AppMultiSelectDropdown<String>(
-    label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+                                      if (state is SkillsLoaded) {
+                                        return AppMultiSelectDropdown<String>(
+                                          label: 'കഴിവുകൾ / വൈദഗ്ധ്യങ്ങൾ',
+                                          items: state.items
+                                              .map((e) => e.name)
+                                              .toList(),
+                                          selectedValues: selectedSkills,
+                                          onChanged: (values) {
+                                            setState(() {
+                                              selectedSkills = values;
 
-    items: state.items.map((e) => e.name).toList(),
-
-    selectedValues: selectedSkills,
-
-    onChanged: (values) {
-      setState(() {
-        selectedSkills = values;
-
-        // ✅ FIX: convert id to String
-        selectedSkillIds = state.items
-            .where((e) => values.contains(e.name))
-            .map((e) => e.id.toString())
-            .toList();
-      });
-    },
-  );
-}
-
+                                              selectedSkillIds = state.items
+                                                  .where((e) =>
+                                                      values.contains(e.name))
+                                                  .map((e) => e.id.toString())
+                                                  .toList();
+                                            });
+                                          },
+                                        );
+                                      }
 
                                       if (state is SkillsError) {
                                         return Text(
@@ -1123,12 +1094,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               employmentSupportLabel = value;
@@ -1162,12 +1130,9 @@ void _goToListPage() {
                                       onChanged: (v) {
                                         setState(() {
                                           norkaRegisteredLabel = v;
-                                          if (v == 0) {
-                                            // student = null; // reset dropdown
-                                          }
+                                          if (v == 0) {}
                                         });
                                       },
-                                      // onChanged: (v) => setState(() => student = v),
                                     ),
                                   ],
                                   if (jobStatus == "കർഷകൻ") ...[
@@ -1194,12 +1159,9 @@ void _goToListPage() {
                                                 AppColor.hintText,
                                             validator:
                                                 Validator.validateSelection,
-
-                                            // ✅ API DATA
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
-
                                             onChanged: (value) {
                                               setState(() {
                                                 farmingType = value;
@@ -1241,12 +1203,9 @@ void _goToListPage() {
                                     onChanged: (v) {
                                       setState(() {
                                         patient = v;
-                                        if (v == 0) {
-                                          // student = null; // reset dropdown
-                                        }
+                                        if (v == 0) {}
                                       });
                                     },
-                                    // onChanged: (v) => setState(() => student = v),
                                   ),
                                   if (patient == 1) ...[
                                     const SizedBox(height: 20),
@@ -1272,12 +1231,9 @@ void _goToListPage() {
                                                 AppColor.hintText,
                                             validator:
                                                 Validator.validateSelection,
-
-                                            // ✅ API DATA
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
-
                                             onChanged: (value) {
                                               setState(() {
                                                 hasHealthIssues = value;
@@ -1322,12 +1278,9 @@ void _goToListPage() {
                                     onChanged: (v) {
                                       setState(() {
                                         hasDisability = v;
-                                        if (v == 0) {
-                                          // student = null; // reset dropdown
-                                        }
+                                        if (v == 0) {}
                                       });
                                     },
-                                    // onChanged: (v) => setState(() => student = v),
                                   ),
                                   if (hasDisability == 1) ...[
                                     const SizedBox(height: 20),
@@ -1338,12 +1291,9 @@ void _goToListPage() {
                                       onChanged: (v) {
                                         setState(() {
                                           disabilityBenefit = v;
-                                          if (v == 0) {
-                                            // student = null; // reset dropdown
-                                          }
+                                          if (v == 0) {}
                                         });
                                       },
-                                      // onChanged: (v) => setState(() => student = v),
                                     ),
                                   ],
                                   SizedBox(height: 20),
@@ -1353,12 +1303,9 @@ void _goToListPage() {
                                     onChanged: (v) {
                                       setState(() {
                                         healthInsuranceCard = v;
-                                        if (v == 0) {
-                                          // student = null; // reset dropdown
-                                        }
+                                        if (v == 0) {}
                                       });
                                     },
-                                    // onChanged: (v) => setState(() => student = v),
                                   ),
                                   if (healthInsuranceCard == 1) ...[
                                     const SizedBox(height: 20),
@@ -1384,12 +1331,9 @@ void _goToListPage() {
                                                 AppColor.hintText,
                                             validator:
                                                 Validator.validateSelection,
-
-                                            // ✅ API DATA
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
-
                                             onChanged: (value) {
                                               setState(() {
                                                 healthInsurance = value;
@@ -1438,12 +1382,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               requiredHealthSupports = value;
@@ -1486,12 +1427,9 @@ void _goToListPage() {
                                     onChanged: (v) {
                                       setState(() {
                                         isIncludedInRationCard = v;
-                                        if (v == 0) {
-                                          // student = null; // reset dropdown
-                                        }
+                                        if (v == 0) {}
                                       });
                                     },
-                                    // onChanged: (v) => setState(() => student = v),
                                   ),
                                   SizedBox(height: 20),
                                   AppRadioField(
@@ -1500,12 +1438,9 @@ void _goToListPage() {
                                     onChanged: (v) {
                                       setState(() {
                                         isPensionReceiving = v;
-                                        if (v == 0) {
-                                          // student = null; // reset dropdown
-                                        }
+                                        if (v == 0) {}
                                       });
                                     },
-                                    // onChanged: (v) => setState(() => student = v),
                                   ),
                                   if (isPensionReceiving == 1) ...[
                                     const SizedBox(height: 20),
@@ -1531,12 +1466,9 @@ void _goToListPage() {
                                                 AppColor.hintText,
                                             validator:
                                                 Validator.validateSelection,
-
-                                            // ✅ API DATA
                                             items: state.items
                                                 .map((e) => e.name)
                                                 .toList(),
-
                                             onChanged: (value) {
                                               setState(() {
                                                 selectedPensionType = value;
@@ -1585,12 +1517,9 @@ void _goToListPage() {
                                           dropdownTextColor: AppColor.hintText,
                                           validator:
                                               Validator.validateSelection,
-
-                                          // ✅ API DATA
                                           items: state.items
                                               .map((e) => e.name)
                                               .toList(),
-
                                           onChanged: (value) {
                                             setState(() {
                                               isPensionRequired = value;
@@ -1654,12 +1583,9 @@ void _goToListPage() {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 50),
                             AppActionButton(
                               label: "സമർപ്പിക്കുക",
                               onPressed: () async {
-                                // 🔹 BASIC VALIDATION
-
                                 if (familyMemberName.text.trim().isEmpty) {
                                   showSnack(
                                       context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
@@ -1669,10 +1595,26 @@ void _goToListPage() {
                                   showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
                                   return;
                                 }
+
+                                if (!RegExp(r'^[0-9]{10}$')
+                                    .hasMatch(mobileNumber.text.trim())) {
+                                  showSnack(context,
+                                      "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
+                                  return;
+                                }
+
                                 if (whatsupNumber.text.trim().isEmpty) {
                                   showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
                                   return;
                                 }
+
+                                if (!RegExp(r'^[0-9]{10}$')
+                                    .hasMatch(whatsupNumber.text.trim())) {
+                                  showSnack(context,
+                                      "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
+                                  return;
+                                }
+
                                 if (selectedBloodGroup == null ||
                                     selectedBloodGroup!.isEmpty) {
                                   showSnack(
@@ -1699,19 +1641,13 @@ void _goToListPage() {
                                 final dobApi =
                                     "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
 
-                              // ✅ Validate surveyor name field
-                              if (surveyorNameLabel.text.trim().isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                                return;
-                              }
+                                if (surveyorNameLabel.text.trim().isEmpty) {
+                                  showSnack(
+                                      context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                  return;
+                                }
+
                                 try {
-                                  // 🔹 GET USER ID (ward_member + surveyor)
                                   final prefs =
                                       await SharedPreferences.getInstance();
                                   final userId = int.parse(
@@ -1724,57 +1660,74 @@ void _goToListPage() {
                                       : mobileNumber
                                           .text; // ✅ Falls back to mobile if empty
 
-                                  
-  // 🔹 AWAIT the API call first
-  await FamilyMemberSaveRepository().saveFamilyMember(
-    householdId: widget.editId,
-    surveyor: surveyorNameLabel.text,
-    name: familyMemberName.text.trim(),
-    mobile: mobileNumber.text,
-    whatsapp: whatsappValue,
-    bloodGroupId: int.parse(selectedBloodGroupId ?? '0'),
-    relationId: int.parse(selectedRelationId ?? '0'),
-    genderId: int.parse(selectedGenderId ?? '0'),
-    dob: dobApi,
-    maritalStatusId: int.parse(selectedMaritalStatusId ?? '0'),
-    religionId: int.parse(selectedReligionId ?? '0'),
-    casteId: int.parse(selectedCasteId ?? '0'),
-    qualificationId: int.parse(selectedQualificationId ?? '0'),
-    currentlyStudying: student,
-    courseId: int.parse(selectedEducationId ?? '0'),
-    courseOther: courseStudy.text,
-    institution: studyCenter.text,
-    needEducationSupport: needEducationHelp,
-    employmentStatusId: int.parse(employmentStatusId ?? '0'),
-    occupationId: int.parse(jobStatusId ?? '0'),
-    skills: skillsJson,
-    skillDetails: specifySkillLabel.text,
-    needJobSupportId: int.parse(employmentSupportId ?? '0'),
-    norkaRegistered: norkaRegisteredLabel,
-    agricultureType: int.parse(farmingTypeId ?? '0'),
-    isPatient: patient,
-    diseases: (hasHealthIssuesId == '1'
-            ? int.tryParse(requiredHealthSupports ?? '0') ?? 0
-            : 0)
-        .toString(),
-    treatmentPlace: treatmentPlaceLabel.text,
-    disabled: hasDisability,
-    disabilityBenefit: disabilityBenefit,
-    insuranceCard: healthInsuranceCard,
-    insuranceTypeId: int.parse(healthInsuranceId ?? '0'),
-    healthHelp: int.parse(requiredHealthSupportsId ?? '0'),
-    includedInRation: isIncludedInRationCard,
-    receivingPension: isPensionReceiving,
-    pensionTypeId: int.parse(selectedPensionTypeId ?? '0'),
-    needPensionTypeId: int.parse(isPensionRequiredId ?? '0'),
-    povertyPgm: povertyProgramMap[selectedProvertyPrgm] ?? 0,
-  );
+                                  // 🔹 AWAIT the API call first
+                                  await FamilyMemberSaveRepository()
+                                      .saveFamilyMember(
+                                    householdId: widget.editId,
+                                    surveyor: surveyorNameLabel.text,
+                                    name: familyMemberName.text.trim(),
+                                    mobile: mobileNumber.text,
+                                    whatsapp: whatsappValue,
+                                    bloodGroupId:
+                                        int.parse(selectedBloodGroupId ?? '0'),
+                                    relationId:
+                                        int.parse(selectedRelationId ?? '0'),
+                                    genderId:
+                                        int.parse(selectedGenderId ?? '0'),
+                                    dob: dobApi,
+                                    maritalStatusId: int.parse(
+                                        selectedMaritalStatusId ?? '0'),
+                                    religionId:
+                                        int.parse(selectedReligionId ?? '0'),
+                                    casteId: int.parse(selectedCasteId ?? '0'),
+                                    qualificationId: int.parse(
+                                        selectedQualificationId ?? '0'),
+                                    currentlyStudying: student,
+                                    courseId:
+                                        int.parse(selectedEducationId ?? '0'),
+                                    courseOther: courseStudy.text,
+                                    institution: studyCenter.text,
+                                    needEducationSupport: needEducationHelp,
+                                    employmentStatusId:
+                                        int.parse(employmentStatusId ?? '0'),
+                                    occupationId: int.parse(jobStatusId ?? '0'),
+                                    skills: skillsJson,
+                                    skillDetails: specifySkillLabel.text,
+                                    needJobSupportId:
+                                        int.parse(employmentSupportId ?? '0'),
+                                    norkaRegistered: norkaRegisteredLabel,
+                                    agricultureType:
+                                        int.parse(farmingTypeId ?? '0'),
+                                    isPatient: patient,
+                                    diseases: (hasHealthIssuesId == '1'
+                                            ? int.tryParse(
+                                                    requiredHealthSupports ??
+                                                        '0') ??
+                                                0
+                                            : 0)
+                                        .toString(),
+                                    treatmentPlace: treatmentPlaceLabel.text,
+                                    disabled: hasDisability,
+                                    disabilityBenefit: disabilityBenefit,
+                                    insuranceCard: healthInsuranceCard,
+                                    insuranceTypeId:
+                                        int.parse(healthInsuranceId ?? '0'),
+                                    healthHelp: int.parse(
+                                        requiredHealthSupportsId ?? '0'),
+                                    includedInRation: isIncludedInRationCard,
+                                    receivingPension: isPensionReceiving,
+                                    pensionTypeId:
+                                        int.parse(selectedPensionTypeId ?? '0'),
+                                    needPensionTypeId:
+                                        int.parse(isPensionRequiredId ?? '0'),
+                                    povertyPgm: povertyProgramMap[
+                                            selectedProvertyPrgm] ??
+                                        0,
+                                  );
 
-  // ✅ SHOW SUCCESS POPUP AFTER API CALL
-  showSuccessDialog(context);
-
-} 
-                                catch (e) {
+                                  // ✅ SHOW SUCCESS POPUP AFTER API CALL
+                                  showSuccessDialog(context);
+                                } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(e.toString())),
                                   );
@@ -1789,7 +1742,6 @@ void _goToListPage() {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
                     ],
                   );
                 },

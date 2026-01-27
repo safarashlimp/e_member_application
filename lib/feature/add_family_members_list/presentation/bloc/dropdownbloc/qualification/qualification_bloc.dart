@@ -3,11 +3,7 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
-
-class QualificationBloc
-    extends Bloc<QualificationEvent, QualificationState> {
+class QualificationBloc extends Bloc<QualificationEvent, QualificationState> {
   final MemberDropRepository repository;
 
   QualificationBloc(this.repository) : super(QualificationInitial()) {

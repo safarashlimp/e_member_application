@@ -26,6 +26,4 @@ class MemberDropItem {
       name: json['name'],
     );
   }
-
-  
 }

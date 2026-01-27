@@ -1,3 +1,3 @@
 abstract class GenderEvent {}
 
-class FetchGender extends GenderEvent{}
+class FetchGender extends GenderEvent {}

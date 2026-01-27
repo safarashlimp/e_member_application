@@ -2,7 +2,6 @@ import 'package:e_member_app/feature/add_family_members_list/data/model/dropdown
 import 'package:e_member_app/feature/add_family_members_list/domain/repository/dropdownrepo/member_drop_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 part 'job_event.dart';
 part 'job_state.dart';
 
