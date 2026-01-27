@@ -195,15 +195,17 @@ class BottomSummaryCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min, // ⭐ IMPORTANT
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      label,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: titleSize,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        height: 1.15,
+                    Expanded(
+                      child: Text(
+                        label,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: titleSize,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          height: 1.15,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 4),

@@ -267,138 +267,135 @@ double percent(int value) {
   return (value / total) * 100;
 }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final chartSize = constraints.maxHeight * 0.65;
-          
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                /// LEFT COLUMN
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: chartSize,
-                      width: chartSize,
-                      child: PieChart(
-                        PieChartData(
-                          sectionsSpace: 0,
-                          centerSpaceRadius: 0,
-                          sections: [
-                            PieChartSectionData(
-                              value: widget.aayCount.toDouble(),
-                              color: Colors.amber,
-                              showTitle: false,
-                            ),
-                            PieChartSectionData(
-                              value: widget.phhCount.toDouble(),
-                              color: Colors.pink,
-                              showTitle: false,
-                            ),
-                            PieChartSectionData(
-                              value: widget.nphhCount.toDouble(),
-                              color: Colors.blue,
-                              showTitle: false,
-                            ),
-                            PieChartSectionData(
-                              value: widget.npnsCount.toDouble(),
-                              color: Colors.grey,
-                              showTitle: false,
-                            ),
-                          ],
-                        ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final chartSize = constraints.maxHeight * 0.65;
+        
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              /// LEFT COLUMN
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: chartSize,
+                    width: chartSize,
+                    child: PieChart(
+                      PieChartData(
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 0,
+                        sections: [
+                          PieChartSectionData(
+                            value: widget.aayCount.toDouble(),
+                            color: Colors.amber,
+                            showTitle: false,
+                          ),
+                          PieChartSectionData(
+                            value: widget.phhCount.toDouble(),
+                            color: Colors.pink,
+                            showTitle: false,
+                          ),
+                          PieChartSectionData(
+                            value: widget.nphhCount.toDouble(),
+                            color: Colors.blue,
+                            showTitle: false,
+                          ),
+                          PieChartSectionData(
+                            value: widget.npnsCount.toDouble(),
+                            color: Colors.grey,
+                            showTitle: false,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
-                        _LegendItem(color: Colors.amber, label: ' ${percent(widget.aayCount).toStringAsFixed(1)}%'),
-                        SizedBox(width: 6),
-                        _LegendItem(color: Colors.pink, label:  '${percent(widget.phhCount).toStringAsFixed(1)}%'),
-                      ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                      _LegendItem(color: Colors.amber, label: ' ${percent(widget.aayCount).toStringAsFixed(1)}%'),
+                      SizedBox(width: 6),
+                      _LegendItem(color: Colors.pink, label:  '${percent(widget.phhCount).toStringAsFixed(1)}%'),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                      _LegendItem(color: Colors.blue, label:  '${percent(widget.nphhCount).toStringAsFixed(1)}%' ),
+                      SizedBox(width: 6),
+                      _LegendItem(color: Colors.grey, label:   '${percent(widget.npnsCount).toStringAsFixed(1)}%'),
+                    ],
+                  ),
+                ],
+              ),
+    
+              const SizedBox(width: 6),
+    
+              /// RIGHT COLUMN
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _RationCard(
+                              imagePath: 'assets/dashboard/rationyellow.png',
+                              label: "മഞ്ഞ (AAY)",
+                              value: widget.aayCount,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: _RationCard(
+                              imagePath: "assets/dashboard/Group 1171275087.png",
+                              label: "പിങ്ക് (PHH)",
+                              value: widget.phhCount,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
-                        _LegendItem(color: Colors.blue, label:  '${percent(widget.nphhCount).toStringAsFixed(1)}%' ),
-                        SizedBox(width: 6),
-                        _LegendItem(color: Colors.grey, label:   '${percent(widget.npnsCount).toStringAsFixed(1)}%'),
-                      ],
+                    const SizedBox(height:2),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _RationCard(
+                              imagePath: "assets/dashboard/Group 1171275088.png",
+                              label: "നീല (NPHH)",
+                              value: widget.nphhCount,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: _RationCard(
+                              imagePath: "assets/dashboard/Group 1171275089.png",
+                              label: "വെള്ള (NPNS)",
+                              value: widget.npnsCount,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-
-                const SizedBox(width: 6),
-
-                /// RIGHT COLUMN
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _RationCard(
-                                imagePath: 'assets/dashboard/rationyellow.png',
-                                label: "മഞ്ഞ (AAY)",
-                                value: widget.aayCount,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: _RationCard(
-                                imagePath: "assets/dashboard/Group 1171275087.png",
-                                label: "പിങ്ക് (PHH)",
-                                value: widget.phhCount,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height:2),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _RationCard(
-                                imagePath: "assets/dashboard/Group 1171275088.png",
-                                label: "നീല (NPHH)",
-                                value: widget.nphhCount,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: _RationCard(
-                                imagePath: "assets/dashboard/Group 1171275089.png",
-                                label: "വെള്ള (NPNS)",
-                                value: widget.npnsCount,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

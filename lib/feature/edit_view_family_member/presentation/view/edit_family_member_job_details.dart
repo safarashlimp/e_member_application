@@ -551,6 +551,8 @@
 //     );
 //   }
 // }
+import 'dart:convert';
+
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
@@ -615,7 +617,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
-  bool _checkAllLoaded() {
+   bool _checkAllLoaded() {
     final employmentStatusState = context.read<EmploymentStatusBloc>().state;
     final jobState = context.read<JobBloc>().state;
     final skillsState = context.read<SkillsBloc>().state;
@@ -636,10 +638,29 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
     farmingTypeId = value.agricultureType;
     specifySkillLabel.text = value.skillDetails;
 
-    selectedSkillIds = (value.skills ?? '')
-        .split(',')
-        .where((e) => e.trim().isNotEmpty)
-        .toList();
+    // ✅ FIXED: Parse skills JSON array properly
+    try {
+      final skillsString = value.skills ?? '[]';
+      
+      // Handle both JSON array format and comma-separated format
+      if (skillsString.trim().startsWith('[')) {
+        // It's a JSON array like "[1, 2, 3]"
+        final decoded = jsonDecode(skillsString) as List;
+        selectedSkillIds = decoded.map((e) => e.toString()).toList();
+      } else {
+        // It's a comma-separated string like "1,2,3"
+        selectedSkillIds = skillsString
+            .split(',')
+            .where((e) => e.trim().isNotEmpty)
+            .map((e) => e.trim())
+            .toList();
+      }
+      
+      print('✅ Loaded skill IDs: $selectedSkillIds');
+    } catch (e) {
+      print('❌ Error parsing skills: $e');
+      selectedSkillIds = [];
+    }
 
     norkaRegisteredLabel = int.tryParse(value.norkaRegistered) ?? 0;
     surveyorNameLabel.text = value.surveyor;
@@ -657,6 +678,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
     super.initState();
     _populateFields(widget.data.data.first);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -1055,7 +1077,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                               final employmentModel = EmploymentModel(
                                 employmentStatusId: employmentStatusId ?? '',
                                 occupationId: jobStatusId ?? '',
-                                skills: selectedSkillIds.join(','),
+                                                               skills: jsonEncode(selectedSkillIds), 
                                 skillDetails: specifySkillLabel.text,
                                 needJobSupportId: employmentSupportId ?? '',
                                 norkaRegistered:

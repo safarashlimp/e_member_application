@@ -49,15 +49,38 @@ class EmploymentModel {
     required this.surveyor,
     this.wardMember,
   });
-
   factory EmploymentModel.fromJson(Map<String, dynamic> json) {
+    // ✅ FIXED: Properly handle skills as JSON array or string
+    String skillsValue = '[]';
+    
+    if (json['skills'] != null) {
+      if (json['skills'] is List) {
+        // If it's already a List, encode it
+        skillsValue = jsonEncode(json['skills']);
+      } else {
+        // If it's a string, keep it as is
+        skillsValue = json['skills'].toString();
+        
+        // Ensure it's a valid JSON array format
+        if (!skillsValue.trim().startsWith('[')) {
+          // If it's comma-separated like "1,2,3", convert to JSON array
+          final ids = skillsValue
+              .split(',')
+              .where((e) => e.trim().isNotEmpty)
+              .map((e) => e.trim())
+              .toList();
+          skillsValue = jsonEncode(ids);
+        }
+      }
+    }
+
 
     return EmploymentModel(
       id: json['id'],
       memberId: json['member_id'],
       employmentStatusId: json['employment_status_id'],
       occupationId: json['occupation_id'],
-      skills: json['skills'],
+      skills: skillsValue,
       skillDetails: json['skill_details'],
       needJobSupportId: json['need_job_support_id'],
       norkaRegistered: json['norka_registered'],

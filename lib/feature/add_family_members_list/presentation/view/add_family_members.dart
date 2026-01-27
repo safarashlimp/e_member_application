@@ -1642,7 +1642,7 @@ void _goToListPage() {
                                   SizedBox(height: 20),
                                   AppTextField(
                                     controller: surveyorNameLabel,
-                                    label: "സർവേ നടത്തിയ ആളുടെ പേര്",
+                                    label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
                                     focusedBorderColor: AppColor.primary,
@@ -1699,6 +1699,17 @@ void _goToListPage() {
                                 final dobApi =
                                     "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
 
+                              // ✅ Validate surveyor name field
+                              if (surveyorNameLabel.text.trim().isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                return;
+                              }
                                 try {
                                   // 🔹 GET USER ID (ward_member + surveyor)
                                   final prefs =
