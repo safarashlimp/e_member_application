@@ -38,8 +38,8 @@ class AppActionButton extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
                   ),
                   gradient: AppColor.primaryGradientLight,
                 ),

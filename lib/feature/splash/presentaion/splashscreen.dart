@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:e_member_app/core/AppData/appdata.dart';
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
@@ -23,23 +22,21 @@ class Splashscreen extends StatefulWidget {
   @override
   State<Splashscreen> createState() => _SplashscreenState();
 }
+
 class _SplashscreenState extends State<Splashscreen> {
-
-
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _checkAppFlow();
   }
 
- Future<void> _checkAppFlow() async {
+  Future<void> _checkAppFlow() async {
     final status = await _checkversionAndExpiry();
 
     if (!mounted) return;
 
-     
-  // checking expired screen 
+    // checking expired screen
     if (status == Appstatus.expired) {
       _goToExpired();
       return;
@@ -54,79 +51,67 @@ class _SplashscreenState extends State<Splashscreen> {
     _goNext();
   }
 
-
-
-
-
-
-
-
- @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Center(
-      child: Image.asset(
-        'assets/logo/logo.png',
-        width: 150,   // adjust as needed
-        height: 150,
-        fit: BoxFit.contain,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Image.asset(
+          'assets/logo/logo.png',
+          width: 150, // adjust as needed
+          height: 150,
+          fit: BoxFit.contain,
+        ),
       ),
-    ),
-  );
+    );
+  }
 
-
-
-
-
-}
-
- Future<String> _getAppVersion() async {
+  Future<String> _getAppVersion() async {
     final info = await PackageInfo.fromPlatform();
     return info.buildNumber;
   }
-Future<Appstatus> _checkversionAndExpiry() async {
-  final prefs = await SharedPreferences.getInstance();
-  final clientId = prefs.getString(PrefKeys.clientId) ?? "0";
-  final userId = prefs.getString(PrefKeys.userId) ?? "0";
 
-  final url = Uri.parse(
-    "https://emember.org/API/check_app.php?clientid=$clientId&userid=$userId",
-  );
+  Future<Appstatus> _checkversionAndExpiry() async {
+    final prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString(PrefKeys.clientId) ?? "0";
+    final userId = prefs.getString(PrefKeys.userId) ?? "0";
 
-  final response = await http.get(url);
+    final url = Uri.parse(
+      "https://emember.org/API/check_app.php?clientid=$clientId&userid=$userId",
+    );
 
-  if (response.statusCode != 200) {
-    return Appstatus.ok; 
+    final response = await http.get(url);
+
+    if (response.statusCode != 200) {
+      return Appstatus.ok;
+    }
+
+    final json = jsonDecode(response.body);
+
+    if (json["Status"] != true) {
+      return Appstatus.ok;
+    }
+
+    final data = json["data"][0];
+
+    //  App expired
+
+    if (data["expired"] == 1) {
+      return Appstatus.expired;
+    }
+
+    // 🔵 Version check
+    final backendVersion = Platform.isAndroid
+        ? data["Android_version_number"].toString()
+        : data["IOS_version_number"].toString();
+
+    if (AppData.versions.contains(backendVersion)) {
+      return Appstatus.ok;
+    }
+
+    return Appstatus.updateRequired;
   }
 
-  final json = jsonDecode(response.body);
-
-if (json["Status"] != true) {
-  return Appstatus.ok;
-}
-
-
-  final data = json["data"][0];
-
-  //  App expired
-  
-  if (data["expired"] == 1) {
-    return Appstatus.expired;
-  }
-
-  // 🔵 Version check
-  final backendVersion = Platform.isAndroid
-      ? data["Android_version_number"].toString()
-      : data["IOS_version_number"].toString();
-
-  if (AppData.versions.contains(backendVersion)) {
-    return Appstatus.ok;
-  }
-
-  return Appstatus.updateRequired;
-}
-
-void _goNext() async {
+  void _goNext() async {
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
 
@@ -144,7 +129,7 @@ void _goNext() async {
     }
   }
 
- void _goToDashboard() {
+  void _goToDashboard() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -154,16 +139,15 @@ void _goNext() async {
           final useCase = GetDashboardUseCase(repository);
 
           return BlocProvider(
-            create: (_) =>
-                DashboardBloc(useCase)..add(LoadDashboardEvent()),
-            child:  DashboardPage(),
+            create: (_) => DashboardBloc(useCase)..add(LoadDashboardEvent()),
+            child: DashboardPage(),
           );
         },
       ),
     );
   }
 
-   void _goToExpired() {
+  void _goToExpired() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => Expiredscreen()),
@@ -171,7 +155,7 @@ void _goNext() async {
   }
 
   void _goToUpdate() {
-  Navigator.pushReplacement(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) {
@@ -180,26 +164,19 @@ void _goNext() async {
           final useCase = GetDashboardUseCase(repository);
 
           return BlocProvider(
-            create: (_) =>
-                DashboardBloc(useCase)..add(LoadDashboardEvent()),
-            child:  DashboardPage(updateDiolog: true,),
+            create: (_) => DashboardBloc(useCase)..add(LoadDashboardEvent()),
+            child: DashboardPage(
+              updateDiolog: true,
+            ),
           );
         },
       ),
     );
   }
-
-
-
-
 }
 
-
-
-
-
-enum Appstatus{
-    ok,
+enum Appstatus {
+  ok,
   expired,
   updateRequired,
 }
