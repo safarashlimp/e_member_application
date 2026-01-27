@@ -7,6 +7,8 @@ import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_use
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_Servay_filter.dart';
 
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
@@ -19,14 +21,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ListSurveyReport extends StatefulWidget {
   final FamilySurveySectionType sectionType;
   final String postion;
-  const ListSurveyReport(
-      {super.key, required this.sectionType, required this.postion});
+  const ListSurveyReport({
+    super.key,
+    required this.sectionType,
+    required this.postion,
+  });
 
   @override
   State<ListSurveyReport> createState() => _ListSurveyReportState();
 }
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String get pageTitle {
     switch (widget.sectionType) {
       case FamilySurveySectionType.familyBasicDetails:
@@ -42,65 +49,136 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   //   context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
   // }
 
+  // Open filter drawer and wait for result
+  Future<void> _openFilterDrawer() async {
+    final result = await showGeneralDialog<Map<String, dynamic>>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Filter',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: _drawerChosing(),
+        );
+      },
+    );
+
+    // If filters were submitted, apply them
+    if (result != null) {
+      _applyFilters(result);
+    }
+  }
+
+  void _applyFilters(Map<String, dynamic> filters) {
+    print('🎯 Applying filters to list: $filters');
+    context.read<HeaderListBloc>().add(
+          ApplyFilters(widget.postion, filters),
+        );
+  }
+
+  void _clearFilters() {
+    context.read<HeaderListBloc>().add(ClearFilters(widget.postion));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       child: PopScope(
-     canPop: false, // ⛔ block default back
-    onPopInvoked: (didPop) {
-      if (didPop) return;
+        canPop: false, // ⛔ block default back
+        onPopInvoked: (didPop) {
+          if (didPop) return;
 
-    Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(
-    builder: (_) {
-      final datasource = DashboardRemoteDatasource();
-      final repository = DashboardRepositoryImpl(datasource);
-      final useCase = GetDashboardUseCase(repository);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) {
+                final datasource = DashboardRemoteDatasource();
+                final repository = DashboardRepositoryImpl(datasource);
+                final useCase = GetDashboardUseCase(repository);
 
-      return BlocProvider(
-        create: (_) =>
-            DashboardBloc(useCase)..add(LoadDashboardEvent()),
-        child: const DashboardPage(),
-      );
-    },
-  ),
-  (route) => false, // ✅ removes all previous routes
-);
-
-    },
+                return BlocProvider(
+                  create: (_) =>
+                      DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                  child: const DashboardPage(),
+                );
+              },
+            ),
+            (route) => false, // ✅ removes all previous routes
+          );
+        },
         child: Scaffold(
+          key: _scaffoldKey,
           backgroundColor: AppColor.secondary,
           body: Column(
             children: [
-           GradientHeader(
-  title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
-  onPress: () {
-    Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(
-    builder: (_) {
-      final datasource = DashboardRemoteDatasource();
-      final repository = DashboardRepositoryImpl(datasource);
-      final useCase = GetDashboardUseCase(repository);
+              GradientHeader(
+                title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
+                onPress: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        final datasource = DashboardRemoteDatasource();
+                        final repository = DashboardRepositoryImpl(datasource);
+                        final useCase = GetDashboardUseCase(repository);
 
-      return BlocProvider(
-        create: (_) =>
-            DashboardBloc(useCase)..add(LoadDashboardEvent()),
-        child: const DashboardPage(),
-      );
-    },
-  ),
-  (route) => false, // ✅ removes all previous routes
-);
-
-  },
-),
+                        return BlocProvider(
+                          create: (_) =>
+                              DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                          child: const DashboardPage(),
+                        );
+                      },
+                    ),
+                    (route) => false, // ✅ removes all previous routes
+                  );
+                },
+              ),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SearchFieldBar(hintText: 'വീട് നമ്പർ / പേര് തിരയുക'),
+                child: SearchFieldBar(
+                  onFilterTap: _openFilterDrawer,
+                  hintText: 'വീട് നമ്പർ / പേര് തിരയുക',
+                ),
+              ),
+
+              // Filter indicator chip
+              BlocBuilder<HeaderListBloc, HeaderListState>(
+                builder: (context, state) {
+                  if (state is HeaderListLoaded && state.hasFilters) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        children: [
+                          Chip(
+                            avatar: const Icon(
+                              Icons.filter_alt,
+                              size: 16,
+                              color: Color(0xFF0284C7),
+                            ),
+                            label: const Text(
+                              'ഫിൽട്ടർ പ്രയോഗിച്ചു',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            deleteIcon: const Icon(Icons.close, size: 16),
+                            onDeleted: _clearFilters,
+                            backgroundColor: const Color(0xFFE0F2FE),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
               ),
               Expanded(
                 child: Container(
@@ -113,14 +191,42 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                           color: AppColor.iconColor,
                         ));
                       }
-        
+
                       if (state is HeaderListLoaded) {
                         if (state.items.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'വിവരങ്ങൾ ലഭ്യമല്ല',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 64,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  state.hasFilters
+                                      ? 'ഫിൽട്ടറുകൾക്ക് യോജിക്കുന്ന വിവരങ്ങൾ ഇല്ല'
+                                      : 'വിവരങ്ങൾ ലഭ്യമല്ല',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                if (state.hasFilters) ...[
+                                  const SizedBox(height: 16),
+                                  ElevatedButton.icon(
+                                    onPressed: _clearFilters,
+                                    icon: const Icon(Icons.clear),
+                                    label: const Text('ഫിൽട്ടറുകൾ മായ്ക്കുക'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.iconColor,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
                           );
                         }
@@ -141,11 +247,11 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                           },
                         );
                       }
-        
+
                       if (state is HeaderListError) {
                         return Center(child: Text(state.message));
                       }
-        
+
                       return const SizedBox();
                     },
                   ),
@@ -156,5 +262,13 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
         ),
       ),
     );
+  }
+
+  Widget _drawerChosing() {
+    if (widget.postion == "1") {
+      return const AddSurveyFilterPage();
+    } else {
+      return const AddBasicDetailsFilter();
+    }
   }
 }

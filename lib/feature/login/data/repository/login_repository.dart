@@ -48,7 +48,10 @@ class LoginRepository {
     // }
 
     if (response.statusCode == 200) {
+      print(response);
       return userModelFromJson(response.body);
+
+
     } else {
       throw Exception('Failed to login: ${response.statusCode}');
     }

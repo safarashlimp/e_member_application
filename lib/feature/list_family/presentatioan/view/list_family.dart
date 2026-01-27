@@ -8,6 +8,11 @@ import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_use
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
+import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/view/education_drwer.dart';
+import 'package:e_member_app/feature/drawer/health_Details_.dart/presentation/view/health_details.dart';
+import 'package:e_member_app/feature/drawer/job_details/presentation/view/job_details_drawer.dart';
+import 'package:e_member_app/feature/drawer/members_details/presentation/view/members_details_drwer.dart';
+import 'package:e_member_app/feature/drawer/social_details/presentation/view/social_details.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_state.dart';
@@ -53,9 +58,13 @@ class _ListFamilyState extends State<ListFamily> {
 
   @override
   Widget build(BuildContext context) {
+        final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return SafeArea(
       top: false,
       child: Scaffold(
+        key:  _scaffoldKey,
+        drawer: drawerchosing(),
         // bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
         backgroundColor: AppColor.secondary,
         body: Column(
@@ -83,7 +92,11 @@ class _ListFamilyState extends State<ListFamily> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SearchFieldBar(),
+              child: SearchFieldBar(
+                onFilterTap: (){
+                   _scaffoldKey.currentState!.openDrawer();
+                },
+              ),
             ),
             Expanded(
               child: Container(
@@ -135,5 +148,24 @@ class _ListFamilyState extends State<ListFamily> {
         ),
       ),
     );
+  }
+
+  drawerchosing(){
+
+    if(widget.position=="1"){
+
+        return AddMemberDetailsDrawer();
+    }else if(widget.position=="2"){
+     return EducationDrawer();
+    }else if(widget.position=="3"){
+
+      return JobDetailsDrawer();
+
+    }else if (widget.position=="4"){
+      return HealthDetailsDrawer();
+    }else if (widget.position=="5"){
+      return SocialDetailDrawer();
+
+    }
   }
 }
