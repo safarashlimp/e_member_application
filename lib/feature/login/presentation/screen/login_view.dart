@@ -8,7 +8,6 @@ import 'package:e_member_app/feature/login/data/repository/login_repository.dart
 import 'package:e_member_app/feature/login/presentation/bloc/loginBloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
 import 'package:e_member_app/core/widget/text_field/app_text_field.dart';
 import 'package:e_member_app/core/util/validator/validator.dart';
@@ -16,7 +15,6 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
-
   @override
   State<LoginView> createState() => _LoginViewState();
 }
