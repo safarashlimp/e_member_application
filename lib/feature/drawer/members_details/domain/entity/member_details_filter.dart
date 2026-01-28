@@ -30,15 +30,28 @@ class MemberDetailsFilter {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'blood_group_id': bloodGroupId,
-      'gender_id': genderId,
-      'marital_status_id': maritalStatusId,
-      'religion_id': religionId,
-      'caste_id': casteId,
-    };
+ Map<String, dynamic> toMap() {
+  final Map<String, dynamic> data = {};
+
+  if (bloodGroupId != null) {
+    data['blood_group_id'] = bloodGroupId;
   }
+  if (genderId != null) {
+    data['gender_id'] = genderId;
+  }
+  if (maritalStatusId != null) {
+    data['marital_status_id'] = maritalStatusId;
+  }
+  if (religionId != null) {
+    data['religion_id'] = religionId;
+  }
+  if (casteId != null) {
+    data['caste_id'] = casteId;
+  }
+
+  return data;
+}
+
 
   @override
   String toString() {

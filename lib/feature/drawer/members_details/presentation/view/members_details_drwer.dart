@@ -392,19 +392,18 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: currentSelectionId != null
-                  ? () {
-                      if (state.canGoNext) {
-                        context.read<MemberDetailsBloc>().add(
-                              const MemberDetailsNextStep(),
-                            );
-                      } else {
-                        context.read<MemberDetailsBloc>().add(
-                              const MemberDetailsSubmit(),
-                            );
-                      }
-                    }
-                  : null,
+            onPressed: () {
+  if (state.canGoNext) {
+    context.read<MemberDetailsBloc>().add(
+          const MemberDetailsNextStep(),
+        );
+  } else {
+    context.read<MemberDetailsBloc>().add(
+          const MemberDetailsSubmit(),
+        );
+  }
+},
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0284C7),
                 padding: const EdgeInsets.symmetric(vertical: 14),

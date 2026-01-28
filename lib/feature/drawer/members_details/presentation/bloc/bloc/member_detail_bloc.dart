@@ -103,44 +103,50 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     }
   }
 
-  void _onOptionSelected(
-    MemberDetailsOptionSelected event,
-    Emitter<MemberDetailsState> emit,
-  ) {
-    MemberDetailsFilter updatedFilter;
+ void _onOptionSelected(
+  MemberDetailsOptionSelected event,
+  Emitter<MemberDetailsState> emit,
+) {
+  MemberDetailsFilter updatedFilter;
 
-    // Store ID instead of name
-    switch (event.filterKey) {
-      case 'രക്തഗ്രൂപ്പ്':
-        updatedFilter = state.filter.copyWith(bloodGroupId: event.optionId);
-        break;
-      case 'ലിംഗം':
-        updatedFilter = state.filter.copyWith(genderId: event.optionId);
-        break;
-      case 'വിവാഹസ്ഥിതി':
-        updatedFilter = state.filter.copyWith(maritalStatusId: event.optionId);
-        break;
-      case 'മതം':
-        updatedFilter = state.filter.copyWith(religionId: event.optionId);
-        break;
-      case 'ജാതി':
-        updatedFilter = state.filter.copyWith(casteId: event.optionId);
-        break;
-      default:
-        return;
-    }
-
-    emit(state.copyWith(filter: updatedFilter));
+  switch (event.filterKey) {
+    case 'രക്തഗ്രൂപ്പ്':
+      updatedFilter = state.filter.copyWith(bloodGroupId: event.optionId);
+      break;
+    case 'ലിംഗം':
+      updatedFilter = state.filter.copyWith(genderId: event.optionId);
+      break;
+    case 'വിവാഹസ്ഥിതി':
+      updatedFilter =
+          state.filter.copyWith(maritalStatusId: event.optionId);
+      break;
+    case 'മതം':
+      updatedFilter = state.filter.copyWith(religionId: event.optionId);
+      break;
+    case 'ജാതി':
+      updatedFilter = state.filter.copyWith(casteId: event.optionId);
+      break;
+    default:
+      return;
   }
 
-  void _onNextStep(
-    MemberDetailsNextStep event,
-    Emitter<MemberDetailsState> emit,
-  ) {
-    if (state.canGoNext && state.getCurrentSelection() != null) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
-    }
+  // ✅ ONLY update data
+  // ❌ NO step change here
+  emit(state.copyWith(filter: updatedFilter));
+}
+
+
+
+void _onNextStep(
+  MemberDetailsNextStep event,
+  Emitter<MemberDetailsState> emit,
+) {
+  if (state.canGoNext) {
+    emit(state.copyWith(currentStep: state.currentStep + 1));
   }
+}
+
+
 
   void _onPreviousStep(
     MemberDetailsPreviousStep event,
@@ -158,22 +164,26 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     emit(MemberDetailsState(steps: state.steps));
   }
 
-  void _onSubmit(
-    MemberDetailsSubmit event,
-    Emitter<MemberDetailsState> emit,
-  ) {
-    emit(state.copyWith(status: MemberDetailsStatus.loading));
+void _onSubmit(
+  MemberDetailsSubmit event,
+  Emitter<MemberDetailsState> emit,
+) {
+  emit(state.copyWith(status: MemberDetailsStatus.loading));
 
-    try {
-      // Print IDs that will be sent to backend
-      print('Member Details Filter IDs: ${state.filter.toMap()}');
-      
-      emit(state.copyWith(status: MemberDetailsStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-        status: MemberDetailsStatus.error,
-        errorMessage: e.toString(),
-      ));
-    }
+  try {
+     final rawMap = state.filter.toMap();
+
+    // 🔥 Remove null values
+    rawMap.removeWhere((key, value) => value == null);
+    
+    print('Member Details Filter IDs: ${state.filter.toMap()}');
+    emit(state.copyWith(status: MemberDetailsStatus.success));
+  } catch (e) {
+    emit(state.copyWith(
+      status: MemberDetailsStatus.error,
+      errorMessage: e.toString(),
+    ));
   }
+}
+
 }
