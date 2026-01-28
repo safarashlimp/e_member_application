@@ -14,15 +14,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardPage extends StatefulWidget {
- final  bool ? updateDiolog;
-   const DashboardPage({super.key,this.updateDiolog});
+  final bool? updateDiolog;
+  const DashboardPage({super.key, this.updateDiolog});
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-    DateTime? _lastBackPressed;
+  DateTime? _lastBackPressed;
 
   Future<bool> _onWillPop() async {
     final now = DateTime.now();
@@ -42,24 +42,22 @@ class _DashboardPageState extends State<DashboardPage> {
     return true; // ✅ Exit app
   }
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-
-if(widget.updateDiolog==true){
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    showAppUpdateDialog(context);
-  });
-}
-}
-
+    if (widget.updateDiolog == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showAppUpdateDialog(context);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-        child:  PopScope(
+      child: PopScope(
         canPop: false,
         onPopInvoked: (didPop) async {
           if (didPop) return;
@@ -86,13 +84,13 @@ if(widget.updateDiolog==true){
                   builder: (context, constraints) {
                     // Calculate available height
                     final headerHeight = 100.0;
-        
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// FIXED HEADER
                         DashBoardHeader(height: headerHeight),
-        
+
                         /// FLEXIBLE CONTENT
                         Expanded(
                           child: LayoutBuilder(
@@ -100,12 +98,12 @@ if(widget.updateDiolog==true){
                               // Calculate dynamic spacing
                               final spacing =
                                   contentConstraints.maxHeight * 0.01;
-        
+
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(height: spacing),
-        
+
                                   // Top Stats - 10% of content height
                                   Flexible(
                                     flex: 10,
@@ -119,9 +117,9 @@ if(widget.updateDiolog==true){
                                       ),
                                     ),
                                   ),
-        
+
                                   SizedBox(height: spacing),
-        
+
                                   // Gender Section - 18% of content height
                                   Flexible(
                                     flex: 24,
@@ -134,9 +132,9 @@ if(widget.updateDiolog==true){
                                       farmersCount: d.farmers,
                                     ),
                                   ),
-        
+
                                   SizedBox(height: spacing),
-        
+
                                   // Ration Header
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -150,12 +148,13 @@ if(widget.updateDiolog==true){
                                       ),
                                     ),
                                   ),
-        
+
                                   // Ration Section - 25% of content height
                                   Flexible(
                                     flex: 22,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
                                       child: RationSection(
                                         aayCount: d.rationAay,
                                         phhCount: d.rationPhh,
@@ -164,9 +163,9 @@ if(widget.updateDiolog==true){
                                       ),
                                     ),
                                   ),
-        
+
                                   SizedBox(height: spacing),
-        
+
                                   // Bottom Cards Header
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -180,7 +179,7 @@ if(widget.updateDiolog==true){
                                       ),
                                     ),
                                   ),
-        
+
                                   // Bottom Cards - 22% of content height
                                   Flexible(
                                     flex: 26,
@@ -190,7 +189,6 @@ if(widget.updateDiolog==true){
                                       harithakarmasenaCount: d.harithakarmasena,
                                     ),
                                   ),
-        
                                 ],
                               );
                             },
@@ -201,7 +199,7 @@ if(widget.updateDiolog==true){
                   },
                 );
               }
-        
+
               return SizedBox();
             },
           ),
@@ -209,6 +207,4 @@ if(widget.updateDiolog==true){
       ),
     );
   }
-  
-
 }
