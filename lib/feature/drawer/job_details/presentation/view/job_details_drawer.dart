@@ -359,84 +359,80 @@ class _JobDetailsDrawerContent extends StatelessWidget {
       ),
     );
   }
+Widget _buildBottomButtons(
+  BuildContext context,
+  JobDetailsDrawerState state,
+  String? currentSelection,
+) {
+  return Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 10,
+          offset: const Offset(0, -2),
+        ),
+      ],
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () {
+              context.read<JobDetailsDrawerBloc>().add(
+                    JobDetailsDrawerReset(),
+                  );
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              side: const BorderSide(color: Color(0xFF0284C7)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'എല്ലാം ശൂന്യമാക്കുക',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF0284C7),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ElevatedButton(
+  onPressed: () {
+    if (state.canGoNext) {
+      context.read<JobDetailsDrawerBloc>().add(JobDetailsDrawerNextStep());
+    } else {
+      context.read<JobDetailsDrawerBloc>().add(JobDetailsDrawerSubmit());
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFF0284C7),
+    padding: const EdgeInsets.symmetric(vertical: 14),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  child: const Text(
+    'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+    style: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+  ),
+),
 
-  Widget _buildBottomButtons(
-    BuildContext context,
-    JobDetailsDrawerState state,
-    String? currentSelection,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: OutlinedButton(
-              onPressed: () {
-                context.read<JobDetailsDrawerBloc>().add(JobDetailsDrawerReset());
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                side: const BorderSide(color: Color(0xFF0284C7)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'എല്ലാം ശൂന്യമാക്കുക',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0284C7),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: currentSelection != null
-                  ? () {
-                      if (state.canGoNext) {
-                        context.read<JobDetailsDrawerBloc>().add(
-                              JobDetailsDrawerNextStep(),
-                            );
-                      } else {
-                        context.read<JobDetailsDrawerBloc>().add(
-                              JobDetailsDrawerSubmit(),
-                            );
-                      }
-                    }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0284C7),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                disabledBackgroundColor: Colors.grey.shade300,
-              ),
-              child: const Text(
-                'ഫിൽട്ടർ പ്രയോഗിക്കുക',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 }

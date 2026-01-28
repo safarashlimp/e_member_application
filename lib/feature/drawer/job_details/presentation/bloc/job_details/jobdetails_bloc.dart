@@ -75,9 +75,10 @@ class JobDetailsDrawerBloc extends Bloc<JobDetailsDrawerEvent, JobDetailsDrawerS
     JobDetailsDrawerNextStep event,
     Emitter<JobDetailsDrawerState> emit,
   ) {
-    if (state.canGoNext && state.getCurrentSelection() != null) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
-    }
+    if (state.canGoNext) {
+  emit(state.copyWith(currentStep: state.currentStep + 1));
+}
+
   }
 
   void _onPreviousStep(
