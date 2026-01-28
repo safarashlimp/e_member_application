@@ -81,9 +81,10 @@ class SocialDrawerBloc extends Bloc<SocialDrawerEvent, SocialDrawerState> {
     SocialDrawerNextStep event,
     Emitter<SocialDrawerState> emit,
   ) {
-    if (state.canGoNext && state.getCurrentSelection() != null) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
-    }
+   if (state.canGoNext) {
+  emit(state.copyWith(currentStep: state.currentStep + 1));
+}
+
   }
 
   void _onPreviousStep(

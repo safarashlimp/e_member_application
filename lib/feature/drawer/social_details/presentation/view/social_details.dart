@@ -409,8 +409,8 @@ class _SocialDetailDrawerContent extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: currentSelection != null
-                  ? () {
+              onPressed:
+                   () {
                       if (state.canGoNext) {
                         context.read<SocialDrawerBloc>().add(
                               SocialDrawerNextStep(),
@@ -421,7 +421,7 @@ class _SocialDetailDrawerContent extends StatelessWidget {
                             );
                       }
                     }
-                  : null,
+                ,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0284C7),
                 padding: const EdgeInsets.symmetric(vertical: 14),
