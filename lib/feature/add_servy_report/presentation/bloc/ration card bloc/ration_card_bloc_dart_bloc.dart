@@ -3,7 +3,6 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%2
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ration%20card%20bloc/ration_card_bloc_dart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class RationCardBloc extends Bloc<RationCardEvent, RationCardState> {
   final FamilyDropRepository repository;
 

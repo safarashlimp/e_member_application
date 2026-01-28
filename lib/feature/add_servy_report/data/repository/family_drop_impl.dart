@@ -5,26 +5,26 @@ import 'package:http/http.dart' as http;
 
 class FamilyDropRepositoryImpl implements FamilyDropRepository {
   @override
-Future<List<FamilyDropItem>> rationCardType() async {
-  final response = await http.get(
-    Uri.parse(
-      "https://emember.org/API/family_drops.php?clientid=1&posistion=1",
-    ),
-  );
+  Future<List<FamilyDropItem>> rationCardType() async {
+    final response = await http.get(
+      Uri.parse(
+        "https://emember.org/API/family_drops.php?clientid=1&posistion=1",
+      ),
+    );
 
-  if (response.statusCode == 200) {
-    final jsonData = json.decode(response.body);
-    final model = FamilyDropResponse.fromJson(jsonData);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final model = FamilyDropResponse.fromJson(jsonData);
 
-    if (model.status) {
-      return model.data;
+      if (model.status) {
+        return model.data;
+      } else {
+        throw Exception("API status false");
+      }
     } else {
-      throw Exception("API status false");
+      throw Exception("Server error ${response.statusCode}");
     }
-  } else {
-    throw Exception("Server error ${response.statusCode}");
   }
-}
 
   @override
   Future<List<FamilyDropItem>> getHouseTypes() async {
@@ -42,73 +42,76 @@ Future<List<FamilyDropItem>> rationCardType() async {
       throw Exception("Failed to load house types");
     }
   }
-  
- @override
-Future<List<FamilyDropItem>> getLandTypes() async {
-  final response = await http.get(
-    Uri.parse(
-      "https://emember.org/API/family_drops.php?clientid=1&posistion=3",
-    ),
-  );
 
-  final jsonData = json.decode(response.body);
-  final model = FamilyDropResponse.fromJson(jsonData);
-  return model.data;
-}
-@override
-Future<List<FamilyDropItem>> getWaterFacilities() async {
-  final response = await http.get(
-    Uri.parse(
-      "https://emember.org/API/family_drops.php?clientid=1&posistion=4",
-    ),
-  );
+  @override
+  Future<List<FamilyDropItem>> getLandTypes() async {
+    final response = await http.get(
+      Uri.parse(
+        "https://emember.org/API/family_drops.php?clientid=1&posistion=3",
+      ),
+    );
 
-  final jsonData = json.decode(response.body);
-  final model = FamilyDropResponse.fromJson(jsonData);
-  return model.data;
-}
-
-@override
-Future<List<FamilyDropItem>> getRequiredBenefits() async {
-  final response = await http.get(
-    Uri.parse(
-      "https://emember.org/API/family_drops.php?clientid=1&posistion=5",
-    ),
-  );
-
-  if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
     final model = FamilyDropResponse.fromJson(jsonData);
     return model.data;
-  } else {
-    throw Exception("Failed to load required benefits");
   }
-}
-@override
-Future<List<FamilyDropItem>> getOtherBenefits() async {
-  final response = await http.get(
-    Uri.parse("https://emember.org/API/family_drops.php?clientid=1&posistion=6"),
-  );
 
-  final jsonData = json.decode(response.body);
-  final model = FamilyDropResponse.fromJson(jsonData);
-  return model.data;
-}
-@override
-Future<List<FamilyDropItem>> getWardGeneralNeeds() async {
-  final response = await http.get(
-    Uri.parse(
-      "https://emember.org/API/family_drops.php?clientid=1&posistion=7",
-    ),
-  );
+  @override
+  Future<List<FamilyDropItem>> getWaterFacilities() async {
+    final response = await http.get(
+      Uri.parse(
+        "https://emember.org/API/family_drops.php?clientid=1&posistion=4",
+      ),
+    );
 
-  if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
     final model = FamilyDropResponse.fromJson(jsonData);
     return model.data;
-  } else {
-    throw Exception("Failed to load ward general needs");
   }
-}
 
+  @override
+  Future<List<FamilyDropItem>> getRequiredBenefits() async {
+    final response = await http.get(
+      Uri.parse(
+        "https://emember.org/API/family_drops.php?clientid=1&posistion=5",
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final model = FamilyDropResponse.fromJson(jsonData);
+      return model.data;
+    } else {
+      throw Exception("Failed to load required benefits");
+    }
+  }
+
+  @override
+  Future<List<FamilyDropItem>> getOtherBenefits() async {
+    final response = await http.get(
+      Uri.parse(
+          "https://emember.org/API/family_drops.php?clientid=1&posistion=6"),
+    );
+
+    final jsonData = json.decode(response.body);
+    final model = FamilyDropResponse.fromJson(jsonData);
+    return model.data;
+  }
+
+  @override
+  Future<List<FamilyDropItem>> getWardGeneralNeeds() async {
+    final response = await http.get(
+      Uri.parse(
+        "https://emember.org/API/family_drops.php?clientid=1&posistion=7",
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final model = FamilyDropResponse.fromJson(jsonData);
+      return model.data;
+    } else {
+      throw Exception("Failed to load ward general needs");
+    }
+  }
 }

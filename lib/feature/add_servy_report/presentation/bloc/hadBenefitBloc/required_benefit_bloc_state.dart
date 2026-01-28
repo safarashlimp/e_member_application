@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:e_member_app/feature/add_servy_report/data/model/family_dropdown_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,7 +7,9 @@ abstract class RequiredBenefitState extends Equatable {
 }
 
 class RequiredBenefitInitial extends RequiredBenefitState {}
+
 class RequiredBenefitLoading extends RequiredBenefitState {}
+
 class RequiredBenefitLoaded extends RequiredBenefitState {
   final List<FamilyDropItem> items;
 
@@ -20,6 +18,7 @@ class RequiredBenefitLoaded extends RequiredBenefitState {
   @override
   List<Object?> get props => [items];
 }
+
 class RequiredBenefitError extends RequiredBenefitState {
   final String message;
 

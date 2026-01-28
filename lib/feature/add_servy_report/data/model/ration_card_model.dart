@@ -1,4 +1,3 @@
-
 class RationCard {
   final int id;
   final String name;

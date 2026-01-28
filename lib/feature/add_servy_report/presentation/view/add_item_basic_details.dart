@@ -57,89 +57,91 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   }
 
   bool _isSaving = false;
-  bool hasAttemptedSubmit = false; // Track if user has tried to submit
-void showSuccessDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Color(0xff0FA958),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Saved Successfully",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff0FA958),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 68,
-              height: 29,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(AppColor.button),
-                 
-
-                ),
-                onPressed: () {
-                  Navigator.pop(context); // close dialog
-                  _goToListPage();        // then navigate
-                },
-                child: const Text("OK", style: TextStyle(color: AppColor.white),),
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-void _goToListPage() {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(
-      builder: (_) => BlocProvider(
-        create: (_) => HeaderListBloc(
-          GetHeaderListUsecase(
-            HeaderListRepositoryImpl(http.Client()),
+  bool hasAttemptedSubmit = false;
+  void showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        )..add(FetchHeaderList('1')),
-        child: const ListSurveyReport(
-          sectionType: FamilySurveySectionType.familyBasicDetails,
-          postion: '1',
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 70,
+                height: 70,
+                decoration: const BoxDecoration(
+                  color: Color(0xff0FA958),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Saved Successfully",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0FA958),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 68,
+                height: 29,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(AppColor.button),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context); // close dialog
+                    _goToListPage(); // then navigate
+                  },
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(color: AppColor.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _goToListPage() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => HeaderListBloc(
+            GetHeaderListUsecase(
+              HeaderListRepositoryImpl(http.Client()),
+            ),
+          )..add(FetchHeaderList('1')),
+          child: const ListSurveyReport(
+            sectionType: FamilySurveySectionType.familyBasicDetails,
+            postion: '1',
+          ),
         ),
       ),
-    ),
-    (route) => false,
-  );
-}
+      (route) => false,
+    );
+  }
 
   void _populateFieldsFromScreen2(Datum datum) {
     selectedHouseTypeId = datum.houseTypeId;
@@ -226,7 +228,6 @@ void _goToListPage() {
           children: [
             BlocBuilder<HouseTypeBloc, HouseTypeState>(
               builder: (context, state) {
-                // Don't show loading here - let _isAnyBlocLoading handle it
                 if (state is HouseTypeError) {
                   return Center(child: Text('Error: ${state.message}'));
                 }
@@ -700,7 +701,6 @@ void _goToListPage() {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 30),
                             if (isAdd) ...[
                               _isSaving
                                   ? const Center(
@@ -809,18 +809,6 @@ void _goToListPage() {
       hasAttemptedSubmit = true;
     });
 
-    if (!_formKey.currentState!.validate() || selectedHouseTypeId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('ദയവായി എല്ലാ ആവശ്യമായ ഫീൽഡുകളും പൂരിപ്പിക്കുക'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
-
     final screen2 = widget.screen2HeaderData!;
     final int editId = int.parse(screen2.data.first.id);
     final int householdId = int.parse(screen2.data.first.householdId);
@@ -854,19 +842,31 @@ void _goToListPage() {
 
     final header = widget.headerData;
 
-   if (selectedHouseType == null || selectedHouseType!.isEmpty) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: const Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-    ),
-  );
-  return;
-}
+    if (selectedHouseType == null || selectedHouseType!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      );
+      return;
+    }
 
+    if (surveyornamecontroller.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          content: Text("സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+        ),
+      );
+      return;
+    }
 
     if (header == null ||
         header.houseChief.isEmpty ||
@@ -889,48 +889,46 @@ void _goToListPage() {
 
     setState(() => _isSaving = true);
 
-   try {
-  await HeaderSaveRepository().saveSurveyHeader(
-    surveyor: surveyornamecontroller.text,
-    houseChief: header.houseChief,
-    houseNumber: header.houseNumber,
-    houseName: header.houseName,
-    rationCardNumber: header.rationCardNumber,
-    rationCardTypeId: header.rationCardTypeId,
-    annualIncome: header.annualIncome,
-    hasJobCard: header.hasJobCard,
-    kudumbashreeMember: header.kudumbashreeMember,
-    govtBeneficiary: header.govtBeneficiary,
-    extremePoor: header.extremePoor,
-    houseTypeId: selectedHouseTypeId!,
-    landTypeId:
-        selectedLandTypeId != null ? int.tryParse(selectedLandTypeId!) : null,
-    landAreaCents: selectedLandAreaController.text,
-    hasToilet: toilet,
-    hasElectricity: electricityConnection,
-    drinkingWaterSourceId: selectedWaterFacilityId ?? '0',
-    receivedHousingBenefit: benefitsReceived,
-    receivedBenefits:
-        benefitsReceived == 1 ? selectedRequiredBenefitId : '0',
-    needHousingBenefit: benefitsWanted,
-    benefitsRequired:
-        benefitsWanted == 1 ? selectedOtherBenefitId : '0',
-    wardNeeds: selectedGeneralNeedId,
-  );
+    try {
+      await HeaderSaveRepository().saveSurveyHeader(
+        surveyor: surveyornamecontroller.text,
+        houseChief: header.houseChief,
+        houseNumber: header.houseNumber,
+        houseName: header.houseName,
+        rationCardNumber: header.rationCardNumber,
+        rationCardTypeId: header.rationCardTypeId,
+        annualIncome: header.annualIncome,
+        hasJobCard: header.hasJobCard,
+        kudumbashreeMember: header.kudumbashreeMember,
+        govtBeneficiary: header.govtBeneficiary,
+        extremePoor: header.extremePoor,
+        houseTypeId: selectedHouseTypeId!,
+        landTypeId: selectedLandTypeId != null
+            ? int.tryParse(selectedLandTypeId!)
+            : null,
+        landAreaCents: selectedLandAreaController.text,
+        hasToilet: toilet,
+        hasElectricity: electricityConnection,
+        drinkingWaterSourceId: selectedWaterFacilityId ?? '0',
+        receivedHousingBenefit: benefitsReceived,
+        receivedBenefits:
+            benefitsReceived == 1 ? selectedRequiredBenefitId : '0',
+        needHousingBenefit: benefitsWanted,
+        benefitsRequired: benefitsWanted == 1 ? selectedOtherBenefitId : '0',
+        wardNeeds: selectedGeneralNeedId,
+      );
 
-  // ✅ SHOW SUCCESS DIALOG
-  showSuccessDialog(context);
-
-} catch (e) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(e.toString()),
-      backgroundColor: Colors.red,
-    ),
-  );
-} finally {
-  setState(() => _isSaving = false);
-}
-
+      // ✅ SHOW SUCCESS DIALOG
+      showSuccessDialog(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() => _isSaving = false);
+    }
   }
 }

@@ -1,4 +1,4 @@
-//  dropdown model for  acessing dropdwong values  
+//  dropdown model for  acessing dropdwong values
 class DropdownItem {
   final String id;
   final String name;

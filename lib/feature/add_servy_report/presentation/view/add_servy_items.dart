@@ -61,9 +61,8 @@ class _AddServyItemsState extends State<AddServyItems> {
 
   String? selectedRationCardLabel;
   String? selectedRationCardId;
-  //bool showRationCardError = false;
   bool hasAttemptedSubmit = false; // Track if user has tried to submit
-  
+
   String? gender;
   int rationCard = 0;
   int casteCert = 0;
@@ -76,21 +75,6 @@ class _AddServyItemsState extends State<AddServyItems> {
 
   int? selectedRationCard;
 
-  Color rationCardBgColor(int id) {
-    switch (id) {
-      case 1:
-        return const Color(0xFFFFF4C2);
-      case 2:
-        return const Color(0xFFFFC1D9);
-      case 3:
-        return const Color(0xFFBFD9FF);
-      case 4:
-        return const Color(0xFFF1F1F1);
-      default:
-        return Colors.white;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -102,7 +86,7 @@ class _AddServyItemsState extends State<AddServyItems> {
       houseName.text = widget.headerData!.houseName;
       houseNumber.text = widget.headerData!.houseNumber;
       cardNumber.text = widget.headerData!.rationCardNumber;
-     anualIncome.text = widget.headerData?.annualIncome ?? '';
+      anualIncome.text = widget.headerData?.annualIncome ?? '';
 
       selectedRationCardId = widget.headerData!.rationCardTypeId;
       rationCard = widget.headerData!.hasJobCard;
@@ -123,9 +107,7 @@ class _AddServyItemsState extends State<AddServyItems> {
 
   void _clearValidationOnChange() {
     if (hasAttemptedSubmit) {
-      setState(() {
-        // This will trigger a rebuild and re-validate
-      });
+      setState(() {});
     }
   }
 
@@ -143,7 +125,6 @@ class _AddServyItemsState extends State<AddServyItems> {
   void _handleSubmit(BuildContext context) {
     setState(() {
       hasAttemptedSubmit = true;
-
     });
 
     if (isAdd) {
@@ -153,7 +134,7 @@ class _AddServyItemsState extends State<AddServyItems> {
         houseName: houseName.text,
         rationCardNumber: cardNumber.text,
         rationCardTypeId: selectedRationCardId.toString(),
-        annualIncome: double.tryParse(anualIncome.text)?.toString() ,
+        annualIncome: double.tryParse(anualIncome.text)?.toString(),
         hasJobCard: rationCard,
         kudumbashreeMember: casteCert,
         govtBeneficiary: disability,
@@ -330,7 +311,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         focusedBorderColor: AppColor.primary,
                                         labelfontSizes: 12,
                                         textColor: AppColor.primary,
-                                        validator: Validator.houseNumberValidator,
+                                        validator:
+                                            Validator.houseNumberValidator,
                                         width: double.infinity,
                                         type: "house_number",
                                         height: 40,
@@ -339,13 +321,13 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     SizedBox(width: 20),
                                     Expanded(
                                       child: AppTextField(
-                                        controller:  anualIncome,
+                                        controller: anualIncome,
                                         label: "വാർഷിക വരുമാനം",
                                         labelColor: AppColor.hintText2,
                                         borderColor: AppColor.borderColor,
                                         focusedBorderColor: AppColor.primary,
                                         labelfontSizes: 12,
-                                       // validator: Validator.validateIncome,
+                                        // validator: Validator.validateIncome,
                                         type: "income",
                                         textColor: AppColor.primary,
                                         width: double.infinity,
@@ -362,7 +344,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         controller: cardNumber,
                                         label: "* റേഷൻ കാർഡ് നമ്പർ",
                                         type: "card_number",
-                                        validator: Validator.cardNumberValidator,
+                                        validator:
+                                            Validator.cardNumberValidator,
                                         labelColor: AppColor.hintText2,
                                         borderColor: AppColor.borderColor,
                                         focusedBorderColor: AppColor.primary,
@@ -379,44 +362,55 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         builder: (context, state) {
                                           if (state is RationCardLoading) {
                                             return const Center(
-                                              child: CircularProgressIndicator(),
+                                              child:
+                                                  CircularProgressIndicator(),
                                             );
                                           }
 
-                                            if (state is RationCardLoaded) {
-                                              if (selectedRationCardId != null &&
-                                                  selectedRationCardLabel == null) {
-                                                final match = state.items.firstWhere(
-                                                  (e) => e.id == selectedRationCardId,
-                                                  orElse: () => state.items.first,
-                                                );
-                                                selectedRationCardLabel = match.name;
-                                              }
-                                              
-                                              return AppDropdownField<String>(
-                                                label: '* റേഷൻ കാർഡ് തരം',
-                                                selectedValue: selectedRationCardLabel,
-                                                borderColor: AppColor.borderColor,
-                                                selectedTextColor: AppColor.primary,
-                                                dropdownTextColor: AppColor.hintText2,
-                                                labelColor: AppColor.hintText2,
-                                                iconColor: AppColor.black,
-                                                dropdownBgColor: AppColor.white,
-                                                items: state.items
-                                                    .map((e) => e.name)
-                                                    .toList(),
-                                        
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedRationCardLabel = value;
-                                                    selectedRationCardId = state.items
-                                                        .firstWhere((e) => e.name == value)
-                                                        .id;
-                                                  // showRationCardError = false;
-                                                  });
-                                                },
+                                          if (state is RationCardLoaded) {
+                                            if (selectedRationCardId != null &&
+                                                selectedRationCardLabel ==
+                                                    null) {
+                                              final match =
+                                                  state.items.firstWhere(
+                                                (e) =>
+                                                    e.id ==
+                                                    selectedRationCardId,
+                                                orElse: () => state.items.first,
                                               );
+                                              selectedRationCardLabel =
+                                                  match.name;
                                             }
+
+                                            return AppDropdownField<String>(
+                                              label: '* റേഷൻ കാർഡ് തരം',
+                                              selectedValue:
+                                                  selectedRationCardLabel,
+                                              borderColor: AppColor.borderColor,
+                                              selectedTextColor:
+                                                  AppColor.primary,
+                                              dropdownTextColor:
+                                                  AppColor.hintText2,
+                                              labelColor: AppColor.hintText2,
+                                              iconColor: AppColor.black,
+                                              dropdownBgColor: AppColor.white,
+                                              items: state.items
+                                                  .map((e) => e.name)
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedRationCardLabel =
+                                                      value;
+                                                  selectedRationCardId = state
+                                                      .items
+                                                      .firstWhere((e) =>
+                                                          e.name == value)
+                                                      .id;
+                                                  // showRationCardError = false;
+                                                });
+                                              },
+                                            );
+                                          }
 
                                           return const SizedBox();
                                         },
@@ -428,19 +422,23 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 AppRadioField(
                                   label: "തൊഴിൽ ഉറപ്പ് കാർഡ് ഉണ്ടോ?",
                                   value: rationCard,
-                                  onChanged: (v) => setState(() => rationCard = v),
+                                  onChanged: (v) =>
+                                      setState(() => rationCard = v),
                                 ),
                                 const SizedBox(height: 18),
                                 AppRadioField(
                                   label: "കുടുംബശ്രീ അംഗമാണോ?",
                                   value: casteCert,
-                                  onChanged: (v) => setState(() => casteCert = v),
+                                  onChanged: (v) =>
+                                      setState(() => casteCert = v),
                                 ),
                                 const SizedBox(height: 18),
                                 AppRadioField(
-                                  label: "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
+                                  label:
+                                      "സർക്കാർ അനുകൂല്യങ്ങൾ ലഭിക്കുന്നുണ്ടോ?",
                                   value: disability,
-                                  onChanged: (v) => setState(() => disability = v),
+                                  onChanged: (v) =>
+                                      setState(() => disability = v),
                                 ),
                                 const SizedBox(height: 18),
                                 AppRadioField(
@@ -465,79 +463,115 @@ class _AddServyItemsState extends State<AddServyItems> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 24),
                           if (isAdd) ...[
                             Row(
                               children: [
                                 const Spacer(),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
                                   child: AppActionButton(
                                     label: "അടുത്തത്",
                                     onPressed: () {
-                                      
-                                      
-    if (gardienName.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-           behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-          content: Text("കുടുംബനാഥൻ്റെ പേര് നൽകുക")),
-      );
-      return;
-    }
+                                      if (gardienName.text.trim().isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content: Text(
+                                                  "കുടുംബനാഥൻ്റെ പേര് നൽകുക")),
+                                        );
+                                        return;
+                                      }
 
-    if (houseName.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(
-               behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-        content: Text("വീട്ടുപേര് നൽകുക")),
-      );
-      return;
-    }
+                                      if (houseName.text.trim().isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content:
+                                                  Text("വീട്ടുപേര് നൽകുക")),
+                                        );
+                                        return;
+                                      }
 
-    if (houseNumber.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(
-               behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-        content: Text("വീട്ടുനമ്പർ നൽകുക")),
-      );
-      return;
-    }
-      if (cardNumber.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-                 behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-          content: Text("റേഷൻ കാർഡ് നമ്പർ നൽകുക")),
-      );
-      return;
-    }
+                                      if (houseNumber.text.trim().isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content:
+                                                  Text("വീട്ടുനമ്പർ നൽകുക")),
+                                        );
+                                        return;
+                                      }
+                                      if (cardNumber.text.trim().isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content: Text(
+                                                  "റേഷൻ കാർഡ് നമ്പർ നൽകുക")),
+                                        );
+                                        return;
+                                      }
 
-    if (selectedRationCardId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-               behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-        content: Text("റേഷൻ കാർഡ് തരം തിരഞ്ഞെടുക്കുക")),
-      );
-      return;
-    }
-
-  
-                                       _handleSubmit(context);},
+                                      if (selectedRationCardId == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content: Text(
+                                                  "റേഷൻ കാർഡ് തരം തിരഞ്ഞെടുക്കുക")),
+                                        );
+                                        return;
+                                      }
+                                    if (isEdit){
+                                      if (surveyornamecontroller.text
+                                          .trim()
+                                          .isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            content: Text(
+                                                "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    }
+                                      _handleSubmit(context);
+                                    },
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
                                       fontSize: 15,
@@ -551,7 +585,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                             ),
                           ],
                           if (isEdit) ...[
-                            BlocConsumer<HouseholdSubmitBloc, HouseholdSubmitState>(
+                            BlocConsumer<HouseholdSubmitBloc,
+                                HouseholdSubmitState>(
                               listener: (context, state) {
                                 if (state is HouseholdSubmitSuccess) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -566,7 +601,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                       builder: (_) => BlocProvider(
                                         create: (_) => HeaderListBloc(
                                           GetHeaderListUsecase(
-                                            HeaderListRepositoryImpl(http.Client()),
+                                            HeaderListRepositoryImpl(
+                                                http.Client()),
                                           ),
                                         )..add(FetchHeaderList('1')),
                                         child: const ListSurveyReport(
