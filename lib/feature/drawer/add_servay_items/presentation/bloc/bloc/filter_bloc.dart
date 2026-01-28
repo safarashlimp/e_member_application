@@ -4,7 +4,6 @@ import 'package:e_member_app/feature/drawer/add_servay_items/domain/ussecase/sub
 import 'package:e_member_app/feature/drawer/add_servay_items/presentation/bloc/bloc/filter_event.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/presentation/bloc/bloc/filter_state.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/domain/entity/filter_selection.dart';
-
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
   final GetFilterOptions getFilterOptions;
   final SubmitFilters submitFilters;
@@ -17,6 +16,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     on<ChangeStep>(_onChangeStep);
     on<SelectOption>(_onSelectOption);
     on<ClearAllFilters>(_onClearAllFilters);
+    on<NextStep>(_onNextStep); // NEW
     on<SubmitFilterEvent>(_onSubmitFilters);
   }
 
@@ -25,15 +25,14 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     Emitter<FilterState> emit,
   ) async {
     emit(state.copyWith(status: FilterStatus.loading));
-    
     try {
       final options = await getFilterOptions();
-      
+
       final initialSelections = <String, String?>{};
       for (final option in options) {
         initialSelections[option.id] = null;
       }
-      
+
       emit(state.copyWith(
         status: FilterStatus.loaded,
         filterOptions: options,
@@ -76,12 +75,23 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     ));
   }
 
+  /// NEW: Handles next step navigation
+  void _onNextStep(NextStep event, Emitter<FilterState> emit) {
+    final isLastStep = state.currentStep == state.filterOptions.length - 1;
+
+    if (!isLastStep) {
+      emit(state.copyWith(currentStep: state.currentStep + 1));
+    } else {
+      // If last step, submit filters automatically
+      add(SubmitFilterEvent());
+    }
+  }
+
   Future<void> _onSubmitFilters(
     SubmitFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
     emit(state.copyWith(status: FilterStatus.submitting));
-    
     try {
       final payload = await submitFilters(state.selections, state.filterOptions);
       emit(state.copyWith(
