@@ -419,8 +419,8 @@ Widget _buildBottomButtons(
       borderRadius: BorderRadius.circular(8),
     ),
   ),
-  child: const Text(
-    'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+  child:  Text(
+  state.canGoNext ? 'അടുത്തത്' : 'ഫിൽട്ടർ പ്രയോഗിക്കുക',
     style: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w600,

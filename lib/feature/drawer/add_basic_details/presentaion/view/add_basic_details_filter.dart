@@ -150,8 +150,8 @@ class _FilterDrawerContent extends StatelessWidget {
           // Apply Filter Button
           Expanded(
             child: ElevatedButton(
-              onPressed: state.hasSelection
-                  ? () {
+              onPressed: 
+                   () {
                       if (state.isLastStep) {
                         context.read<AddBasicFilter>().add(SubmitAddFilterSubmitEvent());
                         Navigator.pop(context);
@@ -159,7 +159,7 @@ class _FilterDrawerContent extends StatelessWidget {
                         context.read<AddBasicFilter>().add(NextStepEvent());
                       }
                     }
-                  : null,
+             ,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0284C7),
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -168,8 +168,8 @@ class _FilterDrawerContent extends StatelessWidget {
                 ),
                 disabledBackgroundColor: Colors.grey.shade300,
               ),
-              child: const Text(
-                'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+              child:  Text(
+                 state. isLastStep ? 'ഫിൽട്ടർ പ്രയോഗിക്കുക' : "  അടുത്തത്" ,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

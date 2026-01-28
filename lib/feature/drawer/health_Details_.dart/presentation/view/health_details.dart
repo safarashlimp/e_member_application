@@ -430,8 +430,8 @@ class _HealthDetailsDrawerContent extends StatelessWidget {
                 ),
                 disabledBackgroundColor: Colors.grey.shade300,
               ),
-              child: const Text(
-                'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+              child:  Text(
+                  state.canGoNext ? 'അടുത്തത്' : 'ഫിൽട്ടർ പ്രയോഗിക്കുക',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

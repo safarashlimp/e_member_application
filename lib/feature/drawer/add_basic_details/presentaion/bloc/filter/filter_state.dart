@@ -4,7 +4,7 @@ import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/f
 class FilterStateAddBasic {
   final List<FilterStep> steps;
   final int currentStep;
-  final Map<String, String> selections; // Stores stepName → selectedID
+  final Map<String, String> selections; 
   final bool isLoading;
   final String? error;
 
