@@ -56,6 +56,90 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
         context.watch<WardGeneralNeedBloc>().state is WardGeneralNeedLoading;
   }
 
+  void showUpdateSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 70,
+                height: 70,
+                decoration: const BoxDecoration(
+                  color: Color(0xff0FA958),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Updated Successfully",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0FA958),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 68,
+                height: 29,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(AppColor.button),
+                  ),
+                  onPressed: () {
+                    // close dialog
+                    _goToUpdateListPage(context); // navigate
+                  },
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(color: AppColor.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _goToUpdateListPage(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => HeaderListBloc(
+            GetHeaderListUsecase(
+              HeaderListRepositoryImpl(http.Client()),
+            ),
+          )..add(FetchHeaderList('2')),
+          child: const ListSurveyReport(
+            sectionType: FamilySurveySectionType.basicFacilities,
+            postion: '2',
+          ),
+        ),
+      ),
+    );
+  }
+
   bool _isSaving = false;
   bool hasAttemptedSubmit = false;
   void showSuccessDialog(BuildContext context) {
@@ -724,29 +808,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                               BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
                                 listener: (context, state) {
                                   if (state is HouseDetailsSuccess) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          backgroundColor: AppColor.blue,
-                                          content: Text('അപ്ഡേറ്റ് ചെയ്തു')),
-                                    );
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => BlocProvider(
-                                          create: (_) => HeaderListBloc(
-                                            GetHeaderListUsecase(
-                                              HeaderListRepositoryImpl(
-                                                  http.Client()),
-                                            ),
-                                          )..add(FetchHeaderList('1')),
-                                          child: const ListSurveyReport(
-                                            sectionType: FamilySurveySectionType
-                                                .familyBasicDetails,
-                                            postion: '2',
-                                          ),
-                                        ),
-                                      ),
-                                    );
+                                    showUpdateSuccessDialog(context);
                                   }
 
                                   if (state is HouseDetailsError) {
@@ -761,11 +823,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                 builder: (context, state) {
                                   if (state is HouseDetailsLoading) {
                                     return const Center(
-                                        child: CircularProgressIndicator());
+                                        child: CircularProgressIndicator(
+                                          color: AppColor.primary,
+                                        ));
                                   }
 
                                   return AppActionButton(
-                                    label: "അപ്ഡേറ്റ് ചെയ്യുക",
+                                    label: "സമർപ്പിക്കുക",
                                     onPressed: _handleEditSubmit,
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
