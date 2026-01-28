@@ -114,15 +114,16 @@ class EducationDrawerBloc extends Bloc<EducationDrawerEvent, EducationDrawerStat
 
     emit(state.copyWith(filter: updatedFilter));
   }
-
-  void _onNextStep(
-    EducationDrawerNextStep event,
-    Emitter<EducationDrawerState> emit,
-  ) {
-    if (state.canGoNext && state.getCurrentSelection() != null) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
-    }
+  
+void _onNextStep(
+  EducationDrawerNextStep event,
+  Emitter<EducationDrawerState> emit,
+) {
+  if (state.canGoNext) {
+    emit(state.copyWith(currentStep: state.currentStep + 1));
   }
+}
+
 
   void _onPreviousStep(
     EducationDrawerPreviousStep event,

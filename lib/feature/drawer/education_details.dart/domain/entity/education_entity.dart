@@ -18,12 +18,19 @@ class EducationFilter {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'educational_qualification_id': educationalQualificationId,
-      'currently_studying': currentlyStudyingId, // Will be "1" or "0"
-    };
+ Map<String, dynamic> toMap() {
+  final Map<String, dynamic> map = {};
+
+  if (educationalQualificationId != null) {
+    map['educational_qualification_id'] = educationalQualificationId;
   }
+
+  if (currentlyStudyingId != null) {
+    map['currently_studying'] = currentlyStudyingId;
+  }
+
+  return map;
+}
 
   @override
   String toString() {
