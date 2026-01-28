@@ -15,7 +15,28 @@ class Expiredscreen extends StatelessWidget {
             children: [
               SizedBox(height: 12),
 
-              Image.asset("assets/StaticImg/footersplash.png", width: 200),
+              Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Developed by |",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xff2767FF),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 50,
+                            height: 12.5,
+                            child: Image.asset(
+                              'assets/logo/Workmate Infotech Private Limited  Logo.png',
+                              height: 12,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
 
               Spacer(),
 

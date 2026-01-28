@@ -1,6 +1,7 @@
 import 'package:e_member_app/feature/splash/presentaion/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Splashscreen());
+   return ScreenUtilInit(
+      designSize: const Size(390, 844), // 👈 Your design size
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(home: Splashscreen()        );
+      },
+    );
   }
 }

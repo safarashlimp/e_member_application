@@ -374,7 +374,7 @@ class _MemberCardState extends State<MemberCard> {
             ],
           ),
           const SizedBox(height: 5),
-          // Age
+         // Age
           Row(
             children: [
               Image.asset(
@@ -419,65 +419,121 @@ class _MemberCardState extends State<MemberCard> {
             ],
           ),
           const SizedBox(height: 13),
-          // Action Buttons
+          // // Action Buttons
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     OutlinedButton.icon(
+          //       onPressed: () => onViewTap(context,PageMode.view),
+               
+          //       icon: const Icon(
+          //         Icons.visibility,
+          //         size: 14,
+          //         color: AppColor.button,
+          //       ),
+          //       label: const Text(
+          //         'View',
+          //         style: TextStyle(
+          //           color: AppColor.iconColor,
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //       style: OutlinedButton.styleFrom(
+          //         foregroundColor: AppColor.iconColor,
+          //         side: const BorderSide(color: AppColor.iconColor),
+          //         minimumSize: const Size(57, 23),
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(8),
+          //         ),
+          //         // padding: const EdgeInsets.only(top: 4,bottom: 4),
+          //       ),
+          //     ),
+          //     const SizedBox(width: 7),
+          //     OutlinedButton.icon(
+          //       //add contition
+          //       onPressed: () {
+          //          onViewTap(context,PageMode.edit);
+          //       },
+          //       icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
+          //       label: const Text(
+          //         'Edit',
+          //         style: TextStyle(
+          //           color: AppColor.iconColor,
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //       style: OutlinedButton.styleFrom(
+          //         foregroundColor: AppColor.iconColor,
+          //         side: const BorderSide(color: AppColor.iconColor),
+          //         minimumSize: const Size(57, 23),
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(8),
+          //         ),
+          //         // padding: const EdgeInsets.only(top: 4,bottom: 4),
+          //       ),
+          //     ),
+          //     const Spacer(),
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OutlinedButton.icon(
-                onPressed: () => onViewTap(context,PageMode.view),
-               
-                icon: const Icon(
-                  Icons.visibility,
-                  size: 14,
-                  color: AppColor.button,
-                ),
-                label: const Text(
-                  'View',
-                  style: TextStyle(
-                    color: AppColor.iconColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+              SizedBox(
+                width: 57,
+                height: 23,
+                child: OutlinedButton.icon(
+                  onPressed: () => onViewTap(context, PageMode.view),
+                  icon: const Icon(Icons.visibility, size: 14, color: AppColor.button),
+                  label: const Text(
+                    'View',
+                    style: TextStyle(
+                      color: AppColor.iconColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColor.iconColor,
-                  side: const BorderSide(color: AppColor.iconColor),
-                  minimumSize: const Size(57, 23),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColor.iconColor),
+                    fixedSize: const Size(60, 23),
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  // padding: const EdgeInsets.only(top: 4,bottom: 4),
                 ),
               ),
-              const SizedBox(width: 7),
-              OutlinedButton.icon(
-                //add contition
-                onPressed: () {
-                   onViewTap(context,PageMode.edit);
-                },
-                icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
-                label: const Text(
-                  'Edit',
-                  style: TextStyle(
-                    color: AppColor.iconColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+              SizedBox(width: 7),
+              SizedBox(
+                width: 57,
+                height: 23,
+                child: OutlinedButton.icon(
+                  onPressed: () => onViewTap(context, PageMode.edit),
+                  icon: const Icon(Icons.edit, size: 14, color: AppColor.button),
+                  label:  Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: AppColor.iconColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColor.iconColor,
-                  side: const BorderSide(color: AppColor.iconColor),
-                  minimumSize: const Size(57, 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    side: const BorderSide(color: AppColor.iconColor),
+                   // fixedSize: const Size(57, 23),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  // padding: const EdgeInsets.only(top: 4,bottom: 4),
                 ),
               ),
-              const Spacer(),
             ],
           ),
+
         ],
       ),
     );

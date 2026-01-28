@@ -110,6 +110,7 @@ class _LoginViewState extends State<LoginView> {
                             )
                           : AppActionButton(
                               label: "ലോഗിൻ",
+                              height: 44,
                               onPressed: () {
                                 final email = emailController.text;
                                 final password = passwordController.text;

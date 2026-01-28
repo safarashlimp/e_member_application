@@ -124,7 +124,7 @@ if(widget.updateDiolog==true){
         
                                   // Gender Section - 18% of content height
                                   Flexible(
-                                    flex: 18,
+                                    flex: 24,
                                     child: GenderSection(
                                       maleCount: d.male,
                                       femaleCount: d.female,
@@ -153,12 +153,15 @@ if(widget.updateDiolog==true){
         
                                   // Ration Section - 25% of content height
                                   Flexible(
-                                    flex: 25,
-                                    child: RationSection(
-                                      aayCount: d.rationAay,
-                                      phhCount: d.rationPhh,
-                                      nphhCount: d.rationNphh,
-                                      npnsCount: d.rationNpns,
+                                    flex: 22,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      child: RationSection(
+                                        aayCount: d.rationAay,
+                                        phhCount: d.rationPhh,
+                                        nphhCount: d.rationNphh,
+                                        npnsCount: d.rationNpns,
+                                      ),
                                     ),
                                   ),
         
@@ -171,7 +174,7 @@ if(widget.updateDiolog==true){
                                     child: Text(
                                       'ക്ഷേമ ഗ്രൂപ്പുകൾ',
                                       style: TextStyle(
-                                        fontSize: 13,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                         color: AppColor.black,
                                       ),
@@ -180,7 +183,7 @@ if(widget.updateDiolog==true){
         
                                   // Bottom Cards - 22% of content height
                                   Flexible(
-                                    flex: 22,
+                                    flex: 26,
                                     child: BottomCards(
                                       thozhilurapCount: d.thozhilurap,
                                       kudumbasreeCount: d.kudumbasree,
@@ -188,7 +191,6 @@ if(widget.updateDiolog==true){
                                     ),
                                   ),
         
-                                  SizedBox(height: spacing),
                                 ],
                               );
                             },

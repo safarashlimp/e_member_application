@@ -50,6 +50,7 @@ dependencies:
   fl_chart: ^0.66.2
   device_info_plus: ^12.3.0
   package_info_plus: ^9.0.0
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:
