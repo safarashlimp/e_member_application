@@ -1,4 +1,3 @@
-
 class FetchDetailLoad extends FamilyMemberDetailLoadEvent {
   final String editId;
   final String position;
@@ -9,6 +8,4 @@ class FetchDetailLoad extends FamilyMemberDetailLoadEvent {
   });
 }
 
-class FamilyMemberDetailLoadEvent {
-}
-
+class FamilyMemberDetailLoadEvent {}

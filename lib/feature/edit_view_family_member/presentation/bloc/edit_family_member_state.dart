@@ -4,7 +4,7 @@ abstract class EditFamilyMemberState {}
 
 class EditFamilyMemberInitial extends EditFamilyMemberState {}
 
-class   EditFamilyMemberSubmitting extends EditFamilyMemberState {
+class EditFamilyMemberSubmitting extends EditFamilyMemberState {
   final String screenName;
 
   EditFamilyMemberSubmitting(this.screenName);
@@ -13,12 +13,12 @@ class   EditFamilyMemberSubmitting extends EditFamilyMemberState {
 class EditFamilyMemberSubmitSuccess extends EditFamilyMemberState {
   final String screenName;
   final String responseId;
-  final PersonalDetailsModel? updatedData; // ✅ Add this
+  final PersonalDetailsModel? updatedData;
 
   EditFamilyMemberSubmitSuccess({
     required this.screenName,
     required this.responseId,
-    this.updatedData, // ✅ Optional updated data
+    this.updatedData,
   });
 }
 

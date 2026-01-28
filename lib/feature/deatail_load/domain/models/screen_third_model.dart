@@ -1,31 +1,34 @@
 import 'dart:convert';
 
-EmploymentResponse screen3ModelFromJson(String str) => EmploymentResponse .fromJson(json.decode(str));
+EmploymentResponse screen3ModelFromJson(String str) =>
+    EmploymentResponse.fromJson(json.decode(str));
 
-String screen3ModelToJson(EmploymentResponse  data) => json.encode(data.toJson());
-class EmploymentResponse  {
+String screen3ModelToJson(EmploymentResponse data) =>
+    json.encode(data.toJson());
+
+class EmploymentResponse {
   final bool status;
   final List<EmploymentModel> data;
 
-  EmploymentResponse ({required this.status, required this.data});
+  EmploymentResponse({required this.status, required this.data});
 
-  factory EmploymentResponse .fromJson(Map<String, dynamic> json) {
-    return EmploymentResponse (
+  factory EmploymentResponse.fromJson(Map<String, dynamic> json) {
+    return EmploymentResponse(
       status: json['Status'],
-      data: List<EmploymentModel>.from(json["data"].map((x) => EmploymentModel.fromJson(x))),
+      data: List<EmploymentModel>.from(
+          json["data"].map((x) => EmploymentModel.fromJson(x))),
     );
-    
   }
-  
- Map<String, dynamic> toJson() => {
+
+  Map<String, dynamic> toJson() => {
         "Status": status,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
+      };
 }
 
 class EmploymentModel {
-  final String ?id;
-  final String ?memberId;
+  final String? id;
+  final String? memberId;
   final String employmentStatusId;
   final String occupationId;
   final String skills;
@@ -34,10 +37,10 @@ class EmploymentModel {
   final String norkaRegistered;
   final String agricultureType;
   final String surveyor;
-  final String ?wardMember;
+  final String? wardMember;
 
   EmploymentModel({
-     this.id,
+    this.id,
     this.memberId,
     required this.employmentStatusId,
     required this.occupationId,
@@ -50,20 +53,15 @@ class EmploymentModel {
     this.wardMember,
   });
   factory EmploymentModel.fromJson(Map<String, dynamic> json) {
-    // ✅ FIXED: Properly handle skills as JSON array or string
     String skillsValue = '[]';
-    
+
     if (json['skills'] != null) {
       if (json['skills'] is List) {
-        // If it's already a List, encode it
         skillsValue = jsonEncode(json['skills']);
       } else {
-        // If it's a string, keep it as is
         skillsValue = json['skills'].toString();
-        
-        // Ensure it's a valid JSON array format
+
         if (!skillsValue.trim().startsWith('[')) {
-          // If it's comma-separated like "1,2,3", convert to JSON array
           final ids = skillsValue
               .split(',')
               .where((e) => e.trim().isNotEmpty)
@@ -73,7 +71,6 @@ class EmploymentModel {
         }
       }
     }
-
 
     return EmploymentModel(
       id: json['id'],
@@ -89,9 +86,9 @@ class EmploymentModel {
       wardMember: json['ward_member'],
     );
   }
-    Map<String, dynamic> toJson() {
-  return {
-     'id': id,
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
       'member_id': memberId,
       'employment_status_id': employmentStatusId,
       'occupation_id': occupationId,
@@ -103,6 +100,5 @@ class EmploymentModel {
       'surveyor': surveyor,
       'ward_member': wardMember,
     };
-    }
+  }
 }
-  

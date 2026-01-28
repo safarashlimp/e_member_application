@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +9,6 @@ class HealthDetailsRepository {
     required String editId,
     required HealthModel data,
   }) async {
-    // ✅ Get clientId from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
 
@@ -32,10 +30,6 @@ class HealthDetailsRepository {
       'surveyor': data.surveyor.toString(),
     };
 
-    print('📤 Sending request');
-    print('URL: https://emember.org/API/health_details_6.php');
-    print('Body: $body');
-
     final response = await http.post(
       Uri.parse('https://emember.org/API/health_details_6.php'),
       headers: {
@@ -44,16 +38,11 @@ class HealthDetailsRepository {
       body: body,
     );
 
-    print('📥 Status: ${response.statusCode}');
-    print('📥 Body: ${response.body}');
-
     final decoded = jsonDecode(response.body);
     final status = decoded['Status'].toString().toLowerCase() == 'true';
 
     if (!status) {
       throw Exception(decoded['data'] ?? 'Health details submission failed');
     }
-
-    print('✅ Health details submitted successfully: ${decoded['data']}');
   }
 }

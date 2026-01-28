@@ -10,7 +10,6 @@ class EmploymentDetailsRepository {
     required String editId,
     required EmploymentModel data,
   }) async {
-    // ✅ Get clientId from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
 
@@ -31,10 +30,6 @@ class EmploymentDetailsRepository {
       'surveyor': data.surveyor,
     };
 
-    print('📤 Sending request:');
-    print('URL: https://emember.org/API/employment_details_5.php');
-    print('Body: $body');
-
     final response = await http.post(
       Uri.parse('https://emember.org/API/employment_details_5.php'),
       headers: {
@@ -42,9 +37,6 @@ class EmploymentDetailsRepository {
       },
       body: body,
     );
-
-    print('📥 Response status: ${response.statusCode}');
-    print('📥 Response body: ${response.body}');
 
     final decoded = jsonDecode(response.body);
     final status = decoded['Status'].toString().toLowerCase() == 'true';
@@ -54,7 +46,5 @@ class EmploymentDetailsRepository {
         decoded['data'] ?? 'Employment details submission failed',
       );
     }
-
-    print('✅ Employment details submitted successfully: ${decoded['data']}');
   }
 }

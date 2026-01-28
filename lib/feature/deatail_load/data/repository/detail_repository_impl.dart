@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:e_member_app/feature/deatail_load/data/repository/detail_repository.dart';
 import 'package:http/http.dart' as http;
 
-
-class FamilyMemberDetailsLoadRepositoryImpl implements FamilyMemberDetailsLoadRepository  {
+class FamilyMemberDetailsLoadRepositoryImpl
+    implements FamilyMemberDetailsLoadRepository {
   final http.Client client;
   FamilyMemberDetailsLoadRepositoryImpl(this.client);
 

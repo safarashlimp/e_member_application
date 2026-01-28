@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +9,6 @@ class PensionDetailsRepository {
     required String editId,
     required WelfareModel data,
   }) async {
-    // ✅ Get clientId from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
 
@@ -29,10 +27,6 @@ class PensionDetailsRepository {
       'surveyor': data.surveyor.toString(),
     };
 
-    print('📤 Sending request');
-    print('URL: https://emember.org/API/pension_details_7.php');
-    print('Body: $body');
-
     final response = await http.post(
       Uri.parse('https://emember.org/API/pension_details_7.php'),
       headers: {
@@ -40,9 +34,6 @@ class PensionDetailsRepository {
       },
       body: body,
     );
-
-    print('📥 Status: ${response.statusCode}');
-    print('📥 Body: ${response.body}');
 
     final decoded = jsonDecode(response.body);
     final status = decoded['Status'].toString().toLowerCase() == 'true';
@@ -52,7 +43,5 @@ class PensionDetailsRepository {
         decoded['data'] ?? 'Pension details submission failed',
       );
     }
-
-    print('✅ Pension details submitted successfully: ${decoded['data']}');
   }
 }

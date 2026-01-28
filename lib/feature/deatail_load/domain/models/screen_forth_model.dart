@@ -1,31 +1,33 @@
 import 'dart:convert';
 
-HealthResponse screen3ModelFromJson(String str) => HealthResponse .fromJson(json.decode(str));
+HealthResponse screen3ModelFromJson(String str) =>
+    HealthResponse.fromJson(json.decode(str));
 
-String screen3ModelToJson(HealthResponse  data) => json.encode(data.toJson());
-class HealthResponse  {
+String screen3ModelToJson(HealthResponse data) => json.encode(data.toJson());
+
+class HealthResponse {
   final bool status;
   final List<HealthModel> data;
 
-  HealthResponse ({required this.status, required this.data});
+  HealthResponse({required this.status, required this.data});
 
-  factory HealthResponse .fromJson(Map<String, dynamic> json) {
-    return HealthResponse (
+  factory HealthResponse.fromJson(Map<String, dynamic> json) {
+    return HealthResponse(
       status: json['Status'],
-      data: List<HealthModel>.from(json["data"].map((x) => HealthModel.fromJson(x))),
+      data: List<HealthModel>.from(
+          json["data"].map((x) => HealthModel.fromJson(x))),
     );
-    
   }
-  
- Map<String, dynamic> toJson() => {
+
+  Map<String, dynamic> toJson() => {
         "Status": status,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
+      };
 }
 
 class HealthModel {
-  final String ?id;
-  final String ?memberId;
+  final String? id;
+  final String? memberId;
   final String isPatient;
   final String diseases;
   final String treatmentPlace;
@@ -35,10 +37,10 @@ class HealthModel {
   final String insuranceTypeId;
   final String healthHelp;
   final String surveyor;
-  final String ?wardMember;
+  final String? wardMember;
 
   HealthModel({
-   this.id,
+    this.id,
     this.memberId,
     required this.isPatient,
     required this.diseases,
@@ -49,7 +51,7 @@ class HealthModel {
     required this.insuranceTypeId,
     required this.healthHelp,
     required this.surveyor,
-   this.wardMember,
+    this.wardMember,
   });
 
   factory HealthModel.fromJson(Map<String, dynamic> json) {

@@ -4,12 +4,12 @@ import 'package:e_member_app/feature/deatail_load/presentation/bloc/detail_state
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-class FamilyMemberDetailLoadBloc extends Bloc<FamilyMemberDetailLoadEvent, FamilyMemberDetailLoadState> {
+class FamilyMemberDetailLoadBloc
+    extends Bloc<FamilyMemberDetailLoadEvent, FamilyMemberDetailLoadState> {
   final FamilyMemberDetailsLoadRepository repository;
 
-  FamilyMemberDetailLoadBloc(this.repository) : super(FamilyMemberDetailLoadInitial()) {
+  FamilyMemberDetailLoadBloc(this.repository)
+      : super(FamilyMemberDetailLoadInitial()) {
     on<FetchDetailLoad>((event, emit) async {
       emit(FamilyMemberDetailLoadLoading());
 

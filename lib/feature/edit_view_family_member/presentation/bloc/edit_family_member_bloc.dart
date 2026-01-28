@@ -12,13 +12,14 @@ class EditFamilyMemberBloc
   final FamilyMemberRepository familyMemberRepository;
   final EducationDetailsRepository educationRepository;
   final EmploymentDetailsRepository employmentRepository;
-  final HealthDetailsRepository healthRepository;                                                             
-  final PensionDetailsRepository pensionRepository;           
+  final HealthDetailsRepository healthRepository;
+  final PensionDetailsRepository pensionRepository;
 
-  EditFamilyMemberBloc(employmentDetailsRepository, {
+  EditFamilyMemberBloc(
+    employmentDetailsRepository, {
     required this.familyMemberRepository,
     required this.educationRepository,
-    required this.employmentRepository,                                                 
+    required this.employmentRepository,
     required this.healthRepository,
     required this.pensionRepository,
   }) : super(EditFamilyMemberInitial()) {
@@ -29,34 +30,31 @@ class EditFamilyMemberBloc
     on<SubmitPensionDetailsEvent>(_onSubmitPensionDetails);
   }
 
-  // Screen 1 - Personal Details
- Future<void> _onSubmitPersonalDetails(
-  SubmitPersonalDetailsEvent event,
-  Emitter<EditFamilyMemberState> emit,
-) async {
-  emit(EditFamilyMemberSubmitting('Personal Details'));
+  Future<void> _onSubmitPersonalDetails(
+    SubmitPersonalDetailsEvent event,
+    Emitter<EditFamilyMemberState> emit,
+  ) async {
+    emit(EditFamilyMemberSubmitting('Personal Details'));
 
-  try {
-    await familyMemberRepository.submitFamilyMember(
-     
-      editId: event.editId,
-      data: event.data,
-    );
+    try {
+      await familyMemberRepository.submitFamilyMember(
+        editId: event.editId,
+        data: event.data,
+      );
 
-    emit(EditFamilyMemberSubmitSuccess(
-      screenName: 'Personal Details',
-      responseId: event.editId,
-      updatedData: event.data, // ✅ Pass the updated data
-    ));
-  } catch (e) {
-    emit(EditFamilyMemberSubmitFailure(
-      screenName: 'Personal Details',
-      message: e.toString(),
-    ));
+      emit(EditFamilyMemberSubmitSuccess(
+        screenName: 'Personal Details',
+        responseId: event.editId,
+        updatedData: event.data,
+      ));
+    } catch (e) {
+      emit(EditFamilyMemberSubmitFailure(
+        screenName: 'Personal Details',
+        message: e.toString(),
+      ));
+    }
   }
-}
 
-  // Screen 2 - Education Details
   Future<void> _onSubmitEducationDetails(
     SubmitEducationDetailsEvent event,
     Emitter<EditFamilyMemberState> emit,
@@ -65,7 +63,6 @@ class EditFamilyMemberBloc
 
     try {
       await educationRepository.submitEducationDetails(
-   
         editId: event.editId,
         data: event.data,
       );
@@ -82,7 +79,6 @@ class EditFamilyMemberBloc
     }
   }
 
-  // Screen 3 - Employment Details
   Future<void> _onSubmitEmploymentDetails(
     SubmitEmploymentDetailsEvent event,
     Emitter<EditFamilyMemberState> emit,
@@ -91,7 +87,6 @@ class EditFamilyMemberBloc
 
     try {
       await employmentRepository.submitEmploymentDetails(
-      
         editId: event.editId,
         data: event.data,
       );
@@ -108,7 +103,6 @@ class EditFamilyMemberBloc
     }
   }
 
-  // Screen 4 - Health Details
   Future<void> _onSubmitHealthDetails(
     SubmitHealthDetailsEvent event,
     Emitter<EditFamilyMemberState> emit,
@@ -117,7 +111,6 @@ class EditFamilyMemberBloc
 
     try {
       await healthRepository.submitHealthDetails(
-        //clientId: event.clientId,
         editId: event.editId,
         data: event.data,
       );
@@ -134,7 +127,6 @@ class EditFamilyMemberBloc
     }
   }
 
-  // Screen 5 - Pension/Welfare Details
   Future<void> _onSubmitPensionDetails(
     SubmitPensionDetailsEvent event,
     Emitter<EditFamilyMemberState> emit,
@@ -143,7 +135,6 @@ class EditFamilyMemberBloc
 
     try {
       await pensionRepository.submitPensionDetails(
-      
         editId: event.editId,
         data: event.data,
       );

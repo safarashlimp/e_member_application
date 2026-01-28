@@ -10,7 +10,6 @@ class EducationDetailsRepository {
     required String editId,
     required EducationModel data,
   }) async {
-    // ✅ Get clientId from SharedPreferences (SINGLE SOURCE)
     final prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString(PrefKeys.clientId);
 
@@ -19,7 +18,7 @@ class EducationDetailsRepository {
     }
 
     final body = {
-      'clientid': clientId, // ✅ same as FamilyMemberRepository
+      'clientid': clientId,
       'editid': editId,
       'qualification_id': data.qualificationId,
       'currently_studying': data.currentlyStudying,
@@ -30,10 +29,6 @@ class EducationDetailsRepository {
       'surveyor': data.surveyor,
     };
 
-    print('📤 Sending request:');
-    print('URL: https://emember.org/API/education_details_4.php');
-    print('Body: $body');
-
     final response = await http.post(
       Uri.parse('https://emember.org/API/education_details_4.php'),
       headers: {
@@ -42,16 +37,11 @@ class EducationDetailsRepository {
       body: body,
     );
 
-    print('📥 Response status: ${response.statusCode}');
-    print('📥 Response body: ${response.body}');
-
     final decoded = jsonDecode(response.body);
     final status = decoded['Status'].toString().toLowerCase() == 'true';
 
     if (!status) {
       throw Exception(decoded['data'] ?? 'Education details submission failed');
     }
-
-    print('✅ Education details submitted successfully: ${decoded['data']}');
   }
 }
