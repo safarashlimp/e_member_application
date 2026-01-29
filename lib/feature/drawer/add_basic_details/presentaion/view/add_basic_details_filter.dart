@@ -1,4 +1,5 @@
 // lib/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/data/model/filter_add_basic..dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/bloc/filter/filter_bloc.dart';
@@ -33,12 +34,14 @@ class _FilterDrawerContent extends StatelessWidget {
         // Show loading indicator while fetching data
         if (state.isLoading && state.steps.first.options.isEmpty) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.secondary,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
+                children:  [
+                  CircularProgressIndicator(
+                    color: AppColor.blue,
+                  ),
                   SizedBox(height: 16),
                   Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
                 ],

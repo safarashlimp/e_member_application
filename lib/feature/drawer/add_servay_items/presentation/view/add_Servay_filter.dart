@@ -1,4 +1,5 @@
 
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/data/repository/filter_repository_impl.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/domain/repository/filter_repository.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/domain/ussecase/submit_filter.dart';
@@ -37,14 +38,23 @@ class AddSurveyFilterView extends StatelessWidget {
         Navigator.pop(context, state.filterPayload);
       },
       child: Drawer(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.secondary,
         width: MediaQuery.of(context).size.width,
         child: SafeArea(
           child: BlocBuilder<FilterBloc, FilterState>(
             builder: (context, state) {
               if (state.status == FilterStatus.loading || 
                   state.status == FilterStatus.initial) {
-                return const Center(child: CircularProgressIndicator());
+                return const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  CircularProgressIndicator(
+                    color: AppColor.blue,
+                  ),
+                  SizedBox(height: 16),
+                  Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
+                ],
+              );
               }
 
               return Column(

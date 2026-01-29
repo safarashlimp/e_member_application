@@ -1,5 +1,6 @@
 // lib/feature/drawer/job_details/presentation/job_details_drawer.dart
 
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
 import 'package:e_member_app/feature/drawer/job_details/data/repo/job_repository.dart';
 import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_bloc.dart';
@@ -40,8 +41,20 @@ class _JobDetailsDrawerContent extends StatelessWidget {
       },
       builder: (context, state) {
         if (state.status == JobDetailsDrawerStatus.loading && state.steps.isEmpty) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return  Scaffold(
+            backgroundColor: AppColor.secondary,
+            body:Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    CircularProgressIndicator(
+                      color: AppColor.blue,
+                    ),
+                    SizedBox(height: 16),
+                    Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
+                  ],
+                ),
+            ),
           );
         }
 

@@ -1,4 +1,5 @@
 // lib/feature/drawer/members_details/presentation/view/add_member_details_drawer.dart
+import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 import 'package:e_member_app/feature/drawer/members_details/presentation/bloc/bloc/member_detail_bloc.dart';
@@ -40,12 +41,14 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
         // Show loading while fetching API data
         if (state.isLoadingData && state.steps.first.options.isEmpty) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.secondary,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  CircularProgressIndicator(),
+                  CircularProgressIndicator(
+                    color: AppColor.blue,
+                  ),
                   SizedBox(height: 16),
                   Text('ഫിൽട്ടർ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...'),
                 ],
