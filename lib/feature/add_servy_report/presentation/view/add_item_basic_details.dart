@@ -109,8 +109,13 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                     _goToUpdateListPage(context); // navigate
                   },
                   child: const Text(
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     "OK",
-                    style: TextStyle(color: AppColor.white),
+                    style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -194,9 +199,14 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                     Navigator.pop(context); // close dialog
                     _goToListPage(); // then navigate
                   },
-                  child: const Text(
+                child: const Text(
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     "OK",
-                    style: TextStyle(color: AppColor.white),
+                    style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

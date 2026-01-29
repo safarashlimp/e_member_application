@@ -170,7 +170,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                     const SizedBox(height: 2),
                     Text(
                       widget.subtitle,
-                      style: TextStyle(fontSize: 14, color: AppColor.grey),
+                      style: TextStyle(fontSize: 14, color: AppColor.grey,fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -189,7 +189,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                 height: 12,
                 fit: BoxFit.fill,
                 errorBuilder: (context, error, stackTrace) {
-                  print('Error loading image: $error');
+            
                   return const Icon(
                     Icons.family_restroom,
                     size: 12,
@@ -227,6 +227,8 @@ void openWithLoad(BuildContext context, PageMode mode) {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
+               // padding: const EdgeInsets.all(2),
+              
                 width: 57,
                 height: 23,
                 child: OutlinedButton.icon(
@@ -245,7 +247,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.all(2),
                     side: const BorderSide(color: AppColor.iconColor),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -254,7 +256,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                   ),
                 ),
               ),
-              const SizedBox(width: 7),
+              const SizedBox(width: 6),
               SizedBox(
                 width: 57,
                 height: 23,
@@ -274,7 +276,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.all(2),
                     side: const BorderSide(color: AppColor.iconColor),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -283,9 +285,11 @@ void openWithLoad(BuildContext context, PageMode mode) {
                   ),
                 ),
               ),
-              const SizedBox(width: 7),
+              const SizedBox(width: 6),
               SizedBox(
+            
                 height: 24,
+                width: 160,
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
@@ -391,21 +395,26 @@ void openWithLoad(BuildContext context, PageMode mode) {
                       ),
                     );
                   },
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.add,
                     size: 14,
                     color: AppColor.white,
+                    weight: 900,
+                  //  fill: 1,
                   ),
-                  label: const Text(
+                  label: Text(
                     'അംഗം ചേർക്കുക',
+                    maxLines: 1,
+                  //  textAlign: TextAlign.center,
                     style: TextStyle(
+                      height: 1,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(4),
+                    padding: EdgeInsets.all(2),
                     backgroundColor: AppColor.button,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -414,11 +423,11 @@ void openWithLoad(BuildContext context, PageMode mode) {
                         width: 1,
                       ),
                     ),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ),
-              const SizedBox(width: 63),
+              const SizedBox(width: 38),
             ],
           ),
         ],

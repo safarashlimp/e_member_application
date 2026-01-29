@@ -103,7 +103,7 @@ class _LoginViewState extends State<LoginView> {
                         width: double.infinity,
                         height: 40,
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 30),
                       state is LoginLoading
                           ? CircularProgressIndicator(
                               color: AppColor.blue,
@@ -162,7 +162,7 @@ class _LoginViewState extends State<LoginView> {
                                     );
                               },
                             ),
-                      SizedBox(height: 180),
+                      SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

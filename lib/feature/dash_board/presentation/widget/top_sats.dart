@@ -33,7 +33,7 @@ class _TopStatsState extends State<TopStats> {
         Expanded(
           child: _StatCard(
             icon: 'assets/images/Mask group (25).png',
-            label: 'കുടുംബം',
+            label: 'കുടുംബങ്ങൾ',
             value: widget.familiesCount,
           ),
         ),
@@ -66,7 +66,7 @@ class _StatCard extends StatelessWidget {
     return Container(
       height: 60.h, // 👈 Fixed height
       width: 110.w, // 👈 Fixed width
-      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14.r),
@@ -74,8 +74,8 @@ class _StatCard extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 28.w,
-            height: 28.h,
+            width: 30.w,
+            height: 30.h,
             child: Image.asset(icon, fit: BoxFit.contain),
           ),
           SizedBox(width: 4.w),
@@ -90,12 +90,12 @@ class _StatCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 9.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                //SizedBox(height: 2.h),
                 Text(
                   value.toString(),
                   maxLines: 1,

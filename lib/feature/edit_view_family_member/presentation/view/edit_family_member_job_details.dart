@@ -129,9 +129,14 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                     // close dialog
                     _goToListPage(context); // navigate
                   },
-                  child: const Text(
+                 child: const Text(
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     "OK",
-                    style: TextStyle(color: AppColor.white),
+                    style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

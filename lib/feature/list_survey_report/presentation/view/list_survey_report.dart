@@ -231,6 +231,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                           );
                         }
                         return ListView.builder(
+                          padding: const EdgeInsets.all(16),
                           itemCount: state.items.length,
                           itemBuilder: (context, index) {
                             final item = state.items[index];

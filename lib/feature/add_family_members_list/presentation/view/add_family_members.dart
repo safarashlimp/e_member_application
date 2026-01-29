@@ -284,8 +284,13 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                     _goToListPage(); // navigate
                   },
                   child: const Text(
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     "OK",
-                    style: TextStyle(color: AppColor.white),
+                    style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

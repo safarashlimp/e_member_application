@@ -83,7 +83,7 @@ class _GenderSectionState extends State<GenderSection> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 6),
+                  //  const SizedBox(height: 6),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +109,7 @@ class _GenderSectionState extends State<GenderSection> {
                             'കർഷകർ',
                             widget.farmersCount,
                             AppColor.darkGreen,
-                            12,
+                            10,
                           ),
                         ],
                       ),
@@ -149,14 +149,15 @@ class _GenderCard extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              height: 26,
-              width: 26,
+              height: 30,
+              width: 30,
               child: Image.asset(icon, fit: BoxFit.contain),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -167,14 +168,15 @@ class _GenderCard extends StatelessWidget {
                       color: AppColor.white,
                       fontSize: fontSizes,
                       fontWeight: FontWeight.w500,
-                      height: 1.1,
+                      height: 1.0,
                     ),
                   ),
                   Text(
                     value.toString(),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 14,
+                      fontSize: 16,
+                          height: 1.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

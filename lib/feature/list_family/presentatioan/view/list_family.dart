@@ -129,7 +129,7 @@ class _ListFamilyState extends State<ListFamily> {
                           houseNumber: item.houseNumber,
                           phone: item.mobile,
                           whatsapp: item.whatsapp,
-                          ward: 'കുടുംബനാമനുമായുള്ള ബന്ധം: ${item.relation}',
+                          ward: 'കുടുംബനാഥനുമായുള്ള ബന്ധം: ${item.relation}',
                           age: 'വയസ്: ${item.age}',
                           lastUpdated: 'Updated on ${item.lastModified}',
                           

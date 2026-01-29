@@ -97,16 +97,16 @@ class _DashboardPageState extends State<DashboardPage> {
                             builder: (context, contentConstraints) {
                               // Calculate dynamic spacing
                               final spacing =
-                                  contentConstraints.maxHeight * 0.01;
+                                  contentConstraints.maxHeight * 0.025;
 
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: spacing),
+                                //  SizedBox(height: spacing),
 
                                   // Top Stats - 10% of content height
                                   Flexible(
-                                    flex: 10,
+                                    flex: 12,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15),
@@ -122,7 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                   // Gender Section - 18% of content height
                                   Flexible(
-                                    flex: 24,
+                                    flex: 28,
                                     child: GenderSection(
                                       maleCount: d.male,
                                       femaleCount: d.female,
@@ -151,7 +151,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                   // Ration Section - 25% of content height
                                   Flexible(
-                                    flex: 22,
+                                    flex: 26,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16),
@@ -182,7 +182,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                   // Bottom Cards - 22% of content height
                                   Flexible(
-                                    flex: 26,
+                                    flex: 28,
                                     child: BottomCards(
                                       thozhilurapCount: d.thozhilurap,
                                       kudumbasreeCount: d.kudumbasree,

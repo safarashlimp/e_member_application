@@ -128,8 +128,13 @@ class _EditFamilyMemberEducationdetailsState
                     _goToListPage(context); // navigate
                   },
                   child: const Text(
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     "OK",
-                    style: TextStyle(color: AppColor.white),
+                    style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
