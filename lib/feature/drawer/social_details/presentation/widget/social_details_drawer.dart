@@ -1,15 +1,15 @@
-import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/bloc/filter/filter_bloc.dart';
-import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/bloc/filter/filter_event.dart' show ChangeStepEvent, SelectOptionEvent, ClearAllSelectionsEvent, SubmitAddFilterSubmitEvent, NextStepEvent;
-import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/bloc/filter/filter_state.dart';
+import 'package:e_member_app/feature/drawer/social_details/domain/entity/social_entity.dart';
+import 'package:e_member_app/feature/drawer/social_details/presentation/bloc/social_filter/social_filter_bloc.dart';
+import 'package:e_member_app/feature/drawer/social_details/presentation/bloc/social_filter/social_filter_event.dart';
+import 'package:e_member_app/feature/drawer/social_details/presentation/bloc/social_filter/social_filter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddbasicdetailsWidget {
+class SocialDetailsDrawer {
 
 
-static Widget buildHeader(BuildContext context){
-
-      return Container(
+  static Widget buildHeader(BuildContext context) {
+    return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -42,13 +42,10 @@ static Widget buildHeader(BuildContext context){
         ],
       ),
     );
-}
+  }
 
-
-
-static buildLeftSection( BuildContext context ,FilterStateAddBasic state){
-
-  return Container(
+ static  Widget buildStepsSection(BuildContext context, SocialDrawerState state) {
+    return Container(
       width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
         color: const Color(0xFFF1F5F9),
@@ -62,7 +59,6 @@ static buildLeftSection( BuildContext context ,FilterStateAddBasic state){
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section Headers
           Container(
             padding: const EdgeInsets.all(16),
             child: const Column(
@@ -89,7 +85,6 @@ static buildLeftSection( BuildContext context ,FilterStateAddBasic state){
             ),
           ),
           const Divider(height: 1),
-          // Steps List
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.zero,
@@ -97,13 +92,13 @@ static buildLeftSection( BuildContext context ,FilterStateAddBasic state){
               itemBuilder: (context, index) {
                 final isSelected = state.currentStep == index;
                 final step = state.steps[index];
-final stepName = step.name; // Malayalam for UI
-final hasSelection = state.selections.containsKey(step.key); // English key
-
+                final hasSelection = _hasSelectionForStep(state.filter, index);
 
                 return InkWell(
                   onTap: () {
-                    context.read<AddBasicFilter>().add(ChangeStepEvent(index));
+                    context.read<SocialDrawerBloc>().add(
+                          SocialDrawerStepChanged(index),
+                        );
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -127,7 +122,7 @@ final hasSelection = state.selections.containsKey(step.key); // English key
                       children: [
                         Expanded(
                           child: Text(
-                            stepName,
+                            step.name,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: isSelected
@@ -158,109 +153,126 @@ final hasSelection = state.selections.containsKey(step.key); // English key
         ],
       ),
     );
-}
+  }
 
+ static bool _hasSelectionForStep(SocialDrawerFilter filter, int step) {
+    switch (step) {
+      case 0:
+        return filter.includedInRationCard != null;
+      case 1:
+        return filter.receivingPension != null;
+      case 2:
+        return filter.pensionType != null;
+      case 3:
+        return filter.needPension != null;
+      case 4:
+        return filter.povertyAlleviationMember != null;
+      default:
+        return false;
+    }
+  }
 
-
-
-
-static Widget buildRightSection(BuildContext context, FilterStateAddBasic state){
-
+ static Widget buildOptionsSection(
+    BuildContext context,
+    String currentStepName,
+    List<dynamic> currentOptions,
+    String? currentSelection,
+    int stepIndex,
+  ) {
     return Expanded(
-    child: Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section Title
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'നിർദ്ദേശിച്ച ഫിൽട്ടറുകൾ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF64748B),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  state.currentStepName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF0F172A),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 1),
-          // Options
-          Expanded(
-            child: SingleChildScrollView(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
               padding: const EdgeInsets.all(16),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 10,
-                children: state.currentOptions.map((option) {
-  final stepKey = state.steps[state.currentStep].key;
-  final isSelected = state.selections[stepKey] == option.id;
-
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(999),
-                    onTap: () {
-                      // Send the ID, not the name
-                      context.read<AddBasicFilter>().add(
-                            SelectOptionEvent(state.currentStep, option.id),
-                          );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFFDEEBFF)
-                            : const Color(0xFFF7FAFC),
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(
-                          width: 1.5,
-                          color: isSelected
-                              ? const Color(0xFF0284C7)
-                              : const Color(0xFFCBD5E1),
-                        ),
-                      ),
-                      child: Text(
-                        option.name, // Display name
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: isSelected
-                              ? const Color(0xFF0C4A6E)
-                              : const Color(0xFF334155),
-                        ),
-                      ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'നിർദ്ദേശിച്ച ഫിൽട്ടറുകൾ',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF64748B),
+                      fontWeight: FontWeight.w500,
                     ),
-                  );
-                }).toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    currentStepName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF0F172A),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            const Divider(height: 1),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 10,
+                  children: currentOptions.map((option) {
+                    final isSelected = currentSelection == option.id;
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(999),
+                      onTap: () {
+                        context.read<SocialDrawerBloc>().add(
+                              SocialDrawerOptionSelected(
+                                stepIndex,
+                                option.id,
+                              ),
+                            );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFFDEEBFF)
+                              : const Color(0xFFF7FAFC),
+                          borderRadius: BorderRadius.circular(999),
+                          border: Border.all(
+                            width: 1.5,
+                            color: isSelected
+                                ? const Color(0xFF0284C7)
+                                : const Color(0xFFCBD5E1),
+                          ),
+                        ),
+                        child: Text(
+                          option.name,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: isSelected
+                                ? const Color(0xFF0C4A6E)
+                                : const Color(0xFF334155),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-
-
-
- static Widget buildBottomButtons(BuildContext context, FilterStateAddBasic state) {
+ static Widget buildBottomButtons(
+    BuildContext context,
+    SocialDrawerState state,
+    String? currentSelection,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -275,17 +287,14 @@ static Widget buildRightSection(BuildContext context, FilterStateAddBasic state)
       ),
       child: Row(
         children: [
-          // Clear All Button
           Expanded(
             child: OutlinedButton(
               onPressed: () {
-                context.read<AddBasicFilter>().add(ClearAllSelectionsEvent());
+                context.read<SocialDrawerBloc>().add(SocialDrawerReset());
               },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                side: const BorderSide(
-                  color: Color(0xFF0284C7),
-                ),
+                side: const BorderSide(color: Color(0xFF0284C7)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -301,19 +310,21 @@ static Widget buildRightSection(BuildContext context, FilterStateAddBasic state)
             ),
           ),
           const SizedBox(width: 12),
-          // Apply Filter Button
           Expanded(
             child: ElevatedButton(
-              onPressed: 
+              onPressed:
                    () {
-                      if (state.isLastStep) {
-                        context.read<AddBasicFilter>().add(SubmitAddFilterSubmitEvent());
-                        Navigator.pop(context);
+                      if (state.canGoNext) {
+                        context.read<SocialDrawerBloc>().add(
+                              SocialDrawerNextStep(),
+                            );
                       } else {
-                        context.read<AddBasicFilter>().add(NextStepEvent());
+                        context.read<SocialDrawerBloc>().add(
+                              SocialDrawerSubmit(),
+                            );
                       }
                     }
-             ,
+                ,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0284C7),
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -323,19 +334,19 @@ static Widget buildRightSection(BuildContext context, FilterStateAddBasic state)
                 disabledBackgroundColor: Colors.grey.shade300,
               ),
               child:  Text(
-                 state. isLastStep ? 'ഫിൽട്ടർ പ്രയോഗിക്കുക' : "  അടുത്തത്" ,
+                  state.canGoNext ? 'അടുത്തത്' : 'ഫിൽട്ടർ പ്രയോഗിക്കുക',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+                  color: Colors.white
+                  ),
+),
+),
+),
+],
+),
+);
+}
 
 
 }

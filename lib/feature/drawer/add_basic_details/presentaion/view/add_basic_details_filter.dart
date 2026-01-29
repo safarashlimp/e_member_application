@@ -90,7 +90,7 @@ class _FilterDrawerContent extends StatelessWidget {
                     ],
                   ),
                 ),
-                _buildBottomButtons(context, state),
+              AddbasicdetailsWidget.buildBottomButtons(context, state),
               ],
             ),
           ),
@@ -104,81 +104,3 @@ class _FilterDrawerContent extends StatelessWidget {
 
 
 
-
-
-  Widget _buildBottomButtons(BuildContext context, FilterStateAddBasic state) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Clear All Button
-          Expanded(
-            child: OutlinedButton(
-              onPressed: () {
-                context.read<AddBasicFilter>().add(ClearAllSelectionsEvent());
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                side: const BorderSide(
-                  color: Color(0xFF0284C7),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'എല്ലാം ശൂന്യമാക്കുക',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0284C7),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Apply Filter Button
-          Expanded(
-            child: ElevatedButton(
-              onPressed: 
-                   () {
-                      if (state.isLastStep) {
-                        context.read<AddBasicFilter>().add(SubmitAddFilterSubmitEvent());
-                        Navigator.pop(context);
-                      } else {
-                        context.read<AddBasicFilter>().add(NextStepEvent());
-                      }
-                    }
-             ,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0284C7),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                disabledBackgroundColor: Colors.grey.shade300,
-              ),
-              child:  Text(
-                 state. isLastStep ? 'ഫിൽട്ടർ പ്രയോഗിക്കുക' : "  അടുത്തത്" ,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
