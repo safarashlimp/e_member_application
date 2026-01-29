@@ -10,7 +10,7 @@ class EducationConstants {
   static const List<EducationFilterStep> steps = [
     EducationFilterStep(
       name: "വിദ്യാഭ്യാസ യോഗ്യത",
-      options: [], // Will be filled from member_drops.php?position=6
+      options: [], 
       position: 6,
     ),
     EducationFilterStep(
