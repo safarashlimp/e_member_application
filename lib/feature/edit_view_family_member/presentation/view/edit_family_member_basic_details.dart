@@ -19,14 +19,12 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_one_model.dart';
-import 'package:e_member_app/feature/edit_view_family_member/data/repository/edit_family_member_firstpage_details_repository.dart';
+
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
-import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
-import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
