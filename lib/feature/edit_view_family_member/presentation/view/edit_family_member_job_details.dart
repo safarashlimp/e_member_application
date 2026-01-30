@@ -116,7 +116,12 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );}
+    );  if (focusNode != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    }
+  }
   void showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,

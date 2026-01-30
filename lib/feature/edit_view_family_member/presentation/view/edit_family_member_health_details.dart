@@ -104,7 +104,12 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );}
+    );  if (focusNode != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    }
+  }
   void _populateFields(HealthModel value) {
     patient = int.tryParse(value.isPatient) ?? 0;
     hasDisability = int.tryParse(value.disabled) ?? 0;

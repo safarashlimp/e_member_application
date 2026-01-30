@@ -102,7 +102,12 @@ class _EditFamilyMemberEducationdetailsState
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );}
+    );  if (focusNode != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    }
+  }
   void _populateFields(EducationModel value) {
     courseStudy.text = value.courseOther ?? '';
     studyCenter.text = value.institution ?? '';
