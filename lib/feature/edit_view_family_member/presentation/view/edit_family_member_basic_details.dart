@@ -56,6 +56,24 @@ class _EditFamilyMemberBasicDetailsState
   final TextEditingController selectedDate = TextEditingController();
   final TextEditingController whatsupNumber = TextEditingController();
   final TextEditingController surveyorNameLabel = TextEditingController();
+  final FocusNode familyNameFocus = FocusNode();
+  final FocusNode mobileFocus = FocusNode();
+  final FocusNode whatsappFocus = FocusNode();
+  final FocusNode surveyorFocus = FocusNode();
+
+  // ✅ ADD THIS: ScrollController
+  final ScrollController scrollController = ScrollController();
+
+  // ✅ ADD THESE: GlobalKeys for scroll-to-widget
+  final GlobalKey familyNameKey = GlobalKey();
+  final GlobalKey mobileKey = GlobalKey();
+  final GlobalKey whatsappKey = GlobalKey();
+  final GlobalKey bloodGroupKey = GlobalKey();
+  final GlobalKey relationKey = GlobalKey();
+  final GlobalKey genderKey = GlobalKey();
+  final GlobalKey dobKey = GlobalKey();
+  final GlobalKey surveyorKey = GlobalKey();
+
   String? selectedBloodGroup;
   String? selectedBloodGroupId;
   String? selectedReletion;
@@ -69,7 +87,7 @@ class _EditFamilyMemberBasicDetailsState
   String? selectedCasteId;
   String? selectedReligion;
   String? selectedReligionId;
-
+  DateTime? selectedDob;
   bool _allDataLoaded = false;
 
   bool get isEdit => widget.mode == PageMode.edit;
@@ -159,7 +177,7 @@ class _EditFamilyMemberBasicDetailsState
                     // close dialog
                     _goToListPage(context); // navigate
                   },
-                 child: const Text(
+                  child: const Text(
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     "OK",
@@ -197,6 +215,42 @@ class _EditFamilyMemberBasicDetailsState
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // ✅ ADD THIS: Dispose focus nodes
+    familyNameFocus.dispose();
+    mobileFocus.dispose();
+    whatsappFocus.dispose();
+    surveyorFocus.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  // ✅ ADD THIS FUNCTION: Scroll to widget and focus
+  void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+    final ctx = key.currentContext;
+
+    if (ctx == null) return;
+
+    // Close keyboard from previous field
+    FocusScope.of(context).unfocus();
+
+    // Scroll first
+    Scrollable.ensureVisible(
+      ctx,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      alignment: 0.25,
+    );
+
+    // Focus AFTER frame is rendered
+    if (focusNode != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    }
   }
 
   @override
@@ -319,6 +373,8 @@ class _EditFamilyMemberBasicDetailsState
                         child: Column(
                           children: [
                             AppTextField(
+                              key: familyNameKey,
+                              focusNode: familyNameFocus,
                               controller: familyMemberName,
                               label: "* കുടുംബാംഗത്തിന്റെ പേര്",
                               labelColor: AppColor.hintText2,
@@ -334,7 +390,9 @@ class _EditFamilyMemberBasicDetailsState
                               children: [
                                 Expanded(
                                   child: AppTextField(
+                                    key: mobileKey,
                                     controller: mobileNumber,
+                                    focusNode: mobileFocus,
                                     label: "* മൊബൈൽ നമ്പർ",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
@@ -349,7 +407,9 @@ class _EditFamilyMemberBasicDetailsState
                                 const SizedBox(width: 20),
                                 Expanded(
                                   child: AppTextField(
+                                    key: whatsappKey,
                                     controller: whatsupNumber,
+                                    focusNode: whatsappFocus,
                                     label: "* വാട്സ്ആപ്പ് നമ്പർ",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
@@ -377,6 +437,7 @@ class _EditFamilyMemberBasicDetailsState
                                   }
 
                                   return AppDropdownField<String>(
+                                    key: bloodGroupKey,
                                     label: '* രക്തഗ്രൂപ്പ്',
                                     selectedValue: selectedBloodGroup,
                                     borderColor: AppColor.borderColor,
@@ -423,6 +484,7 @@ class _EditFamilyMemberBasicDetailsState
                                   }
 
                                   return AppDropdownField<String>(
+                                    key: relationKey,
                                     label: '* കുടുംബനാഥനുമായുള്ള ബന്ധം',
                                     selectedValue: selectedReletion,
                                     borderColor: AppColor.borderColor,
@@ -468,6 +530,7 @@ class _EditFamilyMemberBasicDetailsState
                                     selectedGender = match.name;
                                   }
                                   return AppDropdownField<String>(
+                                    key: genderKey,
                                     label: '* ലിംഗം',
                                     selectedValue: selectedGender,
                                     borderColor: AppColor.borderColor,
@@ -506,6 +569,7 @@ class _EditFamilyMemberBasicDetailsState
                                 Expanded(
                                   child: AppDateField(
                                     context: context,
+                                    key: dobKey,
                                     label: '* ജനനത്തീയതി',
                                     borderColor: AppColor.borderColor,
                                     labelColor: AppColor.hintText2,
@@ -513,6 +577,11 @@ class _EditFamilyMemberBasicDetailsState
                                     textColor: AppColor.primary,
                                     validator: Validator.validateDate,
                                     controller: selectedDate,
+                                    onDateSelected: (DateTime date) {
+                                      setState(() {
+                                        selectedDob = date;
+                                      });
+                                    },
                                     focusedBorderColor: AppColor.borderColor,
                                   ),
                                 ),
@@ -665,6 +734,8 @@ class _EditFamilyMemberBasicDetailsState
                             ),
                             SizedBox(height: 20),
                             AppTextField(
+                              key: surveyorKey,
+                              focusNode: surveyorFocus,
                               controller: surveyorNameLabel,
                               label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
@@ -702,36 +773,71 @@ class _EditFamilyMemberBasicDetailsState
                               if (familyMemberName.text.trim().isEmpty) {
                                 showSnack(
                                     context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
+                                _scrollToField(familyNameKey,
+                                    focusNode: familyNameFocus);
                                 return;
                               }
                               if (mobileNumber.text.trim().isEmpty) {
                                 showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
+                                _scrollToField(mobileKey,
+                                    focusNode: mobileFocus);
                                 return;
                               }
+                              if (!RegExp(r'^[0-9]{10}$')
+                                  .hasMatch(mobileNumber.text.trim())) {
+                                showSnack(
+                                    context, "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
+                                _scrollToField(mobileKey,
+                                    focusNode: mobileFocus);
+                                return;
+                              }
+
                               if (whatsupNumber.text.trim().isEmpty) {
                                 showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
+                                _scrollToField(whatsappKey,
+                                    focusNode: whatsappFocus);
+                                return;
+                              }
+                              if (!RegExp(r'^[0-9]{10}$')
+                                  .hasMatch(whatsupNumber.text.trim())) {
+                                showSnack(context,
+                                    "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
+                                _scrollToField(whatsappKey,
+                                    focusNode: whatsappFocus);
                                 return;
                               }
                               if (selectedBloodGroup == null ||
                                   selectedBloodGroup!.isEmpty) {
                                 showSnack(
                                     context, "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
+                                _scrollToField(bloodGroupKey);
                                 return;
                               }
                               if (selectedReletion == null ||
                                   selectedReletion!.isEmpty) {
                                 showSnack(context,
                                     "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
+                                _scrollToField(relationKey);
                                 return;
                               }
                               if (selectedGender == null ||
                                   selectedGender!.isEmpty) {
                                 showSnack(context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
+                                _scrollToField(genderKey);
                                 return;
                               }
                               if (selectedDate == null ||
                                   selectedDate.text.isEmpty) {
                                 showSnack(context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
+                                _scrollToField(dobKey);
+                                return;
+                              }
+
+                              if (surveyorNameLabel.text.trim().isEmpty) {
+                                showSnack(
+                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                _scrollToField(surveyorKey,
+                                    focusNode: surveyorFocus);
                                 return;
                               }
 

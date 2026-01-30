@@ -52,7 +52,8 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
   String? hasHealthIssuesId;
   String? requiredHealthSupports;
   bool _allDataLoaded = false;
-
+    final GlobalKey surveyorKey = GlobalKey();
+      final FocusNode surveyorFocus = FocusNode();
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -65,7 +66,45 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
         healthInsuranceState is HealthInsuranceLoaded &&
         requiredHealthState is RequiredHealthSupportLoaded;
   }
+    void showSnack(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+    );
+  }
+  @override
+  void dispose() {
+    // ✅ ADD THIS: Dispose focus nodes
+   
 
+    surveyorFocus.dispose();
+ 
+    super.dispose();
+  }
+
+  // ✅ ADD THIS FUNCTION: Scroll to widget and focus
+  void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+    final ctx = key.currentContext;
+
+    if (ctx == null) return;
+
+    // Close keyboard from previous field
+    FocusScope.of(context).unfocus();
+
+    // Scroll first
+    Scrollable.ensureVisible(
+      ctx,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      alignment: 0.25,
+    );}
   void _populateFields(HealthModel value) {
     patient = int.tryParse(value.isPatient) ?? 0;
     hasDisability = int.tryParse(value.disabled) ?? 0;
@@ -443,6 +482,8 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             ),
                             SizedBox(height: 20),
                             AppTextField(
+                                key: surveyorKey,
+                              focusNode: surveyorFocus,
                               controller: surveyorNameLabel,
                               label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                               labelColor: AppColor.hintText2,
@@ -477,6 +518,14 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                                 ? "സമർപ്പിക്കുന്നു..."
                                 : "സമർപ്പിക്കുക",
                             onPressed: () {
+                                 
+                              if (surveyorNameLabel.text.trim().isEmpty) {
+                                showSnack(
+                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                _scrollToField(surveyorKey,
+                                    focusNode: surveyorFocus);
+                                return;
+                              }
                               final finalEditId = widget.editId ?? '';
 
                               if (finalEditId.isEmpty) {
