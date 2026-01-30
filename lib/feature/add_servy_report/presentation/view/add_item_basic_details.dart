@@ -279,6 +279,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   void dispose() {
     selectedLandAreaController.dispose();
     surveyornamecontroller.dispose();
+      landAreaFocus.dispose();
+  surveyorFocus.dispose();
+  selectedLandAreaController.dispose();
+  surveyornamecontroller.dispose();
     super.dispose();
   }
 
@@ -311,6 +315,29 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   int electricityConnection = 0;
   int benefitsReceived = 0;
   int benefitsWanted = 0;
+final FocusNode landAreaFocus = FocusNode();
+final FocusNode surveyorFocus = FocusNode();
+final GlobalKey houseTypeKey = GlobalKey();
+final GlobalKey landAreaKey = GlobalKey();
+final GlobalKey surveyorKey = GlobalKey();
+void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+  final ctx = key.currentContext;
+  if (ctx != null) {
+    Scrollable.ensureVisible(
+      ctx,
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.easeInOut,
+      alignment: 0.25,
+    );
+
+    if (focusNode != null) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        focusNode.requestFocus();
+      });
+    }
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -376,6 +403,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                               }
                                               return AppDropdownField<String>(
                                                 label: '* വീടിന്റെ തരം',
+                                                  key: houseTypeKey,
                                                 borderColor:
                                                     AppColor.borderColor,
                                                 selectedTextColor:
@@ -782,6 +810,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                                     height: 20,
                                   ),
                                   AppTextField(
+                                      key: surveyorKey,
+                                      focusNode: surveyorFocus,
                                     controller: surveyornamecontroller,
                                     label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                                     labelColor: AppColor.hintText2,
@@ -923,9 +953,11 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
+            
           ),
         ),
       );
+         _scrollToField(houseTypeKey);
       return;
     }
 
@@ -939,6 +971,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
           content: Text("സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
         ),
       );
+          _scrollToField(surveyorKey, focusNode: surveyorFocus); 
       return;
     }
 

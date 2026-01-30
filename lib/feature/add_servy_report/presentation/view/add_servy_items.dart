@@ -72,8 +72,58 @@ class _AddServyItemsState extends State<AddServyItems> {
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
   bool get isAdd => widget.mode == PageMode.add;
+  final FocusNode guardianFocus = FocusNode();
+  final FocusNode houseNameFocus = FocusNode();
+  final FocusNode houseNumberFocus = FocusNode();
+  final FocusNode cardNumberFocus = FocusNode();
+  final FocusNode surveyorFocus = FocusNode();
 
   int? selectedRationCard;
+  final guardianKey = GlobalKey();
+  final houseNameKey = GlobalKey();
+  final houseNumberKey = GlobalKey();
+  final cardNumberKey = GlobalKey();
+  final rationCardTypeKey = GlobalKey();
+  final surveyorKey = GlobalKey();
+
+  void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeInOut,
+        alignment: 0.25,
+      );
+
+      // ✅ Focus field after scroll animation
+      if (focusNode != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          focusNode.requestFocus();
+        });
+      }
+    }
+  }
+
+  bool guardianError = false;
+  bool houseNameError = false;
+  bool houseNumberError = false;
+  bool cardNumberError = false;
+  bool rationCardTypeError = false;
+  bool sarvayorError = false;
+
+  void _clearValidationOnChange() {
+    if (hasAttemptedSubmit) {
+      setState(() {
+        guardianError = false;
+        houseNameError = false;
+        houseNumberError = false;
+        cardNumberError = false;
+        rationCardTypeError = false;
+        sarvayorError = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -103,12 +153,6 @@ class _AddServyItemsState extends State<AddServyItems> {
     anualIncome.addListener(_clearValidationOnChange);
     cardNumber.addListener(_clearValidationOnChange);
     surveyornamecontroller.addListener(_clearValidationOnChange);
-  }
-
-  void _clearValidationOnChange() {
-    if (hasAttemptedSubmit) {
-      setState(() {});
-    }
   }
 
   void showSuccessDialog(BuildContext context) {
@@ -205,6 +249,11 @@ class _AddServyItemsState extends State<AddServyItems> {
 
   @override
   void dispose() {
+    guardianFocus.dispose();
+    houseNameFocus.dispose();
+    houseNumberFocus.dispose();
+    cardNumberFocus.dispose();
+    surveyorFocus.dispose();
     gardienName.dispose();
     houseName.dispose();
     houseNumber.dispose();
@@ -329,7 +378,7 @@ class _AddServyItemsState extends State<AddServyItems> {
           body: BlocBuilder<RationCardBloc, RationCardState>(
             builder: (context, state) {
               if (state is RationCardLoading) {
-                return Container(
+                return SizedBox(
                   height: double.infinity,
                   width: double.infinity,
                   child: Center(
@@ -367,7 +416,9 @@ class _AddServyItemsState extends State<AddServyItems> {
                             child: Column(
                               children: [
                                 AppTextField(
+                                  key: guardianKey,
                                   controller: gardienName,
+                                  focusNode: guardianFocus,
                                   label: "* കുടുംബനാഥൻ്റെ പേര്",
                                   labelColor: AppColor.hintText2,
                                   borderColor: AppColor.borderColor,
@@ -381,6 +432,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 SizedBox(height: 18),
                                 AppTextField(
                                   controller: houseName,
+                                  key: houseNameKey,
+                                  focusNode: houseNameFocus,
                                   label: "* വീട്ടുപേര്",
                                   labelColor: AppColor.hintText2,
                                   borderColor: AppColor.borderColor,
@@ -397,6 +450,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     Expanded(
                                       child: AppTextField(
                                         controller: houseNumber,
+                                        key: houseNumberKey,
+                                        focusNode: houseNumberFocus,
                                         label: "* വീട്ടുനമ്പർ",
                                         labelColor: AppColor.hintText2,
                                         borderColor: AppColor.borderColor,
@@ -414,6 +469,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     Expanded(
                                       child: AppTextField(
                                         controller: anualIncome,
+
                                         label: "വാർഷിക വരുമാനം",
                                         labelColor: AppColor.hintText2,
                                         borderColor: AppColor.borderColor,
@@ -434,6 +490,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     Expanded(
                                       child: AppTextField(
                                         controller: cardNumber,
+                                        key: cardNumberKey,
+                                        focusNode: cardNumberFocus,
                                         label: "* റേഷൻ കാർഡ് നമ്പർ",
                                         type: "card_number",
                                         validator:
@@ -475,6 +533,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                             }
 
                                             return AppDropdownField<String>(
+                                              key: rationCardTypeKey,
                                               label: '* റേഷൻ കാർഡ് തരം',
                                               selectedValue:
                                                   selectedRationCardLabel,
@@ -498,7 +557,6 @@ class _AddServyItemsState extends State<AddServyItems> {
                                                       .firstWhere((e) =>
                                                           e.name == value)
                                                       .id;
-                                                  // showRationCardError = false;
                                                 });
                                               },
                                             );
@@ -541,7 +599,9 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 if (isEdit || isView) ...[
                                   SizedBox(height: 18),
                                   AppTextField(
+                                    key: surveyorKey,
                                     controller: surveyornamecontroller,
+                                    focusNode: surveyorFocus,
                                     label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                                     labelColor: AppColor.hintText2,
                                     borderColor: AppColor.borderColor,
@@ -566,6 +626,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                     label: "അടുത്തത്",
                                     onPressed: () {
                                       if (gardienName.text.trim().isEmpty) {
+                                        setState(() => guardianError = true);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -578,10 +639,13 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               content: Text(
                                                   "കുടുംബനാഥൻ്റെ പേര് നൽകുക")),
                                         );
+                                        _scrollToField(guardianKey,
+                                            focusNode: guardianFocus);
                                         return;
                                       }
 
                                       if (houseName.text.trim().isEmpty) {
+                                        setState(() => houseNameError = true);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -594,10 +658,13 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               content:
                                                   Text("വീട്ടുപേര് നൽകുക")),
                                         );
+                                        _scrollToField(houseNameKey,
+                                            focusNode: houseNameFocus);
                                         return;
                                       }
 
                                       if (houseNumber.text.trim().isEmpty) {
+                                        setState(() => cardNumberError = true);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -610,9 +677,13 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               content:
                                                   Text("വീട്ടുനമ്പർ നൽകുക")),
                                         );
+                                        _scrollToField(houseNumberKey,
+                                            focusNode: houseNumberFocus);
                                         return;
                                       }
                                       if (cardNumber.text.trim().isEmpty) {
+                                        setState(
+                                            () => rationCardTypeError = true);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -625,6 +696,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               content: Text(
                                                   "റേഷൻ കാർഡ് നമ്പർ നൽകുക")),
                                         );
+                                        _scrollToField(cardNumberKey,
+                                            focusNode: cardNumberFocus);
                                         return;
                                       }
 
@@ -641,6 +714,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                               content: Text(
                                                   "റേഷൻ കാർഡ് തരം തിരഞ്ഞെടുക്കുക")),
                                         );
+                                        _scrollToField(rationCardTypeKey);
                                         return;
                                       }
                                       if (isEdit) {
@@ -660,6 +734,8 @@ class _AddServyItemsState extends State<AddServyItems> {
                                                   "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
                                             ),
                                           );
+                                          _scrollToField(surveyorKey,
+                                              focusNode: surveyorFocus);
                                           return;
                                         }
                                       }

@@ -73,6 +73,23 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   final TextEditingController courseStudy = TextEditingController();
   final TextEditingController studyCenter = TextEditingController();
   final TextEditingController selectedDate = TextEditingController();
+  final FocusNode familyNameFocus = FocusNode();
+  final FocusNode mobileFocus = FocusNode();
+  final FocusNode whatsappFocus = FocusNode();
+  final FocusNode surveyorFocus = FocusNode();
+
+  // ✅ ADD THIS: ScrollController
+  final ScrollController scrollController = ScrollController();
+
+  // ✅ ADD THESE: GlobalKeys for scroll-to-widget
+  final GlobalKey familyNameKey = GlobalKey();
+  final GlobalKey mobileKey = GlobalKey();
+  final GlobalKey whatsappKey = GlobalKey();
+  final GlobalKey bloodGroupKey = GlobalKey();
+  final GlobalKey relationKey = GlobalKey();
+  final GlobalKey genderKey = GlobalKey();
+  final GlobalKey dobKey = GlobalKey();
+  final GlobalKey surveyorKey = GlobalKey();
 
   bool _isAnyBlocLoading(BuildContext context) {
     final relationState = context.watch<RelationDropBloc>().state;
@@ -336,6 +353,42 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   }
 
   @override
+  void dispose() {
+    // ✅ ADD THIS: Dispose focus nodes
+    familyNameFocus.dispose();
+    mobileFocus.dispose();
+    whatsappFocus.dispose();
+    surveyorFocus.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  // ✅ ADD THIS FUNCTION: Scroll to widget and focus
+  void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+    final ctx = key.currentContext;
+
+    if (ctx == null) return;
+
+    // Close keyboard from previous field
+    FocusScope.of(context).unfocus();
+
+    // Scroll first
+    Scrollable.ensureVisible(
+      ctx,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      alignment: 0.25,
+    );
+
+    // Focus AFTER frame is rendered
+    if (focusNode != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isLoading = _isAnyBlocLoading(context);
 
@@ -379,47 +432,61 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               iconAsset: "assets/images/house.png",
                               child: Column(
                                 children: [
-                                  AppTextField(
-                                    controller: familyMemberName,
-                                    label: "* കുടുംബാംഗത്തിന്റെ പേര്",
-                                    labelColor: AppColor.hintText2,
-                                    borderColor: AppColor.borderColor,
-                                    focusedBorderColor: AppColor.primary,
-                                    labelfontSizes: 12,
-                                    textColor: AppColor.primary,
-                                    validator: Validator.validateName,
-                                    width: double.infinity,
+                                  Container(
+                                    key: familyNameKey,
+                                    child: AppTextField(
+                                      controller: familyMemberName,
+                                      focusNode: familyNameFocus,
+                                      label: "* കുടുംബാംഗത്തിന്റെ പേര്",
+                                      labelColor: AppColor.hintText2,
+                                      borderColor: AppColor.borderColor,
+                                      focusedBorderColor: AppColor.primary,
+                                      labelfontSizes: 12,
+                                      textColor: AppColor.primary,
+                                      validator: Validator.validateName,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                   const SizedBox(height: 20),
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: AppTextField(
-                                          controller: mobileNumber,
-                                          label: "* മൊബൈൽ നമ്പർ",
-                                          labelColor: AppColor.hintText2,
-                                          borderColor: AppColor.borderColor,
-                                          focusedBorderColor: AppColor.primary,
-                                          labelfontSizes: 12,
-                                          textColor: AppColor.primary,
-                                          validator: Validator.validateMobile,
-                                          type: "mobile",
-                                          width: double.infinity,
+                                        child: Container(
+                                          key: mobileKey,
+                                          child: AppTextField(
+                                            controller: mobileNumber,
+                                            focusNode: mobileFocus,
+                                            label: "* മൊബൈൽ നമ്പർ",
+                                            labelColor: AppColor.hintText2,
+                                            borderColor: AppColor.borderColor,
+                                            focusedBorderColor:
+                                                AppColor.primary,
+                                            labelfontSizes: 12,
+                                            textColor: AppColor.primary,
+                                            validator: Validator.validateMobile,
+                                            type: "mobile",
+                                            width: double.infinity,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 20),
                                       Expanded(
-                                        child: AppTextField(
-                                          controller: whatsupNumber,
-                                          label: "* വാട്സ്ആപ്പ് നമ്പർ",
-                                          labelColor: AppColor.hintText2,
-                                          borderColor: AppColor.borderColor,
-                                          focusedBorderColor: AppColor.primary,
-                                          labelfontSizes: 12,
-                                          textColor: AppColor.primary,
-                                          validator: Validator.validateMobile,
-                                          type: "mobile",
-                                          width: double.infinity,
+                                        child: Container(
+                                          key: whatsappKey,
+                                          child: AppTextField(
+                                            controller: whatsupNumber,
+                                            focusNode: whatsappFocus,
+                                            label: "* വാട്സ്ആപ്പ് നമ്പർ",
+                                            labelColor: AppColor.hintText2,
+                                            borderColor: AppColor.borderColor,
+                                            focusedBorderColor:
+                                                AppColor.primary,
+                                            labelfontSizes: 12,
+                                            textColor: AppColor.primary,
+                                            validator: Validator.validateMobile,
+                                            type: "mobile",
+                                            width: double.infinity,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -434,30 +501,37 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                       }
 
                                       if (state is BloodGroupLoaded) {
-                                        return AppDropdownField<String>(
-                                          label: '* രക്തഗ്രൂപ്പ്',
-                                          selectedValue: selectedBloodGroup,
-                                          borderColor: AppColor.borderColor,
-                                          labelColor: AppColor.hintText2,
-                                          selectedTextColor: AppColor.primary,
-                                          iconColor: AppColor.black,
-                                          dropdownBgColor: AppColor.white,
-                                          dropdownTextColor: AppColor.hintText,
-                                          validator:
-                                              Validator.validateSelection,
-                                          items: state.items
-                                              .map((e) => e.name)
-                                              .toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedBloodGroup = value;
+                                        return Container(
+                                          key: bloodGroupKey,
+                                          child: AppDropdownField<String>(
+                                            label: '* രക്തഗ്രൂപ്പ്',
+                                            selectedValue: selectedBloodGroup,
+                                            borderColor: AppColor.borderColor,
+                                            focusedBorderColor:
+                                                AppColor.primary,
+                                            labelColor: AppColor.hintText2,
+                                            selectedTextColor: AppColor.primary,
+                                            iconColor: AppColor.black,
+                                            dropdownBgColor: AppColor.white,
+                                            dropdownTextColor:
+                                                AppColor.hintText,
+                                            validator:
+                                                Validator.validateSelection,
+                                            items: state.items
+                                                .map((e) => e.name)
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedBloodGroup = value;
 
-                                              selectedBloodGroupId = state.items
-                                                  .firstWhere(
-                                                      (e) => e.name == value)
-                                                  .id;
-                                            });
-                                          },
+                                                selectedBloodGroupId = state
+                                                    .items
+                                                    .firstWhere(
+                                                        (e) => e.name == value)
+                                                    .id;
+                                              });
+                                            },
+                                          ),
                                         );
                                       }
 
@@ -483,30 +557,36 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                       }
 
                                       if (state is RelationDropLoaded) {
-                                        return AppDropdownField<String>(
-                                          label: '* കുടുംബനാഥനുമായുള്ള ബന്ധം',
-                                          selectedValue: selectedReletion,
-                                          borderColor: AppColor.borderColor,
-                                          labelColor: AppColor.hintText2,
-                                          selectedTextColor: AppColor.primary,
-                                          iconColor: AppColor.black,
-                                          dropdownBgColor: AppColor.white,
-                                          dropdownTextColor: AppColor.hintText,
-                                          validator:
-                                              Validator.validateSelection,
-                                          items: state.items
-                                              .map((e) => e.name)
-                                              .toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedReletion = value;
+                                        return Container(
+                                          key: relationKey,
+                                          child: AppDropdownField<String>(
+                                            label: '* കുടുംബനാഥനുമായുള്ള ബന്ധം',
+                                            selectedValue: selectedReletion,
+                                            borderColor: AppColor.borderColor,
+                                            labelColor: AppColor.hintText2,
+                                            focusedBorderColor:
+                                                AppColor.primary,
+                                            selectedTextColor: AppColor.primary,
+                                            iconColor: AppColor.black,
+                                            dropdownBgColor: AppColor.white,
+                                            dropdownTextColor:
+                                                AppColor.hintText,
+                                            validator:
+                                                Validator.validateSelection,
+                                            items: state.items
+                                                .map((e) => e.name)
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedReletion = value;
 
-                                              selectedRelationId = state.items
-                                                  .firstWhere(
-                                                      (e) => e.name == value)
-                                                  .id;
-                                            });
-                                          },
+                                                selectedRelationId = state.items
+                                                    .firstWhere(
+                                                        (e) => e.name == value)
+                                                    .id;
+                                              });
+                                            },
+                                          ),
                                         );
                                       }
 
@@ -531,29 +611,35 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                       }
 
                                       if (state is GenderLoaded) {
-                                        return AppDropdownField<String>(
-                                          label: '* ലിംഗം',
-                                          selectedValue: selectedGender,
-                                          borderColor: AppColor.borderColor,
-                                          labelColor: AppColor.hintText2,
-                                          selectedTextColor: AppColor.primary,
-                                          iconColor: AppColor.black,
-                                          dropdownBgColor: AppColor.white,
-                                          dropdownTextColor: AppColor.hintText,
-                                          validator:
-                                              Validator.validateSelection,
-                                          items: state.items
-                                              .map((e) => e.name)
-                                              .toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedGender = value;
-                                              selectedGenderId = state.items
-                                                  .firstWhere(
-                                                      (e) => e.name == value)
-                                                  .id;
-                                            });
-                                          },
+                                        return Container(
+                                          key: genderKey,
+                                          child: AppDropdownField<String>(
+                                            label: '* ലിംഗം',
+                                            focusedBorderColor:
+                                                AppColor.primary,
+                                            selectedValue: selectedGender,
+                                            borderColor: AppColor.borderColor,
+                                            labelColor: AppColor.hintText2,
+                                            selectedTextColor: AppColor.primary,
+                                            iconColor: AppColor.black,
+                                            dropdownBgColor: AppColor.white,
+                                            dropdownTextColor:
+                                                AppColor.hintText,
+                                            validator:
+                                                Validator.validateSelection,
+                                            items: state.items
+                                                .map((e) => e.name)
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedGender = value;
+                                                selectedGenderId = state.items
+                                                    .firstWhere(
+                                                        (e) => e.name == value)
+                                                    .id;
+                                              });
+                                            },
+                                          ),
                                         );
                                       }
 
@@ -572,24 +658,27 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: AppDateField(
-                                            context: context,
-                                            label: '* ജനനത്തീയതി',
-                                            borderColor: AppColor.borderColor,
-                                            labelColor: AppColor.hintText2,
-                                            iconColor: AppColor.hintText2,
-                                            textColor: AppColor.primary,
-                                            focusedBorderColor:
-                                                AppColor.borderColor,
-                                            validator: Validator.validateDate,
-                                            controller: selectedDate,
-                                            onDateSelected: (DateTime date) {
-                                              setState(() {
-                                                selectedDob = date;
-                                              });
-                                            }
-                                            //  selectedDob = date;
-                                            ),
+                                        child: Container(
+                                          key: dobKey,
+                                          child: AppDateField(
+                                              context: context,
+                                              label: '* ജനനത്തീയതി',
+                                              borderColor: AppColor.borderColor,
+                                              labelColor: AppColor.hintText2,
+                                              iconColor: AppColor.hintText2,
+                                              textColor: AppColor.primary,
+                                              focusedBorderColor:
+                                                  AppColor.borderColor,
+                                              validator: Validator.validateDate,
+                                              controller: selectedDate,
+                                              onDateSelected: (DateTime date) {
+                                                setState(() {
+                                                  selectedDob = date;
+                                                });
+                                              }
+                                              //  selectedDob = date;
+                                              ),
+                                        ),
                                       ),
                                       SizedBox(width: 20),
                                       Flexible(
@@ -1574,16 +1663,20 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                     },
                                   ),
                                   SizedBox(height: 20),
-                                  AppTextField(
-                                    controller: surveyorNameLabel,
-                                    label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
-                                    labelColor: AppColor.hintText2,
-                                    borderColor: AppColor.borderColor,
-                                    focusedBorderColor: AppColor.primary,
-                                    labelfontSizes: 12,
-                                    textColor: AppColor.primary,
-                                    validator: Validator.validateName,
-                                    width: double.infinity,
+                                  Container(
+                                    key: surveyorKey,
+                                    child: AppTextField(
+                                      controller: surveyorNameLabel,
+                                      focusNode: surveyorFocus,
+                                      label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
+                                      labelColor: AppColor.hintText2,
+                                      borderColor: AppColor.borderColor,
+                                      focusedBorderColor: AppColor.primary,
+                                      labelfontSizes: 12,
+                                      textColor: AppColor.primary,
+                                      validator: Validator.validateName,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1594,10 +1687,16 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                 if (familyMemberName.text.trim().isEmpty) {
                                   showSnack(
                                       context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
+                                  _scrollToField(familyNameKey,
+                                      focusNode: familyNameFocus);
                                   return;
                                 }
+
+                                // Validate mobile number
                                 if (mobileNumber.text.trim().isEmpty) {
                                   showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
+                                  _scrollToField(mobileKey,
+                                      focusNode: mobileFocus);
                                   return;
                                 }
 
@@ -1605,11 +1704,16 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                     .hasMatch(mobileNumber.text.trim())) {
                                   showSnack(context,
                                       "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
+                                  _scrollToField(mobileKey,
+                                      focusNode: mobileFocus);
                                   return;
                                 }
 
+                                // Validate WhatsApp number
                                 if (whatsupNumber.text.trim().isEmpty) {
                                   showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
+                                  _scrollToField(whatsappKey,
+                                      focusNode: whatsappFocus);
                                   return;
                                 }
 
@@ -1617,38 +1721,54 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                     .hasMatch(whatsupNumber.text.trim())) {
                                   showSnack(context,
                                       "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
+                                  _scrollToField(whatsappKey,
+                                      focusNode: whatsappFocus);
                                   return;
                                 }
 
+                                // Validate blood group
                                 if (selectedBloodGroup == null ||
                                     selectedBloodGroup!.isEmpty) {
                                   showSnack(
                                       context, "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
+                                  _scrollToField(bloodGroupKey);
                                   return;
                                 }
+
+                                // Validate relation
                                 if (selectedReletion == null ||
                                     selectedReletion!.isEmpty) {
                                   showSnack(context,
                                       "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
+                                  _scrollToField(relationKey);
                                   return;
                                 }
+
+                                // ✅ GENDER VALIDATION
                                 if (selectedGender == null ||
                                     selectedGender!.isEmpty) {
                                   showSnack(context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
+                                  _scrollToField(genderKey);
                                   return;
                                 }
+
+                                // Validate DOB
                                 if (selectedDob == null) {
                                   showSnack(
                                       context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
+                                  _scrollToField(dobKey);
                                   return;
                                 }
 
+                                // Validate surveyor name
+
                                 final dobApi =
                                     "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
-
                                 if (surveyorNameLabel.text.trim().isEmpty) {
                                   showSnack(
                                       context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                  _scrollToField(surveyorKey,
+                                      focusNode: surveyorFocus);
                                   return;
                                 }
 

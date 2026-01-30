@@ -157,12 +157,14 @@ void openWithLoad(BuildContext context, PageMode mode) {
                           style: TextStyle(fontSize: 13, color: AppColor.black),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          widget.houseName,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.black,
+                        Expanded(
+                          child: Text(
+                            widget.houseName,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              color: AppColor.black,
+                            ),
                           ),
                         ),
                       ],
@@ -414,7 +416,7 @@ void openWithLoad(BuildContext context, PageMode mode) {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(2),
+                    padding: EdgeInsets.zero,
                     backgroundColor: AppColor.button,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -427,7 +429,8 @@ void openWithLoad(BuildContext context, PageMode mode) {
                   ),
                 ),
               ),
-              const SizedBox(width: 38),
+              Spacer()
+             
             ],
           ),
         ],

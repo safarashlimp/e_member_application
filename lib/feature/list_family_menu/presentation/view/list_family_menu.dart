@@ -59,162 +59,164 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                 );
               },
             ),
-            SizedBox(height: 20),
-            Container(
-              // height: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(9),
-              decoration: BoxDecoration(
-                color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.grey.withOpacity(0.5),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Column(
-                  children: [
-                    MenuContainar(
-                      title: 'കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരം',
-                      iconAsset: 'assets/images/Mask group (16).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightBlue,
-                      iconColor: AppColor.iconColor,
-                      titleColor: AppColor.iconColor,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider(
-                              create: (context) => FamilyMemberListBloc(
-                                GetFamilyMemberListUsecase(
-                                  FamilyMemberListRepositoryImpl(http.Client()),
-                                ),
-                              )..add(FetchFamilyMemberList("1")),
-                              child: ListFamily(
-                                sectionType: SurveySectionType.personal,
-                                position: "1",
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    MenuContainar(
-                      title: 'വിദ്യാഭ്യാസം',
-                      iconAsset: 'assets/images/Mask group (17).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightgreen,
-                      iconColor: AppColor.green,
-                      titleColor: AppColor.green,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                    create: (context) => FamilyMemberListBloc(
-                                      GetFamilyMemberListUsecase(
-                                        FamilyMemberListRepositoryImpl(
-                                            http.Client()),
-                                      ),
-                                    )..add(FetchFamilyMemberList("2")),
-                                    child: ListFamily(
-                                      sectionType: SurveySectionType.education,
-                                      position: "2",
-                                    ),
-                                  )),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    MenuContainar(
-                      title: 'തൊഴിൽ',
-                      iconAsset: 'assets/images/Mask group (18).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightOrange,
-                      iconColor: AppColor.orange,
-                      titleColor: AppColor.orange,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                    create: (context) => FamilyMemberListBloc(
-                                      GetFamilyMemberListUsecase(
-                                        FamilyMemberListRepositoryImpl(
-                                            http.Client()),
-                                      ),
-                                    )..add(FetchFamilyMemberList("3")),
-                                    child: ListFamily(
-                                      sectionType: SurveySectionType.employment,
-                                      position: "3",
-                                    ),
-                                  )),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    MenuContainar(
-                      title: 'ആരോഗ്യം',
-                      iconAsset: 'assets/images/Mask group (20).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightRed,
-                      iconColor: AppColor.red,
-                      titleColor: AppColor.red,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                    create: (context) => FamilyMemberListBloc(
-                                      GetFamilyMemberListUsecase(
-                                        FamilyMemberListRepositoryImpl(
-                                            http.Client()),
-                                      ),
-                                    )..add(FetchFamilyMemberList('4')),
-                                    child: ListFamily(
-                                      sectionType: SurveySectionType.health,
-                                      position: '4',
-                                    ),
-                                  )),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    MenuContainar(
-                      title: 'സാമൂഹിക  /  ക്ഷേമ വിവരങ്ങൾ',
-                      iconAsset: 'assets/images/Mask group (21).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightPurple,
-                      iconColor: AppColor.purple,
-                      titleColor: AppColor.purple,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                    create: (context) => FamilyMemberListBloc(
-                                      GetFamilyMemberListUsecase(
-                                        FamilyMemberListRepositoryImpl(
-                                            http.Client()),
-                                      ),
-                                    )..add(FetchFamilyMemberList('5')),
-                                    child: ListFamily(
-                                      sectionType: SurveySectionType.welfare,
-                                      position: '5',
-                                    ),
-                                  )),
-                        );
-                      },
+           // SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+              
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColor.secondary,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.grey.withOpacity(0.5),
+                      blurRadius: 5,
+                      spreadRadius: 1,
                     ),
                   ],
+                ),
+              
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      MenuContainar(
+                        title: 'കുടുംബാംഗത്തിന്റെ വ്യക്തിഗത വിവരം',
+                        iconAsset: 'assets/images/Mask group (16).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightBlue,
+                        iconColor: AppColor.iconColor,
+                        titleColor: AppColor.iconColor,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (context) => FamilyMemberListBloc(
+                                  GetFamilyMemberListUsecase(
+                                    FamilyMemberListRepositoryImpl(http.Client()),
+                                  ),
+                                )..add(FetchFamilyMemberList("1")),
+                                child: ListFamily(
+                                  sectionType: SurveySectionType.personal,
+                                  position: "1",
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      MenuContainar(
+                        title: 'വിദ്യാഭ്യാസം',
+                        iconAsset: 'assets/images/Mask group (17).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightgreen,
+                        iconColor: AppColor.green,
+                        titleColor: AppColor.green,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                      create: (context) => FamilyMemberListBloc(
+                                        GetFamilyMemberListUsecase(
+                                          FamilyMemberListRepositoryImpl(
+                                              http.Client()),
+                                        ),
+                                      )..add(FetchFamilyMemberList("2")),
+                                      child: ListFamily(
+                                        sectionType: SurveySectionType.education,
+                                        position: "2",
+                                      ),
+                                    )),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      MenuContainar(
+                        title: 'തൊഴിൽ',
+                        iconAsset: 'assets/images/Mask group (18).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightOrange,
+                        iconColor: AppColor.orange,
+                        titleColor: AppColor.orange,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                      create: (context) => FamilyMemberListBloc(
+                                        GetFamilyMemberListUsecase(
+                                          FamilyMemberListRepositoryImpl(
+                                              http.Client()),
+                                        ),
+                                      )..add(FetchFamilyMemberList("3")),
+                                      child: ListFamily(
+                                        sectionType: SurveySectionType.employment,
+                                        position: "3",
+                                      ),
+                                    )),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      MenuContainar(
+                        title: 'ആരോഗ്യം',
+                        iconAsset: 'assets/images/Mask group (20).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightRed,
+                        iconColor: AppColor.red,
+                        titleColor: AppColor.red,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                      create: (context) => FamilyMemberListBloc(
+                                        GetFamilyMemberListUsecase(
+                                          FamilyMemberListRepositoryImpl(
+                                              http.Client()),
+                                        ),
+                                      )..add(FetchFamilyMemberList('4')),
+                                      child: ListFamily(
+                                        sectionType: SurveySectionType.health,
+                                        position: '4',
+                                      ),
+                                    )),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      MenuContainar(
+                        title: 'സാമൂഹിക  /  ക്ഷേമ വിവരങ്ങൾ',
+                        iconAsset: 'assets/images/Mask group (21).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightPurple,
+                        iconColor: AppColor.purple,
+                        titleColor: AppColor.purple,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                      create: (context) => FamilyMemberListBloc(
+                                        GetFamilyMemberListUsecase(
+                                          FamilyMemberListRepositoryImpl(
+                                              http.Client()),
+                                        ),
+                                      )..add(FetchFamilyMemberList('5')),
+                                      child: ListFamily(
+                                        sectionType: SurveySectionType.welfare,
+                                        position: '5',
+                                      ),
+                                    )),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

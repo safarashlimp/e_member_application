@@ -57,82 +57,85 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
               },
             ),
             SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-            // height: double.infinity,
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(9),
-              decoration: BoxDecoration(
-                color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.grey.withOpacity(0.5),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Column(
-                  children: [
-                    MenuContainar(
-                      title: 'അടിസ്ഥാന വിവരങ്ങൾ',
-                      iconAsset: 'assets/images/Mask group (14).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightBlue,
-                      iconColor: AppColor.iconColor,
-                      titleColor: AppColor.iconColor,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider(
-                              create: (_) => HeaderListBloc(
-                                GetHeaderListUsecase(
-                                  HeaderListRepositoryImpl(http.Client()),
-                                ),
-                              )..add(FetchHeaderList('1')),
-                              child: const ListSurveyReport(
-                                sectionType:
-                                    FamilySurveySectionType.familyBasicDetails,
-                                postion: '1',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    MenuContainar(
-                      title: 'അടിസ്ഥാന സൗകര്യങ്ങൾ',
-                      iconAsset: 'assets/images/Mask group (15).png',
-                      icon: Icons.navigate_next,
-                      backgroundColor: AppColor.lightgreen,
-                      iconColor: AppColor.green,
-                      titleColor: AppColor.green,
-                      onIconTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider(
-                              create: (_) => HeaderListBloc(
-                                GetHeaderListUsecase(
-                                  HeaderListRepositoryImpl(http.Client()),
-                                ),
-                              )..add(FetchHeaderList('2')),
-                              child: const ListSurveyReport(
-                                sectionType:
-                                    FamilySurveySectionType.basicFacilities,
-                                postion: '2',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                width: double.infinity,
+                height: 500,
+                     
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColor.secondary,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.grey.withOpacity(0.5),
+                      blurRadius: 5,
+                      spreadRadius: 1,
                     ),
                   ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      MenuContainar(
+                        title: 'അടിസ്ഥാന വിവരങ്ങൾ',
+                        iconAsset: 'assets/images/Mask group (14).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightBlue,
+                        iconColor: AppColor.iconColor,
+                        titleColor: AppColor.iconColor,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => HeaderListBloc(
+                                  GetHeaderListUsecase(
+                                    HeaderListRepositoryImpl(http.Client()),
+                                  ),
+                                )..add(FetchHeaderList('1')),
+                                child: const ListSurveyReport(
+                                  sectionType:
+                                      FamilySurveySectionType.familyBasicDetails,
+                                  postion: '1',
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      MenuContainar(
+                        title: 'അടിസ്ഥാന സൗകര്യങ്ങൾ',
+                        iconAsset: 'assets/images/Mask group (15).png',
+                        icon: Icons.navigate_next,
+                        backgroundColor: AppColor.lightgreen,
+                        iconColor: AppColor.green,
+                        titleColor: AppColor.green,
+                        onIconTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => HeaderListBloc(
+                                  GetHeaderListUsecase(
+                                    HeaderListRepositoryImpl(http.Client()),
+                                  ),
+                                )..add(FetchHeaderList('2')),
+                                child: const ListSurveyReport(
+                                  sectionType:
+                                      FamilySurveySectionType.basicFacilities,
+                                  postion: '2',
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

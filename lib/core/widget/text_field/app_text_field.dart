@@ -11,6 +11,7 @@ class AppTextField extends StatelessWidget {
   final String? hintText;
   final String? Function(String?)? validator;
   final double width;
+    final FocusNode? focusNode; 
   final double height;
   final Color labelColor;
   final Color textColor;
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
     required this.controller,
     this.type = 'text',
     this.hintText,
+       this.focusNode,
     this.validator,
     this.width = double.infinity,
     this.height = 40,
@@ -81,6 +83,7 @@ class AppTextField extends StatelessWidget {
       //height: height
       child: TextFormField(
         controller: controller,
+          focusNode: focusNode,
         keyboardType: keyboardType,
         inputFormatters: [
           ...formatters,

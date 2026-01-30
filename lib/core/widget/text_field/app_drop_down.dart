@@ -20,7 +20,7 @@ class AppDropdownField<T> extends StatelessWidget {
   final Color dropdownBgColor;
   final Color dropdownTextColor;
   final Color selectedTextColor;
-
+  final Color focusedBorderColor;
   const AppDropdownField({
     super.key,
     this.label,
@@ -38,6 +38,7 @@ class AppDropdownField<T> extends StatelessWidget {
     this.dropdownBgColor = AppColor.white,
     this.dropdownTextColor = AppColor.primary,
     this.selectedTextColor = AppColor.primary,
+     this.focusedBorderColor = AppColor.primary,
   });
 
   @override
@@ -64,7 +65,7 @@ class AppDropdownField<T> extends StatelessWidget {
       decoration: appInputDecoration(
         borderColor: borderColor,
         hintText: hintText,
-        focusedBorderColor: AppColor.borderColor,
+        focusedBorderColor: focusedBorderColor,
         //  errorText: errorText,
       ),
       validator: validator ,
