@@ -1,13 +1,33 @@
 import 'dart:convert';
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/model/dropdownmodel/family_member_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../domain/repository/dropdownrepo/member_drop_repo.dart';
 class MemberDropRepositoryImpl implements MemberDropRepository {
+
+ 
+  late final String _clientId;
+
+  
+  MemberDropRepositoryImpl() {
+    _init();
+  }
+
+Future<void> _init() async {
+    final prefs = await SharedPreferences.getInstance();
+    _clientId = prefs.getString(PrefKeys.clientId) ?? '';
+  }
+
   @override
   Future<List<MemberDropItem>> getRelations() async {
+
+
+
+
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=1",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=1",
       ),
     );
 
@@ -29,7 +49,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getGender() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=2",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=2",
       ),
     );
 
@@ -43,7 +63,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getMaritalStatus() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=3",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=3",
       ),
     );
 
@@ -56,7 +76,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getReligion() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=4",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=4",
       ),
     );
 
@@ -69,7 +89,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getCastes() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=5",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=5",
       ),
     );
 
@@ -86,7 +106,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getQualifications() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=6",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=6",
       ),
     );
 
@@ -108,7 +128,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getEducationList() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=7",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=7",
       ),
     );
 
@@ -130,7 +150,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getEmploymentStatus() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=8",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=8",
       ),
     );
 
@@ -152,7 +172,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getJobs() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=9",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=9",
       ),
     );
 
@@ -174,7 +194,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getEmploymentSupports() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=11",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=11",
       ),
     );
 
@@ -196,7 +216,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getFarmingTypes() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=12",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=12",
       ),
     );
 
@@ -218,7 +238,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getHealthIssues() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=13",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=13",
       ),
     );
 
@@ -240,7 +260,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getHealthInsurance() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=14",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=14",
       ),
     );
 
@@ -262,7 +282,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getRequiredHealthSupports() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=15",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=15",
       ),
     );
 
@@ -284,7 +304,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getPensionTypes() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=16",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=16",
       ),
     );
 
@@ -306,7 +326,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getPensionRequirement() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=17",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=17",
       ),
     );
 
@@ -328,7 +348,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getSkills() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/member_drops.php?clientid=1&posistion=10",
+        "https://emember.org/API/member_drops.php?clientid=$_clientId&posistion=10",
       ),
     );
 
@@ -350,7 +370,7 @@ class MemberDropRepositoryImpl implements MemberDropRepository {
   Future<List<MemberDropItem>> getBloodGroups() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/blood_group.php?clientid=1&posistion=9",
+        "https://emember.org/API/blood_group.php?clientid=$_clientId&posistion=9",
       ),
     );
 
