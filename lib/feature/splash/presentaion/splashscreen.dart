@@ -133,16 +133,7 @@ class _SplashscreenState extends State<Splashscreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) {
-          final datasource = DashboardRemoteDatasource();
-          final repository = DashboardRepositoryImpl(datasource);
-          final useCase = GetDashboardUseCase(repository);
-
-          return BlocProvider(
-            create: (_) => DashboardBloc(useCase)..add(LoadDashboardEvent()),
-            child: DashboardPage(),
-          );
-        },
+    builder: (context) => DashboardPage(),
       ),
     );
   }
@@ -158,19 +149,9 @@ class _SplashscreenState extends State<Splashscreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) {
-          final datasource = DashboardRemoteDatasource();
-          final repository = DashboardRepositoryImpl(datasource);
-          final useCase = GetDashboardUseCase(repository);
-
-          return BlocProvider(
-            create: (_) => DashboardBloc(useCase)..add(LoadDashboardEvent()),
-            child: DashboardPage(
-              updateDiolog: true,
-            ),
-          );
-        },
+    builder: (context) => DashboardPage(),
       ),
+  
     );
   }
 }

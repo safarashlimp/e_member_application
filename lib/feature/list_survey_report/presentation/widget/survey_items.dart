@@ -1,41 +1,6 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/blood_group/blood_group_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/caste/caste_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/education/education_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/emloyment/employment_status_dart_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/employment%20support/employment_suppor_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/farming%20type/farming_bloc_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/gender_bloc/gender_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health_insurance/health_insurance_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/jobs/job_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/marital_status/maritalstatus_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/qualification/qualification_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/relation_drop/relation_drop_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_event.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
-import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_event.dart';
 
 import 'package:e_member_app/feature/add_family_members_list/presentation/view/add_family_members.dart';
-
 
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
 import 'package:e_member_app/feature/header_load/data/repository/header_load_repository_impl.dart';
@@ -75,28 +40,28 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-void openWithLoad(BuildContext context, PageMode mode) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => BlocProvider(
-        // ✅ Only create HeaderLoadBloc here
-        create: (_) => HeaderLoadBloc(
-          HeaderLoadRepositoryImpl(http.Client()),
-        )..add(
-            FetchHeaderLoad(
-              editId: widget.editId,
-              position: widget.position,
+  void openWithLoad(BuildContext context, PageMode mode) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          // ✅ Only create HeaderLoadBloc here
+          create: (_) => HeaderLoadBloc(
+            HeaderLoadRepositoryImpl(http.Client()),
+          )..add(
+              FetchHeaderLoad(
+                editId: widget.editId,
+                position: widget.position,
+              ),
             ),
+          child: HeaderLoadGate(
+            mode: mode,
+            position: widget.position,
           ),
-        child: HeaderLoadGate(
-          mode: mode,
-          position: widget.position,
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +137,10 @@ void openWithLoad(BuildContext context, PageMode mode) {
                     const SizedBox(height: 2),
                     Text(
                       widget.subtitle,
-                      style: TextStyle(fontSize: 14, color: AppColor.grey,fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: AppColor.grey,
+                          fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -191,7 +159,6 @@ void openWithLoad(BuildContext context, PageMode mode) {
                 height: 12,
                 fit: BoxFit.fill,
                 errorBuilder: (context, error, stackTrace) {
-            
                   return const Icon(
                     Icons.family_restroom,
                     size: 12,
@@ -229,8 +196,8 @@ void openWithLoad(BuildContext context, PageMode mode) {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-               // padding: const EdgeInsets.all(2),
-              
+                // padding: const EdgeInsets.all(2),
+
                 width: 57,
                 height: 23,
                 child: OutlinedButton.icon(
@@ -289,125 +256,29 @@ void openWithLoad(BuildContext context, PageMode mode) {
               ),
               const SizedBox(width: 6),
               SizedBox(
-            
                 height: 24,
                 width: 160,
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create: (_) =>
-                                  RelationDropBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchRelations()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  MaritalStatusBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchMaritalStatus()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  CasteBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchCastes()),
-                            ),
-                            BlocProvider(
-                              create: (_) => QualificationBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchQualifications()),
-                            ),
-                            BlocProvider(
-                              create: (_) => EducationBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchEducation()),
-                            ),
-                            BlocProvider(
-                              create: (_) => EmploymentStatusBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchEmploymentStatus()),
-                            ),
-                            BlocProvider(
-                              create: (_) => JobBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchJobs()),
-                            ),
-                            BlocProvider(
-                              create: (_) => EmploymentSupportBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchEmploymentSupports()),
-                            ),
-                            BlocProvider(
-                              create: (_) => FarmingTypeBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchFarmingTypes()),
-                            ),
-                            BlocProvider(
-                              create: (_) => HealthIssueBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchHealthIssues()),
-                            ),
-                            BlocProvider(
-                              create: (_) => HealthInsuranceBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchHealthInsurance()),
-                            ),
-                            BlocProvider(
-                              create: (_) => RequiredHealthSupportBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchRequiredHealthSupports()),
-                            ),
-                            BlocProvider(
-                              create: (_) => PensionTypeBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchPensionTypes()),
-                            ),
-                            BlocProvider(
-                              create: (_) => PensionRequiredBloc(
-                                MemberDropRepositoryImpl(),
-                              )..add(FetchPensionRequirement()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  SkillsBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchSkills()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  BloodGroupBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchBloodGroups()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  ReligionBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchReligion()),
-                            ),
-                            BlocProvider(
-                              create: (_) =>
-                                  GenderBloc(MemberDropRepositoryImpl())
-                                    ..add(FetchGender()),
-                            ),
-                          ],
-                          child: AddFamilyMembers(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddFamilyMembers(
                             editId: widget.editId,
                           ),
-                        ),
-                      ),
-                    );
+                        ));
                   },
-                  icon:  Icon(
+                  icon: Icon(
                     Icons.add,
                     size: 14,
                     color: AppColor.white,
                     weight: 900,
-                  //  fill: 1,
+                    //  fill: 1,
                   ),
                   label: Text(
                     'അംഗം ചേർക്കുക',
                     maxLines: 1,
-                  //  textAlign: TextAlign.center,
+                    //  textAlign: TextAlign.center,
                     style: TextStyle(
                       height: 1,
                       fontSize: 12,
@@ -425,12 +296,11 @@ void openWithLoad(BuildContext context, PageMode mode) {
                         width: 1,
                       ),
                     ),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ),
               Spacer()
-             
             ],
           ),
         ],

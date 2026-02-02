@@ -41,22 +41,28 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
             GradientHeader(
               backText: 'back',
               onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      final datasource = DashboardRemoteDatasource();
-                      final repository = DashboardRepositoryImpl(datasource);
-                      final useCase = GetDashboardUseCase(repository);
+                 Navigator.push(
+      context,
+      MaterialPageRoute(
+    builder: (context) => DashboardPage(),
+      ),
+    );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) {
+                //       final datasource = DashboardRemoteDatasource();
+                //       final repository = DashboardRepositoryImpl(datasource);
+                //       final useCase = GetDashboardUseCase(repository);
 
-                      return BlocProvider(
-                        create: (_) =>
-                            DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                        child: const DashboardPage(),
-                      );
-                    },
-                  ),
-                );
+                //       return BlocProvider(
+                //         create: (_) =>
+                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                //         child: const DashboardPage(),
+                //       );
+                //     },
+                //   ),
+                // );
               },
             ),
            // SizedBox(height: 20),

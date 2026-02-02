@@ -93,24 +93,29 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
         canPop: false, // ⛔ block default back
         onPopInvoked: (didPop) {
           if (didPop) return;
+ Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+    builder: (context) => DashboardPage(),
+      ),
+    );
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) {
+          //       final datasource = DashboardRemoteDatasource();
+          //       final repository = DashboardRepositoryImpl(datasource);
+          //       final useCase = GetDashboardUseCase(repository);
 
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (_) {
-                final datasource = DashboardRemoteDatasource();
-                final repository = DashboardRepositoryImpl(datasource);
-                final useCase = GetDashboardUseCase(repository);
-
-                return BlocProvider(
-                  create: (_) =>
-                      DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                  child: const DashboardPage(),
-                );
-              },
-            ),
-            (route) => false, // ✅ removes all previous routes
-          );
+          //       return BlocProvider(
+          //         create: (_) =>
+          //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
+          //         child: const DashboardPage(),
+          //       );
+          //     },
+          //   ),
+          //   (route) => false, // ✅ removes all previous routes
+          // );
         },
         child: Scaffold(
           key: _scaffoldKey,
@@ -120,23 +125,29 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
               GradientHeader(
                 title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
                 onPress: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) {
-                        final datasource = DashboardRemoteDatasource();
-                        final repository = DashboardRepositoryImpl(datasource);
-                        final useCase = GetDashboardUseCase(repository);
+                   Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+    builder: (context) => DashboardPage(),
+      ),
+    );
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (_) {
+                  //       final datasource = DashboardRemoteDatasource();
+                  //       final repository = DashboardRepositoryImpl(datasource);
+                  //       final useCase = GetDashboardUseCase(repository);
 
-                        return BlocProvider(
-                          create: (_) =>
-                              DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                          child: const DashboardPage(),
-                        );
-                      },
-                    ),
-                    (route) => false, // ✅ removes all previous routes
-                  );
+                  //       return BlocProvider(
+                  //         create: (_) =>
+                  //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                  //         child: const DashboardPage(),
+                  //       );
+                  //     },
+                  //   ),
+                  //   (route) => false, // ✅ removes all previous routes
+                  // );
                 },
               ),
 

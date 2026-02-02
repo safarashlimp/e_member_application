@@ -58,12 +58,12 @@ class _ListFamilyState extends State<ListFamily> {
 
   @override
   Widget build(BuildContext context) {
-        final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return SafeArea(
       top: false,
       child: Scaffold(
-        key:  _scaffoldKey,
+        key: _scaffoldKey,
         drawer: drawerchosing(),
         // bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
         backgroundColor: AppColor.secondary,
@@ -75,26 +75,32 @@ class _ListFamilyState extends State<ListFamily> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) {
-                      final datasource = DashboardRemoteDatasource();
-                      final repository = DashboardRepositoryImpl(datasource);
-                      final useCase = GetDashboardUseCase(repository);
-
-                      return BlocProvider(
-                        create: (_) =>
-                            DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                        child: const DashboardPage(),
-                      );
-                    },
+                    builder: (context) => DashboardPage(),
                   ),
                 );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) {
+                //       final datasource = DashboardRemoteDatasource();
+                //       final repository = DashboardRepositoryImpl(datasource);
+                //       final useCase = GetDashboardUseCase(repository);
+
+                //       return BlocProvider(
+                //         create: (_) =>
+                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                //         child: const DashboardPage(),
+                //       );
+                //     },
+                //   ),
+                // );
               },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchFieldBar(
-                onFilterTap: (){
-                   _scaffoldKey.currentState!.openDrawer();
+                onFilterTap: () {
+                  _scaffoldKey.currentState!.openDrawer();
                 },
               ),
             ),
@@ -104,21 +110,22 @@ class _ListFamilyState extends State<ListFamily> {
                 child: BlocBuilder<FamilyMemberListBloc, FamilyMemberListState>(
                     builder: (context, state) {
                   if (state is FamilyMemberListLoading) {
-                    return const Center(child: CircularProgressIndicator(
+                    return const Center(
+                        child: CircularProgressIndicator(
                       backgroundColor: AppColor.white,
                       color: AppColor.primary,
                     ));
                   }
 
                   if (state is FamilyMemberListLoaded) {
-                print(state.members.first); 
-                
+                    print(state.members.first);
+
                     return ListView.builder(
                       padding: const EdgeInsets.all(16),
                       itemCount: state.members.length,
                       itemBuilder: (context, index) {
                         final item = state.members[index];
-                        
+
                         return MemberCard(
                           //  position: item.position ,
                           position: widget.position,
@@ -132,7 +139,6 @@ class _ListFamilyState extends State<ListFamily> {
                           ward: 'കുടുംബനാഥനുമായുള്ള ബന്ധം: ${item.relation}',
                           age: 'വയസ്: ${item.age}',
                           lastUpdated: 'Updated on ${item.lastModified}',
-                          
                         );
                       },
                     );
@@ -150,22 +156,17 @@ class _ListFamilyState extends State<ListFamily> {
     );
   }
 
-  drawerchosing(){
-
-    if(widget.position=="1"){
-
-        return AddMemberDetailsDrawer();
-    }else if(widget.position=="2"){
-     return EducationDrawer();
-    }else if(widget.position=="3"){
-
+  drawerchosing() {
+    if (widget.position == "1") {
+      return AddMemberDetailsDrawer();
+    } else if (widget.position == "2") {
+      return EducationDrawer();
+    } else if (widget.position == "3") {
       return JobDetailsDrawer();
-
-    }else if (widget.position=="4"){
+    } else if (widget.position == "4") {
       return HealthDetailsDrawer();
-    }else if (widget.position=="5"){
+    } else if (widget.position == "5") {
       return SocialDetailDrawer();
-
     }
   }
 }

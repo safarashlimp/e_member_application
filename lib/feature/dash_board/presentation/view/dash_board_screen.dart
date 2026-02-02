@@ -102,7 +102,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                //  SizedBox(height: spacing),
+                                  //  SizedBox(height: spacing),
 
                                   // Top Stats - 10% of content height
                                   Flexible(

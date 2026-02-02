@@ -140,13 +140,8 @@ class AppBottomNav extends StatelessWidget {
                 Navigator.push(
   context,
   MaterialPageRoute(
-    builder: (context) => BlocProvider(
-      create: (_) => RationCardBloc(
-        FamilyDropRepositoryImpl(),
-      )..add(FetchRationCards()),
-      child:
-       const AddServyItems(mode: PageMode.add), 
-    ),
+         builder: (context) => AddServyItems(mode: PageMode.add)
+
   ),
 );
             },

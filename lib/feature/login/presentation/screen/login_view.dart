@@ -48,22 +48,28 @@ class _LoginViewState extends State<LoginView> {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is LoginSuccess) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      final datasource = DashboardRemoteDatasource();
-                      final repository = DashboardRepositoryImpl(datasource);
-                      final useCase = GetDashboardUseCase(repository);
+                 Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+    builder: (context) => DashboardPage(),
+      ),
+    );
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) {
+                //       final datasource = DashboardRemoteDatasource();
+                //       final repository = DashboardRepositoryImpl(datasource);
+                //       final useCase = GetDashboardUseCase(repository);
 
-                      return BlocProvider(
-                        create: (_) =>
-                            DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                        child: const DashboardPage(),
-                      );
-                    },
-                  ),
-                );
+                //       return BlocProvider(
+                //         create: (_) =>
+                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
+                //         child: const DashboardPage(),
+                //       );
+                //     },
+                //   ),
+                // );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),
