@@ -717,28 +717,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         _scrollToField(rationCardTypeKey);
                                         return;
                                       }
-                                      if (isEdit) {
-                                        if (surveyornamecontroller.text
-                                            .trim()
-                                            .isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              content: Text(
-                                                  "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
-                                            ),
-                                          );
-                                          _scrollToField(surveyorKey,
-                                              focusNode: surveyorFocus);
-                                          return;
-                                        }
-                                      }
+                                  
                                       _handleSubmit(context);
                                     },
                                     labelStyle: const TextStyle(
@@ -782,7 +761,28 @@ class _AddServyItemsState extends State<AddServyItems> {
 
                                 return AppActionButton(
                                   label: 'സമർപ്പിക്കുക',
-                                  onPressed: () => _handleSubmit(context),
+                                  onPressed: () {
+                                    if (surveyornamecontroller.text
+                                            .trim()
+                                            .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content: Text(
+                                                  "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+                                            ),
+                                          );
+                                          _scrollToField(surveyorKey,
+                                              focusNode: surveyorFocus);
+                                          return;
+                                        }
+                                   _handleSubmit(context);},
                                   labelStyle: const TextStyle(
                                     color: AppColor.white,
                                     fontSize: 14,
