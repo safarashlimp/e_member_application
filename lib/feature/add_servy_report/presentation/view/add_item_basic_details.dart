@@ -826,6 +826,7 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                               ),
                             ),
                             if (isAdd) ...[
+                              SizedBox(height: 20),
                               _isSaving
                                   ? const Center(
                                       child: Padding(
@@ -837,7 +838,9 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                   : AppActionButton(
                                       label: "സമർപ്പിക്കുക",
                                       height: 44,
-                                      onPressed: _onAddSubmit,
+                                      onPressed:
+                                      
+                                       _onAddSubmit,
                                       labelStyle: const TextStyle(
                                         color: AppColor.white,
                                         fontSize: 16,
@@ -845,8 +848,30 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                       ),
                                     ),
                             ] else if (isEdit) ...[
+                              SizedBox(height: 20),
                               BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
                                 listener: (context, state) {
+                                  
+                                    if (surveyornamecontroller.text
+                                            .trim()
+                                            .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              content: Text(
+                                                  "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+                                            ),
+                                          );
+                                          _scrollToField(surveyorKey,
+                                              focusNode: surveyorFocus);
+                                          return;
+                                        }
                                   if (state is HouseDetailsSuccess) {
                                     showUpdateSuccessDialog(context);
                                   }

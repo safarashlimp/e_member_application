@@ -616,6 +616,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                             ),
                           ),
                           if (isAdd) ...[
+                            SizedBox(height: 20),
                             Row(
                               children: [
                                 const Spacer(),
@@ -733,6 +734,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                             ),
                           ],
                           if (isEdit) ...[
+                            SizedBox(height: 20),
                             BlocConsumer<HouseholdSubmitBloc,
                                 HouseholdSubmitState>(
                               listener: (context, state) {
