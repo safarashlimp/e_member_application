@@ -1,14 +1,27 @@
 import 'dart:convert';
+import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/feature/add_servy_report/data/model/family_dropdown_model.dart';
 import 'package:e_member_app/feature/add_servy_report/domain/repository/family_drop_repo.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FamilyDropRepositoryImpl implements FamilyDropRepository {
+  late final String  _clientId;
+
+  FamilyDropRepositoryImpl(){
+    _init();
+  }
+
+Future<void> _init() async {
+    final prefs = await SharedPreferences.getInstance();
+    _clientId = prefs.getString(PrefKeys.clientId) ?? '';
+  }
+
   @override
   Future<List<FamilyDropItem>> rationCardType() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=1",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=1",
       ),
     );
 
@@ -30,7 +43,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getHouseTypes() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=2",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=2",
       ),
     );
 
@@ -47,7 +60,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getLandTypes() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=3",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=3",
       ),
     );
 
@@ -60,7 +73,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getWaterFacilities() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=4",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=4",
       ),
     );
 
@@ -73,7 +86,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getRequiredBenefits() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=5",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=5",
       ),
     );
 
@@ -90,7 +103,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getOtherBenefits() async {
     final response = await http.get(
       Uri.parse(
-          "https://emember.org/API/family_drops.php?clientid=1&posistion=6"),
+          "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=6"),
     );
 
     final jsonData = json.decode(response.body);
@@ -102,7 +115,7 @@ class FamilyDropRepositoryImpl implements FamilyDropRepository {
   Future<List<FamilyDropItem>> getWardGeneralNeeds() async {
     final response = await http.get(
       Uri.parse(
-        "https://emember.org/API/family_drops.php?clientid=1&posistion=7",
+        "https://emember.org/API/family_drops.php?clientid=$_clientId&posistion=7",
       ),
     );
 
