@@ -256,8 +256,8 @@ class _PropertyCardState extends State<PropertyCard> {
               ),
               const SizedBox(width: 6),
               SizedBox(
-                height: 24,
-                width: 160,
+                height: 23,
+                width: 144,
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
@@ -272,8 +272,8 @@ class _PropertyCardState extends State<PropertyCard> {
                     Icons.add,
                     size: 14,
                     color: AppColor.white,
-                    weight: 900,
-                    //  fill: 1,
+                   //weight: 700,
+                    fill: 1,
                   ),
                   label: Text(
                     'അംഗം ചേർക്കുക',

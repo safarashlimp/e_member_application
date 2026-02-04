@@ -1,12 +1,6 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
-import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
-import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
-import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_family/data/repository/Family_member_repo_impl.dart';
 import 'package:e_member_app/feature/list_family/domain/user_case/user_case.dart';
@@ -14,18 +8,15 @@ import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/view/list_family.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
-
+import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-
 class ListFamilyMenu extends StatefulWidget {
-  const ListFamilyMenu({
-    super.key,
-  });
+  const ListFamilyMenu({super.key});
 
   @override
-  State<ListFamilyMenu> createState() => _ListFamilyMenuState();
+  State<ListFamilyMenu> createState() =>  _ListFamilyMenuState();
 }
 
 class _ListFamilyMenuState extends State<ListFamilyMenu> {
@@ -34,42 +25,26 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
         backgroundColor: AppColor.secondary,
         body: Column(
           children: [
             GradientHeader(
               backText: 'back',
               onPress: () {
-                 Navigator.push(
-      context,
-      MaterialPageRoute(
-    builder: (context) => DashboardPage(),
-      ),
-    );
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) {
-                //       final datasource = DashboardRemoteDatasource();
-                //       final repository = DashboardRepositoryImpl(datasource);
-                //       final useCase = GetDashboardUseCase(repository);
-
-                //       return BlocProvider(
-                //         create: (_) =>
-                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                //         child: const DashboardPage(),
-                //       );
-                //     },
-                //   ),
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainScreen(),
+                  ),
+                );
               },
             ),
-           // SizedBox(height: 20),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-              
+                width: double.infinity,
+                height: 500,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColor.secondary,
@@ -82,7 +57,6 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                     ),
                   ],
                 ),
-              
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: Column(
@@ -101,7 +75,8 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                               builder: (_) => BlocProvider(
                                 create: (context) => FamilyMemberListBloc(
                                   GetFamilyMemberListUsecase(
-                                    FamilyMemberListRepositoryImpl(http.Client()),
+                                    FamilyMemberListRepositoryImpl(
+                                        http.Client()),
                                   ),
                                 )..add(FetchFamilyMemberList("1")),
                                 child: ListFamily(
@@ -125,18 +100,19 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                      create: (context) => FamilyMemberListBloc(
-                                        GetFamilyMemberListUsecase(
-                                          FamilyMemberListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchFamilyMemberList("2")),
-                                      child: ListFamily(
-                                        sectionType: SurveySectionType.education,
-                                        position: "2",
-                                      ),
-                                    )),
+                              builder: (_) => BlocProvider(
+                                create: (context) => FamilyMemberListBloc(
+                                  GetFamilyMemberListUsecase(
+                                    FamilyMemberListRepositoryImpl(
+                                        http.Client()),
+                                  ),
+                                )..add(FetchFamilyMemberList("2")),
+                                child: ListFamily(
+                                  sectionType: SurveySectionType.education,
+                                  position: "2",
+                                ),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -152,18 +128,19 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                      create: (context) => FamilyMemberListBloc(
-                                        GetFamilyMemberListUsecase(
-                                          FamilyMemberListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchFamilyMemberList("3")),
-                                      child: ListFamily(
-                                        sectionType: SurveySectionType.employment,
-                                        position: "3",
-                                      ),
-                                    )),
+                              builder: (_) => BlocProvider(
+                                create: (context) => FamilyMemberListBloc(
+                                  GetFamilyMemberListUsecase(
+                                    FamilyMemberListRepositoryImpl(
+                                        http.Client()),
+                                  ),
+                                )..add(FetchFamilyMemberList("3")),
+                                child: ListFamily(
+                                  sectionType: SurveySectionType.employment,
+                                  position: "3",
+                                ),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -179,18 +156,19 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                      create: (context) => FamilyMemberListBloc(
-                                        GetFamilyMemberListUsecase(
-                                          FamilyMemberListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchFamilyMemberList('4')),
-                                      child: ListFamily(
-                                        sectionType: SurveySectionType.health,
-                                        position: '4',
-                                      ),
-                                    )),
+                              builder: (_) => BlocProvider(
+                                create: (context) => FamilyMemberListBloc(
+                                  GetFamilyMemberListUsecase(
+                                    FamilyMemberListRepositoryImpl(
+                                        http.Client()),
+                                  ),
+                                )..add(FetchFamilyMemberList('4')),
+                                child: ListFamily(
+                                  sectionType: SurveySectionType.health,
+                                  position: '4',
+                                ),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -206,18 +184,19 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                      create: (context) => FamilyMemberListBloc(
-                                        GetFamilyMemberListUsecase(
-                                          FamilyMemberListRepositoryImpl(
-                                              http.Client()),
-                                        ),
-                                      )..add(FetchFamilyMemberList('5')),
-                                      child: ListFamily(
-                                        sectionType: SurveySectionType.welfare,
-                                        position: '5',
-                                      ),
-                                    )),
+                              builder: (_) => BlocProvider(
+                                create: (context) => FamilyMemberListBloc(
+                                  GetFamilyMemberListUsecase(
+                                    FamilyMemberListRepositoryImpl(
+                                        http.Client()),
+                                  ),
+                                )..add(FetchFamilyMemberList('5')),
+                                child: ListFamily(
+                                  sectionType: SurveySectionType.welfare,
+                                  position: '5',
+                                ),
+                              ),
+                            ),
                           );
                         },
                       ),

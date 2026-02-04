@@ -3,15 +3,9 @@ import 'dart:io';
 import 'package:e_member_app/core/AppData/appdata.dart';
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:e_member_app/core/widget/app_expired_dialog/app_expired_dialog.dart';
-import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
-import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
-import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/login/presentation/screen/login_view.dart';
+import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,7 +127,7 @@ class _SplashscreenState extends State<Splashscreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-    builder: (context) => DashboardPage(),
+        builder: (context) => MainScreen(),
       ),
     );
   }
@@ -149,9 +143,8 @@ class _SplashscreenState extends State<Splashscreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-    builder: (context) => DashboardPage(),
+        builder: (context) => MainScreen(),
       ),
-  
     );
   }
 }

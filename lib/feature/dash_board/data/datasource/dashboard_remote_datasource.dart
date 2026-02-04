@@ -7,6 +7,8 @@ class DashboardRemoteDatasource {
 Future <DashboardModel>getDashboard(String clientId,String userId)async{
 
 final url = "https://emember.org/API/dashboard.php?clientid=$clientId&userid=$userId";
+print('userid $userId');
+print('clientid $clientId');
 
 final responce = await  http.get(Uri.parse(url));
 

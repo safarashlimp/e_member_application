@@ -208,7 +208,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   int isIncludedInRationCard = 0;
   int isPensionReceiving = 0;
   int norkaRegisteredLabel = 0;
-
+  bool _isSubmitting = false;
   int student = 0;
   int patient = 0;
   int needEducationHelp = 0;
@@ -1682,182 +1682,228 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               ),
                             ),
                             AppActionButton(
-                              label: "സമർപ്പിക്കുക",
-                              onPressed: () async {
-                                if (familyMemberName.text.trim().isEmpty) {
-                                  showSnack(
-                                      context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
-                                  _scrollToField(familyNameKey,
-                                      focusNode: familyNameFocus);
-                                  return;
-                                }
+                              label: _isSubmitting
+                                  ? "സേവ് ചെയ്യുന്നു..."
+                                  : "സമർപ്പിക്കുക",
+                              onPressed: _isSubmitting
+                                  ? null
+                                  : () async {
+                                      // ✅ STEP 1: Check if already submitting
+                                      if (_isSubmitting) return;
 
-                                // Validate mobile number
-                                if (mobileNumber.text.trim().isEmpty) {
-                                  showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
-                                  _scrollToField(mobileKey,
-                                      focusNode: mobileFocus);
-                                  return;
-                                }
+                                      // ✅ STEP 2: Set submitting state
+                                      setState(() {
+                                        _isSubmitting = true;
+                                      });
+                                      if (familyMemberName.text
+                                          .trim()
+                                          .isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
+                                        _scrollToField(familyNameKey,
+                                            focusNode: familyNameFocus);
+                                        return;
+                                      }
 
-                                if (!RegExp(r'^[0-9]{10}$')
-                                    .hasMatch(mobileNumber.text.trim())) {
-                                  showSnack(context,
-                                      "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
-                                  _scrollToField(mobileKey,
-                                      focusNode: mobileFocus);
-                                  return;
-                                }
+                                      // Validate mobile number
+                                      if (mobileNumber.text.trim().isEmpty) {
+                                        setState(() => _isSubmitting = false);
 
-                                // Validate WhatsApp number
-                                if (whatsupNumber.text.trim().isEmpty) {
-                                  showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
-                                  _scrollToField(whatsappKey,
-                                      focusNode: whatsappFocus);
-                                  return;
-                                }
+                                        showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
+                                        _scrollToField(mobileKey,
+                                            focusNode: mobileFocus);
+                                        return;
+                                      }
 
-                                if (!RegExp(r'^[0-9]{10}$')
-                                    .hasMatch(whatsupNumber.text.trim())) {
-                                  showSnack(context,
-                                      "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
-                                  _scrollToField(whatsappKey,
-                                      focusNode: whatsappFocus);
-                                  return;
-                                }
+                                      if (!RegExp(r'^[0-9]{10}$')
+                                          .hasMatch(mobileNumber.text.trim())) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
+                                        _scrollToField(mobileKey,
+                                            focusNode: mobileFocus);
+                                        return;
+                                      }
 
-                                // Validate blood group
-                                if (selectedBloodGroup == null ||
-                                    selectedBloodGroup!.isEmpty) {
-                                  showSnack(
-                                      context, "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
-                                  _scrollToField(bloodGroupKey);
-                                  return;
-                                }
+                                      if (whatsupNumber.text.trim().isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(
+                                            context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
+                                        _scrollToField(whatsappKey,
+                                            focusNode: whatsappFocus);
+                                        return;
+                                      }
 
-                                // Validate relation
-                                if (selectedReletion == null ||
-                                    selectedReletion!.isEmpty) {
-                                  showSnack(context,
-                                      "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
-                                  _scrollToField(relationKey);
-                                  return;
-                                }
+                                      if (!RegExp(r'^[0-9]{10}$').hasMatch(
+                                          whatsupNumber.text.trim())) {
+                                        showSnack(context,
+                                            "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
+                                        _scrollToField(whatsappKey,
+                                            focusNode: whatsappFocus);
+                                        return;
+                                      }
 
-                                // ✅ GENDER VALIDATION
-                                if (selectedGender == null ||
-                                    selectedGender!.isEmpty) {
-                                  showSnack(context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
-                                  _scrollToField(genderKey);
-                                  return;
-                                }
+                                      // Validate blood group
+                                      if (selectedBloodGroup == null ||
+                                          selectedBloodGroup!.isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
+                                        _scrollToField(bloodGroupKey);
+                                        return;
+                                      }
 
-                                // Validate DOB
-                                if (selectedDob == null) {
-                                  showSnack(
-                                      context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
-                                  _scrollToField(dobKey);
-                                  return;
-                                }
+                                      // Validate relation
+                                      if (selectedReletion == null ||
+                                          selectedReletion!.isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
+                                        _scrollToField(relationKey);
+                                        return;
+                                      }
 
-                                // Validate surveyor name
+                                      // ✅ GENDER VALIDATION
+                                      if (selectedGender == null ||
+                                          selectedGender!.isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(
+                                            context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
+                                        _scrollToField(genderKey);
+                                        return;
+                                      }
 
-                                final dobApi =
-                                    "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
-                                if (surveyorNameLabel.text.trim().isEmpty) {
-                                  showSnack(
-                                      context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
-                                  _scrollToField(surveyorKey,
-                                      focusNode: surveyorFocus);
-                                  return;
-                                }
+                                      // Validate DOB
+                                      if (selectedDob == null) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
+                                        _scrollToField(dobKey);
+                                        return;
+                                      }
 
-                                try {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  final userId = int.parse(
-                                      prefs.getString(PrefKeys.userId)!);
+                                      // Validate surveyor name
 
-                                  final whatsappValue = whatsupNumber
-                                          .text.isNotEmpty
-                                      ? whatsupNumber
-                                          .text // ✅ Uses WhatsApp if not empty
-                                      : mobileNumber
-                                          .text; // ✅ Falls back to mobile if empty
+                                      final dobApi =
+                                          "${selectedDob!.year}-${selectedDob!.month.toString().padLeft(2, '0')}-${selectedDob!.day.toString().padLeft(2, '0')}";
+                                      if (surveyorNameLabel.text
+                                          .trim()
+                                          .isEmpty) {
+                                        setState(() => _isSubmitting = false);
+                                        showSnack(context,
+                                            "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                        _scrollToField(surveyorKey,
+                                            focusNode: surveyorFocus);
+                                        return;
+                                      }
 
-                                  // 🔹 AWAIT the API call first
-                                  await FamilyMemberSaveRepository()
-                                      .saveFamilyMember(
-                                    householdId: widget.editId,
-                                    surveyor: surveyorNameLabel.text,
-                                    name: familyMemberName.text.trim(),
-                                    mobile: mobileNumber.text,
-                                    whatsapp: whatsappValue,
-                                    bloodGroupId:
-                                        int.parse(selectedBloodGroupId ?? '0'),
-                                    relationId:
-                                        int.parse(selectedRelationId ?? '0'),
-                                    genderId:
-                                        int.parse(selectedGenderId ?? '0'),
-                                    dob: dobApi,
-                                    maritalStatusId: int.parse(
-                                        selectedMaritalStatusId ?? '0'),
-                                    religionId:
-                                        int.parse(selectedReligionId ?? '0'),
-                                    casteId: int.parse(selectedCasteId ?? '0'),
-                                    qualificationId: int.parse(
-                                        selectedQualificationId ?? '0'),
-                                    currentlyStudying: student,
-                                    courseId:
-                                        int.parse(selectedEducationId ?? '0'),
-                                    courseOther: courseStudy.text,
-                                    institution: studyCenter.text,
-                                    needEducationSupport: needEducationHelp,
-                                    employmentStatusId:
-                                        int.parse(employmentStatusId ?? '0'),
-                                    occupationId: int.parse(jobStatusId ?? '0'),
-                                    skills: skillsJson,
-                                    skillDetails: specifySkillLabel.text,
-                                    needJobSupportId:
-                                        int.parse(employmentSupportId ?? '0'),
-                                    norkaRegistered: norkaRegisteredLabel,
-                                    agricultureType:
-                                        int.parse(farmingTypeId ?? '0'),
-                                    isPatient: patient,
-                                    diseases: (hasHealthIssuesId == '1'
-                                            ? int.tryParse(
-                                                    requiredHealthSupports ??
-                                                        '0') ??
-                                                0
-                                            : 0)
-                                        .toString(),
-                                    treatmentPlace: treatmentPlaceLabel.text,
-                                    disabled: hasDisability,
-                                    disabilityBenefit: disabilityBenefit,
-                                    insuranceCard: healthInsuranceCard,
-                                    insuranceTypeId:
-                                        int.parse(healthInsuranceId ?? '0'),
-                                    healthHelp: int.parse(
-                                        requiredHealthSupportsId ?? '0'),
-                                    includedInRation: isIncludedInRationCard,
-                                    receivingPension: isPensionReceiving,
-                                    pensionTypeId:
-                                        int.parse(selectedPensionTypeId ?? '0'),
-                                    needPensionTypeId:
-                                        int.parse(isPensionRequiredId ?? '0'),
-                                    povertyPgm: povertyProgramMap[
-                                            selectedProvertyPrgm] ??
-                                        0,
-                                  );
+                                      try {
+                                        final prefs = await SharedPreferences
+                                            .getInstance();
+                                        final userId = int.parse(
+                                            prefs.getString(PrefKeys.userId)!);
 
-                                  // ✅ SHOW SUCCESS POPUP AFTER API CALL
-                                  showSuccessDialog(context);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(e.toString())),
-                                  );
-                                }
-                              },
+                                        final whatsappValue = whatsupNumber
+                                                .text.isNotEmpty
+                                            ? whatsupNumber
+                                                .text // ✅ Uses WhatsApp if not empty
+                                            : mobileNumber
+                                                .text; // ✅ Falls back to mobile if empty
+
+                                        // 🔹 AWAIT the API call first
+                                        await FamilyMemberSaveRepository()
+                                            .saveFamilyMember(
+                                          householdId: widget.editId,
+                                          surveyor: surveyorNameLabel.text,
+                                          name: familyMemberName.text.trim(),
+                                          mobile: mobileNumber.text,
+                                          whatsapp: whatsappValue,
+                                          bloodGroupId: int.parse(
+                                              selectedBloodGroupId ?? '0'),
+                                          relationId: int.parse(
+                                              selectedRelationId ?? '0'),
+                                          genderId: int.parse(
+                                              selectedGenderId ?? '0'),
+                                          dob: dobApi,
+                                          maritalStatusId: int.parse(
+                                              selectedMaritalStatusId ?? '0'),
+                                          religionId: int.parse(
+                                              selectedReligionId ?? '0'),
+                                          casteId:
+                                              int.parse(selectedCasteId ?? '0'),
+                                          qualificationId: int.parse(
+                                              selectedQualificationId ?? '0'),
+                                          currentlyStudying: student,
+                                          courseId: int.parse(
+                                              selectedEducationId ?? '0'),
+                                          courseOther: courseStudy.text,
+                                          institution: studyCenter.text,
+                                          needEducationSupport:
+                                              needEducationHelp,
+                                          employmentStatusId: int.parse(
+                                              employmentStatusId ?? '0'),
+                                          occupationId:
+                                              int.parse(jobStatusId ?? '0'),
+                                          skills: skillsJson,
+                                          skillDetails: specifySkillLabel.text,
+                                          needJobSupportId: int.parse(
+                                              employmentSupportId ?? '0'),
+                                          norkaRegistered: norkaRegisteredLabel,
+                                          agricultureType:
+                                              int.parse(farmingTypeId ?? '0'),
+                                          isPatient: patient,
+                                          diseases: (hasHealthIssuesId == '1'
+                                                  ? int.tryParse(
+                                                          requiredHealthSupports ??
+                                                              '0') ??
+                                                      0
+                                                  : 0)
+                                              .toString(),
+                                          treatmentPlace:
+                                              treatmentPlaceLabel.text,
+                                          disabled: hasDisability,
+                                          disabilityBenefit: disabilityBenefit,
+                                          insuranceCard: healthInsuranceCard,
+                                          insuranceTypeId: int.parse(
+                                              healthInsuranceId ?? '0'),
+                                          healthHelp: int.parse(
+                                              requiredHealthSupportsId ?? '0'),
+                                          includedInRation:
+                                              isIncludedInRationCard,
+                                          receivingPension: isPensionReceiving,
+                                          pensionTypeId: int.parse(
+                                              selectedPensionTypeId ?? '0'),
+                                          needPensionTypeId: int.parse(
+                                              isPensionRequiredId ?? '0'),
+                                          povertyPgm: povertyProgramMap[
+                                                  selectedProvertyPrgm] ??
+                                              0,
+                                        );
+
+                                        setState(() {
+                                          _isSubmitting = false;
+                                        });
+
+                                        // ✅ SHOW SUCCESS POPUP AFTER API CALL
+                                        if (mounted) {
+                                          showSuccessDialog(context);
+                                        }
+                                      } catch (e) {
+                                        // ✅ STEP 4: Reset submitting state on error
+                                        setState(() {
+                                          _isSubmitting = false;
+                                        });
+
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                                content: Text(e.toString())),
+                                          );
+                                        }
+                                      }
+                                    },
                               labelStyle: const TextStyle(
                                 color: AppColor.white,
                                 fontSize: 14,

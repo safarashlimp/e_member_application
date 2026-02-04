@@ -6,6 +6,7 @@ import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/login/data/repository/login_repository.dart';
 import 'package:e_member_app/feature/login/presentation/bloc/loginBloc/login_bloc.dart';
+import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_member_app/core/widget/button/app_action_button.dart';
@@ -51,25 +52,9 @@ class _LoginViewState extends State<LoginView> {
                  Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-    builder: (context) => DashboardPage(),
+    builder: (context) => MainScreen(),
       ),
     );
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) {
-                //       final datasource = DashboardRemoteDatasource();
-                //       final repository = DashboardRepositoryImpl(datasource);
-                //       final useCase = GetDashboardUseCase(repository);
-
-                //       return BlocProvider(
-                //         create: (_) =>
-                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                //         child: const DashboardPage(),
-                //       );
-                //     },
-                //   ),
-                // );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),

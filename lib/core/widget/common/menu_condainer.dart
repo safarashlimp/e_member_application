@@ -77,6 +77,7 @@ class MenuContainar extends StatelessWidget {
                       width: 223,
                       child: Text(
                         title,
+                        
                         style: TextStyle(
                           color: titleColor,
                           fontSize: 16,

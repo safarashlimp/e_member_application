@@ -19,12 +19,10 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/religion_bloc/religion_state.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_one_model.dart';
-
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_state.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/enam/enam.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,7 +85,7 @@ class _EditFamilyMemberBasicDetailsState
   String? selectedReligionId;
   DateTime? selectedDob;
   bool _allDataLoaded = false;
-
+ bool _isSubmitting = false; 
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -753,8 +751,10 @@ class _EditFamilyMemberBasicDetailsState
                             EditFamilyMemberState>(
                           listener: (context, state) {
                             if (state is EditFamilyMemberSubmitSuccess) {
+                               setState(() => _isSubmitting = false);
                               showSuccessDialog(context);
                             } else if (state is EditFamilyMemberSubmitFailure) {
+                               setState(() => _isSubmitting = false);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('Error: ${state.message}'),
@@ -767,7 +767,8 @@ class _EditFamilyMemberBasicDetailsState
                             label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുകയാണ്..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: () {
+                            onPressed: _isSubmitting ? null :
+                            () {
                               if (familyMemberName.text.trim().isEmpty) {
                                 showSnack(
                                     context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
@@ -852,8 +853,9 @@ class _EditFamilyMemberBasicDetailsState
                                   ),
                                 );
 
-                                return; // Don't proceed
+                                return ; // Don't proceed
                               }
+                               setState(() => _isSubmitting = true);
 
                               final personalDetailsModel = PersonalDetailsModel(
                                 id: finalEditId,

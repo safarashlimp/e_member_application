@@ -15,6 +15,7 @@ import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_state.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/widget/survey_items.dart';
+import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,29 +94,12 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
         canPop: false, // ⛔ block default back
         onPopInvoked: (didPop) {
           if (didPop) return;
- Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-    builder: (context) => DashboardPage(),
-      ),
-    );
-          // Navigator.pushAndRemoveUntil(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) {
-          //       final datasource = DashboardRemoteDatasource();
-          //       final repository = DashboardRepositoryImpl(datasource);
-          //       final useCase = GetDashboardUseCase(repository);
-
-          //       return BlocProvider(
-          //         create: (_) =>
-          //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
-          //         child: const DashboardPage(),
-          //       );
-          //     },
-          //   ),
-          //   (route) => false, // ✅ removes all previous routes
-          // );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScreen(),
+            ),
+          );
         },
         child: Scaffold(
           key: _scaffoldKey,
@@ -125,29 +109,12 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
               GradientHeader(
                 title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
                 onPress: () {
-                   Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-    builder: (context) => DashboardPage(),
-      ),
-    );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (_) {
-                  //       final datasource = DashboardRemoteDatasource();
-                  //       final repository = DashboardRepositoryImpl(datasource);
-                  //       final useCase = GetDashboardUseCase(repository);
-
-                  //       return BlocProvider(
-                  //         create: (_) =>
-                  //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                  //         child: const DashboardPage(),
-                  //       );
-                  //     },
-                  //   ),
-                  //   (route) => false, // ✅ removes all previous routes
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainScreen(),
+                    ),
+                  );
                 },
               ),
 

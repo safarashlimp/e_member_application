@@ -18,6 +18,7 @@ import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_state.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/widget/family_member_cart.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/navigation_enums/enum.dart';
+import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,25 +76,10 @@ class _ListFamilyState extends State<ListFamily> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DashboardPage(),
+                    builder: (context) => MainScreen(),
                   ),
                 );
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) {
-                //       final datasource = DashboardRemoteDatasource();
-                //       final repository = DashboardRepositoryImpl(datasource);
-                //       final useCase = GetDashboardUseCase(repository);
-
-                //       return BlocProvider(
-                //         create: (_) =>
-                //             DashboardBloc(useCase)..add(LoadDashboardEvent()),
-                //         child: const DashboardPage(),
-                //       );
-                //     },
-                //   ),
-                // );
+               
               },
             ),
             Padding(
