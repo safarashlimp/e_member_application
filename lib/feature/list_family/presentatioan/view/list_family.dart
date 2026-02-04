@@ -1,13 +1,6 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
-
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
-import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
-import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
-import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/view/education_drwer.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/presentation/view/health_details.dart';
 import 'package:e_member_app/feature/drawer/job_details/presentation/view/job_details_drawer.dart';
@@ -34,6 +27,8 @@ class ListFamily extends StatefulWidget {
 }
 
 class _ListFamilyState extends State<ListFamily> {
+  final ScrollController _scrollController = ScrollController();
+
   String get pageTitle {
     switch (widget.sectionType) {
       case SurveySectionType.personal:
@@ -55,6 +50,29 @@ class _ListFamilyState extends State<ListFamily> {
     context
         .read<FamilyMemberListBloc>()
         .add(FetchFamilyMemberList(widget.position));
+
+    // Add scroll listener for pagination
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<FamilyMemberListBloc>().add(LoadMoreFamilyMembers());
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    // Trigger when 200 pixels from bottom
+    return currentScroll >= (maxScroll - 200);
   }
 
   @override
@@ -79,7 +97,6 @@ class _ListFamilyState extends State<ListFamily> {
                     builder: (context) => MainScreen(),
                   ),
                 );
-               
               },
             ),
             Padding(
@@ -104,12 +121,28 @@ class _ListFamilyState extends State<ListFamily> {
                   }
 
                   if (state is FamilyMemberListLoaded) {
-                    print(state.members.first);
+                    print('Displaying ${state.members.length} members');
 
                     return ListView.builder(
+                      controller: _scrollController,
                       padding: const EdgeInsets.all(16),
-                      itemCount: state.members.length,
+                      itemCount:
+                          state.members.length + (state.hasMoreData ? 1 : 0),
                       itemBuilder: (context, index) {
+                        // Show loading indicator at the end if more data available
+                        if (index >= state.members.length) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: state.isLoadingMore
+                                  ? const CircularProgressIndicator(
+                                      color: AppColor.primary,
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                          );
+                        }
+
                         final item = state.members[index];
 
                         return MemberCard(

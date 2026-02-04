@@ -62,8 +62,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+     
     final repo = MemberDropRepositoryImpl();
  final datasource = DashboardRemoteDatasource();
           final repository = DashboardRepositoryImpl(datasource);
@@ -164,6 +166,7 @@ class MyApp extends StatelessWidget {
               ),
             ],
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               home: Splashscreen(),
             ));
       },

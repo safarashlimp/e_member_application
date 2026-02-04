@@ -384,7 +384,10 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                             if (state is HouseTypeLoading) {
                                               return const Center(
                                                 child:
-                                                    CircularProgressIndicator(),
+                                                    CircularProgressIndicator(
+                                                      color: AppColor.primary,
+                                                      backgroundColor: AppColor.white,
+                                                    ),
                                               );
                                             }
 
@@ -561,7 +564,10 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                     builder: (context, state) {
                                       if (state is WaterFacilityLoading) {
                                         return const Center(
-                                          child: CircularProgressIndicator(),
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.primary,
+                                            backgroundColor: AppColor.white,
+                                          ),
                                         );
                                       }
 
@@ -832,7 +838,10 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                       child: Padding(
                                         padding:
                                             EdgeInsets.symmetric(vertical: 12),
-                                        child: CircularProgressIndicator(),
+                                        child: CircularProgressIndicator(
+                                          color: AppColor.primary,
+                                          backgroundColor: AppColor.white,
+                                        ),
                                       ),
                                     )
                                   : AppActionButton(
@@ -893,8 +902,22 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                         ));
                                   }
 
-                                  return AppActionButton(
-                                    label: "സമർപ്പിക്കുക",
+                                  return
+                                    _isSaving
+                                  ? const Center(
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 12),
+                                        child: CircularProgressIndicator(
+                                          color: AppColor.primary,
+                                          backgroundColor: AppColor.white,
+                                        ),
+                                      ),
+                                    )
+                                  : AppActionButton(
+                                      label: "സമർപ്പിക്കുക",
+                                    //  height: 44,
+                                    //  onPressed:
                                     onPressed: _handleEditSubmit,
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
