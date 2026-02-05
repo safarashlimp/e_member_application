@@ -1,50 +1,4 @@
-// import 'package:bloc/bloc.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-
-// import 'package:e_member_app/core/constants/pref_keys.dart';
-// import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
-// import 'header_list_event.dart';
-// import 'header_list_state.dart';
-
-// class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
-//   final GetHeaderListUsecase usecase;
-
-//   HeaderListBloc(this.usecase) : super(HeaderListInitial()) {
-//     on<FetchHeaderList>(_onFetchHeaderList);
-//   }
-
-//   Future<void> _onFetchHeaderList(
-//     FetchHeaderList event,
-//     Emitter<HeaderListState> emit,
-//   ) async {
-//     emit(HeaderListLoading());
-
-//     try {
-//       final prefs = await SharedPreferences.getInstance();
-
-//       final clientId = prefs.getString(PrefKeys.clientId);
-//       final userId = prefs.getString(PrefKeys.userId);
-
-//       // 🔴 THIS WAS YOUR ERROR
-//       if (clientId == null || userId == null) {
-//         emit(HeaderListError(
-//             'Session expired. Please login again.'));
-//         return;
-//       }
-
-//       final items = await usecase(
-//         clientId,
-//         userId,
-//         event.position, 
-//       );
-
-//       emit(HeaderListLoaded(items));
-//     } catch (e) {
-//       emit(HeaderListError(e.toString()));
-//     }
-//   }
-// }
-//
+import 'package:e_member_app/feature/list_survey_report/data/model/header_list_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -53,10 +7,17 @@ import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header
 class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
   final GetHeaderListUsecase getHeaderListUsecase;
 
+  static const int pageSize = 25;
+  List<HeaderItem> _allItems = [];
+  int _currentOffset = 0;
+  String? _currentPosition;
+  Map<String, dynamic>? _currentFilters;
+
   HeaderListBloc(this.getHeaderListUsecase) : super(HeaderListInitial()) {
     on<FetchHeaderList>(_onFetchHeaderList);
     on<ApplyFilters>(_onApplyFilters);
     on<ClearFilters>(_onClearFilters);
+    on<LoadMoreHeaders>(_onLoadMoreHeaders);
   }
 
   Future<void> _onFetchHeaderList(
@@ -64,13 +25,36 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     Emitter<HeaderListState> emit,
   ) async {
     emit(HeaderListLoading());
-    
+
     try {
-      final items = await getHeaderListUsecase(
+      // Fetch all items from API
+      final allItems = await getHeaderListUsecase(
         event.position,
         filters: event.filters,
       );
-      emit(HeaderListLoaded(items));
+
+      print('📦 Total items fetched: ${allItems.length}');
+
+      // Store all items and reset pagination
+      _allItems = allItems;
+      _currentOffset = 0;
+      _currentPosition = event.position;
+      _currentFilters = event.filters;
+
+      // Get first 25 items
+      final firstBatch = _allItems.take(pageSize).toList();
+      final hasMore = _allItems.length > pageSize;
+
+      _currentOffset = firstBatch.length;
+
+      print('📊 Showing first ${firstBatch.length} items, hasMore: $hasMore');
+
+      emit(HeaderListLoaded(
+        firstBatch,
+        appliedFilters: event.filters,
+        hasMoreData: hasMore,
+        isLoadingMore: false,
+      ));
     } catch (e) {
       emit(HeaderListError(e.toString()));
     }
@@ -81,14 +65,36 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     Emitter<HeaderListState> emit,
   ) async {
     emit(HeaderListLoading());
-    
+
     try {
       print('🔍 Applying filters: ${event.filters}');
-      final items = await getHeaderListUsecase(
+
+      // Fetch all filtered items from API
+      final allItems = await getHeaderListUsecase(
         event.position,
         filters: event.filters,
       );
-      emit(HeaderListLoaded(items, appliedFilters: event.filters));
+
+      print('📦 Filtered items fetched: ${allItems.length}');
+
+      // Store all items and reset pagination
+      _allItems = allItems;
+      _currentOffset = 0;
+      _currentPosition = event.position;
+      _currentFilters = event.filters;
+
+      // Get first 25 items
+      final firstBatch = _allItems.take(pageSize).toList();
+      final hasMore = _allItems.length > pageSize;
+
+      _currentOffset = firstBatch.length;
+
+      emit(HeaderListLoaded(
+        firstBatch,
+        appliedFilters: event.filters,
+        hasMoreData: hasMore,
+        isLoadingMore: false,
+      ));
     } catch (e) {
       emit(HeaderListError(e.toString()));
     }
@@ -99,12 +105,89 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     Emitter<HeaderListState> emit,
   ) async {
     emit(HeaderListLoading());
-    
+
     try {
-      final items = await getHeaderListUsecase(event.position);
-      emit(HeaderListLoaded(items));
+      print('🧹 Clearing filters');
+
+      // Fetch all items without filters
+      final allItems = await getHeaderListUsecase(event.position);
+
+      print('📦 Total items fetched: ${allItems.length}');
+
+      // Store all items and reset pagination
+      _allItems = allItems;
+      _currentOffset = 0;
+      _currentPosition = event.position;
+      _currentFilters = null;
+
+      // Get first 25 items
+      final firstBatch = _allItems.take(pageSize).toList();
+      final hasMore = _allItems.length > pageSize;
+
+      _currentOffset = firstBatch.length;
+
+      emit(HeaderListLoaded(
+        firstBatch,
+        hasMoreData: hasMore,
+        isLoadingMore: false,
+      ));
     } catch (e) {
       emit(HeaderListError(e.toString()));
+    }
+  }
+
+  Future<void> _onLoadMoreHeaders(
+    LoadMoreHeaders event,
+    Emitter<HeaderListState> emit,
+  ) async {
+    // Only load more if we're in a loaded state and have more data
+    if (state is! HeaderListLoaded) return;
+
+    final currentState = state as HeaderListLoaded;
+
+    // Don't load if already loading or no more data
+    if (currentState.isLoadingMore || !currentState.hasMoreData) return;
+
+    print('📥 Loading more items from offset $_currentOffset');
+
+    // Show loading indicator
+    emit(currentState.copyWith(isLoadingMore: true));
+
+    try {
+      // Simulate network delay (optional - remove if not needed)
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Get next batch
+      final nextBatch = _allItems.skip(_currentOffset).take(pageSize).toList();
+
+      if (nextBatch.isEmpty) {
+        print('✅ No more items to load');
+        emit(currentState.copyWith(
+          isLoadingMore: false,
+          hasMoreData: false,
+        ));
+        return;
+      }
+
+      // Combine existing and new items
+      final updatedItems = List<HeaderItem>.from(currentState.items)
+        ..addAll(nextBatch);
+      _currentOffset += nextBatch.length;
+
+      final hasMore = _currentOffset < _allItems.length;
+
+      print(
+          '📊 Loaded ${nextBatch.length} more items. Total: ${updatedItems.length}/${_allItems.length}');
+
+      emit(HeaderListLoaded(
+        updatedItems,
+        appliedFilters: currentState.appliedFilters,
+        hasMoreData: hasMore,
+        isLoadingMore: false,
+      ));
+    } catch (e) {
+      print('❌ Error loading more items: $e');
+      emit(currentState.copyWith(isLoadingMore: false));
     }
   }
 }

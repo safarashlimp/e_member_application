@@ -199,7 +199,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                     Navigator.pop(context); // close dialog
                     _goToListPage(); // then navigate
                   },
-                child: const Text(
+                  child: const Text(
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     "OK",
@@ -279,10 +279,10 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   void dispose() {
     selectedLandAreaController.dispose();
     surveyornamecontroller.dispose();
-      landAreaFocus.dispose();
-  surveyorFocus.dispose();
-  selectedLandAreaController.dispose();
-  surveyornamecontroller.dispose();
+    landAreaFocus.dispose();
+    surveyorFocus.dispose();
+    selectedLandAreaController.dispose();
+    surveyornamecontroller.dispose();
     super.dispose();
   }
 
@@ -311,33 +311,33 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
   bool get isAdd => widget.mode == PageMode.add;
   String? selectedOtherBenefit;
   String? selectedOtherBenefitId;
+  bool _isSubmitting = false;
   int toilet = 0;
   int electricityConnection = 0;
   int benefitsReceived = 0;
   int benefitsWanted = 0;
-final FocusNode landAreaFocus = FocusNode();
-final FocusNode surveyorFocus = FocusNode();
-final GlobalKey houseTypeKey = GlobalKey();
-final GlobalKey landAreaKey = GlobalKey();
-final GlobalKey surveyorKey = GlobalKey();
-void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
-  final ctx = key.currentContext;
-  if (ctx != null) {
-    Scrollable.ensureVisible(
-      ctx,
-      duration: const Duration(milliseconds: 450),
-      curve: Curves.easeInOut,
-      alignment: 0.25,
-    );
+  final FocusNode landAreaFocus = FocusNode();
+  final FocusNode surveyorFocus = FocusNode();
+  final GlobalKey houseTypeKey = GlobalKey();
+  final GlobalKey landAreaKey = GlobalKey();
+  final GlobalKey surveyorKey = GlobalKey();
+  void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
+    final ctx = key.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeInOut,
+        alignment: 0.25,
+      );
 
-    if (focusNode != null) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        focusNode.requestFocus();
-      });
+      if (focusNode != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          focusNode.requestFocus();
+        });
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -385,9 +385,10 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                               return const Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                                      color: AppColor.primary,
-                                                      backgroundColor: AppColor.white,
-                                                    ),
+                                                  color: AppColor.primary,
+                                                  backgroundColor:
+                                                      AppColor.white,
+                                                ),
                                               );
                                             }
 
@@ -406,7 +407,7 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                               }
                                               return AppDropdownField<String>(
                                                 label: '* വീടിന്റെ തരം',
-                                                  key: houseTypeKey,
+                                                key: houseTypeKey,
                                                 borderColor:
                                                     AppColor.borderColor,
                                                 selectedTextColor:
@@ -816,8 +817,8 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                     height: 20,
                                   ),
                                   AppTextField(
-                                      key: surveyorKey,
-                                      focusNode: surveyorFocus,
+                                    key: surveyorKey,
+                                    focusNode: surveyorFocus,
                                     controller: surveyornamecontroller,
                                     label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
                                     labelColor: AppColor.hintText2,
@@ -833,35 +834,36 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                             ),
                             if (isAdd) ...[
                               SizedBox(height: 20),
-                              _isSaving
-                                  ? const Center(
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 12),
-                                        child: CircularProgressIndicator(
-                                          color: AppColor.primary,
-                                          backgroundColor: AppColor.white,
-                                        ),
-                                      ),
-                                    )
-                                  : AppActionButton(
-                                      label: "സമർപ്പിക്കുക",
-                                      height: 44,
-                                      onPressed:
-                                      
-                                       _onAddSubmit,
-                                      labelStyle: const TextStyle(
-                                        color: AppColor.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                            ] else if (isEdit) ...[
-                              SizedBox(height: 20),
-                              BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
-                                listener: (context, state) {
-                                  
-                                    if (surveyornamecontroller.text
+                              AppActionButton(
+                                label: _isSaving
+                                    ? "സമർപ്പിക്കുന്നു..."
+                                    : "സമർപ്പിക്കുക",
+                                height: 44,
+                                onPressed: _isSaving
+                                    ? null
+                                    : () async {
+                                        // Validate house type first
+                                        if (selectedHouseType == null ||
+                                            selectedHouseType!.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: const Text(
+                                                  "വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                          );
+                                          _scrollToField(houseTypeKey);
+                                          return;
+                                        }
+
+                                        // Validate surveyor name
+                                        if (surveyornamecontroller.text
                                             .trim()
                                             .isEmpty) {
                                           ScaffoldMessenger.of(context)
@@ -881,11 +883,34 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                               focusNode: surveyorFocus);
                                           return;
                                         }
+
+                                        setState(() {
+                                          _isSaving = true;
+                                        });
+
+                                        await _onAddSubmit();
+                                      },
+                                labelStyle: const TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ] else if (isEdit) ...[
+                              SizedBox(height: 20),
+                              BlocConsumer<HouseDetailsBloc, HouseDetailsState>(
+                                listener: (context, state) {
                                   if (state is HouseDetailsSuccess) {
+                                    setState(() {
+                                      _isSubmitting = false;
+                                    });
                                     showUpdateSuccessDialog(context);
                                   }
 
                                   if (state is HouseDetailsError) {
+                                    setState(() {
+                                      _isSubmitting = false;
+                                    });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(state.message),
@@ -895,39 +920,71 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
                                   }
                                 },
                                 builder: (context, state) {
-                                  if (state is HouseDetailsLoading) {
-                                    return const Center(
-                                        child: CircularProgressIndicator(
-                                          color: AppColor.primary,
-                                        ));
-                                  }
+                                  return AppActionButton(
+                                    label: state is HouseDetailsLoading
+                                        ? "സമർപ്പിക്കുന്നു..."
+                                        : "സമർപ്പിക്കുക",
+                                    height: 44,
+                                    onPressed: _isSubmitting
+                                        ? null
+                                        : () {
+                                            // Validate house type first
+                                            if (selectedHouseType == null ||
+                                                selectedHouseType!.isEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  content: Text(
+                                                      "വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
+                                                ),
+                                              );
+                                              _scrollToField(houseTypeKey);
+                                              return;
+                                            }
 
-                                  return
-                                    _isSaving
-                                  ? const Center(
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 12),
-                                        child: CircularProgressIndicator(
-                                          color: AppColor.primary,
-                                          backgroundColor: AppColor.white,
-                                        ),
-                                      ),
-                                    )
-                                  : AppActionButton(
-                                      label: "സമർപ്പിക്കുക",
-                                    //  height: 44,
-                                    //  onPressed:
-                                    onPressed: _handleEditSubmit,
+                                            // Validate surveyor name
+                                            if (surveyornamecontroller.text
+                                                .trim()
+                                                .isEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  content: Text(
+                                                      "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+                                                ),
+                                              );
+                                              _scrollToField(surveyorKey,
+                                                  focusNode: surveyorFocus);
+                                              return;
+                                            }
+
+                                            setState(() {
+                                              _isSubmitting = true;
+                                            });
+                                            _handleEditSubmit();
+                                          },
                                     labelStyle: const TextStyle(
                                       color: AppColor.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                    height: 44,
                                   );
                                 },
-                              ),
+                              )
                             ] else if (isView) ...[
                               SizedBox(
                                 height: 20,
@@ -965,6 +1022,8 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
     final int editId = int.parse(screen2.data.first.id);
     final int householdId = int.parse(screen2.data.first.householdId);
 
+    // Note: We DON'T set _isSubmitting here anymore because it's already set in the onPressed
+
     context.read<HouseDetailsBloc>().add(
           SubmitHouseDetails(
             editId: editId,
@@ -994,35 +1053,6 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
 
     final header = widget.headerData;
 
-    if (selectedHouseType == null || selectedHouseType!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("വീടിന്റെ തരം തിരഞ്ഞെടുക്കുക"),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            
-          ),
-        ),
-      );
-         _scrollToField(houseTypeKey);
-      return;
-    }
-
-    if (surveyornamecontroller.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          content: Text("സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
-        ),
-      );
-          _scrollToField(surveyorKey, focusNode: surveyorFocus); 
-      return;
-    }
-
     if (header == null ||
         header.houseChief.isEmpty ||
         header.houseNumber.isEmpty ||
@@ -1034,15 +1064,14 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
           content: Text("അനിവാര്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക"),
           backgroundColor: AppColor.grey,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // curve here
+            borderRadius: BorderRadius.circular(12),
           ),
           duration: Duration(seconds: 3),
         ),
       );
+      setState(() => _isSaving = false);
       return;
     }
-
-    setState(() => _isSaving = true);
 
     try {
       await HeaderSaveRepository().saveSurveyHeader(
@@ -1073,17 +1102,20 @@ void _scrollToField(GlobalKey key, {FocusNode? focusNode}) {
         wardNeeds: selectedGeneralNeedId,
       );
 
-      // ✅ SHOW SUCCESS DIALOG
+      // Reset loading state before showing dialog
+      setState(() => _isSaving = false);
+
+      // Show success dialog
       showSuccessDialog(context);
     } catch (e) {
+      setState(() => _isSaving = false);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
           backgroundColor: Colors.red,
         ),
       );
-    } finally {
-      setState(() => _isSaving = false);
     }
   }
 }

@@ -1,15 +1,8 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
-import 'package:e_member_app/feature/dash_board/data/datasource/dashboard_remote_datasource.dart';
-import 'package:e_member_app/feature/dash_board/data/repository/dashboard_repository_impl.dart';
-import 'package:e_member_app/feature/dash_board/domain/usecase/get_dashboard_usecase.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart';
 import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_Servay_filter.dart';
-
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -34,6 +27,7 @@ class ListSurveyReport extends StatefulWidget {
 
 class _ListSurveyReportState extends State<ListSurveyReport> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
 
   String get pageTitle {
     switch (widget.sectionType) {
@@ -44,11 +38,32 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
     }
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<HeaderListBloc>().add(FetchHeaderList(widget.postion));
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // Add scroll listener for pagination
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<HeaderListBloc>().add(LoadMoreHeaders());
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    // Trigger when 200 pixels from bottom
+    return currentScroll >= (maxScroll - 200);
+  }
 
   // Open filter drawer and wait for result
   Future<void> _openFilterDrawer() async {
@@ -97,7 +112,9 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MainScreen(),
+              builder: (context) => MainScreen(
+                shouldRefresh: true,
+              ),
             ),
           );
         },
@@ -208,10 +225,29 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                             ),
                           );
                         }
+
+                        print('📱 Displaying ${state.items.length} items');
+
                         return ListView.builder(
+                          controller: _scrollController,
                           padding: const EdgeInsets.all(16),
-                          itemCount: state.items.length,
+                          itemCount:
+                              state.items.length + (state.hasMoreData ? 1 : 0),
                           itemBuilder: (context, index) {
+                            // Show loading indicator at the end if more data available
+                            if (index >= state.items.length) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: state.isLoadingMore
+                                      ? const CircularProgressIndicator(
+                                          color: AppColor.iconColor,
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              );
+                            }
+
                             final item = state.items[index];
                             return PropertyCard(
                               editId: item.editId,

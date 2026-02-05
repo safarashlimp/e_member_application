@@ -9,7 +9,7 @@ class RequiredBenefitBloc
 
   RequiredBenefitBloc(this.repository) : super(RequiredBenefitInitial()) {
     on<FetchRequiredBenefits>((event, emit) async {
-      emit(RequiredBenefitLoading());
+      emit(RequiredBenefitLoading('Required Benefits'));
       try {
         final items = await repository.getRequiredBenefits();
         emit(RequiredBenefitLoaded(items: items));

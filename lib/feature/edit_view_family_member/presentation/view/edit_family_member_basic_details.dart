@@ -85,7 +85,7 @@ class _EditFamilyMemberBasicDetailsState
   String? selectedReligionId;
   DateTime? selectedDob;
   bool _allDataLoaded = false;
- bool _isSubmitting = false; 
+  bool _isSubmitting = false;
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -107,7 +107,7 @@ class _EditFamilyMemberBasicDetailsState
 
   void _populateFields(PersonalDetailsModel value) {
     // Text fields
-    familyMemberName.text = value.name ?? '';
+    familyMemberName.text = value.name;
     mobileNumber.text = value.mobile;
     whatsupNumber.text = value.whatsapp;
     selectedDate.text = value.dob;
@@ -751,10 +751,10 @@ class _EditFamilyMemberBasicDetailsState
                             EditFamilyMemberState>(
                           listener: (context, state) {
                             if (state is EditFamilyMemberSubmitSuccess) {
-                               setState(() => _isSubmitting = false);
+                              setState(() => _isSubmitting = false);
                               showSuccessDialog(context);
                             } else if (state is EditFamilyMemberSubmitFailure) {
-                               setState(() => _isSubmitting = false);
+                              setState(() => _isSubmitting = false);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('Error: ${state.message}'),
@@ -767,119 +767,126 @@ class _EditFamilyMemberBasicDetailsState
                             label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുകയാണ്..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: _isSubmitting ? null :
-                            () {
-                              if (familyMemberName.text.trim().isEmpty) {
-                                showSnack(
-                                    context, "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
-                                _scrollToField(familyNameKey,
-                                    focusNode: familyNameFocus);
-                                return;
-                              }
-                              if (mobileNumber.text.trim().isEmpty) {
-                                showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
-                                _scrollToField(mobileKey,
-                                    focusNode: mobileFocus);
-                                return;
-                              }
-                              if (!RegExp(r'^[0-9]{10}$')
-                                  .hasMatch(mobileNumber.text.trim())) {
-                                showSnack(
-                                    context, "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
-                                _scrollToField(mobileKey,
-                                    focusNode: mobileFocus);
-                                return;
-                              }
+                            onPressed: _isSubmitting
+                                ? null
+                                : () {
+                                    if (familyMemberName.text.trim().isEmpty) {
+                                      showSnack(context,
+                                          "കുടുംബാംഗത്തിന്റെ പേര് നൽകുക");
+                                      _scrollToField(familyNameKey,
+                                          focusNode: familyNameFocus);
+                                      return;
+                                    }
+                                    if (mobileNumber.text.trim().isEmpty) {
+                                      showSnack(context, "മൊബൈൽ നമ്പർ നൽകുക");
+                                      _scrollToField(mobileKey,
+                                          focusNode: mobileFocus);
+                                      return;
+                                    }
+                                    if (!RegExp(r'^[0-9]{10}$')
+                                        .hasMatch(mobileNumber.text.trim())) {
+                                      showSnack(context,
+                                          "മൊബൈൽ നമ്പർ 10 അക്കമായിരിക്കണം");
+                                      _scrollToField(mobileKey,
+                                          focusNode: mobileFocus);
+                                      return;
+                                    }
 
-                              if (whatsupNumber.text.trim().isEmpty) {
-                                showSnack(context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
-                                _scrollToField(whatsappKey,
-                                    focusNode: whatsappFocus);
-                                return;
-                              }
-                              if (!RegExp(r'^[0-9]{10}$')
-                                  .hasMatch(whatsupNumber.text.trim())) {
-                                showSnack(context,
-                                    "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
-                                _scrollToField(whatsappKey,
-                                    focusNode: whatsappFocus);
-                                return;
-                              }
-                              if (selectedBloodGroup == null ||
-                                  selectedBloodGroup!.isEmpty) {
-                                showSnack(
-                                    context, "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
-                                _scrollToField(bloodGroupKey);
-                                return;
-                              }
-                              if (selectedReletion == null ||
-                                  selectedReletion!.isEmpty) {
-                                showSnack(context,
-                                    "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
-                                _scrollToField(relationKey);
-                                return;
-                              }
-                              if (selectedGender == null ||
-                                  selectedGender!.isEmpty) {
-                                showSnack(context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
-                                _scrollToField(genderKey);
-                                return;
-                              }
-                              if (selectedDate == null ||
-                                  selectedDate.text.isEmpty) {
-                                showSnack(context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
-                                _scrollToField(dobKey);
-                                return;
-                              }
+                                    if (whatsupNumber.text.trim().isEmpty) {
+                                      showSnack(
+                                          context, "വാട്സ്ആപ്പ് നമ്പർ നൽകുക");
+                                      _scrollToField(whatsappKey,
+                                          focusNode: whatsappFocus);
+                                      return;
+                                    }
+                                    if (!RegExp(r'^[0-9]{10}$')
+                                        .hasMatch(whatsupNumber.text.trim())) {
+                                      showSnack(context,
+                                          "വാട്സ്ആപ്പ് നമ്പർ 10 അക്കമായിരിക്കണം");
+                                      _scrollToField(whatsappKey,
+                                          focusNode: whatsappFocus);
+                                      return;
+                                    }
+                                    if (selectedBloodGroup == null ||
+                                        selectedBloodGroup!.isEmpty) {
+                                      showSnack(context,
+                                          "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക");
+                                      _scrollToField(bloodGroupKey);
+                                      return;
+                                    }
+                                    if (selectedReletion == null ||
+                                        selectedReletion!.isEmpty) {
+                                      showSnack(context,
+                                          "കുടുംബനാഥനുമായുള്ള ബന്ധം തിരഞ്ഞെടുക്കുക");
+                                      _scrollToField(relationKey);
+                                      return;
+                                    }
+                                    if (selectedGender == null ||
+                                        selectedGender!.isEmpty) {
+                                      showSnack(
+                                          context, "ലിംഗം തിരഞ്ഞെടുക്കുക");
+                                      _scrollToField(genderKey);
+                                      return;
+                                    }
+                                    if (selectedDate == null ||
+                                        selectedDate.text.isEmpty) {
+                                      showSnack(
+                                          context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
+                                      _scrollToField(dobKey);
+                                      return;
+                                    }
 
-                              if (surveyorNameLabel.text.trim().isEmpty) {
-                                showSnack(
-                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
-                                _scrollToField(surveyorKey,
-                                    focusNode: surveyorFocus);
-                                return;
-                              }
+                                    if (surveyorNameLabel.text.trim().isEmpty) {
+                                      showSnack(context,
+                                          "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                      _scrollToField(surveyorKey,
+                                          focusNode: surveyorFocus);
+                                      return;
+                                    }
 
-                              final finalEditId =
-                                  widget.editId ?? widget.data.id ?? '';
+                                    final finalEditId =
+                                        widget.editId ?? widget.data.id ?? '';
 
-                              if (finalEditId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        '❌ Error: Member ID is missing. Cannot update without ID.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
+                                    if (finalEditId.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              '❌ Error: Member ID is missing. Cannot update without ID.'),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
 
-                                return ; // Don't proceed
-                              }
-                               setState(() => _isSubmitting = true);
+                                      return; // Don't proceed
+                                    }
+                                    setState(() => _isSubmitting = true);
 
-                              final personalDetailsModel = PersonalDetailsModel(
-                                id: finalEditId,
-                                name: familyMemberName.text,
-                                mobile: mobileNumber.text,
-                                whatsapp: whatsupNumber.text,
-                                bloodgroup: selectedBloodGroupId.toString(),
-                                relationId: selectedRelationId.toString(),
-                                genderId: selectedGenderId.toString(),
-                                dob: selectedDate.text,
-                                maritalStatusId:
-                                    selectedMaritalStatusId.toString(),
-                                religionId: selectedReligionId.toString(),
-                                casteId: selectedCasteId.toString(),
-                                surveyor: surveyorNameLabel.text,
-                              );
+                                    final personalDetailsModel =
+                                        PersonalDetailsModel(
+                                      id: finalEditId,
+                                      name: familyMemberName.text,
+                                      mobile: mobileNumber.text,
+                                      whatsapp: whatsupNumber.text,
+                                      bloodgroup:
+                                          selectedBloodGroupId.toString(),
+                                      relationId: selectedRelationId.toString(),
+                                      genderId: selectedGenderId.toString(),
+                                      dob: selectedDate.text,
+                                      maritalStatusId:
+                                          selectedMaritalStatusId.toString(),
+                                      religionId: selectedReligionId.toString(),
+                                      casteId: selectedCasteId.toString(),
+                                      surveyor: surveyorNameLabel.text,
+                                    );
 
-                              context.read<EditFamilyMemberBloc>().add(
-                                    SubmitPersonalDetailsEvent(
-                                      data: personalDetailsModel,
-                                      editId: finalEditId,
-                                    ),
-                                  );
-                            },
+                                    context.read<EditFamilyMemberBloc>().add(
+                                          SubmitPersonalDetailsEvent(
+                                            data: personalDetailsModel,
+                                            editId: finalEditId,
+                                          ),
+                                        );
+                                  },
                             labelStyle: const TextStyle(
                               color: AppColor.white,
                               fontSize: 14,

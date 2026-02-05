@@ -48,8 +48,9 @@ class _EditFamilyMemberSocielDetailsState
   String? selectedPensionTypeId;
   String? isPensionRequiredId;
   bool _allDataLoaded = false;
-    final GlobalKey surveyorKey = GlobalKey();
-      final FocusNode surveyorFocus = FocusNode();
+  bool _isSubmitting = false;
+  final GlobalKey surveyorKey = GlobalKey();
+  final FocusNode surveyorFocus = FocusNode();
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -67,7 +68,8 @@ class _EditFamilyMemberSocielDetailsState
     return pensionTypeState is PensionTypeLoaded &&
         pensionRequiredState is PensionRequiredLoaded;
   }
-    void showSnack(BuildContext context, String message) {
+
+  void showSnack(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -80,13 +82,13 @@ class _EditFamilyMemberSocielDetailsState
       ),
     );
   }
+
   @override
   void dispose() {
     // ✅ ADD THIS: Dispose focus nodes
-   
 
     surveyorFocus.dispose();
- 
+
     super.dispose();
   }
 
@@ -105,12 +107,14 @@ class _EditFamilyMemberSocielDetailsState
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );  if (focusNode != null) {
+    );
+    if (focusNode != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(focusNode);
       });
     }
   }
+
   void showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -428,7 +432,7 @@ class _EditFamilyMemberSocielDetailsState
                             ),
                             SizedBox(height: 20),
                             AppTextField(
-                                 key: surveyorKey,
+                              key: surveyorKey,
                               focusNode: surveyorFocus,
                               controller: surveyorNameLabel,
                               label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
@@ -463,48 +467,56 @@ class _EditFamilyMemberSocielDetailsState
                             label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുന്നു..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: () {
-                              
-                                 if (surveyorNameLabel.text.trim().isEmpty) {
-                                showSnack(
-                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
-                                _scrollToField(surveyorKey,
-                                    focusNode: surveyorFocus);
-                                return;
-                              }
-                              final finalEditId = widget.editId ?? '';
+                            onPressed: _isSubmitting
+                                ? null
+                                : () {
+                                    if (surveyorNameLabel.text.trim().isEmpty) {
+                                      showSnack(context,
+                                          "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                      _scrollToField(surveyorKey,
+                                          focusNode: surveyorFocus);
+                                      return;
+                                    }
+                                    final finalEditId = widget.editId ?? '';
 
-                              if (finalEditId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        '❌ Error: Member ID is missing. Cannot update without ID.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                                return;
-                              }
-                              final welfareModel = WelfareModel(
-                                includedInRation:
-                                    isIncludedInRationCard.toString(),
-                                receivingPension: isPensionReceiving.toString(),
-                                pensionTypeId: selectedPensionTypeId ?? '0',
-                                needPensionTypeId: isPensionRequiredId ?? '0',
-                                povertyPgm:
-                                    povertyProgramMap[selectedProvertyPrgm]
-                                            ?.toString() ??
-                                        '0',
-                                surveyor: surveyorNameLabel.text,
-                              );
+                                    if (finalEditId.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              '❌ Error: Member ID is missing. Cannot update without ID.'),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    setState(() {
+                                      _isSubmitting = true;
+                                    });
+                                    final welfareModel = WelfareModel(
+                                      includedInRation:
+                                          isIncludedInRationCard.toString(),
+                                      receivingPension:
+                                          isPensionReceiving.toString(),
+                                      pensionTypeId:
+                                          selectedPensionTypeId ?? '0',
+                                      needPensionTypeId:
+                                          isPensionRequiredId ?? '0',
+                                      povertyPgm: povertyProgramMap[
+                                                  selectedProvertyPrgm]
+                                              ?.toString() ??
+                                          '0',
+                                      surveyor: surveyorNameLabel.text,
+                                    );
 
-                              context.read<EditFamilyMemberBloc>().add(
-                                    SubmitPensionDetailsEvent(
-                                      data: welfareModel,
-                                      editId: finalEditId,
-                                    ),
-                                  );
-                            },
+                                    context.read<EditFamilyMemberBloc>().add(
+                                          SubmitPensionDetailsEvent(
+                                            data: welfareModel,
+                                            editId: finalEditId,
+                                          ),
+                                        );
+                                  },
                             labelStyle: const TextStyle(
                               color: AppColor.white,
                               fontSize: 14,

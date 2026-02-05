@@ -29,7 +29,6 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health%20issue/health_issue_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health_insurance/health_insurance_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/jobs/job_bloc.dart';
-
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_event.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
@@ -62,16 +61,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-     
     final repo = MemberDropRepositoryImpl();
- final datasource = DashboardRemoteDatasource();
-          final repository = DashboardRepositoryImpl(datasource);
-          final useCase = GetDashboardUseCase(repository);
+    final datasource = DashboardRemoteDatasource();
+    final repository = DashboardRepositoryImpl(datasource);
+    final useCase = GetDashboardUseCase(repository);
 
-        
     return ScreenUtilInit(
       designSize: const Size(390, 844), // 👈 Your design size
       minTextAdapt: true,
@@ -79,9 +75,9 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
             providers: [
-               BlocProvider(
-            create: (_) => DashboardBloc(useCase)..add(LoadDashboardEvent())),
-          
+              BlocProvider(
+                  create: (_) =>
+                      DashboardBloc(useCase)..add(LoadDashboardEvent())),
               BlocProvider(
                 create: (_) => RationCardBloc(
                   FamilyDropRepositoryImpl(),

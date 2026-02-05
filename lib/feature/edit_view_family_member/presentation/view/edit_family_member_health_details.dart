@@ -52,8 +52,9 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
   String? hasHealthIssuesId;
   String? requiredHealthSupports;
   bool _allDataLoaded = false;
-    final GlobalKey surveyorKey = GlobalKey();
-      final FocusNode surveyorFocus = FocusNode();
+  bool _selectSelected = false;
+  final GlobalKey surveyorKey = GlobalKey();
+  final FocusNode surveyorFocus = FocusNode();
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -66,7 +67,8 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
         healthInsuranceState is HealthInsuranceLoaded &&
         requiredHealthState is RequiredHealthSupportLoaded;
   }
-    void showSnack(BuildContext context, String message) {
+
+  void showSnack(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -79,13 +81,13 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
       ),
     );
   }
+
   @override
   void dispose() {
     // ✅ ADD THIS: Dispose focus nodes
-   
 
     surveyorFocus.dispose();
- 
+
     super.dispose();
   }
 
@@ -104,12 +106,14 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );  if (focusNode != null) {
+    );
+    if (focusNode != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(focusNode);
       });
     }
   }
+
   void _populateFields(HealthModel value) {
     patient = int.tryParse(value.isPatient) ?? 0;
     hasDisability = int.tryParse(value.disabled) ?? 0;
@@ -177,7 +181,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                     // close dialog
                     _goToListPage(context); // navigate
                   },
-                child: const Text(
+                  child: const Text(
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     "OK",
@@ -487,7 +491,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             ),
                             SizedBox(height: 20),
                             AppTextField(
-                                key: surveyorKey,
+                              key: surveyorKey,
                               focusNode: surveyorFocus,
                               controller: surveyorNameLabel,
                               label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
@@ -522,47 +526,56 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                             label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുന്നു..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: () {
-                                 
-                              if (surveyorNameLabel.text.trim().isEmpty) {
-                                showSnack(
-                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
-                                _scrollToField(surveyorKey,
-                                    focusNode: surveyorFocus);
-                                return;
-                              }
-                              final finalEditId = widget.editId ?? '';
+                            onPressed: _selectSelected
+                                ? null
+                                : () {
+                                    if (surveyorNameLabel.text.trim().isEmpty) {
+                                      showSnack(context,
+                                          "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                      _scrollToField(surveyorKey,
+                                          focusNode: surveyorFocus);
+                                      return;
+                                    }
+                                    final finalEditId = widget.editId ?? '';
 
-                              if (finalEditId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        '❌ Error: Member ID is missing. Cannot update without ID.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                                return;
-                              }
-                              final healthModel = HealthModel(
-                                isPatient: patient.toString(),
-                                diseases: hasHealthIssuesId.toString(),
-                                treatmentPlace: treatmentPlaceLabel.text,
-                                disabled: hasDisability.toString(),
-                                disabilityBenefit: disabilityBenefit.toString(),
-                                insuranceCard: healthInsuranceCard.toString(),
-                                insuranceTypeId: healthInsuranceId.toString(),
-                                healthHelp: requiredHealthSupportsId.toString(),
-                                surveyor: surveyorNameLabel.text,
-                              );
+                                    if (finalEditId.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              '❌ Error: Member ID is missing. Cannot update without ID.'),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    setState(() {
+                                      _selectSelected = true;
+                                    });
+                                    final healthModel = HealthModel(
+                                      isPatient: patient.toString(),
+                                      diseases: hasHealthIssuesId.toString(),
+                                      treatmentPlace: treatmentPlaceLabel.text,
+                                      disabled: hasDisability.toString(),
+                                      disabilityBenefit:
+                                          disabilityBenefit.toString(),
+                                      insuranceCard:
+                                          healthInsuranceCard.toString(),
+                                      insuranceTypeId:
+                                          healthInsuranceId.toString(),
+                                      healthHelp:
+                                          requiredHealthSupportsId.toString(),
+                                      surveyor: surveyorNameLabel.text,
+                                    );
 
-                              context.read<EditFamilyMemberBloc>().add(
-                                    SubmitHealthDetailsEvent(
-                                      data: healthModel,
-                                      editId: finalEditId,
-                                    ),
-                                  );
-                            },
+                                    context.read<EditFamilyMemberBloc>().add(
+                                          SubmitHealthDetailsEvent(
+                                            data: healthModel,
+                                            editId: finalEditId,
+                                          ),
+                                        );
+                                  },
                             labelStyle: const TextStyle(
                               color: AppColor.white,
                               fontSize: 14,

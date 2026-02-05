@@ -14,10 +14,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       emit(DashboardLoading());
 
       try {
-
-        final pref =  await SharedPreferences.getInstance();
-        final clientId =  pref.getString(PrefKeys.clientId);
-        final userId = pref.getString(PrefKeys.userId) ;
+        final pref = await SharedPreferences.getInstance();
+        final clientId = pref.getString(PrefKeys.clientId);
+        final userId = pref.getString(PrefKeys.userId);
 
         final data = await useCase(clientId!, userId!);
         emit(DashboardLoaded(data));

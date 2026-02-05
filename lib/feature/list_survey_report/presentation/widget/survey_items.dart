@@ -272,7 +272,7 @@ class _PropertyCardState extends State<PropertyCard> {
                     Icons.add,
                     size: 14,
                     color: AppColor.white,
-                   //weight: 700,
+                    //weight: 700,
                     fill: 1,
                   ),
                   label: Text(

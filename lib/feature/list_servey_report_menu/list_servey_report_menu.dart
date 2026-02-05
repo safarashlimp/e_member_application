@@ -32,12 +32,12 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
             GradientHeader(
               backText: 'back',
               onPress: () {
-              Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-    builder: (context) =>  MainScreen(),
-      ),
-    );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainScreen(),
+                  ),
+                );
               },
             ),
             SizedBox(height: 10),

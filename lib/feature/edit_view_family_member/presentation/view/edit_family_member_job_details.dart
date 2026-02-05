@@ -59,8 +59,9 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
   String? farmingType;
   List<String> selectedSkillIds = [];
   bool _allDataLoaded = false;
+  bool _isselecting = false;
   final GlobalKey surveyorKey = GlobalKey();
-      final FocusNode surveyorFocus = FocusNode();
+  final FocusNode surveyorFocus = FocusNode();
   bool get isEdit => widget.mode == PageMode.edit;
   bool get isView => widget.mode == PageMode.view;
 
@@ -77,7 +78,8 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
         employmentSupportState is EmploymentSupportLoaded &&
         farmingTypeState is FarmingTypeLoaded;
   }
-    void showSnack(BuildContext context, String message) {
+
+  void showSnack(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -90,6 +92,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
       ),
     );
   }
+
   @override
   void dispose() {
     // ✅ ADD THIS: Dispose focus nodes
@@ -97,7 +100,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
     surveyorNameLabel.dispose();
 
     surveyorFocus.dispose();
- 
+
     super.dispose();
   }
 
@@ -116,12 +119,14 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
       alignment: 0.25,
-    );  if (focusNode != null) {
+    );
+    if (focusNode != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(focusNode);
       });
     }
   }
+
   void showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -174,7 +179,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                     // close dialog
                     _goToListPage(context); // navigate
                   },
-                 child: const Text(
+                  child: const Text(
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     "OK",
@@ -234,7 +239,6 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
     norkaRegisteredLabel = int.tryParse(value.norkaRegistered) ?? 0;
     surveyorNameLabel.text = value.surveyor;
   }
-
 
   @override
   void initState() {
@@ -581,7 +585,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                             ],
                             SizedBox(height: 20),
                             AppTextField(
-                                 key: surveyorKey,
+                              key: surveyorKey,
                               focusNode: surveyorFocus,
                               controller: surveyorNameLabel,
                               label: "* സർവേ നടത്തിയ ആളുടെ പേര്",
@@ -616,47 +620,52 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
                             label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുന്നു..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: () {
+                            onPressed: _isselecting
+                                ? null
+                                : () {
+                                    if (surveyorNameLabel.text.trim().isEmpty) {
+                                      showSnack(context,
+                                          "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
+                                      _scrollToField(surveyorKey,
+                                          focusNode: surveyorFocus);
+                                      return;
+                                    }
+                                    final finalEditId = widget.editId ?? '';
 
-                                 if (surveyorNameLabel.text.trim().isEmpty) {
-                                showSnack(
-                                    context, "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക");
-                                _scrollToField(surveyorKey,
-                                    focusNode: surveyorFocus);
-                                return;
-                              }
-                              final finalEditId = widget.editId ?? '';
+                                    if (finalEditId.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              '❌ Error: Member ID is missing. Cannot update without ID.'),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    setState(() => _isselecting = true);
+                                    final employmentModel = EmploymentModel(
+                                      employmentStatusId:
+                                          employmentStatusId ?? '',
+                                      occupationId: jobStatusId ?? '',
+                                      skills: jsonEncode(selectedSkillIds),
+                                      skillDetails: specifySkillLabel.text,
+                                      needJobSupportId:
+                                          employmentSupportId ?? '',
+                                      norkaRegistered:
+                                          norkaRegisteredLabel.toString(),
+                                      agricultureType: farmingTypeId ?? '',
+                                      surveyor: surveyorNameLabel.text,
+                                    );
 
-                              if (finalEditId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        '❌ Error: Member ID is missing. Cannot update without ID.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                                return;
-                              }
-                              final employmentModel = EmploymentModel(
-                                employmentStatusId: employmentStatusId ?? '',
-                                occupationId: jobStatusId ?? '',
-                                skills: jsonEncode(selectedSkillIds),
-                                skillDetails: specifySkillLabel.text,
-                                needJobSupportId: employmentSupportId ?? '',
-                                norkaRegistered:
-                                    norkaRegisteredLabel.toString(),
-                                agricultureType: farmingTypeId ?? '',
-                                surveyor: surveyorNameLabel.text,
-                              );
-
-                              context.read<EditFamilyMemberBloc>().add(
-                                    SubmitEmploymentDetailsEvent(
-                                      data: employmentModel,
-                                      editId: finalEditId,
-                                    ),
-                                  );
-                            },
+                                    context.read<EditFamilyMemberBloc>().add(
+                                          SubmitEmploymentDetailsEvent(
+                                            data: employmentModel,
+                                            editId: finalEditId,
+                                          ),
+                                        );
+                                  },
                             labelStyle: const TextStyle(
                               color: AppColor.white,
                               fontSize: 14,

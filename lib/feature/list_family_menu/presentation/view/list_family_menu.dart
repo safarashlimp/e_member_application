@@ -12,11 +12,12 @@ import 'package:e_member_app/feature/mainscreen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+
 class ListFamilyMenu extends StatefulWidget {
   const ListFamilyMenu({super.key});
 
   @override
-  State<ListFamilyMenu> createState() =>  _ListFamilyMenuState();
+  State<ListFamilyMenu> createState() => _ListFamilyMenuState();
 }
 
 class _ListFamilyMenuState extends State<ListFamilyMenu> {

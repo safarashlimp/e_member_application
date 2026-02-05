@@ -49,7 +49,7 @@ class _EditFamilyMemberEducationdetailsState
   String? selectedEducationId;
   String? selectedQualification;
   String? selectedQualificationId;
-
+ bool _isSubmitting = false; 
   int student = 0;
   int needEducationHelp = 0;
   bool _allDataLoaded = false;
@@ -447,10 +447,10 @@ class _EditFamilyMemberEducationdetailsState
                             }
                           },
                           child: AppActionButton(
-                            label: state is EditFamilyMemberSubmitting
+                          label: state is EditFamilyMemberSubmitting
                                 ? "സമർപ്പിക്കുകയാണ്..."
                                 : "സമർപ്പിക്കുക",
-                            onPressed: () {
+                            onPressed: _isSubmitting ? null : () {
                               
                               if (surveyorNameLabel.text.trim().isEmpty) {
                                 showSnack(
@@ -472,6 +472,7 @@ class _EditFamilyMemberEducationdetailsState
                                 );
                                 return;
                               }
+                                 setState(() => _isSubmitting = true);
                               final educationModel = EducationModel(
                                 qualificationId:
                                     selectedQualificationId.toString(),

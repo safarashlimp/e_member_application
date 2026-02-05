@@ -1,12 +1,16 @@
 import 'package:e_member_app/core/widget/common/bottom_navigation_bar.dart';
 import 'package:e_member_app/feature/benefit_screen/benefit_screen.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_family_menu/presentation/view/list_family_menu.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/list_servey_report_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainScreen extends StatefulWidget {
+  final bool shouldRefresh;
   final int initialIndex;
   final bool? showUpdateDialog;
 
@@ -14,6 +18,7 @@ class MainScreen extends StatefulWidget {
     super.key,
     this.initialIndex = 0,
     this.showUpdateDialog,
+    this.shouldRefresh = false,
   });
 
   @override
@@ -28,6 +33,12 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+    if (widget.shouldRefresh) {
+      // Use addPostFrameCallback to ensure BLoC is available
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<DashboardBloc>().add(LoadDashboardEvent());
+      });
+    }
   }
 
   /// Double back to exit (only from Dashboard)

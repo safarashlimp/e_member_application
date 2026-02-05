@@ -91,11 +91,12 @@ class _ListFamilyState extends State<ListFamily> {
             GradientHeader(
               title: 'സമർപ്പിച്ച വിവരങ്ങൾ',
               onPress: () {
-                Navigator.push(
-                  context,
+                // ✅ Navigate back to MainScreen with refresh flag
+                Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => MainScreen(),
+                    builder: (context) => MainScreen(shouldRefresh: true),
                   ),
+                  (route) => false, // Remove all previous routes
                 );
               },
             ),

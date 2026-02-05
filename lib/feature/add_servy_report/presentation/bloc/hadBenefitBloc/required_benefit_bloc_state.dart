@@ -8,7 +8,10 @@ abstract class RequiredBenefitState extends Equatable {
 
 class RequiredBenefitInitial extends RequiredBenefitState {}
 
-class RequiredBenefitLoading extends RequiredBenefitState {}
+class RequiredBenefitLoading extends RequiredBenefitState {
+  final String screenName;
+  RequiredBenefitLoading(this.screenName);
+}
 
 class RequiredBenefitLoaded extends RequiredBenefitState {
   final List<FamilyDropItem> items;

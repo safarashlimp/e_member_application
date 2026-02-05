@@ -85,7 +85,7 @@ class FamilyMemberSaveRepository {
         'surveyor': surveyor,
 
         'qualification_id': qualificationId.toString(),
-        'currently_studying': (currentlyStudying ?? 0).toString(),
+        'currently_studying': (currentlyStudying).toString(),
         'course_id': (courseId ?? 0).toString(),
         'course_other': courseOther ?? '',
         'institution': institution ?? '',

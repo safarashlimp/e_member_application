@@ -19,7 +19,7 @@ class AppActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final isDisabled = onPressed == null;
+    final isDisabled = onPressed == null;
     return GestureDetector(
       onTap: onPressed,
       child: Opacity(

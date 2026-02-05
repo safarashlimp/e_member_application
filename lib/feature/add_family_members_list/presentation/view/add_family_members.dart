@@ -1801,7 +1801,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                                       try {
                                         final prefs = await SharedPreferences
                                             .getInstance();
-                                        final userId = int.parse(
+                                        int.parse(
                                             prefs.getString(PrefKeys.userId)!);
 
                                         final whatsappValue = whatsupNumber

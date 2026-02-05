@@ -19,3 +19,5 @@ class ClearFilters extends HeaderListEvent {
 
   ClearFilters(this.position);
 }
+
+class LoadMoreHeaders extends HeaderListEvent {}

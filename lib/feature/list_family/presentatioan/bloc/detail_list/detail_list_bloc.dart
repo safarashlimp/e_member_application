@@ -10,7 +10,7 @@ import 'package:e_member_app/core/constants/pref_keys.dart';
 class FamilyMemberListBloc
     extends Bloc<FamilyMemberListEvent, FamilyMemberListState> {
   final GetFamilyMemberListUsecase usecase;
-  
+
   static const int pageSize = 25;
   List<dynamic> _allMembers = []; // Store all fetched members
   int _currentOffset = 0;
@@ -31,9 +31,8 @@ class FamilyMemberListBloc
       final prefs = await SharedPreferences.getInstance();
 
       final clientId = prefs.getString(PrefKeys.clientId);
-      print('PREF clientId => $clientId');
+
       final userId = prefs.getString(PrefKeys.userId);
-      print('PREF userId   => $userId');
 
       if (clientId == null || userId == null) {
         emit(
@@ -50,11 +49,6 @@ class FamilyMemberListBloc
         userId,
         event.position,
       );
-      
-      print('PREF clientId => $clientId');
-      print('PREF userId   => $userId');
-      print('EVENT position=> ${event.position}');
-      print('Total members fetched: ${allMembers.length}');
 
       // Store all members and reset pagination
       _allMembers = allMembers;
@@ -62,9 +56,10 @@ class FamilyMemberListBloc
       _currentPosition = event.position;
 
       // Get first 25 items
-      final firstBatch = _allMembers.take(pageSize).toList().cast<FamilyMember>();
+      final firstBatch =
+          _allMembers.take(pageSize).toList().cast<FamilyMember>();
       final hasMore = _allMembers.length > pageSize;
-      
+
       _currentOffset = firstBatch.length;
 
       emit(FamilyMemberListLoaded(
@@ -83,9 +78,9 @@ class FamilyMemberListBloc
   ) async {
     // Only load more if we're in a loaded state and have more data
     if (state is! FamilyMemberListLoaded) return;
-    
+
     final currentState = state as FamilyMemberListLoaded;
-    
+
     // Don't load if already loading or no more data
     if (currentState.isLoadingMore || !currentState.hasMoreData) return;
 
@@ -112,12 +107,14 @@ class FamilyMemberListBloc
       }
 
       // Combine existing and new members
-      final updatedMembers = List<FamilyMember>.from(currentState.members)..addAll(nextBatch);
+      final updatedMembers = List<FamilyMember>.from(currentState.members)
+        ..addAll(nextBatch);
       _currentOffset += nextBatch.length;
 
       final hasMore = _currentOffset < _allMembers.length;
 
-      print('Loaded ${nextBatch.length} more members. Total: ${updatedMembers.length}/${_allMembers.length}');
+      print(
+          'Loaded ${nextBatch.length} more members. Total: ${updatedMembers.length}/${_allMembers.length}');
 
       emit(FamilyMemberListLoaded(
         updatedMembers,

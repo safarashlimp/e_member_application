@@ -718,7 +718,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                                         _scrollToField(rationCardTypeKey);
                                         return;
                                       }
-                                  
+
                                       _handleSubmit(context);
                                     },
                                     labelStyle: const TextStyle(
@@ -740,7 +740,6 @@ class _AddServyItemsState extends State<AddServyItems> {
                               listener: (context, state) {
                                 if (state is HouseholdSubmitSuccess) {
                                   showSuccessDialog(context);
-                                  // Don't navigate here - let the dialog handle it
                                 }
 
                                 if (state is HouseholdSubmitFailure) {
@@ -753,38 +752,139 @@ class _AddServyItemsState extends State<AddServyItems> {
                                 }
                               },
                               builder: (context, state) {
-                                if (state is HouseholdSubmitting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppColor.primary,
-                                    ),
-                                  );
-                                }
+                                final isSubmitting =
+                                    state is HouseholdSubmitting;
 
                                 return AppActionButton(
-                                  label: 'സമർപ്പിക്കുക',
-                                  onPressed: () {
-                                    if (surveyornamecontroller.text
-                                            .trim()
-                                            .isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
+                                  label: isSubmitting
+                                      ? 'സമർപ്പിക്കുന്നു...'
+                                      : 'സമർപ്പിക്കുക',
+                                  onPressed: isSubmitting
+                                      ? null
+                                      : () {
+                                          // Validate guardian name
+                                          if (gardienName.text.trim().isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content: Text(
+                                                    "കുടുംബനാഥൻ്റെ പേര് നൽകുക"),
                                               ),
-                                              content: Text(
-                                                  "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
-                                            ),
-                                          );
-                                          _scrollToField(surveyorKey,
-                                              focusNode: surveyorFocus);
-                                          return;
-                                        }
-                                   _handleSubmit(context);},
+                                            );
+                                            _scrollToField(guardianKey,
+                                                focusNode: guardianFocus);
+                                            return;
+                                          }
+
+                                          // Validate house name
+                                          if (houseName.text.trim().isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content:
+                                                    Text("വീട്ടുപേര് നൽകുക"),
+                                              ),
+                                            );
+                                            _scrollToField(houseNameKey,
+                                                focusNode: houseNameFocus);
+                                            return;
+                                          }
+
+                                          // Validate house number
+                                          if (houseNumber.text.trim().isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content:
+                                                    Text("വീട്ടുനമ്പർ നൽകുക"),
+                                              ),
+                                            );
+                                            _scrollToField(houseNumberKey,
+                                                focusNode: houseNumberFocus);
+                                            return;
+                                          }
+
+                                          // Validate ration card number
+                                          if (cardNumber.text.trim().isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content: Text(
+                                                    "റേഷൻ കാർഡ് നമ്പർ നൽകുക"),
+                                              ),
+                                            );
+                                            _scrollToField(cardNumberKey,
+                                                focusNode: cardNumberFocus);
+                                            return;
+                                          }
+
+                                          // Validate ration card type
+                                          if (selectedRationCardId == null) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content: Text(
+                                                    "റേഷൻ കാർഡ് തരം തിരഞ്ഞെടുക്കുക"),
+                                              ),
+                                            );
+                                            _scrollToField(rationCardTypeKey);
+                                            return;
+                                          }
+
+                                          // Validate surveyor name
+                                          if (surveyornamecontroller.text
+                                              .trim()
+                                              .isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                content: Text(
+                                                    "സർവേ നടത്തിയ ആളുടെ പേര് നൽകുക"),
+                                              ),
+                                            );
+                                            _scrollToField(surveyorKey,
+                                                focusNode: surveyorFocus);
+                                            return;
+                                          }
+
+                                          _handleSubmit(context);
+                                        },
                                   labelStyle: const TextStyle(
                                     color: AppColor.white,
                                     fontSize: 14,
