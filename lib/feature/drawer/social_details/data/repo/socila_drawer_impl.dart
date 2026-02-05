@@ -2,7 +2,7 @@
 
 import 'package:e_member_app/feature/add_family_members_list/data/model/dropdownmodel/family_member_model.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/drawer/social_details/domain/entity/socila_drawer_filterStep.dart';
+import 'package:e_member_app/feature/drawer/social_details/domain/entity/socila_drawer_filter_step.dart';
 import 'package:e_member_app/feature/drawer/social_details/domain/repo/socila_drawer_repo.dart';
 
 

@@ -37,13 +37,10 @@ class HouseDetailsRepository {
         'benefits_required': benefitsRequired ?? '0',
         'ward_needs': wardNeeds ?? '',
         'surveyor': surveyor,
-        
-        // 'member_id': , 
+
+        // 'member_id': ,
       },
     );
-
-    // Debug: print whatever the server returned
-    print('Raw API Response: ${response.body}');
 
     try {
       final decoded = jsonDecode(response.body);
@@ -62,16 +59,9 @@ class HouseDetailsRepository {
           throw Exception('Failed');
         }
       }
-
-      print('Submission success: ${decoded['data']}');
-
     } catch (e) {
-      // If decoding fails, server didn't send proper JSON
-      print('JSON decode failed: $e');
-      print('Raw server response: ${response.body}');
       throw Exception(
-        'Server returned invalid response. Please check backend. Response: ${response.body}'
-      );
+          'Server returned invalid response. Please check backend. Response: ${response.body}');
     }
   }
 }

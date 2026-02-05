@@ -83,7 +83,6 @@ class AddBasicFilter extends Bloc<FilterEventAddBasic, FilterStateAddBasic> {
 
             updatedSteps.add(step.copyWith(options: apiOptions));
           } catch (e) {
-            print('Failed to load data for ${step.name}: $e');
             updatedSteps.add(step);
           }
         }
@@ -108,19 +107,18 @@ class AddBasicFilter extends Bloc<FilterEventAddBasic, FilterStateAddBasic> {
     emit(state.copyWith(currentStep: event.stepIndex));
   }
 
- void _onSelectOption(
-  SelectOptionEvent event,
-  Emitter<FilterStateAddBasic> emit,
-) {
-  final step = state.steps[event.stepIndex]; // 👈 get step
-  final newSelections = Map<String, String>.from(state.selections);
+  void _onSelectOption(
+    SelectOptionEvent event,
+    Emitter<FilterStateAddBasic> emit,
+  ) {
+    final step = state.steps[event.stepIndex]; // 👈 get step
+    final newSelections = Map<String, String>.from(state.selections);
 
-  // ✅ STORE ENGLISH KEY
-  newSelections[step.key] = event.optionId;
+    // ✅ STORE ENGLISH KEY
+    newSelections[step.key] = event.optionId;
 
-  emit(state.copyWith(selections: newSelections));
-}
-
+    emit(state.copyWith(selections: newSelections));
+  }
 
   void _onClearAll(
     ClearAllSelectionsEvent event,
@@ -141,9 +139,5 @@ class AddBasicFilter extends Bloc<FilterEventAddBasic, FilterStateAddBasic> {
   void _onSubmit(
     SubmitAddFilterSubmitEvent event,
     Emitter<FilterStateAddBasic> emit,
-  ) {
-    // Now selections contains IDs
-    print("Filter selections (IDs): ${state.selections}");
-    // Example output: {വീടിന്റെ തരം: 2, ശൗചാലയം: 1, ...}
-  }
+  ) {}
 }

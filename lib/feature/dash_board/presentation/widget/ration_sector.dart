@@ -213,7 +213,7 @@ class _RationCard extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withAlpha((255.0 * 0.15).round()),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Text(

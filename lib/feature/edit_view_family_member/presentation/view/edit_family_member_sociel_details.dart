@@ -199,7 +199,7 @@ class _EditFamilyMemberSocielDetailsState
 
     selectedPensionTypeId = value.pensionTypeId;
     isPensionRequiredId = value.needPensionTypeId;
-    surveyorNameLabel.text = value.surveyor ?? '';
+    surveyorNameLabel.text = value.surveyor;
 
     selectedProvertyPrgm = povertyProgramMap.entries
         .firstWhere(

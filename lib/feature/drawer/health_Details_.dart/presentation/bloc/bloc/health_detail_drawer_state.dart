@@ -1,6 +1,4 @@
-// lib/feature/drawer/health_Details_.dart/presentation/bloc/bloc/health_detail_drawer_state.dart
-
-import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_FilterStep.dart';
+import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_filter_step.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_drawer_filter.dart';
 
 enum HealthDrawerStatus { initial, loading, loaded, success, error }
@@ -25,7 +23,7 @@ class HealthDrawerState {
 
   String? getCurrentSelection() {
     if (steps.isEmpty || currentStep >= steps.length) return null;
-    
+
     switch (currentStep) {
       case 0:
         return filter.isPatient;

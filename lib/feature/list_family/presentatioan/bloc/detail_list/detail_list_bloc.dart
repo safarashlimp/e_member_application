@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:e_member_app/feature/list_family/data/model/detail_list_model.dart';
 import 'package:e_member_app/feature/list_family/domain/user_case/user_case.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:e_member_app/core/constants/pref_keys.dart';
@@ -14,7 +14,6 @@ class FamilyMemberListBloc
   static const int pageSize = 25;
   List<dynamic> _allMembers = []; // Store all fetched members
   int _currentOffset = 0;
-  String? _currentPosition;
 
   FamilyMemberListBloc(this.usecase) : super(FamilyMemberListInitial()) {
     on<FetchFamilyMemberList>(_onFetchFamilyMemberList);
@@ -53,7 +52,6 @@ class FamilyMemberListBloc
       // Store all members and reset pagination
       _allMembers = allMembers;
       _currentOffset = 0;
-      _currentPosition = event.position;
 
       // Get first 25 items
       final firstBatch =
@@ -113,9 +111,6 @@ class FamilyMemberListBloc
 
       final hasMore = _currentOffset < _allMembers.length;
 
-      print(
-          'Loaded ${nextBatch.length} more members. Total: ${updatedMembers.length}/${_allMembers.length}');
-
       emit(FamilyMemberListLoaded(
         updatedMembers,
         hasMoreData: hasMore,
@@ -123,7 +118,6 @@ class FamilyMemberListBloc
       ));
     } catch (e) {
       emit(currentState.copyWith(isLoadingMore: false));
-      print('Error loading more members: $e');
     }
   }
 }

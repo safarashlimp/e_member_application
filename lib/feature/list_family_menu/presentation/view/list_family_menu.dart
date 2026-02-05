@@ -1,8 +1,7 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
-import 'package:e_member_app/feature/list_family/data/repository/Family_member_repo_impl.dart';
+import 'package:e_member_app/feature/list_family/data/repository/family_member_repository_impl.dart';
 import 'package:e_member_app/feature/list_family/domain/user_case/user_case.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_bloc.dart';
 import 'package:e_member_app/feature/list_family/presentatioan/bloc/detail_list/detail_list_event.dart';
@@ -52,7 +51,7 @@ class _ListFamilyMenuState extends State<ListFamilyMenu> {
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColor.grey.withOpacity(0.5),
+                      color: AppColor.grey.withAlpha((255.0 * 0.5).round()),
                       blurRadius: 5,
                       spreadRadius: 1,
                     ),

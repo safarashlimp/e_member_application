@@ -1,6 +1,5 @@
 // lib/feature/drawer/social_details/presentation/social_detail_drawer.dart
 
-
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
 import 'package:e_member_app/feature/drawer/social_details/data/repo/socila_drawer_impl.dart';
 import 'package:e_member_app/feature/drawer/social_details/domain/entity/social_entity.dart';
@@ -56,7 +55,9 @@ class _SocialDetailDrawerContent extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<SocialDrawerBloc>().add(SocialDrawerInitialize());
+                      context
+                          .read<SocialDrawerBloc>()
+                          .add(SocialDrawerInitialize());
                     },
                     child: const Text('Retry'),
                   ),
@@ -376,7 +377,7 @@ class _SocialDetailDrawerContent extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((255.0 * 0.05).round()),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -433,15 +434,14 @@ class _SocialDetailDrawerContent extends StatelessWidget {
               child: const Text(
                 'ഫിൽട്ടർ പ്രയോഗിക്കുക',
                 style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white
-                  ),
-),
-),
-),
-],
-),
-);
-}
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

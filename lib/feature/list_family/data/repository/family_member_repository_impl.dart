@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:e_member_app/feature/list_family/data/model/detail_list_model.dart';
 import 'package:e_member_app/feature/list_family/domain/repository/list_damily_repository.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FamilyMemberListRepositoryImpl implements FamilyMemberListRepo {
   final http.Client client;
@@ -11,8 +10,7 @@ class FamilyMemberListRepositoryImpl implements FamilyMemberListRepo {
 
   @override
   Future<List<FamilyMember>> getFamilyMemberList(
-    String clientId ,
-    
+    String clientId,
     String userId,
     String position,
   ) async {

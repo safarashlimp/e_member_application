@@ -1,5 +1,3 @@
-// lib/feature/drawer/health_Details_.dart/domain/entity/health_filter_step.dart
-
 import 'package:e_member_app/feature/add_family_members_list/data/model/dropdownmodel/family_member_model.dart';
 
 class HealthFilterStep {

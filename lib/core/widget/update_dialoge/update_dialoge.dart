@@ -130,14 +130,14 @@ class AppUpdateDialog extends StatelessWidget {
     );
   }
 
-  void _handleUpdate() {
-    // Add your update logic here
-    // Example with url_launcher package:
-    // final url = Platform.isAndroid
-    //     ? 'https://play.google.com/store/apps/details?id=your.package.name'
-    //     : 'https://apps.apple.com/app/idYOUR_APP_ID';
-    // launchUrl(Uri.parse(url));
-  }
+  // void _handleUpdate() {
+  //   // Add your update logic here
+  //   // Example with url_launcher package:
+  //   // final url = Platform.isAndroid
+  //   //     ? 'https://play.google.com/store/apps/details?id=your.package.name'
+  //   //     : 'https://apps.apple.com/app/idYOUR_APP_ID';
+  //   // launchUrl(Uri.parse(url));
+  // }
 }
 
  

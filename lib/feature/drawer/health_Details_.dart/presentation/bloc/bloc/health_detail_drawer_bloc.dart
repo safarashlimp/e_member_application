@@ -24,7 +24,7 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     Emitter<HealthDrawerState> emit,
   ) async {
     emit(state.copyWith(status: HealthDrawerStatus.loading));
-    
+
     try {
       final steps = await _repository.getAllHealthSteps();
       emit(state.copyWith(
@@ -53,7 +53,7 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     Emitter<HealthDrawerState> emit,
   ) {
     HealthDrawerFilter updatedFilter;
-    
+
     switch (event.stepIndex) {
       case 0: // രോഗിയാണോ
         updatedFilter = state.filter.copyWith(isPatient: event.optionId);
@@ -62,18 +62,21 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
         updatedFilter = state.filter.copyWith(hasDisability: event.optionId);
         break;
       case 2: // സർക്കാർ ആനുകൂല്യങ്ങൾ
-        updatedFilter = state.filter.copyWith(receivesGovernmentBenefits: event.optionId);
+        updatedFilter =
+            state.filter.copyWith(receivesGovernmentBenefits: event.optionId);
         break;
       case 3: // ഹെൽത്ത് ഇൻഷൂറൻസ്
-        updatedFilter = state.filter.copyWith(hasHealthInsurance: event.optionId);
+        updatedFilter =
+            state.filter.copyWith(hasHealthInsurance: event.optionId);
         break;
       case 4: // ആരോഗ്യ സഹായങ്ങൾ
-        updatedFilter = state.filter.copyWith(requiredHealthAssistance: event.optionId);
+        updatedFilter =
+            state.filter.copyWith(requiredHealthAssistance: event.optionId);
         break;
       default:
         return;
     }
-    
+
     emit(state.copyWith(filter: updatedFilter));
   }
 
@@ -110,19 +113,10 @@ class HealthDrawerBloc extends Bloc<HealthDrawerEvent, HealthDrawerState> {
     Emitter<HealthDrawerState> emit,
   ) {
     emit(state.copyWith(status: HealthDrawerStatus.loading));
-    
+
     try {
-      final filterMap = state.filter.toMap();
-      print('Health Filter Submitted: $filterMap');
-      // Example output:
-      // {
-      //   'is_patient': '1',
-      //   'has_disability': '0',
-      //   'receives_government_benefits': '1',
-      //   'has_health_insurance': '0',
-      //   'required_health_assistance_id': '7'
-      // }
-      
+      state.filter.toMap();
+
       emit(state.copyWith(status: HealthDrawerStatus.success));
     } catch (e) {
       emit(state.copyWith(

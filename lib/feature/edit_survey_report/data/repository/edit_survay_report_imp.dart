@@ -10,7 +10,6 @@ class HouseholdRepository {
     required SurveyHeaderModel data,
     // required int surveyorId,
   }) async {
-
     final response = await http.post(
       Uri.parse('https://emember.org/API/households_1.php'),
       body: {
@@ -32,18 +31,10 @@ class HouseholdRepository {
 
     final decoded = jsonDecode(response.body);
 
-// Convert string "True"/"False" to boolean
-final status = decoded['Status'].toString().toLowerCase() == 'true';
+    final status = decoded['Status'].toString().toLowerCase() == 'true';
 
-if (!status) {
-   print('Submission failed: ${response.body}');
-  throw Exception(decoded['data'] ?? 'Submission failed');
-}
-
-// Optionally print success
-print('Submission success, data: ${decoded['data']}');
-
-
-  
+    if (!status) {
+      throw Exception(decoded['data'] ?? 'Submission failed');
+    }
   }
 }

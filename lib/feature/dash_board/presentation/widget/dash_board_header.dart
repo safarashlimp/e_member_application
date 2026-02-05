@@ -126,7 +126,8 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: AppColor.white.withOpacity(0.8),
+                          color:
+                              AppColor.white.withAlpha((255.0 * 0.8).round()),
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
                         ),

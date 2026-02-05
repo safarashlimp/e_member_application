@@ -359,7 +359,7 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((255.0 * 0.05).round()),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -370,7 +370,9 @@ class _AddMemberDetailsDrawerContent extends StatelessWidget {
           Expanded(
             child: OutlinedButton(
               onPressed: () {
-                context.read<MemberDetailsBloc>().add(const MemberDetailsReset());
+                context
+                    .read<MemberDetailsBloc>()
+                    .add(const MemberDetailsReset());
               },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),

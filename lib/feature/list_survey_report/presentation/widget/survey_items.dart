@@ -73,7 +73,7 @@ class _PropertyCardState extends State<PropertyCard> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.10),
+            color: Colors.black.withAlpha((255.0 * 0.10).round()),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),

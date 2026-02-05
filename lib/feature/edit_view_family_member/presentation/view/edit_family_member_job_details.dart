@@ -214,7 +214,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
 
     // ✅ FIXED: Parse skills JSON array properly
     try {
-      final skillsString = value.skills ?? '[]';
+      final skillsString = value.skills;
 
       // Handle both JSON array format and comma-separated format
       if (skillsString.trim().startsWith('[')) {
@@ -229,10 +229,7 @@ class _EditFamilyJobDetailsState extends State<EditFamilyJobDetails> {
             .map((e) => e.trim())
             .toList();
       }
-
-      print('✅ Loaded skill IDs: $selectedSkillIds');
     } catch (e) {
-      print('❌ Error parsing skills: $e');
       selectedSkillIds = [];
     }
 

@@ -16,8 +16,9 @@ class HeaderListRepositoryImpl implements HeaderListRepo {
     Map<String, dynamic>? filters,
   }) async {
     // Build base URL
-    var url = 'https://emember.org/API/header_list.php?clientid=$clientId&userid=$userId&position=$position';
-    
+    var url =
+        'https://emember.org/API/header_list.php?clientid=$clientId&userid=$userId&position=$position';
+
     // Add filter parameters if provided
     if (filters != null && filters.isNotEmpty) {
       filters.forEach((key, value) {
@@ -27,13 +28,11 @@ class HeaderListRepositoryImpl implements HeaderListRepo {
       });
     }
 
-    print('🔍 Fetching header list with URL: $url');
-    
     final response = await client.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final data = HeaderListResponse.fromJson(json.decode(response.body));
-      print('✅ Received ${data.data.length} items');
+
       return data.data;
     } else {
       throw Exception('Failed to load header list');

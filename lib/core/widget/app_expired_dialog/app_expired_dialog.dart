@@ -1,8 +1,10 @@
-// 
+
 
 import 'package:flutter/material.dart';
 
 class Expiredscreen extends StatelessWidget {
+  const Expiredscreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

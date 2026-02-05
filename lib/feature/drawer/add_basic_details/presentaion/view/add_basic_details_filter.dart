@@ -1,6 +1,6 @@
 // lib/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart
 import 'package:e_member_app/feature/add_servy_report/data/repository/family_drop_impl.dart';
-import 'package:e_member_app/feature/drawer/add_basic_details/data/model/filter_add_basic..dart';
+import 'package:e_member_app/feature/drawer/add_basic_details/data/model/filter_add_basic.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/bloc/filter/filter_bloc.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/bloc/filter/filter_event.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/bloc/filter/filter_state.dart';
@@ -352,7 +352,7 @@ Widget _buildRightSection(BuildContext context, FilterStateAddBasic state) {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((255.0 * 0.05).round()),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

@@ -1,7 +1,6 @@
 import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/common/menu_condainer.dart';
-import 'package:e_member_app/feature/dash_board/presentation/view/dash_board_screen.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
 import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
@@ -52,7 +51,7 @@ class _ListServeyReportMenuState extends State<ListServeyReportMenu> {
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColor.grey.withOpacity(0.5),
+                      color: AppColor.grey.withAlpha((255.0 * 0.5).round()),
                       blurRadius: 5,
                       spreadRadius: 1,
                     ),

@@ -1,4 +1,3 @@
-// lib/feature/drawer/add_basic_details/data/model/filter_add_basic.dart
 import 'package:e_member_app/feature/drawer/add_basic_details/domain/entitties/filter_addbasic.dart';
 
 class FilterData {

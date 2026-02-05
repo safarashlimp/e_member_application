@@ -76,7 +76,6 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
 
           updatedSteps.add(step.copyWith(options: apiOptions));
         } catch (e) {
-          print('Failed to load data for ${step.name}: $e');
           updatedSteps.add(step);
         }
       }
@@ -165,9 +164,6 @@ class MemberDetailsBloc extends Bloc<MemberDetailsEvent, MemberDetailsState> {
     emit(state.copyWith(status: MemberDetailsStatus.loading));
 
     try {
-      // Print IDs that will be sent to backend
-      print('Member Details Filter IDs: ${state.filter.toMap()}');
-      
       emit(state.copyWith(status: MemberDetailsStatus.success));
     } catch (e) {
       emit(state.copyWith(

@@ -10,20 +10,19 @@ class MenuContainar extends StatelessWidget {
   final double iconSize;
   final Color backgroundColor;
   final Color titleColor;
-   final VoidCallback? onIconTap;
-
+  final VoidCallback? onIconTap;
 
   const MenuContainar({
     super.key,
     required this.title,
     required this.iconAsset,
-   // required this.child,
+    // required this.child,
     required this.icon,
     this.iconColor = Colors.blue,
     this.iconSize = 40,
     this.backgroundColor = Colors.white,
     this.titleColor = Colors.black,
-     this.onIconTap,
+    this.onIconTap,
   });
 
   @override
@@ -36,9 +35,11 @@ class MenuContainar extends StatelessWidget {
           color: AppColor.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-            BoxShadow(color: AppColor.grey.withOpacity(0.2), blurRadius: 5, spreadRadius: 1),
+            BoxShadow(
+                color: AppColor.grey.withAlpha((255.0 * 0.2).round()),
+                blurRadius: 5,
+                spreadRadius: 1),
           ],
-         
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +55,7 @@ class MenuContainar extends StatelessWidget {
                       height: 55,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                         borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(15),
                         color: backgroundColor,
                       ),
                     ),
@@ -71,29 +72,26 @@ class MenuContainar extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: 8),
-                
-                  Flexible(
-                    child: SizedBox(
-                      width: 223,
-                      child: Text(
-                        title,
-                        
-                        style: TextStyle(
-                          color: titleColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                Flexible(
+                  child: SizedBox(
+                    width: 223,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                
-                
-                
-                   Icon(icon, size: iconSize, color: iconColor,)
+                ),
+                Icon(
+                  icon,
+                  size: iconSize,
+                  color: iconColor,
+                )
               ],
             ),
-       
-        
           ],
         ),
       ),

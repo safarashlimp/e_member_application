@@ -8,7 +8,8 @@ import 'package:e_member_app/feature/drawer/education_details.dart/presentaion/c
 import 'education_drawer_event.dart';
 import 'education_drawer_state.dart';
 
-class EducationDrawerBloc extends Bloc<EducationDrawerEvent, EducationDrawerState> {
+class EducationDrawerBloc
+    extends Bloc<EducationDrawerEvent, EducationDrawerState> {
   final MemberDropRepository repository;
 
   EducationDrawerBloc({required this.repository})
@@ -62,7 +63,6 @@ class EducationDrawerBloc extends Bloc<EducationDrawerEvent, EducationDrawerStat
 
             updatedSteps.add(step.copyWith(options: apiOptions));
           } catch (e) {
-            print('Failed to load data for ${step.name}: $e');
             updatedSteps.add(step);
           }
         }
@@ -147,9 +147,6 @@ class EducationDrawerBloc extends Bloc<EducationDrawerEvent, EducationDrawerStat
     emit(state.copyWith(status: EducationDrawerStatus.loading));
 
     try {
-      // Print IDs that will be sent to backend
-      print('Education Filter IDs: ${state.filter.toMap()}');
-      
       emit(state.copyWith(status: EducationDrawerStatus.success));
     } catch (e) {
       emit(state.copyWith(

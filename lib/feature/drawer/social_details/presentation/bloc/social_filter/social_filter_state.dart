@@ -1,7 +1,7 @@
 // lib/feature/drawer/social_details/presentation/bloc/social_filter/social_filter_state.dart
 
 import 'package:e_member_app/feature/drawer/social_details/domain/entity/social_entity.dart';
-import 'package:e_member_app/feature/drawer/social_details/domain/entity/socila_drawer_filterStep.dart';
+import 'package:e_member_app/feature/drawer/social_details/domain/entity/socila_drawer_filter_step.dart';
 
 enum SocialDrawerStatus { initial, loading, loaded, success, error }
 

@@ -2,7 +2,7 @@ import 'package:e_member_app/core/theme/app_color/app_color.dart';
 import 'package:e_member_app/core/widget/common/gradient_header.dart';
 import 'package:e_member_app/core/widget/text_field/search_field.dart';
 import 'package:e_member_app/feature/drawer/add_basic_details/presentaion/view/add_basic_details_filter.dart';
-import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_Servay_filter.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/view/add_survey_filter.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_bloc.dart';
 import 'package:e_member_app/feature/list_survey_report/presentation/bloc/header_list/header_list_event.dart';
@@ -91,7 +91,6 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
   }
 
   void _applyFilters(Map<String, dynamic> filters) {
-    print('🎯 Applying filters to list: $filters');
     context.read<HeaderListBloc>().add(
           ApplyFilters(widget.postion, filters),
         );
@@ -225,8 +224,6 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                             ),
                           );
                         }
-
-                        print('📱 Displaying ${state.items.length} items');
 
                         return ListView.builder(
                           controller: _scrollController,

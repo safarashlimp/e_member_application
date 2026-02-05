@@ -123,8 +123,8 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
     healthInsuranceId = value.insuranceTypeId;
     requiredHealthSupportsId = value.healthHelp;
 
-    treatmentPlaceLabel.text = value.treatmentPlace ?? '';
-    surveyorNameLabel.text = value.surveyor ?? '';
+    treatmentPlaceLabel.text = value.treatmentPlace;
+    surveyorNameLabel.text = value.surveyor;
 
     hasHealthIssuesId = value.diseases;
   }

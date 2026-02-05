@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:e_member_app/core/constants/pref_keys.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,8 +34,6 @@ class HeaderSaveRepository {
     final userId = prefs.getString(PrefKeys.userId);
 
     // DEBUG
-    print('CLIENTID FROM PREF: $clientId');
-    print('USERID FROM PREF: $userId');
 
     if (clientId == null || clientId.isEmpty) {
       throw Exception('Client ID not found. Please login again.');

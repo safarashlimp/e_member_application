@@ -828,8 +828,7 @@ class _EditFamilyMemberBasicDetailsState
                                       _scrollToField(genderKey);
                                       return;
                                     }
-                                    if (selectedDate == null ||
-                                        selectedDate.text.isEmpty) {
+                                    if (selectedDate.text.isEmpty) {
                                       showSnack(
                                           context, "ജനനത്തീയതി തിരഞ്ഞെടുക്കുക");
                                       _scrollToField(dobKey);

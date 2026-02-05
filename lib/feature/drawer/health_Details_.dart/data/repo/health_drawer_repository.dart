@@ -2,7 +2,7 @@
 
 import 'package:e_member_app/feature/add_family_members_list/data/model/dropdownmodel/family_member_model.dart';
 import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_FilterStep.dart';
+import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/entity/health_filter_step.dart';
 import 'package:e_member_app/feature/drawer/health_Details_.dart/domain/repo/health_drawer_repo.dart';
 
 class HealthDrawerRepositoryImpl implements HealthDrawerRepository {

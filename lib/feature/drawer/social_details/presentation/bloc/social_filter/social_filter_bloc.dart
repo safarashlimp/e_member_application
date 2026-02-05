@@ -24,7 +24,7 @@ class SocialDrawerBloc extends Bloc<SocialDrawerEvent, SocialDrawerState> {
     Emitter<SocialDrawerState> emit,
   ) async {
     emit(state.copyWith(status: SocialDrawerStatus.loading));
-    
+
     try {
       final steps = await _repository.getAllSocialSteps();
       emit(state.copyWith(
@@ -53,10 +53,11 @@ class SocialDrawerBloc extends Bloc<SocialDrawerEvent, SocialDrawerState> {
     Emitter<SocialDrawerState> emit,
   ) {
     SocialDrawerFilter updatedFilter;
-    
+
     switch (event.stepIndex) {
       case 0: // റേഷൻ കാർഡിൽ ഉൾപ്പെടുത്തിയിട്ടുണ്ടോ
-        updatedFilter = state.filter.copyWith(includedInRationCard: event.optionId);
+        updatedFilter =
+            state.filter.copyWith(includedInRationCard: event.optionId);
         break;
       case 1: // പെൻഷൻ ലഭിക്കുന്നുണ്ടോ
         updatedFilter = state.filter.copyWith(receivingPension: event.optionId);
@@ -68,12 +69,13 @@ class SocialDrawerBloc extends Bloc<SocialDrawerEvent, SocialDrawerState> {
         updatedFilter = state.filter.copyWith(needPension: event.optionId);
         break;
       case 4: // ദാരിദ്ര്യ നിർമ്മാർജ്ജന പദ്ധതികളിൽ അംഗമാണോ
-        updatedFilter = state.filter.copyWith(povertyAlleviationMember: event.optionId);
+        updatedFilter =
+            state.filter.copyWith(povertyAlleviationMember: event.optionId);
         break;
       default:
         return;
     }
-    
+
     emit(state.copyWith(filter: updatedFilter));
   }
 
@@ -110,19 +112,10 @@ class SocialDrawerBloc extends Bloc<SocialDrawerEvent, SocialDrawerState> {
     Emitter<SocialDrawerState> emit,
   ) {
     emit(state.copyWith(status: SocialDrawerStatus.loading));
-    
+
     try {
-      final filterMap = state.filter.toMap();
-      print('Social Filter Submitted: $filterMap');
-      // Example output:
-      // {
-      //   'included_in_ration_card': '1',
-      //   'receiving_pension': '0',
-      //   'pension_type_id': '3',
-      //   'pension_requirement_id': '5',
-      //   'poverty_alleviation_program': '2'
-      // }
-      
+      state.filter.toMap();
+
       emit(state.copyWith(status: SocialDrawerStatus.success));
     } catch (e) {
       emit(state.copyWith(

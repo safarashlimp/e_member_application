@@ -792,7 +792,7 @@ class _HealthDetailsDrawerContent extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((255.0 * 0.05).round()),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

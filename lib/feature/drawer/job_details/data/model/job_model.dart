@@ -1,4 +1,4 @@
-// data/models/job_details_model.dart
+
 import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_details_filter.dart';
 
 class JobDetailsModel {

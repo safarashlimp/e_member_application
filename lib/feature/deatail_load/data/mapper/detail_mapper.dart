@@ -6,14 +6,6 @@ import 'package:e_member_app/feature/deatail_load/domain/models/screen_third_mod
 
 class DetailMapper {
   static PersonalDetailsModel fromApiToScreen1(Map<String, dynamic> json) {
-    int parseIntSafe(dynamic value) {
-      if (value == null) return 0;
-      if (value is int) return value;
-      final str = value.toString();
-      if (str.isEmpty || str == 'null') return 0;
-      return int.tryParse(str) ?? 0;
-    }
-
     final List list = json['data'];
     if (list.isEmpty) {
       throw Exception('Header data empty');

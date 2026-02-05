@@ -10,8 +10,6 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
   static const int pageSize = 25;
   List<HeaderItem> _allItems = [];
   int _currentOffset = 0;
-  String? _currentPosition;
-  Map<String, dynamic>? _currentFilters;
 
   HeaderListBloc(this.getHeaderListUsecase) : super(HeaderListInitial()) {
     on<FetchHeaderList>(_onFetchHeaderList);
@@ -33,21 +31,15 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
         filters: event.filters,
       );
 
-      print('📦 Total items fetched: ${allItems.length}');
-
       // Store all items and reset pagination
       _allItems = allItems;
       _currentOffset = 0;
-      _currentPosition = event.position;
-      _currentFilters = event.filters;
 
       // Get first 25 items
       final firstBatch = _allItems.take(pageSize).toList();
       final hasMore = _allItems.length > pageSize;
 
       _currentOffset = firstBatch.length;
-
-      print('📊 Showing first ${firstBatch.length} items, hasMore: $hasMore');
 
       emit(HeaderListLoaded(
         firstBatch,
@@ -67,21 +59,15 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     emit(HeaderListLoading());
 
     try {
-      print('🔍 Applying filters: ${event.filters}');
-
       // Fetch all filtered items from API
       final allItems = await getHeaderListUsecase(
         event.position,
         filters: event.filters,
       );
 
-      print('📦 Filtered items fetched: ${allItems.length}');
-
       // Store all items and reset pagination
       _allItems = allItems;
       _currentOffset = 0;
-      _currentPosition = event.position;
-      _currentFilters = event.filters;
 
       // Get first 25 items
       final firstBatch = _allItems.take(pageSize).toList();
@@ -107,18 +93,12 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     emit(HeaderListLoading());
 
     try {
-      print('🧹 Clearing filters');
-
       // Fetch all items without filters
       final allItems = await getHeaderListUsecase(event.position);
-
-      print('📦 Total items fetched: ${allItems.length}');
 
       // Store all items and reset pagination
       _allItems = allItems;
       _currentOffset = 0;
-      _currentPosition = event.position;
-      _currentFilters = null;
 
       // Get first 25 items
       final firstBatch = _allItems.take(pageSize).toList();
@@ -148,8 +128,6 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
     // Don't load if already loading or no more data
     if (currentState.isLoadingMore || !currentState.hasMoreData) return;
 
-    print('📥 Loading more items from offset $_currentOffset');
-
     // Show loading indicator
     emit(currentState.copyWith(isLoadingMore: true));
 
@@ -161,7 +139,6 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
       final nextBatch = _allItems.skip(_currentOffset).take(pageSize).toList();
 
       if (nextBatch.isEmpty) {
-        print('✅ No more items to load');
         emit(currentState.copyWith(
           isLoadingMore: false,
           hasMoreData: false,
@@ -176,9 +153,6 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
 
       final hasMore = _currentOffset < _allItems.length;
 
-      print(
-          '📊 Loaded ${nextBatch.length} more items. Total: ${updatedItems.length}/${_allItems.length}');
-
       emit(HeaderListLoaded(
         updatedItems,
         appliedFilters: currentState.appliedFilters,
@@ -186,7 +160,6 @@ class HeaderListBloc extends Bloc<HeaderListEvent, HeaderListState> {
         isLoadingMore: false,
       ));
     } catch (e) {
-      print('❌ Error loading more items: $e');
       emit(currentState.copyWith(isLoadingMore: false));
     }
   }

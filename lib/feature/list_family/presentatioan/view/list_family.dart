@@ -77,12 +77,12 @@ class _ListFamilyState extends State<ListFamily> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return SafeArea(
       top: false,
       child: Scaffold(
-        key: _scaffoldKey,
+        key: scaffoldKey,
         drawer: drawerchosing(),
         // bottomNavigationBar: const AppBottomNav(selectedIndex: 2),
         backgroundColor: AppColor.secondary,
@@ -104,7 +104,7 @@ class _ListFamilyState extends State<ListFamily> {
               padding: const EdgeInsets.all(8.0),
               child: SearchFieldBar(
                 onFilterTap: () {
-                  _scaffoldKey.currentState!.openDrawer();
+                  scaffoldKey.currentState!.openDrawer();
                 },
               ),
             ),
@@ -122,8 +122,6 @@ class _ListFamilyState extends State<ListFamily> {
                   }
 
                   if (state is FamilyMemberListLoaded) {
-                    print('Displaying ${state.members.length} members');
-
                     return ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),

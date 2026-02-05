@@ -1,110 +1,68 @@
-// lib/feature/drawer/job_details/presentation/job_details_drawer.dart
-
-import 'package:e_member_app/feature/add_family_members_list/data/repository/dropdownrepo_impl/member_drop_repository_impl.dart';
-import 'package:e_member_app/feature/drawer/job_details/data/repo/job_repository.dart';
-import 'package:e_member_app/feature/drawer/job_details/domain/entity/job_details_filter.dart';
-import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_bloc.dart';
-import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_event.dart';
-import 'package:e_member_app/feature/drawer/job_details/presentation/bloc/job_details/jobdetails_state.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/data/repository/filter_repository_impl.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/domain/repository/filter_repository.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/domain/ussecase/submit_filter.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/bloc/bloc/filter_bloc.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/bloc/bloc/filter_event.dart';
+import 'package:e_member_app/feature/drawer/add_servay_items/presentation/bloc/bloc/filter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class JobDetailsDrawer extends StatelessWidget {
-  const JobDetailsDrawer({super.key});
+class AddSurveyFilterPage extends StatelessWidget {
+  const AddSurveyFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => JobDetailsDrawerBloc(
-        JobDrawerRepositoryImpl(MemberDropRepositoryImpl()),
-      )..add(JobDetailsDrawerInitialize()),
-      child: const _JobDetailsDrawerContent(),
+      create: (context) => FilterBloc(
+        getFilterOptions: GetFilterOptions(FilterRepositoryImpl()),
+        submitFilters: SubmitFilters(FilterRepositoryImpl()),
+      )..add(LoadFilters()),
+      child: const AddSurveyFilterView(),
     );
   }
 }
 
-class _JobDetailsDrawerContent extends StatelessWidget {
-  const _JobDetailsDrawerContent();
+class AddSurveyFilterView extends StatelessWidget {
+  const AddSurveyFilterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<JobDetailsDrawerBloc, JobDetailsDrawerState>(
+    return BlocListener<FilterBloc, FilterState>(
+      listenWhen: (previous, current) =>
+          current.status == FilterStatus.submitted,
       listener: (context, state) {
-        if (state.status == JobDetailsDrawerStatus.success) {
-          Navigator.pop(context, state.filter);
-        } else if (state.status == JobDetailsDrawerStatus.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage ?? 'Error occurred')),
-          );
-        }
+        // Return the filter payload to the list page
+        Navigator.pop(context, state.filterPayload);
       },
-      builder: (context, state) {
-        if (state.status == JobDetailsDrawerStatus.loading &&
-            state.steps.isEmpty) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+      child: Drawer(
+        backgroundColor: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: SafeArea(
+          child: BlocBuilder<FilterBloc, FilterState>(
+            builder: (context, state) {
+              if (state.status == FilterStatus.loading ||
+                  state.status == FilterStatus.initial) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-        if (state.status == JobDetailsDrawerStatus.error &&
-            state.steps.isEmpty) {
-          return Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              return Column(
                 children: [
-                  Text(state.errorMessage ?? 'Error loading data'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<JobDetailsDrawerBloc>()
-                          .add(JobDetailsDrawerInitialize());
-                    },
-                    child: const Text('Retry'),
+                  _buildHeader(context),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        _buildLeftSection(context, state),
+                        _buildRightSection(context, state),
+                      ],
+                    ),
                   ),
+                  _buildBottomButtons(context, state),
                 ],
-              ),
-            ),
-          );
-        }
-
-        if (state.steps.isEmpty) {
-          return const Scaffold(
-            body: Center(child: Text('No data available')),
-          );
-        }
-
-        final currentStep = state.steps[state.currentStep];
-        final currentSelection = state.getCurrentSelection();
-
-        return Drawer(
-          backgroundColor: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          child: SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(context),
-                Expanded(
-                  child: Row(
-                    children: [
-                      _buildStepsSection(context, state),
-                      _buildOptionsSection(
-                        context,
-                        currentStep.name,
-                        currentStep.options,
-                        currentSelection,
-                        state.currentStep,
-                      ),
-                    ],
-                  ),
-                ),
-                _buildBottomButtons(context, state, currentSelection),
-              ],
-            ),
+              );
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -144,7 +102,7 @@ class _JobDetailsDrawerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildStepsSection(BuildContext context, JobDetailsDrawerState state) {
+  Widget _buildLeftSection(BuildContext context, FilterState state) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
@@ -188,18 +146,16 @@ class _JobDetailsDrawerContent extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: state.steps.length,
+              itemCount: state.filterOptions.length,
               itemBuilder: (context, index) {
                 final isSelected = state.currentStep == index;
-                final step = state.steps[index];
-                final hasSelection = _hasSelectionForStep(state.filter, index);
+                final option = state.filterOptions[index];
+                final hasSelection =
+                    state.selections.selections[option.id] != null;
 
                 return InkWell(
-                  onTap: () {
-                    context.read<JobDetailsDrawerBloc>().add(
-                          JobDetailsDrawerStepChanged(index),
-                        );
-                  },
+                  onTap: () =>
+                      context.read<FilterBloc>().add(ChangeStep(index)),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -222,7 +178,7 @@ class _JobDetailsDrawerContent extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            step.name,
+                            option.label,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: isSelected
@@ -255,26 +211,16 @@ class _JobDetailsDrawerContent extends StatelessWidget {
     );
   }
 
-  bool _hasSelectionForStep(JobDetailsFilter filter, int step) {
-    switch (step) {
-      case 0:
-        return filter.employmentStatus != null;
-      case 1:
-        return filter.occupation != null;
-      case 2:
-        return filter.needEmploymentHelp != null;
-      default:
-        return false;
+  Widget _buildRightSection(BuildContext context, FilterState state) {
+    final currentFilter = state.currentFilterOrNull;
+    if (currentFilter == null) {
+      return const Expanded(
+        child: Center(child: Text('No filter available')),
+      );
     }
-  }
 
-  Widget _buildOptionsSection(
-    BuildContext context,
-    String currentStepName,
-    List<dynamic> currentOptions,
-    String? currentSelection,
-    int stepIndex,
-  ) {
+    final currentSelection = state.currentSelection;
+
     return Expanded(
       child: Container(
         color: Colors.white,
@@ -296,7 +242,7 @@ class _JobDetailsDrawerContent extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    currentStepName,
+                    currentFilter.label,
                     style: const TextStyle(
                       fontSize: 16,
                       color: Color(0xFF0F172A),
@@ -313,18 +259,13 @@ class _JobDetailsDrawerContent extends StatelessWidget {
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 10,
-                  children: currentOptions.map((option) {
-                    final isSelected = currentSelection == option.id;
+                  children: currentFilter.options.map((option) {
+                    final isSelected = currentSelection == option;
                     return InkWell(
                       borderRadius: BorderRadius.circular(999),
-                      onTap: () {
-                        context.read<JobDetailsDrawerBloc>().add(
-                              JobDetailsDrawerOptionSelected(
-                                stepIndex,
-                                option.id,
-                              ),
-                            );
-                      },
+                      onTap: () => context.read<FilterBloc>().add(
+                            SelectOption(currentFilter.id, option),
+                          ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -343,7 +284,7 @@ class _JobDetailsDrawerContent extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          option.name,
+                          option,
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -364,11 +305,7 @@ class _JobDetailsDrawerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomButtons(
-    BuildContext context,
-    JobDetailsDrawerState state,
-    String? currentSelection,
-  ) {
+  Widget _buildBottomButtons(BuildContext context, FilterState state) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -385,11 +322,8 @@ class _JobDetailsDrawerContent extends StatelessWidget {
         children: [
           Expanded(
             child: OutlinedButton(
-              onPressed: () {
-                context
-                    .read<JobDetailsDrawerBloc>()
-                    .add(JobDetailsDrawerReset());
-              },
+              onPressed: () =>
+                  context.read<FilterBloc>().add(ClearAllFilters()),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 side: const BorderSide(color: Color(0xFF0284C7)),
@@ -410,18 +344,8 @@ class _JobDetailsDrawerContent extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: currentSelection != null
-                  ? () {
-                      if (state.canGoNext) {
-                        context.read<JobDetailsDrawerBloc>().add(
-                              JobDetailsDrawerNextStep(),
-                            );
-                      } else {
-                        context.read<JobDetailsDrawerBloc>().add(
-                              JobDetailsDrawerSubmit(),
-                            );
-                      }
-                    }
+              onPressed: state.currentSelection != null
+                  ? () => context.read<FilterBloc>().add(SubmitFilterEvent())
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0284C7),
@@ -431,14 +355,23 @@ class _JobDetailsDrawerContent extends StatelessWidget {
                 ),
                 disabledBackgroundColor: Colors.grey.shade300,
               ),
-              child: const Text(
-                'ഫിൽട്ടർ പ്രയോഗിക്കുക',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
+              child: state.status == FilterStatus.submitting
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      'ഫിൽട്ടർ പ്രയോഗിക്കുക',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           ),
         ],
