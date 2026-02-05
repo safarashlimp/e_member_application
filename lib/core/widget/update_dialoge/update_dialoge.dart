@@ -87,7 +87,6 @@ class AppUpdateDialog extends StatelessWidget {
                     ),
                     child: Text(
                       'Cancel',
-
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
