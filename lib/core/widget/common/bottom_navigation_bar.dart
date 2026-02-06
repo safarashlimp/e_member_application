@@ -362,27 +362,29 @@ class AppBottomNav extends StatelessWidget {
   Widget _navItem(BuildContext context, int index) {
     final bool isSelected = selectedIndex == index;
 
-    return GestureDetector(
-      onTap: () => _onTap(context, index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            _image(index),
-            width: 24,
-            height: 24,
-            color: isSelected ? AppColor.white : AppColor.grey1,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            _label(index),
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w500,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _onTap(context, index),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              _image(index),
+              width: 24,
+              height: 24,
               color: isSelected ? AppColor.white : AppColor.grey1,
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              _label(index),
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.w500,
+                color: isSelected ? AppColor.white : AppColor.grey1,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

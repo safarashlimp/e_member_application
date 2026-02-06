@@ -129,16 +129,18 @@ class MiniCard extends StatelessWidget {
               fit: BoxFit.contain,
             ),
            //SizedBox(height: 6.h),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 8.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColor.black,
-                height: 1.25
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 8.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.black,
+                  height: 1.25
+                ),
               ),
             ),
           ],
@@ -190,23 +192,27 @@ class BottomSummaryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10, // ✅ Match _GenderCard default font size
-                      fontWeight: FontWeight.w500,
-                      height: 1.1, // ✅ Same line height as _GenderCard
+                  Expanded(
+                    child: Text(
+                      label,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10, // ✅ Match _GenderCard default font size
+                        fontWeight: FontWeight.w500,
+                        height: 1.1, // ✅ Same line height as _GenderCard
+                      ),
                     ),
                   ),
-                  Text(
-                    value.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14, // ✅ Same value font size as _GenderCard
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      value.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14, // ✅ Same value font size as _GenderCard
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],

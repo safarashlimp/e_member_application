@@ -78,34 +78,38 @@ class _RationSectionState extends State<RationSection> {
                   ),
                 ),
               ),
-              SizedBox(height: 4.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _LegendItem(
-                      color: Colors.amber,
-                      label:
-                          ' ${percent(widget.aayCount).toStringAsFixed(1)}%'),
-                  SizedBox(width: 6.w),
-                  _LegendItem(
-                      color: Colors.pink,
-                      label: '${percent(widget.phhCount).toStringAsFixed(1)}%'),
-                ],
+           SizedBox(height: 4.h),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _LegendItem(
+                        color: Colors.amber,
+                        label:
+                            ' ${percent(widget.aayCount).toStringAsFixed(1)}%'),
+                    SizedBox(width: 6.w),
+                    _LegendItem(
+                        color: Colors.pink,
+                        label: '${percent(widget.phhCount).toStringAsFixed(1)}%'),
+                  ],
+                ),
               ),
               SizedBox(height: 4.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _LegendItem(
-                      color: Colors.blue,
-                      label:
-                          '${percent(widget.nphhCount).toStringAsFixed(1)}%'),
-                  SizedBox(width: 6.w),
-                  _LegendItem(
-                      color: Colors.grey,
-                      label:
-                          '${percent(widget.npnsCount).toStringAsFixed(1)}%'),
-                ],
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _LegendItem(
+                        color: Colors.blue,
+                        label:
+                            '${percent(widget.nphhCount).toStringAsFixed(1)}%'),
+                    SizedBox(width: 6.w),
+                    _LegendItem(
+                        color: Colors.grey,
+                        label:
+                            '${percent(widget.npnsCount).toStringAsFixed(1)}%'),
+                  ],
+                ),
               ),
             ],
           ),

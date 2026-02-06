@@ -160,24 +160,28 @@ class _GenderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColor.white,
-                      fontSize: fontSizes,
-                      fontWeight: FontWeight.w500,
-                      height: 1.0,
+                  Expanded(
+                    child: Text(
+                      label,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppColor.white,
+                        fontSize: fontSizes,
+                        fontWeight: FontWeight.w500,
+                        height: 1.0,
+                      ),
                     ),
                   ),
-                  Text(
-                    value.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                          height: 1.0,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      value.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                            height: 1.0,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
