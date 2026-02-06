@@ -10,6 +10,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pansion_type/pansion_type_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/pension_required/pension_required_state.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_five_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
@@ -164,6 +166,7 @@ class _EditFamilyMemberSocielDetailsState
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());
                     // close dialog
                     _goToListPage(context); // navigate
                   },

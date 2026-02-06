@@ -11,6 +11,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/health_insurance/health_insurance_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_state.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/deatail_load/domain/models/screen_forth_model.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_bloc.dart';
 import 'package:e_member_app/feature/edit_view_family_member/presentation/bloc/edit_family_member_event.dart';
@@ -178,6 +180,7 @@ class _EditFamilyHealthDetailsState extends State<EditFamilyHealthDetails> {
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());
                     // close dialog
                     _goToListPage(context); // navigate
                   },

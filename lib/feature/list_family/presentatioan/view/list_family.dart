@@ -94,7 +94,9 @@ class _ListFamilyState extends State<ListFamily> {
                 // ✅ Navigate back to MainScreen with refresh flag
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => MainScreen(shouldRefresh: true),
+                    builder: (context) => MainScreen(
+                      //shouldRefresh: true
+                      ),
                   ),
                   (route) => false, // Remove all previous routes
                 );

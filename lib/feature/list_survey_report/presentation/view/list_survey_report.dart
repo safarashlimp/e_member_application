@@ -112,7 +112,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
             context,
             MaterialPageRoute(
               builder: (context) => MainScreen(
-                shouldRefresh: true,
+              //  shouldRefresh: true,
               ),
             ),
           );
@@ -128,7 +128,7 @@ class _ListSurveyReportState extends State<ListSurveyReport> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainScreen(shouldRefresh: true,),
+                      builder: (context) => MainScreen(),
                     ),
                   );
                 },

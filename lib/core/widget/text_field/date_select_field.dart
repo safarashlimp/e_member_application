@@ -62,17 +62,26 @@ class AppDateField extends StatelessWidget {
             builder: (context, child) {
               return Theme(
                 data: ThemeData.light().copyWith(
+                  
                   primaryColor: AppColor.primary,
+                     dividerColor: AppColor.primary, // 👈 change black line color
+      dividerTheme: DividerThemeData(
+        color: AppColor.primary,
+        thickness: 1,
+      ),
+
+      // 🔹 OK & CANCEL button color
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColor.primary, // 👈 button text color
+        ),
+      ),
                   colorScheme: const ColorScheme.light(
                     primary: AppColor.primary,
                     onPrimary: AppColor.white,
                     onSurface: AppColor.primary,
                   ),
-                  textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                      foregroundColor:focusedBorderColor
-                    ),
-                  ),
+              
                   dialogTheme: DialogThemeData(backgroundColor: AppColor.white),
                 ),
                 child: child!,

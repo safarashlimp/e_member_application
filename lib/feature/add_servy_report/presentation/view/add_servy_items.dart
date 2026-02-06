@@ -24,6 +24,8 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_event.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/view/add_item_basic_details.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/edit_survey_report/data/repository/edit_survay_report_imp.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/household/household_bloc.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/household/household_event.dart';
@@ -204,6 +206,7 @@ class _AddServyItemsState extends State<AddServyItems> {
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());
                     // close dialog
                     _goToListPage(context); // navigate
                   },

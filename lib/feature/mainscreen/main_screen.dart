@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainScreen extends StatefulWidget {
-  final bool shouldRefresh;
+  //final bool shouldRefresh;
   final int initialIndex;
   final bool? showUpdateDialog;
 
@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
     super.key,
     this.initialIndex = 0,
     this.showUpdateDialog,
-    this.shouldRefresh = false,
+   // this.shouldRefresh = false,
   });
 
   @override
@@ -33,12 +33,12 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
-    if (widget.shouldRefresh) {
-      // Use addPostFrameCallback to ensure BLoC is available
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<DashboardBloc>().add(LoadDashboardEvent());
-      });
-    }
+    // if (widget.shouldRefresh) {
+    //   // Use addPostFrameCallback to ensure BLoC is available
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     context.read<DashboardBloc>().add(LoadDashboardEvent());
+    //   });
+    // }
   }
 
   /// Double back to exit (only from Dashboard)

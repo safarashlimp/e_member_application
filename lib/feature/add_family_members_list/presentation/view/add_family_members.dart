@@ -44,6 +44,8 @@ import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/d
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/required_health/requried_health_state.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_bloc.dart';
 import 'package:e_member_app/feature/add_family_members_list/presentation/bloc/dropdownbloc/skill/skill_state.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/list_servey_report_menu/presentation/navigate_enum/survey_enum.dart';
 import 'package:e_member_app/feature/list_survey_report/data/repository/header_list_repository_impl.dart';
 import 'package:e_member_app/feature/list_survey_report/domain/usecase/get_header_list_usecase.dart';
@@ -297,7 +299,8 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
-                    Navigator.pop(context); // close dialog
+                    Navigator.pop(context); 
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());// close dialog
                     _goToListPage(); // navigate
                   },
                   child: const Text(

@@ -20,6 +20,8 @@ import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_gen
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/ward_general/ward_general_state.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_bloc.dart';
 import 'package:e_member_app/feature/add_servy_report/presentation/bloc/water-facility/water_facility_state.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:e_member_app/feature/dash_board/presentation/bloc/dashboard_bloc/dashboard_event.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_bloc.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_event.dart';
 import 'package:e_member_app/feature/edit_survey_report/presentation/house_details/bloc/house_details/house_details_state.dart';
@@ -105,6 +107,7 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());
                     // close dialog
                     _goToUpdateListPage(context); // navigate
                   },
@@ -196,7 +199,8 @@ class _AddItemBasicDetailsState extends State<AddItemBasicDetails> {
                     backgroundColor: WidgetStatePropertyAll(AppColor.button),
                   ),
                   onPressed: () {
-                    Navigator.pop(context); // close dialog
+                    Navigator.pop(context); 
+                      context.read<DashboardBloc>().add(LoadDashboardEvent());// close dialog
                     _goToListPage(); // then navigate
                   },
                   child: const Text(
